@@ -1,0 +1,31 @@
+Arguments: 
+  C:\Program Files\nodejs\node.exe C:\Users\User\.node\corepack\yarn\1.22.15\bin\yarn.js set version modern
+
+PATH: 
+  C:\Python310\Scripts\;C:\Python310\;C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v11.4\bin;C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v11.4\libnvvp;C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v10.2\bin;C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v10.2\libnvvp;C:\Program Files\Java\jdk-15\bin;C:\Program Files\Python37\Scripts\;C:\Program Files\Python37\;C:\Windows\system32;C:\Windows;C:\Windows\System32\Wbem;C:\Windows\System32\WindowsPowerShell\v1.0\;C:\Windows\System32\OpenSSH\;C:\Program Files\Microsoft VS Code\bin;C:\Program Files\Git\cmd;C:\Users\User\Documents\User-created Documents\PATH;C:\Users\User\Documents\Apps\Cmder;C:\Program Files\NVIDIA Corporation\NVIDIA NvDLISR;C:\Program Files (x86)\NVIDIA Corporation\PhysX\Common;C:\Program Files\dotnet\;C:\Program Files\NVIDIA Corporation\Nsight Compute 2021.2.0\;C:\Program Files\Pandoc\;C:\Users\User\AppData\Roaming\nvm;C:\Program Files\nodejs;C:\Program Files\Go\bin;C:\WINDOWS\system32;C:\WINDOWS;C:\WINDOWS\System32\Wbem;C:\WINDOWS\System32\WindowsPowerShell\v1.0\;C:\WINDOWS\System32\OpenSSH\;C:\Program Files\Cloudflare\Cloudflare WARP\;C:\ProgramData\chocolatey\bin;C:\tools\Manim\Scripts;C:\tools\TinyTeX\bin\win32;C:\Users\User\.cargo\bin;C:\Users\User\AppData\Local\Microsoft\WindowsApps;C:\Users\User\AppData\Local\Programs\Microsoft VS Code\bin;C:\Users\User\AppData\Local\GitHubDesktop\bin;C:\Program Files\heroku\bin;C:\Users\User\Documents\Apps\ffmpeg;C:\Program Files\Tesseract-OCR;C:\Users\User\.dotnet\tools;C:\Users\User\AppData\Local\Programs\Fiddler;C:\Program Files (x86)\sox-14-4-2;C:\Users\User\Documents\Apps\Hitman\RPKG\;C:\Program Files\JetBrains\WebStorm 2021.3.1\bin;C:\Users\User\spicetify-cli;C:\Users\User\go\bin;C:\Users\User\AppData\Local\Programs\oh-my-posh\bin;C:\Users\User\AppData\Local\Programs\oh-my-posh\themes;C:\Users\User\AppData\Local\Programs\Hyper\resources\bin;C:\Program Files (x86)\mitmproxy\bin;C:\Users\User\AppData\Local\Microsoft\WindowsApps;C:\Users\User\Documents\Apps\scrcpy;C:\Users\User\AppData\Roaming\Python\Python37\Scripts;C:\Users\User\.dotnet\tools
+
+Yarn version: 
+  1.22.15
+
+Node version: 
+  16.13.1
+
+Platform: 
+  win32 x64
+
+Trace: 
+  Error: Release not found: modern
+      at C:\Users\User\.node\corepack\yarn\1.22.15\lib\cli.js:86353:17
+      at Generator.next (<anonymous>)
+      at step (C:\Users\User\.node\corepack\yarn\1.22.15\lib\cli.js:310:30)
+      at C:\Users\User\.node\corepack\yarn\1.22.15\lib\cli.js:321:13
+      at processTicksAndRejections (node:internal/process/task_queues:96:5)
+
+npm manifest: 
+  No manifest
+
+yarn manifest: 
+  No manifest
+
+Lockfile: 
+  No lockfile
