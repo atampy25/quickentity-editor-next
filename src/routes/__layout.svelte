@@ -1,11 +1,27 @@
 <script lang="ts">
 	import "../app.css"
 	import "carbon-components-svelte/css/g90.css"
+	import "$lib/fontawesome/css/all.css"
+
 	import { onMount } from "svelte"
 
 	let ready: boolean = false
 	onMount(() => (ready = true))
-	import { Header, HeaderNav, HeaderNavItem, HeaderNavMenu, SideNav, SideNavItems, SideNavMenu, SideNavMenuItem, SideNavLink, SideNavDivider, SkipToContent, Content } from "carbon-components-svelte"
+	import {
+		Header,
+		HeaderNav,
+		HeaderNavItem,
+		HeaderNavMenu,
+		SideNav,
+		SideNavItems,
+		SideNavMenu,
+		SideNavMenuItem,
+		SideNavLink,
+		SideNavDivider,
+		SkipToContent,
+		Content,
+		Grid
+	} from "carbon-components-svelte"
 	import { page } from "$app/stores"
 
 	import Data2 from "carbon-icons-svelte/lib/Data_2.svelte"
@@ -38,7 +54,9 @@
 		</SideNav>
 	</Header>
 	<Content>
-		<slot />
+		<div class="px-16 h-[90vh]">
+			<slot />
+		</div>
 	</Content>
 {/if}
 
