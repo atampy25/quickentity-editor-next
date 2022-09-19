@@ -10,6 +10,7 @@
 
 	import { Pane, Splitpanes as SplitPanes } from "svelte-splitpanes"
 	import { ClickableTile, TextArea, TextInput } from "carbon-components-svelte"
+	import json from "$lib/json"
 
 	let editor: monaco.editor.IStandaloneCodeEditor
 
@@ -116,7 +117,7 @@
 										{/each}
 									</div>
 								{:else}
-									Wow! There aren't any
+									There's almost as much information to display here as there are possible reasons to ask me about features listed in the framework documentation
 								{/if}
 								<h2 class="mt-2">Reverse references</h2>
 								{#if $reverseReferences[selectedEntityID]?.length}
@@ -135,7 +136,7 @@
 										{/each}
 									</div>
 								{:else}
-									Wow! There aren't any
+									There's almost as much information to display here as there are possible reasons to ask me about features listed in the framework documentation
 								{/if}
 							{:else}
 								<p>
@@ -156,7 +157,13 @@
 			<div class="flex-grow">
 				{#if selectionType}
 					{#if selectionType == "entity"}
-						<MonacoEditor bind:editor jsonToDisplay={selectedEntity} />
+						<MonacoEditor
+							bind:editor
+							jsonToDisplay={selectedEntity}
+							on:contentChanged={() => {
+								$entity.entities[selectedEntityID] = json.parse(editor.getValue())
+							}}
+						/>
 					{:else}
 						<TextInput labelText="Name" bind:value={$entity.comments[selectedComment].name} />
 						<br />

@@ -1,6 +1,6 @@
 <script lang="ts">
 	import type monaco from "monaco-editor"
-	import { onMount } from "svelte"
+	import { createEventDispatcher, onMount } from "svelte"
 	import editorWorker from "monaco-editor/esm/vs/editor/editor.worker?worker"
 	import jsonWorker from "monaco-editor/esm/vs/language/json/json.worker?worker"
 	import cssWorker from "monaco-editor/esm/vs/language/css/css.worker?worker"
@@ -15,6 +15,8 @@
 	export let editor: monaco.editor.IStandaloneCodeEditor = null!
 
 	export let jsonToDisplay: SubEntity
+
+	const dispatch = createEventDispatcher()
 
 	onMount(async () => {
 		// @ts-ignore
@@ -52,6 +54,10 @@
 			theme: "theme",
 			fontFamily: "Fira Code",
 			fontLigatures: true
+		})
+
+		editor.onDidChangeModelContent((e) => {
+			dispatch("contentChanged")
 		})
 
 		return () => {
