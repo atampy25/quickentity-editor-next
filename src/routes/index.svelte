@@ -31,6 +31,19 @@
 
 	const updateEntityData = debounce((entityID, data) => {
 		try {
+			json.parse(data)
+		} catch {
+			editorIsValid = false
+			$addNotification = {
+				kind: "error",
+				title: "Invalid JSON",
+				subtitle: "You've entered invalid JSON."
+			}
+
+			return
+		}
+
+		try {
 			if (checkValidityOfEntity($entity, json.parse(data))) {
 				editorIsValid = true
 
@@ -49,8 +62,8 @@
 			editorIsValid = false
 			$addNotification = {
 				kind: "error",
-				title: "Invalid JSON",
-				subtitle: "You've entered invalid JSON."
+				title: "Invalid entity",
+				subtitle: "The entity either references something that doesn't exist or isn't valid according to the schema."
 			}
 		}
 	}, 5000)
@@ -191,7 +204,7 @@
 										{/each}
 									</div>
 								{:else}
-									There's almost as much information to display here as there are possible reasons to ask me about features listed in the framework documentation
+									There aren't any references to display
 								{/if}
 								<h2 class="mt-2">Reverse references</h2>
 								{#if $reverseReferences[selectedEntityID]?.length}
@@ -213,7 +226,7 @@
 										{/each}
 									</div>
 								{:else}
-									There's almost as much information to display here as there are possible reasons to ask me about features listed in the framework documentation
+									There aren't any reverse references to display
 								{/if}
 							{:else}
 								<p>
@@ -234,7 +247,13 @@
 			<div class="flex-grow">
 				{#if selectionType}
 					{#if selectionType == "entity"}
-						<MonacoEditor bind:editor jsonToDisplay={selectedEntity} on:contentChanged={() => updateEntityData(selectedEntityID, editor.getValue())} />
+						<MonacoEditor
+							bind:editor
+							entity={$entity}
+							subEntityID={selectedEntityID}
+							jsonToDisplay={selectedEntity}
+							on:contentChanged={() => updateEntityData(selectedEntityID, editor.getValue())}
+						/>
 					{:else}
 						<TextInput labelText="Name" bind:value={$entity.comments[selectedComment].name} />
 						<br />

@@ -18,7 +18,7 @@
 	<TooltipIcon icon={Information}>
 		<span slot="tooltipText" style="font-size: 0.875rem; margin-top: 0.5rem; margin-bottom: 0.5rem">
 			QuickEntity Editor has a set of extensions that make it far easier to work with game entities, including the ability to quickly load any game entity, the ability to preview overrides and
-			deep intellisense. These require extracting up to 5 gigabytes of game files, however.
+			deep intellisense. These require extracting up to 8 gigabytes of game files, however.
 		</span>
 	</TooltipIcon>
 </div>

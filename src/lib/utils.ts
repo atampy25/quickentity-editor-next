@@ -237,7 +237,7 @@ export function getReferencedEntities(entityData: SubEntity): {
 export function checkValidityOfEntity(entity: Entity, target: SubEntity): boolean {
 	// Check that all referenced entities exist
 	for (const ref of getReferencedEntities(target)) {
-		if (!entity.entities[ref.entity]) {
+		if (ref != null && !entity.entities[ref.entity]) {
 			return false
 		}
 	}
@@ -245,7 +245,7 @@ export function checkValidityOfEntity(entity: Entity, target: SubEntity): boolea
 	// Check that schema is met
 	if (
 		!new Ajv().validate(
-			Object.assign(schema, {
+			Object.assign({}, schema, {
 				$ref: "#/definitions/SubEntity"
 			}),
 			target

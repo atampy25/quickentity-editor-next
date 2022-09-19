@@ -1,9 +1,10 @@
-import { writable, derived, type Writable, type Readable } from "svelte/store"
+import { writable, derived, readable, type Writable, type Readable } from "svelte/store"
 import type { Entity, FullRef, RefMaybeConstantValue } from "$lib/quickentity-types"
 import { getReferencedEntities, getReferencedLocalEntity } from "$lib/utils"
 import Decimal from "decimal.js"
 import { forage } from "@tauri-apps/tauri-forage"
 import json from "$lib/json"
+import { Intellisense } from "$lib/intellisense"
 
 if (!(await forage.getItem({ key: "appSettings" })())) {
 	await forage.setItem({
@@ -17,7 +18,7 @@ export const appSettings: Writable<{
 	gameFileExtensionsDataPath: string
 }> = writable(json.parse(await forage.getItem({ key: "appSettings" })()))
 
-appSettings.subscribe((value) => {
+appSettings.subscribe((value: { gameFileExtensions: boolean; gameFileExtensionsDataPath: string }) => {
 	void (async () => {
 		await forage.setItem({ key: "appSettings", value: json.stringify(value) })()
 	})()
@@ -105,3 +106,13 @@ export const addNotification: Writable<{ kind: "error" | "info" | "info-square" 
 
 // For caching deep intellisense data
 export const parsedEntities: Writable<Record<string, Entity>> = writable({})
+
+export let intellisense: Readable<Intellisense>
+
+appSettings.subscribe((value: { gameFileExtensions: boolean; gameFileExtensionsDataPath: string }) => {
+	if (value.gameFileExtensions) {
+		intellisense = readable(new Intellisense(value))
+
+		intellisense.subscribe((value) => void value.ready())
+	}
+})

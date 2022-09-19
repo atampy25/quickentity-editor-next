@@ -14,7 +14,7 @@
 	"devDependencies": {
 		"@sveltejs/adapter-static": "1.0.0-next.38",
 		"@sveltejs/kit": "1.0.0-next.380",
-		"@tauri-apps/cli": "^1.0.4",
+		"@tauri-apps/cli": "^1.1.1",
 		"@types/lodash": "^4",
 		"@types/md5": "^2",
 		"@typescript-eslint/eslint-plugin": "^5.30.6",
@@ -42,7 +42,7 @@
 	"type": "module",
 	"private": true,
 	"dependencies": {
-		"@tauri-apps/api": "^1.0.2",
+		"@tauri-apps/api": "^1.1.0",
 		"@tauri-apps/tauri-forage": "^1.0.0-beta.2",
 		"@types/jquery": "^3.5.14",
 		"@types/jstree": "^3.3.41",
