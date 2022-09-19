@@ -1,6 +1,7 @@
 import type { Entity, FullRef, Ref, RefMaybeConstantValue, SubEntity } from "$lib/quickentity-types"
 
 import Ajv from "ajv"
+import md5 from "md5"
 import schema from "$lib/schema.json"
 
 export const genRandHex = (size: number) => [...Array(size)].map(() => Math.floor(Math.random() * 16).toString(16)).join("")
@@ -254,4 +255,12 @@ export function checkValidityOfEntity(entity: Entity, target: SubEntity): boolea
 	}
 
 	return true
+}
+
+export function normaliseToHash(path: string): string {
+	if (path.includes(":")) {
+		return ("00" + md5(path).slice(2, 16)).toUpperCase()
+	}
+
+	return path
 }
