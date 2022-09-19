@@ -1,6 +1,6 @@
 {
 	"name": "QuickEntity Editor",
-	"version": "0.1.0",
+	"version": "1.0.0",
 	"license": "LGPL-3.0-only",
 	"scripts": {
 		"dev": "vite dev",
@@ -9,7 +9,7 @@
 		"preview": "vite preview",
 		"prepare": "svelte-kit sync",
 		"format": "cd src-tauri && cargo fmt && cargo clippy --fix --allow-dirty && cd .. && prettier-eslint --write \"./**/*.{html,css,js,cjs,mjs,ts,svelte,json,toml}\"",
-		"tauri": "tauri"
+		"tauri": "env-cmd tauri"
 	},
 	"devDependencies": {
 		"@sveltejs/adapter-static": "1.0.0-next.38",
@@ -23,6 +23,7 @@
 		"carbon-components-svelte": "^0.67.1",
 		"carbon-icons-svelte": "^11.2.0",
 		"carbon-preprocess-svelte": "^0.9.1",
+		"env-cmd": "^10.1.0",
 		"eslint": "^8.20.0",
 		"eslint-config-prettier": "^8.3.0",
 		"eslint-plugin-svelte3": "^4.0.0",

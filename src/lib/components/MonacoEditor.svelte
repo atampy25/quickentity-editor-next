@@ -113,8 +113,6 @@
 
 			allFoundProperties = [...new Set(allFoundProperties)]
 
-			console.log(allFoundProperties)
-
 			props = {}
 
 			if ($intellisense.knownCPPTProperties[normaliseToHash(jsonToDisplay.template)]) {

@@ -1,6 +1,6 @@
 [package]
 name = "quickentity-editor"
-version = "0.1.0"
+version = "1.0.0"
 description = "A Tauri App"
 authors = ["GlacierModding"]
 license = "LGPL-3.0-only"
@@ -15,7 +15,7 @@ tauri-build = { version = "1.0.4", features = [] }
 [dependencies]
 serde_json = "1.0"
 serde = { version = "1.0", features = ["derive"] }
-tauri = { version = "1.1.1", features = ["api-all"] }
+tauri = { version = "1.1.1", features = ["api-all", "updater"] }
 
 [features]
 # by default Tauri runs in production mode
