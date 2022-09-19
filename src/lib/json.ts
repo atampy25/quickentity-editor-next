@@ -19,7 +19,7 @@ function replacer(key: string, value: any) {
 }
 
 export const parse = (val: string) => LosslessJSON.parse(val, reviver)
-export const stringify = (val: Record<string, any>, sp: string | undefined) => LosslessJSON.stringify(val, replacer, sp)
+export const stringify = (val: Record<string, any>, sp: string | undefined = undefined) => LosslessJSON.stringify(val, replacer, sp)
 
 export default {
 	parse,

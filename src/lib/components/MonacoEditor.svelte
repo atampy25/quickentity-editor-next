@@ -8,6 +8,7 @@
 	import tsWorker from "monaco-editor/esm/vs/language/typescript/ts.worker?worker"
 	import type { SubEntity } from "$lib/quickentity-types"
 	import json from "$lib/json"
+	import schema from "$lib/schema.json"
 
 	let el: HTMLDivElement = null!
 	let Monaco: typeof monaco
@@ -47,13 +48,30 @@
 			colors: {}
 		})
 
+		let model
+		try {
+			model = Monaco.editor.createModel("The JSON for the selected entity will appear here. You're using QuickEntity Editor 3.0.", "json", Monaco.Uri.parse("qne://subentity.json"))
+		} catch {
+			model = Monaco.editor.getModel(Monaco.Uri.parse("qne://subentity.json"))
+		}
+
 		editor = Monaco.editor.create(el, {
-			value: "The JSON for the selected entity will appear here. You're using QuickEntity Editor 3.0.",
-			language: "json",
+			model,
 			roundedSelection: false,
-			theme: "theme",
-			fontFamily: "Fira Code",
-			fontLigatures: true
+			theme: "theme"
+		})
+
+		Monaco.languages.json.jsonDefaults.setDiagnosticsOptions({
+			validate: true,
+			schemas: [
+				{
+					uri: "qne://subentity-schema.json", // id of the first schema
+					fileMatch: ["qne://subentity.json"], // associate with our model
+					schema: Object.assign(schema, {
+						$ref: "#/definitions/SubEntity"
+					})
+				}
+			]
 		})
 
 		editor.onDidChangeModelContent((e) => {

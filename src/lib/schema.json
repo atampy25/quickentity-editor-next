@@ -1,0 +1,434 @@
+{
+	"$schema": "http://json-schema.org/draft-07/schema#",
+	"$ref": "#/definitions/Entity",
+	"definitions": {
+		"Entity": {
+			"type": "object",
+			"properties": {
+				"tempHash": {
+					"type": "string"
+				},
+				"tbluHash": {
+					"type": "string"
+				},
+				"rootEntity": {
+					"type": "string"
+				},
+				"entities": {
+					"type": "object",
+					"additionalProperties": {
+						"$ref": "#/definitions/SubEntity"
+					}
+				},
+				"propertyOverrides": {
+					"type": "array",
+					"items": {
+						"$ref": "#/definitions/PropertyOverride"
+					}
+				},
+				"overrideDeletes": {
+					"type": "array",
+					"items": {
+						"$ref": "#/definitions/Ref"
+					}
+				},
+				"pinConnectionOverrides": {
+					"type": "array",
+					"items": {
+						"$ref": "#/definitions/PinConnectionOverride"
+					}
+				},
+				"pinConnectionOverrideDeletes": {
+					"type": "array",
+					"items": {
+						"$ref": "#/definitions/PinConnectionOverrideDelete"
+					}
+				},
+				"externalScenes": {
+					"type": "array",
+					"items": {
+						"type": "string"
+					}
+				},
+				"subType": {
+					"$ref": "#/definitions/SubType"
+				},
+				"quickEntityVersion": {
+					"type": "number"
+				},
+				"extraFactoryDependencies": {
+					"type": "array",
+					"items": {
+						"$ref": "#/definitions/Dependency"
+					}
+				},
+				"extraBlueprintDependencies": {
+					"type": "array",
+					"items": {
+						"$ref": "#/definitions/Dependency"
+					}
+				},
+				"comments": {
+					"type": "array",
+					"items": {
+						"$ref": "#/definitions/CommentEntity"
+					}
+				}
+			},
+			"required": [
+				"tempHash",
+				"tbluHash",
+				"rootEntity",
+				"entities",
+				"propertyOverrides",
+				"overrideDeletes",
+				"pinConnectionOverrides",
+				"pinConnectionOverrideDeletes",
+				"externalScenes",
+				"subType",
+				"quickEntityVersion",
+				"extraFactoryDependencies",
+				"extraBlueprintDependencies",
+				"comments"
+			],
+			"additionalProperties": false
+		},
+		"SubEntity": {
+			"type": "object",
+			"properties": {
+				"parent": {
+					"$ref": "#/definitions/Ref"
+				},
+				"name": {
+					"type": "string"
+				},
+				"template": {
+					"type": "string"
+				},
+				"templateFlag": {
+					"type": "string",
+					"default": "1F"
+				},
+				"blueprint": {
+					"type": "string"
+				},
+				"editorOnly": {
+					"type": "boolean",
+					"default": false
+				},
+				"properties": {
+					"type": "object",
+					"additionalProperties": {
+						"$ref": "#/definitions/Property"
+					}
+				},
+				"platformSpecificProperties": {
+					"type": "object",
+					"additionalProperties": {
+						"type": "object",
+						"additionalProperties": {
+							"$ref": "#/definitions/Property"
+						}
+					}
+				},
+				"events": {
+					"type": "object",
+					"additionalProperties": {
+						"type": "object",
+						"additionalProperties": {
+							"type": "array",
+							"items": {
+								"$ref": "#/definitions/RefMaybeConstantValue"
+							}
+						}
+					}
+				},
+				"inputCopying": {
+					"type": "object",
+					"additionalProperties": {
+						"type": "object",
+						"additionalProperties": {
+							"type": "array",
+							"items": {
+								"$ref": "#/definitions/RefMaybeConstantValue"
+							}
+						}
+					}
+				},
+				"outputCopying": {
+					"type": "object",
+					"additionalProperties": {
+						"type": "object",
+						"additionalProperties": {
+							"type": "array",
+							"items": {
+								"$ref": "#/definitions/RefMaybeConstantValue"
+							}
+						}
+					}
+				},
+				"propertyAliases": {
+					"type": "object",
+					"additionalProperties": {
+						"$ref": "#/definitions/PropertyAlias"
+					}
+				},
+				"exposedEntities": {
+					"type": "object",
+					"additionalProperties": {
+						"$ref": "#/definitions/ExposedEntity"
+					}
+				},
+				"exposedInterfaces": {
+					"type": "object",
+					"additionalProperties": {
+						"type": "string"
+					}
+				},
+				"subsets": {
+					"type": "object",
+					"additionalProperties": {
+						"type": "array",
+						"items": {
+							"type": "string"
+						}
+					}
+				}
+			},
+			"required": ["parent", "name", "template", "blueprint"],
+			"additionalProperties": false,
+			"default": {
+				"parent": "fffffffffffffffe",
+				"name": "New Entity",
+				"template": "[modules:/zentity.class].pc_entitytype",
+				"blueprint": "[modules:/zentity.class].pc_entityblueprint"
+			}
+		},
+		"Ref": {
+			"anyOf": [
+				{
+					"$ref": "#/definitions/FullRef"
+				},
+				{
+					"type": "string"
+				},
+				{
+					"type": "null"
+				}
+			]
+		},
+		"FullRef": {
+			"type": "object",
+			"properties": {
+				"ref": {
+					"type": "string"
+				},
+				"externalScene": {
+					"type": ["string", "null"]
+				},
+				"exposedEntity": {
+					"type": "string"
+				}
+			},
+			"required": ["ref", "externalScene"],
+			"additionalProperties": false
+		},
+		"Property": {
+			"type": "object",
+			"properties": {
+				"type": {
+					"type": "string"
+				},
+				"value": {},
+				"postInit": {
+					"type": "boolean",
+					"default": false
+				}
+			},
+			"required": ["type", "value"],
+			"additionalProperties": false,
+			"default": {
+				"type": "",
+				"value": ""
+			}
+		},
+		"RefMaybeConstantValue": {
+			"anyOf": [
+				{
+					"$ref": "#/definitions/RefWithConstantValue"
+				},
+				{
+					"$ref": "#/definitions/Ref"
+				}
+			]
+		},
+		"RefWithConstantValue": {
+			"type": "object",
+			"properties": {
+				"ref": {
+					"$ref": "#/definitions/Ref"
+				},
+				"value": {
+					"$ref": "#/definitions/SimpleProperty"
+				}
+			},
+			"required": ["ref", "value"],
+			"additionalProperties": false
+		},
+		"SimpleProperty": {
+			"type": "object",
+			"properties": {
+				"type": {
+					"type": "string"
+				},
+				"value": {}
+			},
+			"required": ["type", "value"],
+			"additionalProperties": false
+		},
+		"PropertyAlias": {
+			"type": "object",
+			"properties": {
+				"originalProperty": {
+					"type": "string"
+				},
+				"originalEntity": {
+					"$ref": "#/definitions/Ref"
+				}
+			},
+			"required": ["originalProperty", "originalEntity"],
+			"additionalProperties": false
+		},
+		"ExposedEntity": {
+			"type": "object",
+			"properties": {
+				"isArray": {
+					"type": "boolean"
+				},
+				"targets": {
+					"type": "array",
+					"items": {
+						"$ref": "#/definitions/Ref"
+					}
+				}
+			},
+			"required": ["isArray", "targets"],
+			"additionalProperties": false
+		},
+		"PropertyOverride": {
+			"type": "object",
+			"properties": {
+				"entities": {
+					"type": "array",
+					"items": {
+						"$ref": "#/definitions/Ref"
+					}
+				},
+				"properties": {
+					"type": "object",
+					"additionalProperties": {
+						"$ref": "#/definitions/OverriddenProperty"
+					}
+				}
+			},
+			"required": ["entities", "properties"],
+			"additionalProperties": false
+		},
+		"OverriddenProperty": {
+			"type": "object",
+			"properties": {
+				"type": {
+					"type": "string"
+				},
+				"value": {}
+			},
+			"required": ["type", "value"],
+			"additionalProperties": false
+		},
+		"PinConnectionOverride": {
+			"type": "object",
+			"properties": {
+				"fromEntity": {
+					"$ref": "#/definitions/Ref"
+				},
+				"fromPin": {
+					"type": "string"
+				},
+				"toEntity": {
+					"$ref": "#/definitions/Ref"
+				},
+				"toPin": {
+					"type": "string"
+				},
+				"value": {}
+			},
+			"required": ["fromEntity", "fromPin", "toEntity", "toPin"],
+			"additionalProperties": false
+		},
+		"PinConnectionOverrideDelete": {
+			"type": "object",
+			"properties": {
+				"fromEntity": {
+					"$ref": "#/definitions/Ref"
+				},
+				"fromPin": {
+					"type": "string"
+				},
+				"toEntity": {
+					"$ref": "#/definitions/Ref"
+				},
+				"toPin": {
+					"type": "string"
+				},
+				"value": {
+					"$ref": "#/definitions/SimpleProperty"
+				}
+			},
+			"required": ["fromEntity", "fromPin", "toEntity", "toPin"],
+			"additionalProperties": false
+		},
+		"SubType": {
+			"type": "string",
+			"enum": ["brick", "scene", "template"]
+		},
+		"Dependency": {
+			"anyOf": [
+				{
+					"$ref": "#/definitions/DependencyWithFlag"
+				},
+				{
+					"type": "string"
+				}
+			]
+		},
+		"DependencyWithFlag": {
+			"type": "object",
+			"properties": {
+				"resource": {
+					"type": "string"
+				},
+				"flag": {
+					"type": "string"
+				}
+			},
+			"required": ["resource", "flag"],
+			"additionalProperties": false
+		},
+		"CommentEntity": {
+			"type": "object",
+			"properties": {
+				"parent": {
+					"$ref": "#/definitions/Ref"
+				},
+				"name": {
+					"type": "string"
+				},
+				"text": {
+					"type": "string"
+				}
+			},
+			"required": ["parent", "name", "text"],
+			"additionalProperties": false
+		}
+	}
+}

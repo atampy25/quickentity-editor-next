@@ -22,6 +22,7 @@
 
 	export let currentlySelected: string = null!
 	export let previouslySelected: string = null!
+	export let editorIsValid: boolean
 
 	export const elemID = "tree-" + v4().replaceAll("-", "")
 
@@ -163,18 +164,6 @@
 							icon: "far fa-clipboard",
 							action: false,
 							submenu: {
-								copyID: {
-									separator_before: false,
-									separator_after: false,
-									_disabled: false,
-									label: "Copy ID",
-									icon: "far fa-copy",
-									action: function (b: { reference: string | HTMLElement | JQuery<HTMLElement> }) {
-										let d = tree.get_node(b.reference)
-
-										clipboard.writeText(d.id)
-									}
-								},
 								copy: {
 									separator_before: false,
 									separator_after: false,
@@ -191,6 +180,18 @@
 									action: () => {} // TODO: copy and paste
 								}
 							}
+						},
+						copyID: {
+							separator_before: false,
+							separator_after: false,
+							_disabled: false,
+							label: "Copy ID",
+							icon: "far fa-copy",
+							action: function (b: { reference: string | HTMLElement | JQuery<HTMLElement> }) {
+								let d = tree.get_node(b.reference)
+
+								clipboard.writeText(d.id)
+							}
 						}
 					}
 				}
@@ -202,10 +203,15 @@
 
 		jQuery("#" + elemID).on("changed.jstree", (...data) => {
 			if (data[1].action == "select_node" && data[1].node.id != currentlySelected) {
-				previouslySelected = currentlySelected
-				currentlySelected = data[1].node.id
+				if (editorIsValid) {
+					previouslySelected = currentlySelected
+					currentlySelected = data[1].node.id
 
-				dispatch("selectionUpdate", data)
+					dispatch("selectionUpdate", data)
+				} else {
+					tree.deselect_node(data[1].node.id)
+					tree.select_node(currentlySelected)
+				}
 			}
 		})
 		jQuery("#" + elemID).on("move_node.jstree", (...data) => dispatch("dragAndDrop", data))
@@ -251,6 +257,11 @@
 	export function navigateTo(ent: string) {
 		tree.deselect_node(currentlySelected)
 		tree.select_node(ent)
+	}
+
+	export function deselect() {
+		tree.deselect_all()
+		currentlySelected = null!
 	}
 </script>
 
