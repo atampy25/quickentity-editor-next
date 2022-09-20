@@ -106,7 +106,11 @@
 			for (const template of templates[entityID]) {
 				if (isGeom(template)) {
 					if (
-						!(await exists(typeof entityData.properties!.m_ResourceID.value == "string" ? entityData.properties!.m_ResourceID.value : entityData.properties!.m_ResourceID.value.resource))
+						!(await exists(
+							`gltf/${
+								typeof entityData.properties!.m_ResourceID.value == "string" ? entityData.properties!.m_ResourceID.value : entityData.properties!.m_ResourceID.value.resource
+							}.PRIM.glb`
+						))
 					) {
 						if (
 							!$inProgressMeshLoads[

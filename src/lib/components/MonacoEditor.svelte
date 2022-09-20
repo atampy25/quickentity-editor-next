@@ -192,7 +192,12 @@
 		}
 	})
 
-	$: editor && jsonToDisplay && editor.setValue(json.stringify(jsonToDisplay, "\t"))
+	$: {
+		if (editor && jsonToDisplay) {
+			editor.setValue(json.stringify(jsonToDisplay, "\t"))
+			editor.layout()
+		}
+	}
 </script>
 
 <div bind:this={el} class="h-full" />

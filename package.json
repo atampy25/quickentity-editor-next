@@ -12,6 +12,7 @@
 		"tauri": "env-cmd tauri"
 	},
 	"devDependencies": {
+		"@fortawesome/free-solid-svg-icons": "^6.2.0",
 		"@sveltejs/adapter-static": "1.0.0-next.38",
 		"@sveltejs/kit": "1.0.0-next.380",
 		"@tauri-apps/cli": "^1.1.1",
@@ -35,6 +36,7 @@
 		"prettier-plugin-toml": "^0.3.1",
 		"svelte": "^3.44.0",
 		"svelte-check": "^2.7.1",
+		"svelte-fa": "^3.0.3",
 		"svelte-preprocess": "^4.10.6",
 		"tailwindcss": "^3.1.6",
 		"tslib": "^2.3.1",
@@ -44,6 +46,7 @@
 	"type": "module",
 	"private": true,
 	"dependencies": {
+		"@simonwep/pickr": "^1.8.2",
 		"@tauri-apps/api": "^1.1.0",
 		"@tauri-apps/tauri-forage": "^1.0.0-beta.2",
 		"@threlte/core": "^4.3.2",

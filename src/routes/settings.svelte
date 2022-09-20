@@ -6,9 +6,9 @@
 	import Information from "carbon-icons-svelte/lib/Information.svelte"
 	import { slide } from "svelte/transition"
 
-	let appPath: string
+	let documentsPath: string
 	;(async () => {
-		appPath = await documentDir()
+		documentsPath = await documentDir()
 	})()
 </script>
 
@@ -24,7 +24,7 @@
 </div>
 <br />
 {#if $appSettings.gameFileExtensions}
-	<TextInput labelText="Path to game file data" placeholder={appPath + "blabla"} bind:value={$appSettings.gameFileExtensionsDataPath} />
+	<TextInput labelText="Path to game file data" placeholder={documentsPath + "blabla"} bind:value={$appSettings.gameFileExtensionsDataPath} />
 	<br />
 {/if}
-<TextInput labelText="Runtime path" placeholder={appPath + "blabla"} bind:value={$appSettings.runtimePath} />
+<TextInput labelText="Runtime path" placeholder={documentsPath + "blabla"} bind:value={$appSettings.runtimePath} />
