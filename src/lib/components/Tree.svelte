@@ -80,7 +80,13 @@
 				fuzzy: true,
 				show_only_matches: true,
 				close_opened_onclear: false,
-				search_callback: false
+				search_callback: (search: string, node: { id: string }) => {
+					if (search.startsWith(":")) {
+						return eval(search.slice(1))(entity.entities[node.id])
+					} else {
+						return JSON.stringify(entity.entities[node.id]).toLowerCase().includes(search)
+					}
+				}
 			},
 			sort: function (a: any, b: any) {
 				if (
@@ -252,6 +258,10 @@
 		}
 
 		tree.refresh()
+	}
+
+	export function search(query: string) {
+		tree.search(query.toLowerCase())
 	}
 
 	export function navigateTo(ent: string) {

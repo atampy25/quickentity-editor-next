@@ -15,7 +15,7 @@
 	import enums from "$lib/enums.json"
 
 	import { Pane, Splitpanes as SplitPanes } from "svelte-splitpanes"
-	import { ClickableTile, Select, TextArea, TextInput } from "carbon-components-svelte"
+	import { ClickableTile, Search, Select, TextArea, TextInput } from "carbon-components-svelte"
 	import debounce from "lodash/debounce"
 	import isEqual from "lodash/isEqual"
 	import { AmbientLight, Canvas, DirectionalLight, Mesh, OrbitControls, PerspectiveCamera } from "@threlte/core"
@@ -86,6 +86,12 @@
 			}
 		}
 	}, 5000)
+
+	let treeSearchInput: string
+
+	const treeSearch = debounce(() => {
+		tree.search(treeSearchInput)
+	}, 2500)
 </script>
 
 <SplitPanes on:resize={() => editor.layout()} theme="">
@@ -95,6 +101,8 @@
 				<div class="flex flex-col h-full">
 					<h1>Tree</h1>
 					<div class="flex-grow overflow-auto">
+						<Search size="lg" labelText="Filter tree entities" on:input={treeSearch} bind:value={treeSearchInput} />
+						<br />
 						<Tree
 							on:selectionUpdate={({ detail }) => {
 								if (selectionType == "entity") {
@@ -276,7 +284,7 @@
 																<AmbientLight intensity={1} />
 
 																{#await readJSON(joined) then content}
-																	<!-- <Entity3DMesh
+																	<Entity3DMesh
 																		entity={content}
 																		rotation={{
 																			x: selectedEntity.properties?.m_mTransform.value.rotation.x * DEG2RAD || 0,
@@ -288,7 +296,7 @@
 																			y: selectedEntity.properties?.m_PrimitiveScale.value.z || 1,
 																			z: selectedEntity.properties?.m_PrimitiveScale.value.y || 1
 																		}}
-																	/> -->
+																	/>
 																{/await}
 
 																<!-- Floor -->
