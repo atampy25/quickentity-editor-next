@@ -259,7 +259,19 @@
 														<AmbientLight intensity={1} />
 
 														{#await readJSON(joined) then content}
-															<Entity3DMesh entity={content} scale={{ x: 1, y: 1, z: 1 }} />
+															<Entity3DMesh
+																entity={content}
+																rotation={{
+																	x: selectedEntity.properties?.m_mTransform.value.rotation.x * DEG2RAD || 0,
+																	y: selectedEntity.properties?.m_mTransform.value.rotation.z * DEG2RAD || 0,
+																	z: selectedEntity.properties?.m_mTransform.value.rotation.y * DEG2RAD || 0
+																}}
+																scale={{
+																	x: selectedEntity.properties?.m_PrimitiveScale.value.x || 1,
+																	y: selectedEntity.properties?.m_PrimitiveScale.value.z || 1,
+																	z: selectedEntity.properties?.m_PrimitiveScale.value.y || 1
+																}}
+															/>
 														{/await}
 
 														<!-- Floor -->

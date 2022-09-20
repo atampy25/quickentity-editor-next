@@ -24,11 +24,7 @@
 			<DirectionalLight position={{ x: -5, y: 10, z: -10 }} intensity={0.2} />
 			<AmbientLight intensity={1} />
 
-			{#await join($appSettings.gameFileExtensionsDataPath, "TEMP", "0061F5664CA5E39D.TEMP.entity.json") then joined}
-				{#await readTextFile(joined) then content}
-					<Entity3DMesh entity={$entity} scale={{ x: 0.1, y: 0.1, z: 0.1 }} />
-				{/await}
-			{/await}
+			<Entity3DMesh entity={$entity} scale={{ x: 0.1, y: 0.1, z: 0.1 }} />
 
 			<!-- Floor -->
 			<Mesh receiveShadow rotation={{ x: -90 * (Math.PI / 180) }} geometry={new CircleGeometry(3, 72)} material={new MeshStandardMaterial({ side: DoubleSide, color: "white" })} />
