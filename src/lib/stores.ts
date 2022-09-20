@@ -5,6 +5,7 @@ import Decimal from "decimal.js"
 import { forage } from "@tauri-apps/tauri-forage"
 import json from "$lib/json"
 import { Intellisense } from "$lib/intellisense"
+import RPKGInstance from "$lib/rpkg"
 
 if (!(await forage.getItem({ key: "appSettings" })())) {
 	await forage.setItem({
@@ -16,9 +17,10 @@ if (!(await forage.getItem({ key: "appSettings" })())) {
 export const appSettings: Writable<{
 	gameFileExtensions: boolean
 	gameFileExtensionsDataPath: string
+	runtimePath: string
 }> = writable(json.parse(await forage.getItem({ key: "appSettings" })()))
 
-appSettings.subscribe((value: { gameFileExtensions: boolean; gameFileExtensionsDataPath: string }) => {
+appSettings.subscribe((value: { gameFileExtensions: boolean; gameFileExtensionsDataPath: string; runtimePath: string }) => {
 	void (async () => {
 		await forage.setItem({ key: "appSettings", value: json.stringify(value) })()
 	})()
@@ -116,3 +118,5 @@ appSettings.subscribe((value: { gameFileExtensions: boolean; gameFileExtensionsD
 		intellisense.subscribe((value) => void value.ready())
 	}
 })
+
+export const inProgressMeshLoads: Writable<Record<string, boolean>> = writable({})

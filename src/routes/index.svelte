@@ -5,14 +5,29 @@
 	import MonacoEditor from "$lib/components/MonacoEditor.svelte"
 	import Tree from "$lib/components/Tree.svelte"
 
-	import { addNotification, entity, references, reverseReferences } from "$lib/stores"
-	import { changeReferenceToLocalEntity, checkValidityOfEntity, deleteReferencesToEntity, genRandHex, traverseEntityTree } from "$lib/utils"
+	import { addNotification, appSettings, entity, references, reverseReferences } from "$lib/stores"
+	import { changeReferenceToLocalEntity, checkValidityOfEntity, deleteReferencesToEntity, genRandHex, normaliseToHash, traverseEntityTree } from "$lib/utils"
 	import json from "$lib/json"
 
 	import { Pane, Splitpanes as SplitPanes } from "svelte-splitpanes"
 	import { ClickableTile, TextArea, TextInput } from "carbon-components-svelte"
 	import debounce from "lodash/debounce"
 	import isEqual from "lodash/isEqual"
+	import { AmbientLight, Canvas, DirectionalLight, Mesh, OrbitControls, PerspectiveCamera } from "@threlte/core"
+	import Entity3DMesh from "$lib/components/Entity3DMesh.svelte"
+	import { join } from "@tauri-apps/api/path"
+	import { readTextFile, exists as tauriExists } from "@tauri-apps/api/fs"
+	import { DEG2RAD } from "three/src/math/MathUtils"
+	import { CircleGeometry, DoubleSide, MeshStandardMaterial } from "three"
+
+	const readJSON = async (path: string) => json.parse(await readTextFile(path))
+	const exists = async (path: string) => {
+		try {
+			return await tauriExists(path)
+		} catch {
+			return false
+		}
+	}
 
 	let editor: monaco.editor.IStandaloneCodeEditor
 
@@ -27,7 +42,7 @@
 
 	let editorIsValid: boolean = true
 
-	window.onresize = () => editor.layout()
+	window.onresize = () => editor?.layout()
 
 	const updateEntityData = debounce((entityID, data) => {
 		try {
@@ -227,6 +242,38 @@
 									</div>
 								{:else}
 									There aren't any reverse references to display
+								{/if}
+								{#if $appSettings.gameFileExtensions}
+									{#await join($appSettings.gameFileExtensionsDataPath, "TEMP", normaliseToHash(selectedEntity.template) + ".TEMP.entity.json") then joined}
+										{#await exists(joined) then condition}
+											{#if condition}
+												<h2 class="mt-2">3D preview</h2>
+												<div class="h-full">
+													<Canvas>
+														<PerspectiveCamera position={{ x: 10, y: 10, z: 10 }} fov={24}>
+															<OrbitControls maxPolarAngle={DEG2RAD * 80} autoRotate={true} enableZoom={true} target={{ y: 0.5 }} />
+														</PerspectiveCamera>
+
+														<DirectionalLight shadow position={{ x: 5, y: 10, z: 10 }} />
+														<DirectionalLight position={{ x: -5, y: 10, z: -10 }} intensity={0.2} />
+														<AmbientLight intensity={1} />
+
+														{#await readJSON(joined) then content}
+															<Entity3DMesh entity={content} scale={{ x: 1, y: 1, z: 1 }} />
+														{/await}
+
+														<!-- Floor -->
+														<Mesh
+															receiveShadow
+															rotation={{ x: -90 * (Math.PI / 180) }}
+															geometry={new CircleGeometry(3, 72)}
+															material={new MeshStandardMaterial({ side: DoubleSide, color: "white" })}
+														/>
+													</Canvas>
+												</div>
+											{/if}
+										{/await}
+									{/await}
 								{/if}
 							{:else}
 								<p>

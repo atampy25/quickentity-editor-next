@@ -25,4 +25,6 @@
 <br />
 {#if $appSettings.gameFileExtensions}
 	<TextInput labelText="Path to game file data" placeholder={appPath + "blabla"} bind:value={$appSettings.gameFileExtensionsDataPath} />
+	<br />
 {/if}
+<TextInput labelText="Runtime path" placeholder={appPath + "blabla"} bind:value={$appSettings.runtimePath} />

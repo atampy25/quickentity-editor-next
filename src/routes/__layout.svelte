@@ -43,6 +43,7 @@
 	import Edit from "carbon-icons-svelte/lib/Edit.svelte"
 	import TreeView from "carbon-icons-svelte/lib/TreeView.svelte"
 	import Settings from "carbon-icons-svelte/lib/Settings.svelte"
+	import Chart_3D from "carbon-icons-svelte/lib/Chart_3D.svelte"
 
 	let displayNotifications: { kind: "error" | "info" | "info-square" | "success" | "warning" | "warning-alt"; title: string; subtitle: string }[] = []
 
@@ -180,7 +181,16 @@
 
 						await writeTextFile("./entity.json", json.stringify($entity))
 
-						await new Command("sidecar/quickentity-rs", ["--input1", String($entityMetadata.originalEntityPath), "--input2", "./entity.json", "--output", x]).spawn()
+						await Command.sidecar("sidecar/quickentity-rs", [
+							"patch",
+							"generate",
+							"--input1",
+							String($entityMetadata.originalEntityPath),
+							"--input2",
+							"./entity.json",
+							"--output",
+							x
+						]).execute()
 					}}
 					href="#"
 					text="Save as patch file"
@@ -195,6 +205,7 @@
 				<SideNavLink icon={Edit} text="Overrides" href="/overrides" isSelected={$page.url.pathname == "/overrides"} />
 				<SideNavDivider />
 				<SideNavLink icon={TreeView} text="Tree View" href="/" isSelected={$page.url.pathname == "/"} />
+				<SideNavLink icon={Chart_3D} text="3D Preview" href="/3d" isSelected={$page.url.pathname == "/3d"} />
 				<SideNavDivider />
 				<SideNavLink icon={Settings} text="Settings" href="/settings" isSelected={$page.url.pathname == "/settings"} />
 			</SideNavItems>

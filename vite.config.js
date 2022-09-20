@@ -8,6 +8,9 @@ const config = {
 	},
 	build: {
 		target: "es2022"
+	},
+	ssr: {
+		noExternal: ["three", "troika-three-text"]
 	}
 }
 
