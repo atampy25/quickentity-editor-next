@@ -82,9 +82,11 @@
 				close_opened_onclear: false,
 				search_callback: (search: string, node: { id: string }) => {
 					if (search.startsWith(":")) {
-						return eval(search.slice(1))(entity.entities[node.id])
+						if (entity.entities[node.id]) {
+							return eval(search.slice(1))(entity.entities[node.id])
+						}
 					} else {
-						return (JSON.stringify(entity.entities[node.id]) + node.id).toLowerCase().includes(search)
+						return (JSON.stringify(entity.entities[node.id] || entity.comments[Number(node.id.split("-")[1])]) + node.id).toLowerCase().includes(search)
 					}
 				}
 			},

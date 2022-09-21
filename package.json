@@ -1,6 +1,6 @@
 {
 	"name": "QuickEntity Editor",
-	"version": "1.1.0",
+	"version": "1.1.1",
 	"license": "LGPL-3.0-only",
 	"scripts": {
 		"dev": "vite dev",

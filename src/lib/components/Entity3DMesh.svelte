@@ -5,7 +5,7 @@
 	import { appSettings, inProgressMeshLoads, intellisense, parsedEntities } from "$lib/stores"
 	import { readTextFile, exists as tauriExists } from "@tauri-apps/api/fs"
 	import json from "$lib/json"
-	import { join } from "@tauri-apps/api/path"
+	import { appDir, join } from "@tauri-apps/api/path"
 	import type { Entity } from "$lib/quickentity-types"
 	import { Command } from "@tauri-apps/api/shell"
 	import { onDestroy, onMount } from "svelte"
@@ -129,7 +129,7 @@
 							await rpkg.callFunction(
 								`-extract_prim_textured_from "${$appSettings.runtimePath}" -filter "${
 									typeof entityData.properties!.m_ResourceID.value == "string" ? entityData.properties!.m_ResourceID.value : entityData.properties!.m_ResourceID.value.resource
-								}" -output_path gltf`
+								}" -output_path "${await join(await appDir(), "gltf")}"`
 							)
 
 							delete $inProgressMeshLoads[

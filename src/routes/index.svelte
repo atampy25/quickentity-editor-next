@@ -8,7 +8,7 @@
 	import ColorPicker from "$lib/components/ColorPicker.svelte"
 	import Entity3DMesh from "$lib/components/Entity3DMesh.svelte"
 
-	import { addNotification, appSettings, entity, references, reverseReferences } from "$lib/stores"
+	import { addNotification, appSettings, entity, entityMetadata, references, reverseReferences } from "$lib/stores"
 	import { changeReferenceToLocalEntity, checkValidityOfEntity, deleteReferencesToEntity, genRandHex, normaliseToHash, traverseEntityTree } from "$lib/utils"
 	import json from "$lib/json"
 
@@ -49,40 +49,42 @@
 	window.onresize = () => editor?.layout()
 
 	const updateEntityData = debounce((entityID, data) => {
-		try {
-			json.parse(data)
-		} catch {
-			editorIsValid = false
-			$addNotification = {
-				kind: "error",
-				title: "Invalid JSON",
-				subtitle: "You've entered invalid JSON."
+		if (selectionType) {
+			try {
+				json.parse(data)
+			} catch {
+				editorIsValid = false
+				$addNotification = {
+					kind: "error",
+					title: "Invalid JSON",
+					subtitle: "You've entered invalid JSON."
+				}
+
+				return
 			}
 
-			return
-		}
+			try {
+				if (checkValidityOfEntity($entity, json.parse(data))) {
+					editorIsValid = true
 
-		try {
-			if (checkValidityOfEntity($entity, json.parse(data))) {
-				editorIsValid = true
-
-				if (!isEqual($entity.entities[entityID], json.parse(data))) {
-					$entity.entities[entityID] = json.parse(data)
+					if (!isEqual($entity.entities[entityID], json.parse(data))) {
+						$entity.entities[entityID] = json.parse(data)
+					}
+				} else {
+					editorIsValid = false
+					$addNotification = {
+						kind: "error",
+						title: "Invalid entity",
+						subtitle: "The entity either references something that doesn't exist or isn't valid according to the schema."
+					}
 				}
-			} else {
+			} catch {
 				editorIsValid = false
 				$addNotification = {
 					kind: "error",
 					title: "Invalid entity",
 					subtitle: "The entity either references something that doesn't exist or isn't valid according to the schema."
 				}
-			}
-		} catch {
-			editorIsValid = false
-			$addNotification = {
-				kind: "error",
-				title: "Invalid entity",
-				subtitle: "The entity either references something that doesn't exist or isn't valid according to the schema."
 			}
 		}
 	}, 5000)
@@ -92,6 +94,16 @@
 	const treeSearch = debounce(() => {
 		tree.search(treeSearchInput)
 	}, 2500)
+
+	let entityPath: string | undefined
+
+	$: entityPath = $entityMetadata.originalEntityPath
+
+	$: if (entityPath) {
+		selectionType = null
+		selectedEntityID = undefined!
+		selectedEntity = undefined!
+	}
 </script>
 
 <SplitPanes on:resize={() => editor.layout()} theme="">

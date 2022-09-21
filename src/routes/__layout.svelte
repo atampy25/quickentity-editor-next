@@ -34,7 +34,7 @@
 	import { flip } from "svelte/animate"
 	import { open, save } from "@tauri-apps/api/dialog"
 	import { readTextFile, writeTextFile } from "@tauri-apps/api/fs"
-	import { join, sep } from "@tauri-apps/api/path"
+	import { appDir, join, sep } from "@tauri-apps/api/path"
 	import { Command } from "@tauri-apps/api/shell"
 	import jiff from "jiff"
 	import md5 from "md5"
@@ -145,7 +145,6 @@
 						if (!y || Array.isArray(y)) return
 
 						let patched = jiff.patch(json.parse(await readTextFile(x)), json.parse(await readTextFile(y)))
-						await writeTextFile("./patched.json", json.stringify(patched))
 
 						$entityMetadata.originalEntityPath = x
 						$entityMetadata.saveAsPatch = true
@@ -203,7 +202,7 @@
 
 						if (!x) return
 
-						await writeTextFile("./entity.json", json.stringify($entity))
+						await writeTextFile(await join(await appDir(), "entity.json"), json.stringify($entity))
 
 						await Command.sidecar("sidecar/quickentity-rs", [
 							"patch",
@@ -211,7 +210,7 @@
 							"--input1",
 							String($entityMetadata.originalEntityPath),
 							"--input2",
-							"./entity.json",
+							await join(await appDir(), "entity.json"),
 							"--output",
 							x
 						]).execute()
@@ -235,7 +234,7 @@
 						role="none"
 						use:shortcut={{ control: true, key: "s" }}
 						on:click={async () => {
-							await writeTextFile("./entity.json", json.stringify($entity))
+							await writeTextFile(await join(await appDir(), "entity.json"), json.stringify($entity))
 
 							await Command.sidecar("sidecar/quickentity-rs", [
 								"patch",
@@ -243,7 +242,7 @@
 								"--input1",
 								String($entityMetadata.originalEntityPath),
 								"--input2",
-								"./entity.json",
+								await join(await appDir(), "entity.json"),
 								"--output",
 								$entityMetadata.saveAsPatchPath
 							]).execute()
