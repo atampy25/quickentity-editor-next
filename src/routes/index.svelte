@@ -99,10 +99,11 @@
 		<SplitPanes on:resize={() => editor.layout()} theme="" horizontal={true}>
 			<Pane>
 				<div class="flex flex-col h-full">
-					<h1>Tree</h1>
-					<div class="flex-grow overflow-auto">
+					<div class="flex flex-row gap-4 items-center">
+						<h1>Tree</h1>
 						<Search size="lg" labelText="Filter tree entities" on:input={treeSearch} bind:value={treeSearchInput} />
-						<br />
+					</div>
+					<div class="flex-grow overflow-auto">
 						<Tree
 							on:selectionUpdate={({ detail }) => {
 								if (selectionType == "entity") {
@@ -118,6 +119,7 @@
 												title: "Invalid entity",
 												subtitle: "The entity either references something that doesn't exist or isn't valid according to the schema."
 											}
+											return
 										}
 									} catch {
 										tree.navigateTo(selectedEntityID)
@@ -126,6 +128,7 @@
 											title: "Invalid JSON",
 											subtitle: "You've entered invalid JSON."
 										}
+										return
 									}
 								}
 
@@ -211,7 +214,7 @@
 			<Pane>
 				<div class="flex flex-col h-full">
 					<h1>Information</h1>
-					<div class="flex-grow overflow-auto">
+					<div class="flex-grow overflow-y-auto overflow-x-hidden">
 						{#if selectionType}
 							{#if selectionType == "entity"}
 								<ExpandableSection initiallyOpen={true}>
@@ -270,10 +273,10 @@
 									{#await join($appSettings.gameFileExtensionsDataPath, "TEMP", normaliseToHash(selectedEntity.template) + ".TEMP.entity.json") then joined}
 										{#await exists(joined) then condition}
 											{#if condition}
-												<ExpandableSection initiallyOpen={true}>
+												<ExpandableSection initiallyOpen={false}>
 													<h2 slot="heading">3D preview</h2>
 													<div slot="content">
-														<div class="h-full">
+														<div class="h-96">
 															<Canvas>
 																<PerspectiveCamera position={{ x: 10, y: 10, z: 10 }} fov={24}>
 																	<OrbitControls maxPolarAngle={DEG2RAD * 80} autoRotate={true} enableZoom={true} target={{ y: 0.5 }} />
@@ -287,14 +290,14 @@
 																	<Entity3DMesh
 																		entity={content}
 																		rotation={{
-																			x: selectedEntity.properties?.m_mTransform.value.rotation.x * DEG2RAD || 0,
-																			y: selectedEntity.properties?.m_mTransform.value.rotation.z * DEG2RAD || 0,
-																			z: selectedEntity.properties?.m_mTransform.value.rotation.y * DEG2RAD || 0
+																			x: selectedEntity.properties?.m_mTransform?.value?.rotation?.x * DEG2RAD || 0,
+																			y: selectedEntity.properties?.m_mTransform?.value?.rotation?.z * DEG2RAD || 0,
+																			z: selectedEntity.properties?.m_mTransform?.value?.rotation?.y * DEG2RAD || 0
 																		}}
 																		scale={{
-																			x: selectedEntity.properties?.m_PrimitiveScale.value.x || 1,
-																			y: selectedEntity.properties?.m_PrimitiveScale.value.z || 1,
-																			z: selectedEntity.properties?.m_PrimitiveScale.value.y || 1
+																			x: 1,
+																			y: 1,
+																			z: 1
 																		}}
 																	/>
 																{/await}

@@ -25,7 +25,7 @@
 			<tr class:border-b={index != data.length - 1} class="border-solid border-b-white">
 				<td class="p-2 px-4 text-[#f4f4f4]">
 					<div class="flex flex-row gap-4 items-center">
-						<code class="flex-grow">{value}</code>
+						<code class="flex-grow break-all">{value}</code>
 						<Button
 							kind="ghost"
 							size="small"

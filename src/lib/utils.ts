@@ -113,7 +113,7 @@ export function deleteReferencesToEntity(
 				break
 
 			case "exposedEntity":
-				entity.entities[ref.entity].exposedEntities![ref.context![0]].targets = entity.entities[ref.entity].exposedEntities![ref.context![0]].targets.filter(
+				entity.entities[ref.entity].exposedEntities![ref.context![0]].refersTo = entity.entities[ref.entity].exposedEntities![ref.context![0]].refersTo.filter(
 					(a) => getReferencedLocalEntity(a) != target
 				)
 				deleted++
@@ -204,7 +204,7 @@ export function getReferencedEntities(entityData: SubEntity): {
 
 	if (entityData.exposedEntities) {
 		for (const [exposedEnt, data] of Object.entries(entityData.exposedEntities)) {
-			for (const target of data.targets) {
+			for (const target of data.refersTo) {
 				const localRef = getReferencedLocalEntity(target)
 				if (localRef) {
 					refs.push({

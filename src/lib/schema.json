@@ -305,14 +305,14 @@
 				"isArray": {
 					"type": "boolean"
 				},
-				"targets": {
+				"refersTo": {
 					"type": "array",
 					"items": {
 						"$ref": "#/definitions/Ref"
 					}
 				}
 			},
-			"required": ["isArray", "targets"],
+			"required": ["isArray", "refersTo"],
 			"additionalProperties": false
 		},
 		"PropertyOverride": {

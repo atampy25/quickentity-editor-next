@@ -29,19 +29,18 @@
 	<TextInput labelText="Root entity" bind:value={$entity.rootEntity} style="font-family: 'Fira Code', 'IBM Plex Mono', 'Menlo', 'DejaVu Sans Mono', 'Bitstream Vera Sans Mono', Courier, monospace" />
 </div>
 <br />
-<div class="mt-2 grid grid-cols-3">
-	<div>
-		<span class="bx--label">External scenes</span>
-		<ListEditor
-			data={$entity.externalScenes}
-			on:define={({ detail }) => {
-				$entity.externalScenes[
-					$entity.externalScenes.findIndex((a) => a == detail.original) != -1 ? $entity.externalScenes.findIndex((a) => a == detail.original) : $entity.externalScenes.length
-				] = detail.new
-			}}
-			on:undefine={({ detail }) => ($entity.externalScenes = $entity.externalScenes.filter((a) => a != detail.value))}
-		/>
-	</div>
+<span class="bx--label">External scenes</span>
+<ListEditor
+	data={$entity.externalScenes}
+	on:define={({ detail }) => {
+		$entity.externalScenes[
+			$entity.externalScenes.findIndex((a) => a == detail.original) != -1 ? $entity.externalScenes.findIndex((a) => a == detail.original) : $entity.externalScenes.length
+		] = detail.new
+	}}
+	on:undefine={({ detail }) => ($entity.externalScenes = $entity.externalScenes.filter((a) => a != detail.value))}
+/>
+<br>
+<div class="mt-2 grid grid-cols-2 gap-4">
 	<div>
 		<span class="bx--label">Extra factory dependencies</span>
 		<ListEditor

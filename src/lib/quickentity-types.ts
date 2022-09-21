@@ -34,7 +34,7 @@ export interface Entity {
 
 export interface ExposedEntity {
 	isArray: boolean
-	targets: Array<Ref>
+	refersTo: Array<Ref>
 }
 
 export interface FullRef {

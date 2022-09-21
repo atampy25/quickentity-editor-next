@@ -8,7 +8,7 @@
 	import { join } from "@tauri-apps/api/path"
 	import type { Entity } from "$lib/quickentity-types"
 	import { Command } from "@tauri-apps/api/shell"
-	import { onMount } from "svelte"
+	import { onDestroy, onMount } from "svelte"
 	import { getReferencedLocalEntity, normaliseToHash } from "$lib/utils"
 	import { convertFileSrc } from "@tauri-apps/api/tauri"
 	import { DEG2RAD, RAD2DEG } from "three/src/math/MathUtils"
@@ -121,15 +121,20 @@
 								typeof entityData.properties!.m_ResourceID.value == "string" ? entityData.properties!.m_ResourceID.value : entityData.properties!.m_ResourceID.value.resource
 							] = true
 
+							// Don't load more than 10 at a time
+							while (Object.values($inProgressMeshLoads).filter((a) => a).length > 10) {
+								await new Promise((resolve) => setTimeout(resolve, 1000))
+							}
+
 							await rpkg.callFunction(
 								`-extract_prim_textured_from "${$appSettings.runtimePath}" -filter "${
 									typeof entityData.properties!.m_ResourceID.value == "string" ? entityData.properties!.m_ResourceID.value : entityData.properties!.m_ResourceID.value.resource
 								}" -output_path gltf`
 							)
 
-							$inProgressMeshLoads[
+							delete $inProgressMeshLoads[
 								typeof entityData.properties!.m_ResourceID.value == "string" ? entityData.properties!.m_ResourceID.value : entityData.properties!.m_ResourceID.value.resource
-							] = false
+							]
 						} else {
 							while (
 								$inProgressMeshLoads[
@@ -139,20 +144,20 @@
 								await new Promise((resolve) => setTimeout(resolve, 1000))
 							}
 						}
-
-						useGltf(
-							convertFileSrc(
-								`gltf/${
-									typeof entityData.properties!.m_ResourceID.value == "string" ? entityData.properties!.m_ResourceID.value : entityData.properties!.m_ResourceID.value.resource
-								}.PRIM.glb`
-							)
-						).gltf.subscribe(
-							(value) =>
-								(loadedGeometry[
-									typeof entityData.properties!.m_ResourceID.value == "string" ? entityData.properties!.m_ResourceID.value : entityData.properties!.m_ResourceID.value.resource
-								] = value)
-						)
 					}
+
+					useGltf(
+						convertFileSrc(
+							`gltf/${
+								typeof entityData.properties!.m_ResourceID.value == "string" ? entityData.properties!.m_ResourceID.value : entityData.properties!.m_ResourceID.value.resource
+							}.PRIM.glb`
+						)
+					).gltf.subscribe(
+						(value) =>
+							(loadedGeometry[
+								typeof entityData.properties!.m_ResourceID.value == "string" ? entityData.properties!.m_ResourceID.value : entityData.properties!.m_ResourceID.value.resource
+							] = value)
+					)
 				} else if (await exists(await join($appSettings.gameFileExtensionsDataPath, "TEMP", normaliseToHash(template) + ".TEMP.entity.json"))) {
 					$parsedEntities[normaliseToHash(template)] = await readJSON(await join($appSettings.gameFileExtensionsDataPath, "TEMP", normaliseToHash(template) + ".TEMP.entity.json"))
 				}
@@ -197,6 +202,12 @@
 					.map((a) => [finalTransforms[a[0]], getAllTransforms(a[0])])
 			)
 		}
+
+		await rpkg.exit()
+	})
+
+	onDestroy(async () => {
+		$inProgressMeshLoads = {}
 
 		await rpkg.exit()
 	})

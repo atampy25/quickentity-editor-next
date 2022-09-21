@@ -84,7 +84,7 @@
 					if (search.startsWith(":")) {
 						return eval(search.slice(1))(entity.entities[node.id])
 					} else {
-						return JSON.stringify(entity.entities[node.id]).toLowerCase().includes(search)
+						return (JSON.stringify(entity.entities[node.id]) + node.id).toLowerCase().includes(search)
 					}
 				}
 			},

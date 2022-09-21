@@ -1,10 +1,10 @@
 {
 	"version": "1.0.0",
 	"notes": "First version",
-	"pub_date": "2022-98-19T23:34:00Z",
+	"pub_date": "2022-09-21T16:25:00Z",
 	"platforms": {
 		"windows-x86_64": {
-			"signature": "dW50cnVzdGVkIGNvbW1lbnQ6IHNpZ25hdHVyZSBmcm9tIHRhdXJpIHNlY3JldCBrZXkKUlVScWpVZGd2b0lOTlFabFZDcFI3cFNHemo0QXlsdlhraG5IUDliTkRCNzl6cDlKbkk1bklnUGxNeEdUalRWakJIZUFnY3hoRElEQ0lZeGo3eGRCRE1Hdjg1WU5reXZyOWdnPQp0cnVzdGVkIGNvbW1lbnQ6IHRpbWVzdGFtcDoxNjYzNTk0MjQ5CWZpbGU6UXVpY2tFbnRpdHkgRWRpdG9yXzAuMS4wX3g2NF9lbi1VUy5tc2kuemlwCi82SkkyNU1QSXlyTkpPMExkeGVPMmlVZGZxSDRhTTBvU1hhWEsxaVNuNWZ0SjErc2M3SkFpYWxMdXZIMkw1L1l1NHF2SEQwelNTN0JRNVplalN4UkJRPT0K",
+			"signature": "dW50cnVzdGVkIGNvbW1lbnQ6IHNpZ25hdHVyZSBmcm9tIHRhdXJpIHNlY3JldCBrZXkKUlVScWpVZGd2b0lOTmNERjdLWUFrT2FXMUJ0cnpodWsrVDdnY1k5bHJIdW9tRllETUZEb3N0aThPNzV1UjJURm1pSnhEUHJEa0JqR3pJMjNXVmJQZ0xwcHgvMEVSR0dyQ3dFPQp0cnVzdGVkIGNvbW1lbnQ6IHRpbWVzdGFtcDoxNjYzNzQxNDU4CWZpbGU6UXVpY2tFbnRpdHkgRWRpdG9yXzEuMC4wX3g2NF9lbi1VUy5tc2kuemlwCjgwUUJrbkNGcmNoQUQrazZtSzd0c3dsMSt4emxUV09ZeDdCQzFkYmtjL1pPYVZCVVJHQXRFU2E3QVVuQ24zWGxzUnZFc3I3TVAvRlpIbWZ5d3JDMERRPT0K",
 			"url": "https://github.com/atampy25/quickentity-editor-next/releases/download/1.0.0/QuickEntity Editor_1.0.0_x64_en-US.msi.zip"
 		}
 	}

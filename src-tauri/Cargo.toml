@@ -1,7 +1,7 @@
 [package]
 name = "quickentity-editor"
 version = "1.0.0"
-description = "A Tauri App"
+description = "An editor for the QuickEntity format."
 authors = ["GlacierModding"]
 license = "LGPL-3.0-only"
 default-run = "quickentity-editor"

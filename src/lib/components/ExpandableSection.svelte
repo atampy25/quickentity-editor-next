@@ -4,7 +4,7 @@
 	import Icon from "svelte-fa"
 	import { faChevronDown } from "@fortawesome/free-solid-svg-icons"
 
-	import { scale } from "svelte/transition"
+	import { scale, slide } from "svelte/transition"
 	import { onMount } from "svelte"
 	import { v4 } from "uuid"
 
@@ -41,13 +41,8 @@
 			<Icon icon={faChevronDown} />
 		</div>
 	</div>
-	{#if !open}
-		<div>
-			<slot name="closedContent" />
-		</div>
-	{/if}
 	{#if open}
-		<div class="mb-2">
+		<div class="mb-2" transition:slide>
 			<slot name="content" />
 		</div>
 	{/if}
