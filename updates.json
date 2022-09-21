@@ -1,11 +1,11 @@
 {
-	"version": "1.0.0",
-	"notes": "First version",
+	"version": "1.1.0",
+	"notes": "Sensible keyboard shortcuts for header actions",
 	"pub_date": "2022-09-21T16:25:00Z",
 	"platforms": {
 		"windows-x86_64": {
-			"signature": "dW50cnVzdGVkIGNvbW1lbnQ6IHNpZ25hdHVyZSBmcm9tIHRhdXJpIHNlY3JldCBrZXkKUlVScWpVZGd2b0lOTllUMkpiNTcwNDJleVlVUjM4a1VDMlE3OTJYZGw5alJkbndEL0RKZGlkZ1hXZzhkemRBN3dZcHVNS2QyNkVrVWE0Z1h4VXdOTWdCbkR1Umdxa05pY0EwPQp0cnVzdGVkIGNvbW1lbnQ6IHRpbWVzdGFtcDoxNjYzNzQzNzA5CWZpbGU6UXVpY2tFbnRpdHkgRWRpdG9yXzEuMC4wX3g2NF9lbi1VUy5tc2kuemlwCkpCQ2JMN3o5NnFLdzlUVFFPN1pYYVF4aVlaekJmZUViY2pyLzJMRFNyai96aHRKZ3BUNW9VWGZ0MitZNDY0QmRpV2xZNDBCSU15V1hoRG93ZWdsYUR3PT0K",
-			"url": "https://github.com/atampy25/quickentity-editor-next/releases/download/1.0.0/QuickEntity.Editor_1.0.0_x64_en-US.msi.zip"
+			"signature": "dW50cnVzdGVkIGNvbW1lbnQ6IHNpZ25hdHVyZSBmcm9tIHRhdXJpIHNlY3JldCBrZXkKUlVScWpVZGd2b0lOTlE5NEtJVDVsT2pvZk5iNWV1ZXlteEErZzBYdkFXZ05jTkFiQ2lHRGNZdkxTSHZ1SlhuOUwyQW1lb0M3dnRFM29qSUp4eElQUUx3d1dLQ2ZDQThqUndvPQp0cnVzdGVkIGNvbW1lbnQ6IHRpbWVzdGFtcDoxNjYzNzUyODM4CWZpbGU6UXVpY2tFbnRpdHkgRWRpdG9yXzEuMS4wX3g2NF9lbi1VUy5tc2kuemlwCkpUM1NLNUNXS3ZYWGRocGdWd1JBZUQxTGhybmxiSFl3aUxHeXFpQnhCMGRLdWRCeDNnMzB1WEt1WnAyMkcvV3EzOVFwRUhRSllNeGpKZi9VZllWWURRPT0K",
+			"url": "https://github.com/atampy25/quickentity-editor-next/releases/download/1.1.0/QuickEntity.Editor_1.1.0_x64_en-US.msi.zip"
 		}
 	}
 }

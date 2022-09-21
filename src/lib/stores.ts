@@ -28,6 +28,9 @@ appSettings.subscribe((value: { gameFileExtensions: boolean; gameFileExtensionsD
 
 export const entityMetadata: Writable<{
 	originalEntityPath?: string
+	saveAsPatch?: boolean
+	saveAsEntityPath?: string
+	saveAsPatchPath?: string
 }> = writable({})
 
 export const entity: Writable<Entity> = writable({

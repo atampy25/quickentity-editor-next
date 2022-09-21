@@ -419,10 +419,6 @@
 		width: 100%;
 	}
 
-	code {
-		font-family: "Fira Code", "IBM Plex Mono", "Menlo", "DejaVu Sans Mono", "Bitstream Vera Sans Mono", Courier, monospace;
-	}
-
 	.bx--toast-notification__caption {
 		display: none;
 	}

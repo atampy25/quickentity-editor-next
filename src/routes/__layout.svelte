@@ -34,7 +34,7 @@
 	import { flip } from "svelte/animate"
 	import { open, save } from "@tauri-apps/api/dialog"
 	import { readTextFile, writeTextFile } from "@tauri-apps/api/fs"
-	import { join } from "@tauri-apps/api/path"
+	import { join, sep } from "@tauri-apps/api/path"
 	import { Command } from "@tauri-apps/api/shell"
 	import jiff from "jiff"
 	import md5 from "md5"
@@ -44,6 +44,7 @@
 	import TreeView from "carbon-icons-svelte/lib/TreeView.svelte"
 	import Settings from "carbon-icons-svelte/lib/Settings.svelte"
 	import Chart_3D from "carbon-icons-svelte/lib/Chart_3D.svelte"
+	import { shortcut } from "$lib/shortcut"
 
 	let displayNotifications: { kind: "error" | "info" | "info-square" | "success" | "warning" | "warning-alt"; title: string; subtitle: string }[] = []
 
@@ -77,7 +78,9 @@
 		</svelte:fragment>
 		<HeaderNav>
 			<HeaderNavMenu text="Load">
-				<HeaderNavItem
+				<li
+					role="none"
+					use:shortcut={{ control: true, key: "o" }}
 					on:click={async () => {
 						let x = await open({
 							multiple: false,
@@ -92,22 +95,28 @@
 
 						if (x && !Array.isArray(x)) {
 							$entityMetadata.originalEntityPath = x
+							$entityMetadata.saveAsPatch = false
+							$entityMetadata.saveAsEntityPath = $entityMetadata.originalEntityPath
 							$entity = json.parse(await readTextFile(x))
 						}
 					}}
-					href="#"
-					text="Load entity from file"
-				/>
+				>
+					<HeaderNavItem href="#" text="Load entity from file" />
+				</li>
 				{#if $appSettings.gameFileExtensions}
-					<HeaderNavItem
+					<li
+						role="none"
+						use:shortcut={{ control: true, alt: true, key: "o" }}
 						on:click={() => {
 							askGameFileModalOpen = true
 						}}
-						href="#"
-						text="Load entity from game"
-					/>
+					>
+						<HeaderNavItem href="#" text="Load entity from game" />
+					</li>
 				{/if}
-				<HeaderNavItem
+				<li
+					role="none"
+					use:shortcut={{ control: true, shift: true, key: "O" }}
 					on:click={async () => {
 						let x = await open({
 							multiple: false,
@@ -138,15 +147,19 @@
 						let patched = jiff.patch(json.parse(await readTextFile(x)), json.parse(await readTextFile(y)))
 						await writeTextFile("./patched.json", json.stringify(patched))
 
-						$entityMetadata.originalEntityPath = "./patched.json"
+						$entityMetadata.originalEntityPath = x
+						$entityMetadata.saveAsPatch = true
+						$entityMetadata.saveAsPatchPath = y
 						$entity = patched
 					}}
-					href="#"
-					text="Load entity from patch"
-				/>
+				>
+					<HeaderNavItem href="#" text="Load entity from patch" />
+				</li>
 			</HeaderNavMenu>
-			<HeaderNavMenu text="Save">
-				<HeaderNavItem
+			<HeaderNavMenu text="Save as">
+				<li
+					role="none"
+					use:shortcut={{ control: true, shift: true, key: "S" }}
 					on:click={async () => {
 						let x = await save({
 							title: "Save the entity JSON",
@@ -161,11 +174,22 @@
 						if (!x) return
 
 						await writeTextFile(x, json.stringify($entity))
+
+						$entityMetadata.saveAsPatch = false
+						$entityMetadata.saveAsEntityPath = x
+
+						$addNotification = {
+							kind: "success",
+							title: "Saved entity successfully",
+							subtitle: "Saved the entity to the selected path"
+						}
 					}}
-					href="#"
-					text="Save as entity file"
-				/>
-				<HeaderNavItem
+				>
+					<HeaderNavItem href="#" text="Save as entity file" />
+				</li>
+				<li
+					role="none"
+					use:shortcut={{ control: true, shift: true, alt: true, key: "S" }}
 					on:click={async () => {
 						let x = await save({
 							title: "Save the patch JSON",
@@ -191,11 +215,72 @@
 							"--output",
 							x
 						]).execute()
+
+						$entityMetadata.saveAsPatch = true
+						$entityMetadata.saveAsPatchPath = x
+
+						$addNotification = {
+							kind: "success",
+							title: "Saved patch successfully",
+							subtitle: "Saved the changes from the original entity to the selected path"
+						}
 					}}
-					href="#"
-					text="Save as patch file"
-				/>
+				>
+					<HeaderNavItem href="#" text="Save as patch file" />
+				</li>
 			</HeaderNavMenu>
+			{#if $entityMetadata.originalEntityPath}
+				{#if $entityMetadata.saveAsPatch}
+					<li
+						role="none"
+						use:shortcut={{ control: true, key: "s" }}
+						on:click={async () => {
+							await writeTextFile("./entity.json", json.stringify($entity))
+
+							await Command.sidecar("sidecar/quickentity-rs", [
+								"patch",
+								"generate",
+								"--input1",
+								String($entityMetadata.originalEntityPath),
+								"--input2",
+								"./entity.json",
+								"--output",
+								$entityMetadata.saveAsPatchPath
+							]).execute()
+
+							$addNotification = {
+								kind: "success",
+								title: "Saved patch successfully",
+								subtitle:
+									"Saved the changes from the original entity to " +
+									($entityMetadata.saveAsPatchPath.split(sep).length > 3 ? "..." + $entityMetadata.saveAsPatchPath.split(sep).slice(-3).join(sep) : $entityMetadata.saveAsPatchPath)
+							}
+						}}
+					>
+						<a role="menuitem" tabindex="0" href="#" class="bx--header__menu-item"><span class="bx--text-truncate--end">Save patch</span></a>
+					</li>
+				{:else}
+					<li
+						role="none"
+						use:shortcut={{ control: true, key: "s" }}
+						on:click={async () => {
+							await writeTextFile($entityMetadata.saveAsEntityPath, json.stringify($entity))
+
+							$addNotification = {
+								kind: "success",
+								title: "Saved entity successfully",
+								subtitle:
+									"Saved the entity to " +
+									($entityMetadata.saveAsEntityPath.split(sep).length > 3
+										? "..." + $entityMetadata.saveAsEntityPath.split(sep).slice(-3).join(sep)
+										: $entityMetadata.saveAsEntityPath)
+							}
+						}}
+					>
+						<a role="menuitem" tabindex="0" href="#" class="bx--header__menu-item"><span class="bx--text-truncate--end">Save entity</span></a>
+					</li>
+				{/if}
+			{/if}
 		</HeaderNav>
 
 		<SideNav bind:isOpen={isSideNavOpen} rail>
@@ -242,6 +327,9 @@
 			}
 
 			$entityMetadata.originalEntityPath = await join($appSettings.gameFileExtensionsDataPath, "TEMP", askGameFileModalResult + ".TEMP.entity.json")
+			$entityMetadata.saveAsPatch = false
+			$entityMetadata.saveAsEntityPath = $entityMetadata.originalEntityPath
+
 			$entity = json.parse(await readTextFile(await join($appSettings.gameFileExtensionsDataPath, "TEMP", askGameFileModalResult + ".TEMP.entity.json")))
 		}}
 	>
@@ -258,5 +346,9 @@
 
 	.bx--toast-notification:first-child {
 		@apply mt-0;
+	}
+
+	code {
+		font-family: "Fira Code", "IBM Plex Mono", "Menlo", "DejaVu Sans Mono", "Bitstream Vera Sans Mono", Courier, monospace;
 	}
 </style>
