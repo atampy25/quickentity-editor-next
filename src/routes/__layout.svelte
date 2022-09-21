@@ -33,7 +33,7 @@
 	import { fade, fly } from "svelte/transition"
 	import { flip } from "svelte/animate"
 	import { open, save } from "@tauri-apps/api/dialog"
-	import { readTextFile, writeTextFile } from "@tauri-apps/api/fs"
+	import { BaseDirectory, createDir, readTextFile, writeTextFile } from "@tauri-apps/api/fs"
 	import { appDir, join, sep } from "@tauri-apps/api/path"
 	import { Command } from "@tauri-apps/api/shell"
 	import jiff from "jiff"
@@ -69,6 +69,10 @@
 
 	let askGameFileModalOpen = false
 	let askGameFileModalResult: string
+
+	onMount(async () => {
+		await createDir("gltf", { dir: BaseDirectory.App, recursive: true })
+	})
 </script>
 
 {#if ready}
@@ -202,7 +206,7 @@
 
 						if (!x) return
 
-						await writeTextFile(await join(await appDir(), "entity.json"), json.stringify($entity))
+						await writeTextFile("entity.json", json.stringify($entity), { dir: BaseDirectory.App })
 
 						await Command.sidecar("sidecar/quickentity-rs", [
 							"patch",
@@ -234,7 +238,7 @@
 						role="none"
 						use:shortcut={{ control: true, key: "s" }}
 						on:click={async () => {
-							await writeTextFile(await join(await appDir(), "entity.json"), json.stringify($entity))
+							await writeTextFile("entity.json", json.stringify($entity), { dir: BaseDirectory.App })
 
 							await Command.sidecar("sidecar/quickentity-rs", [
 								"patch",
