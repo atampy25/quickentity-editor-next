@@ -87,15 +87,17 @@ export class Intellisense {
 		const targetedEntity = loadedEntity.entities[targetEntity || loadedEntity.rootEntity]
 
 		if (targetedEntity.propertyAliases) {
-			for (const [aliasedName, aliasData] of Object.entries(targetedEntity.propertyAliases)) {
-				if (aliasedName == propertyToFind) {
-					return await this.findDefaultPropertyValue(
-						pathToEntity,
-						aliasData.originalEntity as string /* We can assume that the property alias is a local reference */,
-						aliasData.originalProperty,
-						useLoadedEntity,
-						excludeEntity
-					)
+			for (const [aliasedName, aliases] of Object.entries(targetedEntity.propertyAliases)) {
+				for (const aliasData of aliases) {
+					if (aliasedName == propertyToFind) {
+						return await this.findDefaultPropertyValue(
+							pathToEntity,
+							aliasData.originalEntity as string /* We can assume that the property alias is a local reference */,
+							aliasData.originalProperty,
+							useLoadedEntity,
+							excludeEntity
+						)
+					}
 				}
 			}
 		}

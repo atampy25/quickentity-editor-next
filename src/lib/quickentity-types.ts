@@ -106,7 +106,7 @@ export interface SubEntity {
 	events?: Record<string, Record<string, Array<RefMaybeConstantValue>>>
 	inputCopying?: Record<string, Record<string, Array<RefMaybeConstantValue>>>
 	outputCopying?: Record<string, Record<string, Array<RefMaybeConstantValue>>>
-	propertyAliases?: Record<string, PropertyAlias>
+	propertyAliases?: Record<string, Array<PropertyAlias>>
 	exposedEntities?: Record<string, ExposedEntity>
 	exposedInterfaces?: Record<string, string>
 	subsets?: Record<string, Array<string>>
