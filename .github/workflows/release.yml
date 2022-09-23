@@ -94,6 +94,13 @@ jobs:
           field: "notes"
           value: ${{ github.event.head_commit.message }}
 
+      - name: Update updates.json pub_date
+        uses: jossef/action-set-json-field@v2
+        with:
+          file: "updates.json"
+          field: "pub_date"
+          value: ${{ github.event.repository.updated_at}}
+
       - name: Build
         run: |
           yarn tauri build
