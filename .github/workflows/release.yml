@@ -4,11 +4,12 @@ on:
   push:
     tags:
       - '*.*.*'
+  workflow_dispatch:
 
 jobs:
   build:
     runs-on: windows-latest
-    if: startsWith(github.ref, 'refs/tags/')
+    if: github.event.action != 'push' || startsWith(github.ref, 'refs/tags/')
 
     steps:
       - uses: actions/checkout@v2
@@ -21,7 +22,8 @@ jobs:
         with:
           fallback: unknown
       
-      - uses: actions-rs/toolchain@v1
+      - name: Prepare Rust toolchain
+        uses: actions-rs/toolchain@v1
         with:
           toolchain: stable
           target: x86_64-pc-windows-msvc
@@ -29,7 +31,9 @@ jobs:
       
       - name: Install dependencies
         run: |
+          yarn set version 3.2.3
           yarn
+          yarn prepare
 
       - name: Download RPKG
         uses: aochmann/actions-download-artifact@5709392f11b5937bd316e52687ad87f7deced5f5
@@ -39,7 +43,7 @@ jobs:
           latest: true
           path: './temp'
       
-      - name: release-downloader
+      - name: Download quickentity-rs
         uses: robinraju/release-downloader@v1.5
         with:
           repository: atampy25/quickentity-rs
@@ -49,8 +53,8 @@ jobs:
       
       - name: Update third-party files
         run: |
-          robocopy "temp" "src-tauri/sidecar" "rpkg-cli.exe" "rpkg-cli-x86_64-pc-windows-msvc.exe"; if ($lastexitcode -lt 8) { $global:LASTEXITCODE = $null }
-          robocopy "temp" "src-tauri/sidecar" "quickentity-rs.exe" "quickentity-rs-x86_64-pc-windows-msvc.exe"; if ($lastexitcode -lt 8) { $global:LASTEXITCODE = $null }
+          copy "temp/rpkg-cli.exe" "src-tauri/sidecar/rpkg-cli-x86_64-pc-windows-msvc.exe"
+          copy "temp/quickentity-rs.exe" "src-tauri/sidecar/quickentity-rs-x86_64-pc-windows-msvc.exe"
           robocopy "temp" "intellisense-scripts" "quickentity-rs.exe" "quickentity-rs.exe"; if ($lastexitcode -lt 8) { $global:LASTEXITCODE = $null }
           robocopy "temp" "src-tauri" "hash_list.txt" "hash_list.txt"; if ($lastexitcode -lt 8) { $global:LASTEXITCODE = $null }
 
@@ -67,7 +71,7 @@ jobs:
           value: ${{ steps.latestTag.outputs.tag }}
 
       - name: Update Cargo.toml version
-        uses: ciiiii/toml-editor@1.0.0
+        uses: colathro/toml-editor@1.1.1
         with:
           file: "src-tauri/Cargo.toml"
           key: "package.version"
@@ -92,7 +96,7 @@ jobs:
         with:
           file: "updates.json"
           field: "notes"
-          value: ${{ github.event.head_commit.message }}
+          value: "${{ github.event.head_commit.message || format('v{0}', steps.latestTag.outputs.tag) }}"
 
       - name: Update updates.json pub_date
         uses: jossef/action-set-json-field@v2
@@ -101,15 +105,37 @@ jobs:
           field: "pub_date"
           value: ${{ github.event.repository.updated_at}}
 
+      - name: Write key file
+        uses: DamianReeves/write-file-action@v1.0
+        with:
+          path: "src-tauri/qne.key"
+          contents: ${{ secrets.KEYDATA }}
+
+      - name: Write env file
+        uses: DamianReeves/write-file-action@v1.0
+        with:
+          path: "./.env"
+          contents: |
+            TAURI_PRIVATE_KEY=qne.key
+            TAURI_KEY_PASSWORD=${{ secrets.KEYPASS }}
+
       - name: Build
         run: |
           yarn tauri build
 
+      - name: Remove key file
+        run: |
+          Remove-Item "src-tauri/qne.key"
+
+      - name: Remove env file
+        run: |
+          Remove-Item "./.env"
+      
       - name: Read update signature
         id: updateSignature
         uses: andstor/file-reader-action@v1.0.0
         with:
-          path: "src-tauri/target/release/bundle/msi/QuickEntity.Editor_${{ steps.latestTag.outputs.tag }}_x64_en-US.msi.zip.sig"
+          path: "src-tauri/target/release/bundle/msi/QuickEntity Editor_${{ steps.latestTag.outputs.tag }}_x64_en-US.msi.zip.sig"
 
       - name: Update updates.json signature
         uses: jossef/action-set-json-field@v2
@@ -137,20 +163,24 @@ jobs:
         uses: TheDoctor0/zip-release@4fb9e4ff72847dd3d1c111cf63834e353ed7cb3d
         with:
           filename: Portable.zip
-          directory: src-tauri/target/release/portable
+          path: src-tauri/target/release/portable
 
       - name: Create intellisense scripts ZIP
         uses: TheDoctor0/zip-release@4fb9e4ff72847dd3d1c111cf63834e353ed7cb3d
         with:
           filename: Intellisense_Scripts.zip
-          directory: "intellisense-scripts"
+          path: "intellisense-scripts"
+
+      - name: Rename installer zip
+        run: |
+          Rename-Item -Path "src-tauri/target/release/bundle/msi/QuickEntity Editor_${{ steps.latestTag.outputs.tag }}_x64_en-US.msi.zip" -NewName "QuickEntity.Editor_${{ steps.latestTag.outputs.tag }}_x64_en-US.msi.zip"
 
       - name: Release
         uses: softprops/action-gh-release@v1
         with:
           name: ${{ steps.latestTag.outputs.tag }}
-          body: >
-            ${{ github.event.head_commit.message }}
+          body: |
+            ${{ github.event.head_commit.message || format('v{0}', steps.latestTag.outputs.tag) }}
 
             Download the `QuickEntity.Editor_${{ steps.latestTag.outputs.tag }}_x64_en-US.msi.zip` file for an installer with automatic update capability, or the `Portable.zip` file, which makes no guarantees about automatic updates.
 

@@ -1,11 +1,11 @@
 {
-	"version": "1.1.3",
-	"notes": "Hotfix for QuickEntity property aliases and fix for copying/pasting sub-entities",
-	"pub_date": "2022-09-22T14:54:00Z",
-	"platforms": {
-		"windows-x86_64": {
-			"signature": "dW50cnVzdGVkIGNvbW1lbnQ6IHNpZ25hdHVyZSBmcm9tIHRhdXJpIHNlY3JldCBrZXkKUlVScWpVZGd2b0lOTmJ5OHdtdmlFRkRISXQvYmlmUmYyTTEyeTlQS2szM1lVRmFPSmkrazFEU0JsQjU1dVRIVkJMcURlQktNSmJnSDRGb2RhQ3c3OGpmdCsvTzhkUWE2bEEwPQp0cnVzdGVkIGNvbW1lbnQ6IHRpbWVzdGFtcDoxNjYzODIyNDE2CWZpbGU6UXVpY2tFbnRpdHkgRWRpdG9yXzEuMS4zX3g2NF9lbi1VUy5tc2kuemlwCktkK1dDU2xxS0hTU2dJREZnVHZtL09oQ1YzSHJOd0NwdFJJZ29DcDdwWGxxRmN5RDVudWJMWlloQ0h2aDNsRCtZbWdWN0xLWFpvdnYweVcyRmhJcUJRPT0K",
-			"url": "https://github.com/atampy25/quickentity-editor-next/releases/download/1.1.3/QuickEntity.Editor_1.1.3_x64_en-US.msi.zip"
-		}
-	}
+  "version": "1.1.4",
+  "notes": "v1.1.4",
+  "pub_date": "2022-09-21T07:25:26Z",
+  "platforms": {
+    "windows-x86_64": {
+      "signature": "dW50cnVzdGVkIGNvbW1lbnQ6IHNpZ25hdHVyZSBmcm9tIHRhdXJpIHNlY3JldCBrZXkKUlVScWpVZGd2b0lOTmNBN3dRMXY2amIxOFlmK05JZklMOGlxSTYxWlhUZHVGU28yWTQ2M3ZjZTdaMUdqRHhjbGxnQzd6L1pnNWEvdTBqZzdLYnc1WlNXU1R6QXhNUVFXZ2dzPQp0cnVzdGVkIGNvbW1lbnQ6IHRpbWVzdGFtcDoxNjYzOTMwNzkxCWZpbGU6UXVpY2tFbnRpdHkgRWRpdG9yXzEuMS40X3g2NF9lbi1VUy5tc2kuemlwCjZvSVJZT0o5V2Q4Z2I1R3NGbG9BS2ZZaWZ0QUI5NGpoZ3Z0VnBMS3hjV2tuMi9hZmFHVjRtS01aaXU4MDFDMndVc1pybWhnSzhmSGMrQlY0djZvc0F3PT0K",
+      "url": "https://github.com/atampy25/quickentity-editor-next/releases/download/1.1.4/QuickEntity.Editor_1.1.4_x64_en-US.msi.zip"
+    }
+  }
 }
