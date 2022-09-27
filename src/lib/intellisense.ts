@@ -149,8 +149,8 @@ export class Intellisense {
 
 		for (const template of (await exists(await join(this.appSettings.gameFileExtensionsDataPath, "ASET", normaliseToHash(targetedEntity.template) + ".ASET.meta.JSON")))
 			? (await readJSON(await join(this.appSettings.gameFileExtensionsDataPath, "ASET", normaliseToHash(targetedEntity.template) + ".ASET.meta.JSON"))).hash_reference_data
-					.slice(0, -1)
-					.map((a) => a.hash)
+				.slice(0, -1)
+				.map((a) => a.hash)
 			: [normaliseToHash(targetedEntity.template)]) {
 			if (await exists(await join(this.appSettings.gameFileExtensionsDataPath, "TEMP", template + ".TEMP.entity.json"))) {
 				const result = await this.findDefaultPropertyValue(await join(this.appSettings.gameFileExtensionsDataPath, "TEMP", template + ".TEMP.entity.json"), undefined, propertyToFind)

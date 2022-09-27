@@ -197,6 +197,10 @@ jobs:
           Remove-Item Portable.zip
           Remove-Item Intellisense_Scripts.zip
       
+      - name: Format
+        run: |
+          yarn format
+      
       - name: Commit changes
         uses: EndBug/add-and-commit@v9.1.0
         with:

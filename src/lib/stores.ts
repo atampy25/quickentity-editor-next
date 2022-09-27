@@ -6,11 +6,12 @@ import { forage } from "@tauri-apps/tauri-forage"
 import json from "$lib/json"
 import { Intellisense } from "$lib/intellisense"
 import RPKGInstance from "$lib/rpkg"
+import { GameServer } from "./in-vivo/gameServer"
 
 if (!(await forage.getItem({ key: "appSettings" })())) {
 	await forage.setItem({
 		key: "appSettings",
-		value: json.stringify({ gameFileExtensions: false, gameFileExtensionsDataPath: null })
+		value: json.stringify({ gameFileExtensions: false, gameFileExtensionsDataPath: null, inVivoExtensions: false, runtimePath: "" })
 	})()
 }
 
@@ -18,9 +19,10 @@ export const appSettings: Writable<{
 	gameFileExtensions: boolean
 	gameFileExtensionsDataPath: string
 	runtimePath: string
+	inVivoExtensions: boolean
 }> = writable(json.parse(await forage.getItem({ key: "appSettings" })()))
 
-appSettings.subscribe((value: { gameFileExtensions: boolean; gameFileExtensionsDataPath: string; runtimePath: string }) => {
+appSettings.subscribe((value: { gameFileExtensions: boolean; gameFileExtensionsDataPath: string; runtimePath: string; inVivoExtensions: boolean }) => {
 	void (async () => {
 		await forage.setItem({ key: "appSettings", value: json.stringify(value) })()
 	})()
@@ -114,12 +116,18 @@ export const parsedEntities: Writable<Record<string, Entity>> = writable({})
 
 export let intellisense: Readable<Intellisense>
 
-appSettings.subscribe((value: { gameFileExtensions: boolean; gameFileExtensionsDataPath: string }) => {
+export const inProgressMeshLoads: Writable<Record<string, boolean>> = writable({})
+
+export const gameServer = new GameServer()
+
+appSettings.subscribe((value: { gameFileExtensions: boolean; gameFileExtensionsDataPath: string; inVivoExtensions: boolean }) => {
 	if (value.gameFileExtensions) {
 		intellisense = readable(new Intellisense(value))
 
 		intellisense.subscribe((value) => void value.ready())
 	}
-})
 
-export const inProgressMeshLoads: Writable<Record<string, boolean>> = writable({})
+	if (value.inVivoExtensions) {
+		void gameServer.start()
+	}
+})
