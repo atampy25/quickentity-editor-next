@@ -1,9 +1,93 @@
 import type { Entity, FullRef, Ref, RefMaybeConstantValue, SubEntity } from "$lib/quickentity-types"
 
 import Ajv from "ajv"
+import cloneDeep from "lodash/cloneDeep"
+import enums from "$lib/enums.json"
 import isEqual from "lodash/isEqual"
 import md5 from "md5"
+import merge from "lodash/merge"
+import propertyTypeSchemas from "$lib/property-type-schemas.json"
 import schema from "$lib/schema.json"
+
+const ajv = new Ajv({ keywords: ["markdownDescription"] }).compile(
+	Object.assign({}, cloneDeep(schema), {
+		$ref: "#/definitions/SubEntity"
+	})
+)
+
+schema.definitions.SubEntity.properties.properties.additionalProperties = {
+	anyOf: [
+		...Object.entries(propertyTypeSchemas).map(([propType, valSchema]) => {
+			return merge({}, cloneDeep(schema.definitions.Property), {
+				properties: {
+					type: {
+						const: propType
+					},
+					value: valSchema
+				},
+				default: {
+					type: propType,
+					value: valSchema.default
+				}
+			})
+		}),
+		...Object.entries(propertyTypeSchemas).map(([propType, valSchema]) => {
+			return merge({}, cloneDeep(schema.definitions.Property), {
+				properties: {
+					type: {
+						const: `TArray<${propType}>`
+					},
+					value: { type: "array", items: valSchema }
+				},
+				default: {
+					type: `TArray<${propType}>`,
+					value: [valSchema.default]
+				}
+			})
+		}),
+		...Object.entries(enums).map(([propType, possibleValues]) => {
+			return merge({}, cloneDeep(schema.definitions.Property), {
+				properties: {
+					type: {
+						const: propType
+					},
+					value: {
+						enum: possibleValues
+					}
+				},
+				default: {
+					type: propType,
+					value: possibleValues[0]
+				}
+			})
+		}),
+		...Object.entries(enums).map(([propType, possibleValues]) => {
+			return merge({}, cloneDeep(schema.definitions.Property), {
+				properties: {
+					type: {
+						const: `TArray<${propType}>`
+					},
+					value: {
+						type: "array",
+						items: {
+							enum: possibleValues
+						}
+					}
+				},
+				default: {
+					type: `TArray<${propType}>`,
+					value: [possibleValues[0]]
+				}
+			})
+		}),
+		{
+			$ref: "#/definitions/Property"
+		}
+	]
+}
+
+schema.definitions.SubEntity.properties.platformSpecificProperties.additionalProperties.additionalProperties = cloneDeep(schema.definitions.SubEntity.properties.properties.additionalProperties)
+schema.definitions.PropertyOverride.properties.properties.additionalProperties = cloneDeep(schema.definitions.SubEntity.properties.properties.additionalProperties)
 
 export const genRandHex = (size: number) => [...Array(size)].map(() => Math.floor(Math.random() * 16).toString(16)).join("")
 
@@ -387,14 +471,8 @@ export function checkValidityOfEntity(entity: Entity, target: SubEntity): boolea
 	}
 
 	// Check that schema is met
-	if (
-		!new Ajv().validate(
-			Object.assign({}, schema, {
-				$ref: "#/definitions/SubEntity"
-			}),
-			target
-		)
-	) {
+	if (!ajv(target)) {
+		console.log("Entity invalid by schema", ajv.errors)
 		return false
 	}
 
@@ -407,4 +485,8 @@ export function normaliseToHash(path: string): string {
 	}
 
 	return path
+}
+
+export function getSchema() {
+	return cloneDeep(schema)
 }

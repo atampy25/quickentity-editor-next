@@ -8,12 +8,11 @@
 	import tsWorker from "monaco-editor/esm/vs/language/typescript/ts.worker?worker"
 	import type { Entity, SubEntity } from "$lib/quickentity-types"
 	import json from "$lib/json"
-	import schema from "$lib/schema.json"
 	import { appSettings, intellisense } from "$lib/stores"
 	import merge from "lodash/merge"
 	import { basename, dirname, join } from "@tauri-apps/api/path"
 	import { readDir, readTextFile, exists as tauriExists } from "@tauri-apps/api/fs"
-	import { normaliseToHash } from "$lib/utils"
+	import { getSchema, normaliseToHash } from "$lib/utils"
 
 	let el: HTMLDivElement = null!
 	let Monaco: typeof monaco
@@ -122,13 +121,16 @@
 						properties: {
 							type: {
 								type: "string",
-								description: "The type of the property.",
 								const: $intellisense.knownCPPTProperties[normaliseToHash(jsonToDisplay.template)][foundProp][0]
 							},
-							value: {
-								description: "The value of the property.",
-								default: $intellisense.knownCPPTProperties[normaliseToHash(jsonToDisplay.template)][foundProp][1]
-							}
+							value: merge(
+								getSchema().definitions.SubEntity.properties.properties.additionalProperties.anyOf.find(
+									(a) => a?.properties?.type?.const == $intellisense.knownCPPTProperties[normaliseToHash(jsonToDisplay.template)][foundProp][0]
+								)?.properties?.value,
+								{
+									default: $intellisense.knownCPPTProperties[normaliseToHash(jsonToDisplay.template)][foundProp][1]
+								}
+							)
 						},
 						default: {
 							type: $intellisense.knownCPPTProperties[normaliseToHash(jsonToDisplay.template)][foundProp][0],
@@ -146,13 +148,14 @@
 							properties: {
 								type: {
 									type: "string",
-									description: "The type of the property.",
 									const: val.type
 								},
-								value: {
-									description: "The value of the property.",
-									default: val.value
-								}
+								value: merge(
+									getSchema().definitions.SubEntity.properties.properties.additionalProperties.anyOf.find((a) => a?.properties?.type?.const == val.type)?.properties?.value,
+									{
+										default: val.value
+									}
+								)
 							},
 							default: val
 						}
@@ -167,7 +170,7 @@
 				{
 					uri: "qne://subentity-schema.json", // id of the first schema
 					fileMatch: ["qne://subentity.json"], // associate with our model
-					schema: merge({}, schema, {
+					schema: merge({}, getSchema(), {
 						$ref: "#/definitions/SubEntity",
 						definitions: {
 							SubEntity: {

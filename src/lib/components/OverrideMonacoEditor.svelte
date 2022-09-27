@@ -8,8 +8,8 @@
 	import tsWorker from "monaco-editor/esm/vs/language/typescript/ts.worker?worker"
 	import type { Property } from "$lib/quickentity-types"
 	import json from "$lib/json"
-	import schema from "$lib/schema.json"
 	import { v4 } from "uuid"
+	import { getSchema } from "$lib/utils"
 
 	let el: HTMLDivElement = null!
 	let Monaco: typeof monaco
@@ -72,7 +72,7 @@
 					fileMatch: ["qne://property" + id + ".json"], // associate with our model
 					schema: {
 						type: "object",
-						additionalProperties: Object.assign(schema, {
+						additionalProperties: Object.assign(getSchema(), {
 							$ref: "#/definitions/Property"
 						})
 					}

@@ -1,0 +1,107 @@
+{
+	"SColorRGB": {
+		"type": "string",
+		"description": "A colour in standard RGB hexadecimal format.",
+		"default": "#ffffff"
+	},
+	"SColorRGBA": {
+		"type": "string",
+		"description": "A colour in standard RGBA hexadecimal format.",
+		"default": "#ffffffff"
+	},
+	"ZGuid": {
+		"type": "string",
+		"description": "A UUID in standard text format.",
+		"default": "00000000-0000-0000-0000-000000000000"
+	},
+	"SMatrix43": {
+		"type": "object",
+		"description": "A transform with position and rotation.",
+		"properties": {
+			"rotation": {
+				"type": "object",
+				"description": "A rotation expressed in euler angles (in degrees) in the order XYZ.",
+				"properties": {
+					"x": {
+						"type": "number"
+					},
+					"y": {
+						"type": "number"
+					},
+					"z": {
+						"type": "number"
+					}
+				},
+				"default": {
+					"x": 0,
+					"y": 0,
+					"z": 0
+				}
+			},
+			"position": {
+				"type": "object",
+				"description": "A position on the 3D plane, where positive Z is vertical.",
+				"properties": {
+					"x": {
+						"type": "number"
+					},
+					"y": {
+						"type": "number"
+					},
+					"z": {
+						"type": "number"
+					}
+				},
+				"default": {
+					"x": 0,
+					"y": 0,
+					"z": 0
+				}
+			}
+		},
+		"default": {
+			"rotation": {
+				"x": 0,
+				"y": 0,
+				"z": 0
+			},
+			"position": {
+				"x": 0,
+				"y": 0,
+				"z": 0
+			}
+		}
+	},
+	"ZRuntimeResourceID": {
+		"anyOf": [
+			{
+				"$ref": "#/definitions/DependencyWithFlag"
+			},
+			{
+				"type": "string"
+			},
+			{
+				"type": "null"
+			}
+		],
+		"description": "A game resource, referenced by its path and, optionally, a flag.",
+		"default": null
+	},
+	"SEntityTemplateReference": {
+		"$ref": "#/definitions/Ref",
+		"description": "A reference to another sub-entity, in this entity or another.",
+		"default": null
+	},
+	"ZGameTime": {
+		"type": "object",
+		"description": "A time expressed in the number of game ticks. There are 1048576 (1024 x 1024) ticks in each real second.",
+		"properties": {
+			"m_nTicks": {
+				"type": "number"
+			}
+		},
+		"default": {
+			"m_nTicks": 0
+		}
+	}
+}
