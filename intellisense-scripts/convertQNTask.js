@@ -1,6 +1,5 @@
 const { execSync } = require("child_process")
 const fs = require("fs-extra")
-const QuickEntity = require("./quickentity")
 const LosslessJSON = require("lossless-json")
 const path = require("path")
 

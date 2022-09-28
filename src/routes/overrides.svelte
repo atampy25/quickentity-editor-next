@@ -38,7 +38,7 @@
 							)
 						}
 
-						overriddenEntityNames[ref.externalScene + ref.ref] = $parsedEntities[normaliseToHash(ref.externalScene)].entities[ref.ref].name
+						overriddenEntityNames[normaliseToHash(ref.externalScene) + ref.ref] = $parsedEntities[normaliseToHash(ref.externalScene)].entities[ref.ref].name
 
 						overriddenEntityNames = overriddenEntityNames
 					}
@@ -53,7 +53,7 @@
 						)
 					}
 
-					overriddenEntityNames[ref.externalScene + ref.ref] = $parsedEntities[normaliseToHash(ref.externalScene)].entities[ref.ref].name
+					overriddenEntityNames[normaliseToHash(ref.externalScene) + ref.ref] = $parsedEntities[normaliseToHash(ref.externalScene)].entities[ref.ref].name
 
 					overriddenEntityNames = overriddenEntityNames
 				}
@@ -82,14 +82,14 @@
 					{#each override.entities as ref}
 						<div class="inline-flex gap-3 items-center pl-3 bg-neutral-800">
 							{#if $appSettings.gameFileExtensions && ref && typeof ref == "object"}
-								{#if overriddenEntityNames[ref?.externalScene + ref?.ref]}
+								{#if overriddenEntityNames[normaliseToHash(ref?.externalScene) + ref?.ref]}
 									<div>
 										<span style="font-size: 0.7rem">
 											{ref.ref} in {ref.externalScene}
 										</span>
 										<br />
 										<span style="font-size: 1rem">
-											{overriddenEntityNames[ref.externalScene + ref.ref]}
+											{overriddenEntityNames[normaliseToHash(ref?.externalScene) + ref.ref]}
 										</span>
 									</div>
 								{:else}
@@ -157,14 +157,14 @@
 				<Tile>
 					<div class="flex items-center gap-4">
 						{#if $appSettings.gameFileExtensions && ref && typeof ref == "object"}
-							{#if overriddenEntityNames[ref?.externalScene + ref?.ref]}
+							{#if overriddenEntityNames[normaliseToHash(ref?.externalScene) + ref?.ref]}
 								<div>
 									<span style="font-size: 0.7rem">
 										{ref.ref} in {ref.externalScene}
 									</span>
 									<br />
 									<span style="font-size: 1rem">
-										{overriddenEntityNames[ref.externalScene + ref.ref]}
+										{overriddenEntityNames[normaliseToHash(ref?.externalScene) + ref.ref]}
 									</span>
 								</div>
 							{:else}
