@@ -1092,7 +1092,6 @@
 			namespace.hooks.addShims(shims)
 		} else {
 			var _namespace$shims
-
 			;(_namespace$shims = namespace.shims).push.apply(_namespace$shims, shims)
 		}
 	})

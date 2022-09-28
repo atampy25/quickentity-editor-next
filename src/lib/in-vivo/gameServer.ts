@@ -1,15 +1,10 @@
-import * as fs from "@tauri-apps/api/fs"
-import * as path from "@tauri-apps/api/path"
-
 import type { Property, Ref, SubEntity } from "$lib/quickentity-types"
 import { getReferencedLocalEntity, normaliseToHash } from "$lib/utils"
 
 import { Decimal } from "decimal.js"
-import UDPSocket from "./api/udp"
-import WebSocket from "./api/websockets"
+import UDPSocket from "$lib/in-vivo/udp"
 import deepClone from "lodash/cloneDeep"
 import enums from "$lib/enums.json"
-import knownPins from "./knownPins.json"
 
 class GameServer {
 	// @ts-expect-error Client should be connected before use

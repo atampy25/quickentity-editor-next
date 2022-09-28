@@ -1,4 +1,4 @@
-use serde_json::{Value as JsonValue, json};
+use serde_json::{json, Value as JsonValue};
 use tauri::{
 	api::ipc::{format_callback, CallbackFn},
 	plugin::Plugin,
@@ -14,12 +14,17 @@ type Id = u32;
 struct ConnectionManager(Mutex<HashMap<Id, (Arc<UdpSocket>, JoinHandle<()>)>>);
 
 #[tauri::command]
-async fn bind<R: Runtime>(window: Window<R>, address: String, callback_function: CallbackFn) -> Result<Id, String> {
+async fn bind<R: Runtime>(
+	window: Window<R>,
+	address: String,
+	callback_function: CallbackFn,
+) -> Result<Id, String> {
 	let id = rand::random();
 
 	let rx = Arc::new(
 		UdpSocket::bind(address.parse::<SocketAddr>().unwrap())
-			.await.map_err(|err| format!("Error in binding to own UDP socket: {err}"))?,
+			.await
+			.map_err(|err| format!("Error in binding to own UDP socket: {err}"))?,
 	);
 
 	let tx = rx.clone();
@@ -50,7 +55,12 @@ async fn bind<R: Runtime>(window: Window<R>, address: String, callback_function:
 }
 
 #[tauri::command]
-async fn send(manager: State<'_, ConnectionManager>, id: Id, address: String, message: String) -> Result<(), ()> {
+async fn send(
+	manager: State<'_, ConnectionManager>,
+	id: Id,
+	address: String,
+	message: String,
+) -> Result<(), ()> {
 	if let Some((tx, _)) = manager.0.lock().await.get_mut(&id) {
 		tx.send_to(message.as_bytes(), address.parse::<SocketAddr>().unwrap())
 			.await
