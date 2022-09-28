@@ -35,9 +35,11 @@ async function a() {
 			)
 
 		let allFilesSuperseded = []
+		let allFilesSupersededBasenames = new Set()
 		allFiles.forEach((a) => {
-			if (!allFilesSuperseded.some((b) => path.basename(b) == path.basename(a.path))) {
+			if (!allFilesSupersededBasenames.has(path.basename(a.path))) {
 				allFilesSuperseded.push(a.path)
+				allFilesSupersededBasenames.add(path.basename(a.path))
 			}
 		})
 

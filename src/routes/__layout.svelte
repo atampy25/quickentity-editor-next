@@ -296,12 +296,10 @@
 				{#if $appSettings.inVivoExtensions}
 					<HeaderNavItem
 						href="#"
-						text="{!gameServer.connected ? 'Connect to' : 'Disconnect from'} game"
+						text="{!gameServer.connected ? 'Enable' : 'Disable'} game connection"
 						on:click={async () => {
 							if (!gameServer.connected) {
 								await gameServer.start()
-
-								await gameServer.client.send(gameServer.lastAddress, "Ping")
 
 								gameServer.client.addListener(({ datagram }) => {
 									gameServer.lastMessage = Date.now()
