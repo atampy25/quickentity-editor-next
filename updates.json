@@ -1,11 +1,11 @@
 {
-	"version": "1.3.1",
-	"notes": "Fix game connection status indicator",
+	"version": "1.4.0",
+	"notes": "Information page and feedback survey",
 	"pub_date": "2022-09-28T09:45:47Z",
 	"platforms": {
 		"windows-x86_64": {
-			"signature": "dW50cnVzdGVkIGNvbW1lbnQ6IHNpZ25hdHVyZSBmcm9tIHRhdXJpIHNlY3JldCBrZXkKUlVScWpVZGd2b0lOTmZEUzVGZlNFSHJWMHFrangvSXV5YTRFeHRDbVBWODNweUxNNExMZzVXeWx6b0UxeC95SlBuS0k2REhjV0xxZHZKVTlqaHVVOTliNEZwT1pBbUZLc1FNPQp0cnVzdGVkIGNvbW1lbnQ6IHRpbWVzdGFtcDoxNjY0MzY0NDM3CWZpbGU6UXVpY2tFbnRpdHkgRWRpdG9yXzEuMy4xX3g2NF9lbi1VUy5tc2kuemlwCkdXTkpIeWhyUnBrVUZxQzhNdGJBcWtxcjJ6TU5sQTJqblhhVzJlaVlXNVFHMWhiaDVxL0dVVmVKMEErdHRGaE41Q3h2bXcrNVQyOFFzekgrb01rZ0NBPT0K",
-			"url": "https://github.com/atampy25/quickentity-editor-next/releases/download/1.3.1/QuickEntity.Editor_1.3.1_x64_en-US.msi.zip"
+			"signature": "dW50cnVzdGVkIGNvbW1lbnQ6IHNpZ25hdHVyZSBmcm9tIHRhdXJpIHNlY3JldCBrZXkKUlVScWpVZGd2b0lOTlJiSUZvV29iOTZBQnRtVTdEbXRoNHlUUjkzbGRwYm8rYnhjazU5d0FiV3BVSVc2cnM0cE1CQk82NzBhQ0xrUTY4OFZXa1VOL2V1SmhOUVptRkhzeXc0PQp0cnVzdGVkIGNvbW1lbnQ6IHRpbWVzdGFtcDoxNjY0MzY4MTY3CWZpbGU6UXVpY2tFbnRpdHkgRWRpdG9yXzEuNC4wX3g2NF9lbi1VUy5tc2kuemlwCjlMVEppL3VtVFhHY3dneDU0cDBsR0Y3NThRZ3RGQVNvQUgyeGZ3RWxDVnFZMnJReHZrRUNBRmcyZG9tRm92SytON1ZmckgvSmFTUHJqcUlZWDdnRUJ3PT0K",
+			"url": "https://github.com/atampy25/quickentity-editor-next/releases/download/1.4.0/QuickEntity.Editor_1.4.0_x64_en-US.msi.zip"
 		}
 	}
 }
