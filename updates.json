@@ -1,11 +1,11 @@
 {
-	"version": "1.2.0",
-	"notes": "Improved intellisense for properties as well as hover documentation for certain values",
+	"version": "1.3.0",
+	"notes": "Ability to edit properties and change positions in game; check the Settings page",
 	"pub_date": "2022-09-21T07:25:26Z",
 	"platforms": {
 		"windows-x86_64": {
-			"signature": "dW50cnVzdGVkIGNvbW1lbnQ6IHNpZ25hdHVyZSBmcm9tIHRhdXJpIHNlY3JldCBrZXkKUlVScWpVZGd2b0lOTmZzNVRMdzN1WUZwK1lIcXNSRzZ6djJnZkYzS2ZRZGVHUzQ0VHhjQ1gwWEFoYk1Zc1pvQzN5am5kYnlXUUo5QUh3YnRxQlBnT1FjZlBPeUlhTGtMSFFRPQp0cnVzdGVkIGNvbW1lbnQ6IHRpbWVzdGFtcDoxNjY0MjY0ODk2CWZpbGU6UXVpY2tFbnRpdHkgRWRpdG9yXzEuMi4wX3g2NF9lbi1VUy5tc2kuemlwCmZnam1IZFlaZTEwZnVPU01sMEpWeERERm9MNEoxRGRPcllmcXR0ckZYZll5U0RPaTNUSVhNKzh6RkNwWTJZM0JTZUNhWHBJS3JjeFRINlJoTGo3ZENBPT0K",
-			"url": "https://github.com/atampy25/quickentity-editor-next/releases/download/1.2.0/QuickEntity.Editor_1.2.0_x64_en-US.msi.zip"
+			"signature": "dW50cnVzdGVkIGNvbW1lbnQ6IHNpZ25hdHVyZSBmcm9tIHRhdXJpIHNlY3JldCBrZXkKUlVScWpVZGd2b0lOTmFHdlE4OWRNcEpJQkFxNFZYOHBUYUJqdWxZMlB0SUxJWjZPVjhkdThLbzI3ZjJTSlcrR3k3RzBpMTY1NmIxbEEvRk9FUkxEUW1OelV5OEJQWXRYVndVPQp0cnVzdGVkIGNvbW1lbnQ6IHRpbWVzdGFtcDoxNjY0MzU4OTY5CWZpbGU6UXVpY2tFbnRpdHkgRWRpdG9yXzEuMy4wX3g2NF9lbi1VUy5tc2kuemlwCnE1TS9jVk5jWDJreVNrUFlSOEFmeTdiNWpCR0FkNTJHTjJJd2MyV2pOdUJWYjFIM29DQnlFMlM4OUFTZFJHSWwySm1jd2xGMGh1ZzFHa2k3dkI1Z0FnPT0K",
+			"url": "https://github.com/atampy25/quickentity-editor-next/releases/download/1.3.0/QuickEntity.Editor_1.3.0_x64_en-US.msi.zip"
 		}
 	}
 }
