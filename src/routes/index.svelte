@@ -106,9 +106,9 @@
 	}
 </script>
 
-<SplitPanes on:resize={() => editor.layout()} theme="">
+<SplitPanes on:resize={() => editor?.layout()} theme="">
 	<Pane>
-		<SplitPanes on:resize={() => editor.layout()} theme="" horizontal={true}>
+		<SplitPanes on:resize={() => editor?.layout()} theme="" horizontal={true}>
 			<Pane>
 				<div class="flex flex-col h-full">
 					<div class="flex flex-row gap-4 items-center">
@@ -215,8 +215,12 @@
 									$entity.comments = $entity.comments.filter((a, b) => b == detail[1].node.id)
 								}
 							}}
+							on:entityUpdated={({ detail }) => {
+								selectedEntity = $entity.entities[detail]
+							}}
 							entity={$entity}
 							reverseReferences={$reverseReferences}
+							inVivoExtensions={$appSettings.inVivoExtensions}
 							{editorIsValid}
 							bind:this={tree}
 						/>
@@ -353,6 +357,7 @@
 							entity={$entity}
 							subEntityID={selectedEntityID}
 							jsonToDisplay={selectedEntity}
+							inVivoExtensions={$appSettings.inVivoExtensions}
 							on:contentChanged={() => updateEntityData(selectedEntityID, editor.getValue())}
 						/>
 					{:else}
@@ -433,5 +438,9 @@
 
 	.bx--toast-notification__caption {
 		display: none;
+	}
+
+	.vakata-context {
+		margin-top: -22px;
 	}
 </style>

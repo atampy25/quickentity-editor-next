@@ -13,6 +13,7 @@
 	import { basename, dirname, join } from "@tauri-apps/api/path"
 	import { readDir, readTextFile, exists as tauriExists } from "@tauri-apps/api/fs"
 	import { getSchema, normaliseToHash } from "$lib/utils"
+	import { gameServer } from "$lib/in-vivo/gameServer"
 
 	let el: HTMLDivElement = null!
 	let Monaco: typeof monaco
@@ -22,6 +23,7 @@
 	export let entity: Entity
 	export let jsonToDisplay: SubEntity
 	export let subEntityID: string
+	export let inVivoExtensions: boolean
 
 	const dispatch = createEventDispatcher()
 
@@ -74,6 +76,74 @@
 			roundedSelection: false,
 			theme: "theme"
 		})
+
+		if (inVivoExtensions) {
+			const customContextKey = (id: string, defaultValue: any) => {
+				const condition = editor.createContextKey(id, defaultValue)
+				let cachedValue = defaultValue
+				return {
+					set: (value: any) => {
+						cachedValue = value
+						condition.set(value)
+					},
+					get: () => cachedValue
+				}
+			}
+
+			const showUpdatePropertyCondition = customContextKey("showUpdatePropertyCondition", false)
+
+			const contextmenu = editor.getContribution("editor.contrib.contextmenu")!
+			const realOnContextMenuMethod = contextmenu._onContextMenu
+			contextmenu._onContextMenu = function () {
+				const event = arguments[0]
+
+				let word: string | undefined | false
+				try {
+					word = editor.getModel()!.getWordAtPosition(event.target.position)?.word
+				} catch {
+					word = false
+				}
+
+				if (!word || !gameServer.connected) {
+					showUpdatePropertyCondition.set(false)
+				} else {
+					showUpdatePropertyCondition.set(!!json.parse(editor.getValue()).properties[word])
+				}
+
+				realOnContextMenuMethod.apply(contextmenu, arguments)
+			}
+
+			editor.addAction({
+				id: "update-property",
+				label: "Update property in-game",
+				contextMenuGroupId: "navigation",
+				contextMenuOrder: 0,
+				keybindings: [],
+				precondition: "showUpdatePropertyCondition",
+				run: async (ed) => {
+					const propertyName = editor.getModel()!.getWordAtPosition(ed.getPosition()!)!.word
+
+					await gameServer.updateProperty(subEntityID, propertyName, json.parse(editor.getValue()).properties[propertyName])
+				}
+			})
+
+			const realDoShowContextMenuMethod = contextmenu._doShowContextMenu
+			contextmenu._doShowContextMenu = function () {
+				let index = 0
+				if (showUpdatePropertyCondition.get()) index++
+
+				if (index > 0)
+					arguments[0].splice(
+						index,
+						0,
+						arguments[0].find((item: { id: string }) => item.id === "vs.actions.separator")
+					)
+
+				realDoShowContextMenuMethod.apply(contextmenu, arguments)
+
+				showUpdatePropertyCondition.set(false)
+			}
+		}
 
 		let props: Record<string, any> = {}
 

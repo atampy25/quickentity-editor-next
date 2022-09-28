@@ -57,7 +57,7 @@
 				"providerShortName": null,
 				"signingIdentity": null
 			},
-			"resources": ["hash_list.txt"],
+			"resources": ["hash_list.txt", "LogPins.dll", "LogPins.pdb"],
 			"shortDescription": "",
 			"targets": "all",
 			"windows": {

@@ -1,79 +1,118 @@
 import * as fs from "@tauri-apps/api/fs"
 import * as path from "@tauri-apps/api/path"
 
+import type { Property, Ref, SubEntity } from "$lib/quickentity-types"
+import { getReferencedLocalEntity, normaliseToHash } from "$lib/utils"
+
 import { Decimal } from "decimal.js"
-import UDPServer from "./api/udp"
+import UDPSocket from "./api/udp"
 import WebSocket from "./api/websockets"
+import deepClone from "lodash/cloneDeep"
+import enums from "$lib/enums.json"
 import knownPins from "./knownPins.json"
 
-// let lastGamePing = 0
-
-// function onMessageRecieved(msg) {
-// 	if (msg.startsWith("GetHeroPosition")) {
-// 		const [msgType, x, y, z] = msg.split("_")
-// 		console.log("sent " + msgType)
-// 	} else if (msg.startsWith("Ping")) {
-// 		lastGamePing = Date.now()
-// 	}
-// }
-
-// switch (message.type) {
-// 	case "register":
-// 		console.log(message.requestedPins)
-// 		requestedPins = message.requestedPins.reduce((prev, val) => {
-// 			prev[val] = ws
-// 			return prev
-// 		}, {})
-// 		break
-// 	case "highlight":
-// 		console.log(message.entityId)
-// 		if (currentGameConnectionInfo) gameServer.send(`H|${new Decimal("0x" + message.entityId).toFixed()}`, currentGameConnectionInfo.port, currentGameConnectionInfo.address)
-// 		break
-// 	case "cover_plane":
-// 		console.log(message.entityId)
-// 		if (currentGameConnectionInfo)
-// 			gameServer.send(
-// 				`C|${new Decimal("0x" + message.entityId).toFixed()}|${message.positions.join("|")}|${message.rotations.join("|")}|${message.size.join("|")}`,
-// 				currentGameConnectionInfo.port,
-// 				currentGameConnectionInfo.address
-// 			)
-// 		break
-// 	case "get_hero_position":
-// 		if (currentGameConnectionInfo) gameServer.send("GetHeroPosition", currentGameConnectionInfo.port, currentGameConnectionInfo.address)
-// 		break
-// 	case "set_hero_position":
-// 		if (currentGameConnectionInfo)
-// 			gameServer.send(
-// 				`SetHeroPosition|${new Decimal("0x" + message.entityId).toFixed()}|${message.positions.join("|")}|${message.rotations.join("|")}`,
-// 				currentGameConnectionInfo.port,
-// 				currentGameConnectionInfo.address
-// 			)
-// 		break
-// 	case "update_property":
-// 		console.log(message.entityId)
-// 		if (currentGameConnectionInfo)
-// 			gameServer.send(
-// 				`UpdateProperty|${new Decimal("0x" + message.entityId).toFixed()}|${message.property}|${message.propertyType}|${message.value}`,
-// 				currentGameConnectionInfo.port,
-// 				currentGameConnectionInfo.address
-// 			)
-// 		break
-// 	case "signal_pin":
-// 		if (currentGameConnectionInfo)
-// 			gameServer.send(
-// 				`SignalPin|${new Decimal("0x" + message.entityId).toFixed()}|${message.pinType}|${message.pinName}`,
-// 				currentGameConnectionInfo.port,
-// 				currentGameConnectionInfo.address
-// 			)
-// }
-
-export class GameServer {
+class GameServer {
 	// @ts-expect-error Client should be connected before use
-	client: UDPServer
+	client: UDPSocket
+	connected: boolean
+	lastMessage: number
+	lastAddress: string
+
+	constructor() {
+		this.connected = false
+		this.lastMessage = 0
+		this.lastAddress = null!
+	}
 
 	async start() {
-		this.client = await UDPServer.bind("127.0.0.1:37275")
+		console.log("Binding UDP socket on localhost:37275")
 
-		this.client.addListener(({ datagram, address }) => console.log("Received datagram", JSON.stringify(datagram), "from", address))
+		this.client = await UDPSocket.bind("127.0.0.1:37275")
+		this.connected = true
+
+		this.client.addListener(({ datagram, address }) => {
+			if (datagram != "PingGame") {
+				console.log("Received datagram", JSON.stringify(datagram), "from", address)
+			}
+			this.lastAddress = address
+		})
+	}
+
+	async kill() {
+		console.log("Killing UDP socket")
+
+		await this.client.kill()
+		this.connected = false
+	}
+
+	async getPlayerPosition(): Promise<{ x: number; y: number; z: number }> {
+		await this.client.send(this.lastAddress, "GetHeroPosition")
+		return await new Promise((resolve) =>
+			this.client.once(
+				`getHeroPosition${Date.now()}`,
+				({ datagram }) => datagram.startsWith("GetHeroPosition"),
+				({ datagram }) => resolve({ x: +datagram.split("_")[1], y: +datagram.split("_")[2], z: +datagram.split("_")[3] })
+			)
+		)
+	}
+
+	/** Barely works; only here for reference. */
+	async setPlayerPosition(transform: { position: { x: number; y: number; z: number }; rotation: { x: number; y: number; z: number } }) {
+		await this.client.send(this.lastAddress, `SetHeroPosition|blablaunused|${Object.values(transform.position).join("|")}|${Object.values(transform.rotation).join("|")}`)
+	}
+
+	async updateProperty(id: string, propertyName: string, property: Property) {
+		let propertyType = property.type
+		let propertyValue = deepClone(property.value)
+
+		if (enums[property.type]) {
+			propertyType = "enum"
+			propertyValue = enums[property.type].indexOf(property.value)
+		}
+
+		let positions, rotations, vector
+		switch (propertyType) {
+			case "SMatrix43":
+				positions = [+propertyValue.position.x, +propertyValue.position.y, +propertyValue.position.z]
+				rotations = [+propertyValue.rotation.x, +propertyValue.rotation.y, +propertyValue.rotation.z]
+				propertyValue = `${positions.join("|")}|${rotations.join("|")}`
+				break
+			case "SVector3":
+				vector = [+propertyValue.x, +propertyValue.y, +propertyValue.z]
+
+				propertyValue = vector.join("|")
+				break
+			case "ZGuid":
+				propertyValue = propertyValue.toUpperCase()
+				break
+			case "SEntityTemplateReference":
+				propertyValue = new Decimal("0x" + getReferencedLocalEntity(propertyValue)).toFixed()
+				break
+			case "TArray<SEntityTemplateReference>":
+				propertyValue = `${propertyValue.length}|${propertyValue.map((ref: Ref) => new Decimal("0x" + getReferencedLocalEntity(ref)).toFixed()).join("|")}`
+				break
+			default:
+				propertyValue = propertyValue instanceof Decimal ? +propertyValue : propertyValue
+		}
+
+		await this.client.send(this.lastAddress, `UpdateProperty|${new Decimal(`0x${id}`).toFixed()}|${propertyName}|${propertyType}|${propertyValue}`)
+	}
+
+	async highlightEntity(id: string, ent: SubEntity) {
+		if (normaliseToHash(ent.template) === "007E948041B18F72" || ent.properties?.m_vGlobalSize) {
+			await this.client.send(
+				this.lastAddress,
+				`C|${new Decimal(`0x${id}`).toFixed()}|${Object.values(ent.properties?.m_mTransform.value.position).join("|")}|${Object.values(ent.properties?.m_mTransform.value.rotation).join(
+					"|"
+				)}|${(normaliseToHash(ent.template) === "007E948041B18F72"
+					? [+ent.properties?.m_fCoverLength.value, +ent.properties?.m_fCoverDepth.value, ent.properties?.m_eCoverSize.value === "eLowCover" ? 1 : 2]
+					: Object.values(ent.properties?.m_vGlobalSize.value)
+				).join("|")}`
+			)
+		} else {
+			await this.client.send(this.lastAddress, `H|${new Decimal(`0x${id}`).toFixed()}`)
+		}
 	}
 }
+
+export const gameServer = new GameServer()
