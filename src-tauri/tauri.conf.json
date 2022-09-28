@@ -1,105 +1,88 @@
 {
-  "$schema": "../node_modules/@tauri-apps/cli/schema.json",
-  "build": {
-    "beforeBuildCommand": "yarn build && cmd /c copyThings.bat",
-    "beforeDevCommand": "yarn dev",
-    "devPath": "http://localhost:3000",
-    "distDir": "../build"
-  },
-  "package": {
-    "productName": "QuickEntity Editor",
-    "version": "1.2.0"
-  },
-  "tauri": {
-    "allowlist": {
-      "all": true,
-      "shell": {
-        "all": true,
-        "sidecar": true,
-        "scope": [
-          {
-            "name": "sidecar/quickentity-rs",
-            "args": true,
-            "sidecar": true
-          },
-          {
-            "name": "sidecar/rpkg-cli",
-            "args": true,
-            "sidecar": true
-          }
-        ]
-      },
-      "fs": {
-        "all": true,
-        "scope": [
-          "*"
-        ]
-      },
-      "protocol": {
-        "all": true,
-        "asset": true,
-        "assetScope": [
-          "*"
-        ]
-      }
-    },
-    "bundle": {
-      "active": true,
-      "category": "DeveloperTool",
-      "copyright": "",
-      "deb": {
-        "depends": []
-      },
-      "externalBin": [
-        "sidecar/quickentity-rs",
-        "sidecar/rpkg-cli"
-      ],
-      "icon": [
-        "icons/32x32.png",
-        "icons/128x128.png",
-        "icons/128x128@2x.png",
-        "icons/icon.icns",
-        "icons/icon.ico"
-      ],
-      "identifier": "app.quickentity.editor",
-      "longDescription": "",
-      "macOS": {
-        "entitlements": null,
-        "exceptionDomain": "",
-        "frameworks": [],
-        "providerShortName": null,
-        "signingIdentity": null
-      },
-      "resources": [
-        "hash_list.txt"
-      ],
-      "shortDescription": "",
-      "targets": "all",
-      "windows": {
-        "certificateThumbprint": null,
-        "digestAlgorithm": "sha256",
-        "timestampUrl": ""
-      }
-    },
-    "security": {
-      "csp": null
-    },
-    "updater": {
-      "active": true,
-      "endpoints": [
-        "https://raw.githubusercontent.com/atampy25/quickentity-editor-next/master/updates.json"
-      ],
-      "dialog": true,
-      "pubkey": "dW50cnVzdGVkIGNvbW1lbnQ6IG1pbmlzaWduIHB1YmxpYyBrZXk6IDM1MEQ4MkJFNjA0NzhENkEKUldScWpVZGd2b0lOTmNweGMyOHVUZExMQndhNm5BSWUwWEJ1amRiMUhGMW5RYk1RSUwwSXZXY1IK"
-    },
-    "windows": [
-      {
-        "fullscreen": false,
-        "height": 600,
-        "resizable": true,
-        "title": "QuickEntity Editor",
-        "width": 800
-      }
-    ]
-  }
+	"$schema": "../node_modules/@tauri-apps/cli/schema.json",
+	"build": {
+		"beforeBuildCommand": "yarn build && cmd /c copyThings.bat",
+		"beforeDevCommand": "yarn dev",
+		"devPath": "http://localhost:3000",
+		"distDir": "../build"
+	},
+	"package": {
+		"productName": "QuickEntity Editor",
+		"version": "1.2.0"
+	},
+	"tauri": {
+		"allowlist": {
+			"all": true,
+			"shell": {
+				"all": true,
+				"sidecar": true,
+				"scope": [
+					{
+						"name": "sidecar/quickentity-rs",
+						"args": true,
+						"sidecar": true
+					},
+					{
+						"name": "sidecar/rpkg-cli",
+						"args": true,
+						"sidecar": true
+					}
+				]
+			},
+			"fs": {
+				"all": true,
+				"scope": ["*"]
+			},
+			"protocol": {
+				"all": true,
+				"asset": true,
+				"assetScope": ["*"]
+			}
+		},
+		"bundle": {
+			"active": true,
+			"category": "DeveloperTool",
+			"copyright": "",
+			"deb": {
+				"depends": []
+			},
+			"externalBin": ["sidecar/quickentity-rs", "sidecar/rpkg-cli"],
+			"icon": ["icons/32x32.png", "icons/128x128.png", "icons/128x128@2x.png", "icons/icon.icns", "icons/icon.ico"],
+			"identifier": "app.quickentity.editor",
+			"longDescription": "",
+			"macOS": {
+				"entitlements": null,
+				"exceptionDomain": "",
+				"frameworks": [],
+				"providerShortName": null,
+				"signingIdentity": null
+			},
+			"resources": ["hash_list.txt", "LogPins.dll", "LogPins.pdb"],
+			"shortDescription": "",
+			"targets": "all",
+			"windows": {
+				"certificateThumbprint": null,
+				"digestAlgorithm": "sha256",
+				"timestampUrl": ""
+			}
+		},
+		"security": {
+			"csp": null
+		},
+		"updater": {
+			"active": true,
+			"endpoints": ["https://raw.githubusercontent.com/atampy25/quickentity-editor-next/master/updates.json"],
+			"dialog": true,
+			"pubkey": "dW50cnVzdGVkIGNvbW1lbnQ6IG1pbmlzaWduIHB1YmxpYyBrZXk6IDM1MEQ4MkJFNjA0NzhENkEKUldScWpVZGd2b0lOTmNweGMyOHVUZExMQndhNm5BSWUwWEJ1amRiMUhGMW5RYk1RSUwwSXZXY1IK"
+		},
+		"windows": [
+			{
+				"fullscreen": false,
+				"height": 600,
+				"resizable": true,
+				"title": "QuickEntity Editor",
+				"width": 800
+			}
+		]
+	}
 }

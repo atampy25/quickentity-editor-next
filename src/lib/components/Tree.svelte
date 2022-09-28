@@ -11,6 +11,7 @@
 	import * as clipboard from "@tauri-apps/api/clipboard"
 	import json from "$lib/json"
 	import isEqual from "lodash/isEqual"
+	import { gameServer } from "$lib/in-vivo/gameServer"
 
 	export let entity: Entity
 	export let reverseReferences: Record<
@@ -21,6 +22,7 @@
 			context?: string[]
 		}[]
 	>
+	export let inVivoExtensions: boolean
 
 	export let currentlySelected: string = null!
 	export let previouslySelected: string = null!
@@ -104,7 +106,7 @@
 			},
 			contextmenu: {
 				select_node: false,
-				items: (b: any, c: any) => {
+				items: (b: { id: string }, c: any) => {
 					return {
 						create: {
 							separator_before: false,
@@ -167,6 +169,70 @@
 								c.is_selected(d) ? c.delete_node(c.get_selected()) : c.delete_node(d)
 							}
 						},
+						...(!inVivoExtensions || b.id.startsWith("comment") || !gameServer.connected
+							? {}
+							: {
+									inVivo: {
+										separator_before: true,
+										separator_after: false,
+										label: "In-Vivo",
+										icon: "fas fa-right-left",
+										action: false,
+										submenu: {
+											highlight: {
+												separator_before: false,
+												separator_after: false,
+												label: "Highlight",
+												icon: "fas fa-highlighter",
+												action: async (b: { reference: string | HTMLElement | JQuery<HTMLElement> }) => {
+													let d = tree.get_node(b.reference)
+
+													await gameServer.highlightEntity(d.id, entity.entities[d.id])
+												}
+											},
+											moveToPlayerPosition: {
+												separator_before: false,
+												separator_after: false,
+												label: "Move to Player Position",
+												icon: "fas fa-location-dot",
+												action: async (b: { reference: string | HTMLElement | JQuery<HTMLElement> }) => {
+													let d = tree.get_node(b.reference)
+
+													let playerPos = await gameServer.getPlayerPosition()
+
+													entity.entities[d.id].properties ??= {}
+													entity.entities[d.id].properties!.m_mTransform ??= {
+														type: "SMatrix43",
+														value: {
+															rotation: {
+																x: 0,
+																y: 0,
+																z: 0
+															},
+															position: {
+																x: 0,
+																y: 0,
+																z: 0
+															}
+														}
+													}
+
+													if (entity.entities[d.id].properties!.m_eidParent) {
+														delete entity.entities[d.id].properties!.m_eidParent
+													}
+
+													entity.entities[d.id].properties!.m_mTransform.value.position.x = playerPos.x
+													entity.entities[d.id].properties!.m_mTransform.value.position.y = playerPos.y
+													entity.entities[d.id].properties!.m_mTransform.value.position.z = playerPos.z
+
+													dispatch("entityUpdated", d.id)
+
+													await gameServer.updateProperty(d.id, "m_mTransform", entity.entities[d.id].properties!.m_mTransform)
+												}
+											}
+										}
+									}
+							  }),
 						ccp: {
 							separator_before: true,
 							separator_after: false,
@@ -464,18 +530,20 @@
 		tree.settings!.core.data = []
 
 		for (let [entityID, entityData] of Object.entries(entity.entities)) {
-			tree.settings!.core.data.push({
-				id: String(entityID),
-				parent: getReferencedLocalEntity(entityData.parent) || "#",
-				icon:
-					entityData.template == "[modules:/zentity.class].pc_entitytype" && reverseReferences[entityID].some((a) => a.type == "parent")
-						? "far fa-folder"
-						: icons.find((a) => entityData.template.includes(a[0]))
-						? icons.find((a) => entityData.template.includes(a[0]))![1]
-						: "far fa-file",
-				text: `${entityData.name} (ref ${entityID})`,
-				folder: entityData.template == "[modules:/zentity.class].pc_entitytype" && reverseReferences[entityID].some((a) => a.type == "parent") // for sorting and stuff
-			})
+			if (entityID != "abcdefcadc2e258e" && entityID != "abcdefcadc77e4f2") {
+				tree.settings!.core.data.push({
+					id: String(entityID),
+					parent: getReferencedLocalEntity(entityData.parent) || "#",
+					icon:
+						entityData.template == "[modules:/zentity.class].pc_entitytype" && reverseReferences[entityID].some((a) => a.type == "parent")
+							? "far fa-folder"
+							: icons.find((a) => entityData.template.includes(a[0]))
+							? icons.find((a) => entityData.template.includes(a[0]))![1]
+							: "far fa-file",
+					text: `${entityData.name} (ref ${entityID})`,
+					folder: entityData.template == "[modules:/zentity.class].pc_entitytype" && reverseReferences[entityID].some((a) => a.type == "parent") // for sorting and stuff
+				})
+			}
 		}
 
 		let index = 0
@@ -489,6 +557,39 @@
 			})
 
 			index++
+		}
+
+		if (inVivoExtensions && gameServer.connected) {
+			entity.entities["abcdefcadc2e258e"] = {
+				parent: null,
+				name: "QNE In-Vivo Helper Entity",
+				template: "[modules:/zmultiparentspatialentity.class].pc_entitytype",
+				blueprint: "[modules:/zmultiparentspatialentity.class].pc_entityblueprint",
+				properties: {
+					m_aParents: {
+						type: "TArray<SEntityTemplateReference>",
+						value: Object.keys(entity.entities).filter((a) => a != "abcdefcadc2e258e" && a != "abcdefcadc77e4f2")
+					}
+				}
+			}
+
+			entity.entities["abcdefcadc77e4f2"] = {
+				parent: "abcdefcadc2e258e",
+				name: "QNE In-Vivo Helper Entity GameEventListener",
+				template: "[modules:/zgameeventlistenerentity.class].pc_entitytype",
+				blueprint: "[modules:/zgameeventlistenerentity.class].pc_entityblueprint",
+				properties: {
+					m_eEvent: {
+						type: "EGameEventType",
+						value: "GET_IntroCutEnd"
+					}
+				},
+				events: {
+					EventOccurred: {
+						GetIndex: ["abcdefcadc2e258e"]
+					}
+				}
+			}
 		}
 
 		tree.refresh()

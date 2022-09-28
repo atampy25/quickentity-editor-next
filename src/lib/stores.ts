@@ -10,7 +10,7 @@ import RPKGInstance from "$lib/rpkg"
 if (!(await forage.getItem({ key: "appSettings" })())) {
 	await forage.setItem({
 		key: "appSettings",
-		value: json.stringify({ gameFileExtensions: false, gameFileExtensionsDataPath: null })
+		value: json.stringify({ gameFileExtensions: false, gameFileExtensionsDataPath: null, inVivoExtensions: false, runtimePath: "", retailPath: "" })
 	})()
 }
 
@@ -18,9 +18,11 @@ export const appSettings: Writable<{
 	gameFileExtensions: boolean
 	gameFileExtensionsDataPath: string
 	runtimePath: string
+	retailPath: string
+	inVivoExtensions: boolean
 }> = writable(json.parse(await forage.getItem({ key: "appSettings" })()))
 
-appSettings.subscribe((value: { gameFileExtensions: boolean; gameFileExtensionsDataPath: string; runtimePath: string }) => {
+appSettings.subscribe((value: { gameFileExtensions: boolean; gameFileExtensionsDataPath: string; runtimePath: string; retailPath: string; inVivoExtensions: boolean }) => {
 	void (async () => {
 		await forage.setItem({ key: "appSettings", value: json.stringify(value) })()
 	})()
@@ -114,7 +116,7 @@ export const parsedEntities: Writable<Record<string, Entity>> = writable({})
 
 export let intellisense: Readable<Intellisense>
 
-appSettings.subscribe((value: { gameFileExtensions: boolean; gameFileExtensionsDataPath: string }) => {
+appSettings.subscribe((value: { gameFileExtensions: boolean; gameFileExtensionsDataPath: string; inVivoExtensions: boolean }) => {
 	if (value.gameFileExtensions) {
 		intellisense = readable(new Intellisense(value))
 

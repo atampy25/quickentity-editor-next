@@ -2,27 +2,33 @@
 name = "quickentity-editor"
 version = "1.2.0"
 description = "An editor for the QuickEntity format."
-authors = [ "Atampy26" ]
-license = "LGPL-3.0-only"
+authors = ["Atampy26"]
+license = "GPL-3.0-only"
 default-run = "quickentity-editor"
 edition = "2021"
 rust-version = "1.57"
 
 [build-dependencies.tauri-build]
 version = "1.0.4"
-features = [ ]
+features = []
 
 [dependencies]
 serde_json = "1.0"
+tokio = { version = "1.21.1", features = ["macros"] }
+futures-util = "0.3.24"
+tokio-tungstenite = "0.17.2"
+thiserror = "1.0.36"
+rand = "0.8.5"
+tokio-util = { version = "0.7.4", features = ["net", "codec"] }
 
-  [dependencies.serde]
-  version = "1.0"
-  features = [ "derive" ]
+[dependencies.serde]
+version = "1.0"
+features = ["derive"]
 
-  [dependencies.tauri]
-  version = "1.1.1"
-  features = [ "api-all", "updater" ]
+[dependencies.tauri]
+version = "1.1.1"
+features = ["api-all", "updater"]
 
 [features]
-default = [ "custom-protocol" ]
-custom-protocol = [ "tauri/custom-protocol" ]
+default = ["custom-protocol"]
+custom-protocol = ["tauri/custom-protocol"]

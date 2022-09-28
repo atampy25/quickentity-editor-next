@@ -45,6 +45,7 @@
 	import Settings from "carbon-icons-svelte/lib/Settings.svelte"
 	import Chart_3D from "carbon-icons-svelte/lib/Chart_3D.svelte"
 	import { shortcut } from "$lib/shortcut"
+	import { gameServer } from "$lib/in-vivo/gameServer"
 
 	let displayNotifications: { kind: "error" | "info" | "info-square" | "success" | "warning" | "warning-alt"; title: string; subtitle: string }[] = []
 
@@ -73,6 +74,15 @@
 	onMount(async () => {
 		await createDir("gltf", { dir: BaseDirectory.App, recursive: true })
 	})
+
+	let currentDate = 0
+	setInterval(() => {
+		currentDate = Date.now()
+
+		if (gameServer.connected && gameServer.lastAddress) {
+			void gameServer.client.send(gameServer.lastAddress, "Ping")
+		}
+	}, 100)
 </script>
 
 {#if ready}
@@ -283,6 +293,36 @@
 						<a role="menuitem" tabindex="0" href="#" class="bx--header__menu-item"><span class="bx--text-truncate--end">Save entity</span></a>
 					</li>
 				{/if}
+				{#if $appSettings.inVivoExtensions}
+					<HeaderNavItem
+						href="#"
+						text="{!gameServer.connected ? 'Connect to' : 'Disconnect from'} game"
+						on:click={async () => {
+							if (!gameServer.connected) {
+								await gameServer.start()
+
+								await gameServer.client.send(gameServer.lastAddress, "Ping")
+
+								gameServer.client.addListener(({ datagram }) => {
+									gameServer.lastMessage = Date.now()
+								})
+							} else {
+								await gameServer.kill()
+							}
+
+							gameServer.connected = gameServer.connected
+						}}
+					/>
+					{#if gameServer.connected}
+						<li role="none">
+							<a href="#" disabled class="bx--header__menu-item">
+								<span class="bx--text-truncate--end" style:color={currentDate - gameServer.lastMessage < 5000 ? "#bbf7d0" : "#fecaca"}>
+									Last message from game: {currentDate - gameServer.lastMessage != currentDate ? Math.max(0, currentDate - gameServer.lastMessage) : "never"}
+								</span>
+							</a>
+						</li>
+					{/if}
+				{/if}
 			{/if}
 		</HeaderNav>
 
@@ -353,5 +393,10 @@
 
 	code {
 		font-family: "Fira Code", "IBM Plex Mono", "Menlo", "DejaVu Sans Mono", "Bitstream Vera Sans Mono", Courier, monospace;
+	}
+
+	a.bx--header__menu-item:hover[disabled] {
+		background-color: inherit;
+		color: inherit;
 	}
 </style>
