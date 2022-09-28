@@ -1,6 +1,6 @@
 {
 	"version": "1.2.0",
-	"notes": "v1.2.0",
+	"notes": "Improved intellisense for properties as well as hover documentation for certain values",
 	"pub_date": "2022-09-21T07:25:26Z",
 	"platforms": {
 		"windows-x86_64": {
