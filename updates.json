@@ -1,11 +1,11 @@
 {
-	"version": "1.4.2",
-	"notes": "Fix game closes with in-vivo connection",
+	"version": "1.4.3",
+	"notes": "Don't allow overwriting when loading from game file extensions data",
 	"pub_date": "2022-09-28T09:45:47Z",
 	"platforms": {
 		"windows-x86_64": {
-			"signature": "dW50cnVzdGVkIGNvbW1lbnQ6IHNpZ25hdHVyZSBmcm9tIHRhdXJpIHNlY3JldCBrZXkKUlVScWpVZGd2b0lOTlZZN0FWUVdCNENEbzhNSStPSHEwc2xOOHZ2dXZNNXExWEhiMmFUbEVrZ09DZVNSUGJKVjF0a2JtY1g1dUhQWnRqUFR0S3dld0dpSy91c0Vpa29pTUF3PQp0cnVzdGVkIGNvbW1lbnQ6IHRpbWVzdGFtcDoxNjY0NDM2NTgzCWZpbGU6UXVpY2tFbnRpdHkgRWRpdG9yXzEuNC4yX3g2NF9lbi1VUy5tc2kuemlwCjFrcEFMcDNBWVhVSyt6VHRydG9IeU04MlNVOGVEenZyZ3pEWmIyeS90bDhlZFhNQ055bHF1VG5BdFgyamNDQUZTc3F4cWt4anQvQk12YVRWTU5tYkRBPT0K",
-			"url": "https://github.com/atampy25/quickentity-editor-next/releases/download/1.4.2/QuickEntity.Editor_1.4.2_x64_en-US.msi.zip"
+			"signature": "dW50cnVzdGVkIGNvbW1lbnQ6IHNpZ25hdHVyZSBmcm9tIHRhdXJpIHNlY3JldCBrZXkKUlVScWpVZGd2b0lOTlp1K2JiN2x6aTFqTmN0a1U3SGZaQ2MzQnlPNEh5RFcxTXpjeWFBT1ZrdmhWRFBwRlVDOFVuRjl4WkNRSGNlUThva1VLUkRaZ2hKREgvY25ING9tRkE4PQp0cnVzdGVkIGNvbW1lbnQ6IHRpbWVzdGFtcDoxNjY0NDYwNzc4CWZpbGU6UXVpY2tFbnRpdHkgRWRpdG9yXzEuNC4zX3g2NF9lbi1VUy5tc2kuemlwCnQxKzBLeU4zVW8vYUpuOXRQQ1VhNTFZYVZtOWNiTWd0UXB0V1c3clJidC9BaEgvVitvOHpuZFNnemZ0K0lUKzFSeCs4L3Y2NDNmS2lLanVWSDlFTENBPT0K",
+			"url": "https://github.com/atampy25/quickentity-editor-next/releases/download/1.4.3/QuickEntity.Editor_1.4.3_x64_en-US.msi.zip"
 		}
 	}
 }
