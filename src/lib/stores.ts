@@ -33,6 +33,7 @@ export const entityMetadata: Writable<{
 	saveAsPatch?: boolean
 	saveAsEntityPath?: string
 	saveAsPatchPath?: string
+	loadedFromGameFiles?: boolean
 }> = writable({})
 
 export const entity: Writable<Entity> = writable({

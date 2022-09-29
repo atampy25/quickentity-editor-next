@@ -111,6 +111,7 @@
 							$entityMetadata.originalEntityPath = x
 							$entityMetadata.saveAsPatch = false
 							$entityMetadata.saveAsEntityPath = $entityMetadata.originalEntityPath
+							$entityMetadata.loadedFromGameFiles = false
 							$entity = json.parse(await readTextFile(x))
 						}
 					}}
@@ -163,6 +164,7 @@
 						$entityMetadata.originalEntityPath = x
 						$entityMetadata.saveAsPatch = true
 						$entityMetadata.saveAsPatchPath = y
+						$entityMetadata.loadedFromGameFiles = false
 						$entity = patched
 					}}
 				>
@@ -190,6 +192,7 @@
 
 						$entityMetadata.saveAsPatch = false
 						$entityMetadata.saveAsEntityPath = x
+						$entityMetadata.loadedFromGameFiles = false
 
 						$addNotification = {
 							kind: "success",
@@ -231,6 +234,7 @@
 
 						$entityMetadata.saveAsPatch = true
 						$entityMetadata.saveAsPatchPath = x
+						$entityMetadata.loadedFromGameFiles = false
 
 						$addNotification = {
 							kind: "success",
@@ -242,7 +246,7 @@
 					<HeaderNavItem href="#" text="Save as patch file" />
 				</li>
 			</HeaderNavMenu>
-			{#if $entityMetadata.originalEntityPath}
+			{#if $entityMetadata.originalEntityPath && !$entityMetadata.loadedFromGameFiles}
 				{#if $entityMetadata.saveAsPatch}
 					<li
 						role="none"
@@ -261,6 +265,8 @@
 								$entityMetadata.saveAsPatchPath
 							]).execute()
 
+							$entityMetadata.loadedFromGameFiles = false
+
 							$addNotification = {
 								kind: "success",
 								title: "Saved patch successfully",
@@ -278,6 +284,8 @@
 						use:shortcut={{ control: true, key: "s" }}
 						on:click={async () => {
 							await writeTextFile($entityMetadata.saveAsEntityPath, json.stringify($entity))
+
+							$entityMetadata.loadedFromGameFiles = false
 
 							$addNotification = {
 								kind: "success",
@@ -363,15 +371,17 @@
 		on:submit={async () => {
 			askGameFileModalOpen = false
 
-			if (askGameFileModalResult.includes(":")) {
-				askGameFileModalResult = ("00" + md5(askGameFileModalResult).slice(2, 16)).toUpperCase()
+			let x = askGameFileModalResult
+			if (x.includes(":")) {
+				x = ("00" + md5(x).slice(2, 16)).toUpperCase()
 			}
 
-			$entityMetadata.originalEntityPath = await join($appSettings.gameFileExtensionsDataPath, "TEMP", askGameFileModalResult + ".TEMP.entity.json")
+			$entityMetadata.originalEntityPath = await join($appSettings.gameFileExtensionsDataPath, "TEMP", x + ".TEMP.entity.json")
 			$entityMetadata.saveAsPatch = false
 			$entityMetadata.saveAsEntityPath = $entityMetadata.originalEntityPath
+			$entityMetadata.loadedFromGameFiles = true
 
-			$entity = json.parse(await readTextFile(await join($appSettings.gameFileExtensionsDataPath, "TEMP", askGameFileModalResult + ".TEMP.entity.json")))
+			$entity = json.parse(await readTextFile(await join($appSettings.gameFileExtensionsDataPath, "TEMP", x + ".TEMP.entity.json")))
 		}}
 	>
 		<p>What game file would you like to load? Give either the hash or the path.</p>
