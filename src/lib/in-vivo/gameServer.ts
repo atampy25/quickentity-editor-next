@@ -22,7 +22,9 @@ class GameServer {
 	async start() {
 		console.log("Binding UDP socket on localhost:37275")
 
-		this.client = await UDPSocket.bind("127.0.0.1:37275")
+		this.client = await UDPSocket.bind("127.0.0.1:37275", () => {
+			void this.killAndRestart()
+		})
 		this.connected = true
 
 		this.client.addListener(({ datagram, address }) => {
@@ -38,6 +40,16 @@ class GameServer {
 
 		await this.client.kill()
 		this.connected = false
+	}
+
+	async killAndRestart() {
+		console.log("Killing and restarting UDP socket")
+		await this.kill()
+
+		this.lastMessage = 0
+		this.lastAddress = null!
+
+		await this.start()
 	}
 
 	async getPlayerPosition(): Promise<{ x: number; y: number; z: number }> {

@@ -15,7 +15,7 @@ export default class UDPSocket {
 		this.onceListeners = onceListeners
 	}
 
-	static async bind(address: string): Promise<UDPSocket> {
+	static async bind(address: string, killCallback: () => any): Promise<UDPSocket> {
 		const listeners: Array<(data: { datagram: string; address: string }) => any> = []
 		const onceListeners: Array<{ id: string; condition: (data: { datagram: string; address: string }) => boolean; callback: (data: { datagram: string; address: string }) => any }> = []
 		const handler = (data: { datagram: string; address: string }) => {
@@ -33,7 +33,8 @@ export default class UDPSocket {
 
 		return invoke<number>("plugin:udp|bind", {
 			address,
-			callbackFunction: transformCallback(handler)
+			callbackFunction: transformCallback(handler),
+			killCallbackFunction: transformCallback(killCallback)
 		}).then((id) => new UDPSocket(id, listeners, onceListeners))
 	}
 

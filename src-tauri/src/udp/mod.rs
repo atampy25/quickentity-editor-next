@@ -18,8 +18,9 @@ async fn bind<R: Runtime>(
 	window: Window<R>,
 	address: String,
 	callback_function: CallbackFn,
+	kill_callback_function: CallbackFn,
 ) -> Result<Id, String> {
-	let id = rand::random();
+	let id: u32 = rand::random();
 
 	let rx = Arc::new(
 		UdpSocket::bind(address.parse::<SocketAddr>().unwrap())
@@ -36,16 +37,22 @@ async fn bind<R: Runtime>(
 	let handle = tokio::spawn(async move {
 		loop {
 			let mut buf = [0; 1024];
-			let (_, addr) = rx.recv_from(&mut buf).await.unwrap();
-			let js = format_callback(
-				callback_function,
-				&json!({
-					"datagram": std::str::from_utf8(&buf).expect("Received a datagram which was not a valid string").trim_matches(char::from(0)),
-					"address": addr
-				})
-			)
-			.expect("unable to serialize udp message");
-			let _ = window_.eval(js.as_str());
+			if let Ok((_, addr)) = rx.recv_from(&mut buf).await {
+				let js = format_callback(
+					callback_function,
+					&json!({
+						"datagram": std::str::from_utf8(&buf).expect("Received a datagram which was not a valid string").trim_matches(char::from(0)),
+						"address": addr
+					})
+				)
+				.expect("Unable to serialize UDP message");
+				let _ = window_.eval(js.as_str());
+			} else {
+				let js = format_callback(kill_callback_function, &json!({}))
+					.expect("Unable to call kill callback");
+				let _ = window_.eval(js.as_str());
+				return;
+			}
 		}
 	});
 
@@ -74,9 +81,9 @@ async fn send(
 async fn kill(manager: State<'_, ConnectionManager>, id: Id) -> Result<(), ()> {
 	{
 		let mut man = manager.0.lock().await;
-		let (_, handle) = man.get_mut(&id).unwrap();
-
-		handle.abort();
+		if let Some((_, handle)) = man.get_mut(&id) {
+			handle.abort();
+		}
 	}
 
 	manager.0.lock().await.remove(&id);
