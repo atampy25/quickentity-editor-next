@@ -14,11 +14,11 @@ module.exports = async ({ file, n, allFilesLength }) => {
 
 	try {
 		execSync(
-			`quickentity-rs.exe entity convert --input-factory ${file} --input-factory-meta ${file.replace(".TEMP.json", ".TEMP.meta.json")} --input-blueprint ${
+			`quickentity-rs.exe entity convert --input-factory "${file}" --input-factory-meta "${file.replace(".TEMP.json", ".TEMP.meta.json")}" --input-blueprint "${
 				path.join("./TBLU", readLossless(file.replace(".TEMP.json", ".TEMP.meta.json")).hash_reference_data[readLossless(file).blueprintIndexInResourceHeader].hash) + ".TBLU.json"
-			} --input-blueprint-meta ${
+			}" --input-blueprint-meta "${
 				path.join("./TBLU", readLossless(file.replace(".TEMP.json", ".TEMP.meta.json")).hash_reference_data[readLossless(file).blueprintIndexInResourceHeader].hash) + ".TBLU.meta.json"
-			} --output ${file.replace(".TEMP.json", ".TEMP.entity.json")}`
+			}" --output "${file.replace(".TEMP.json", ".TEMP.entity.json")}"`
 		)
 	} catch {
 		console.log("Failed to convert " + file)

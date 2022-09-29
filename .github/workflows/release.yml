@@ -56,7 +56,7 @@ jobs:
         run: |
           copy "temp/rpkg-cli.exe" "src-tauri/sidecar/rpkg-cli-x86_64-pc-windows-msvc.exe"
           copy "temp/quickentity-rs.exe" "src-tauri/sidecar/quickentity-rs-x86_64-pc-windows-msvc.exe"
-          robocopy "temp" "intellisense-scripts" "quickentity-rs.exe" "quickentity-rs.exe"; if ($lastexitcode -lt 8) { $global:LASTEXITCODE = $null }
+          robocopy "temp" "game-file-extensions" "quickentity-rs.exe" "quickentity-rs.exe"; if ($lastexitcode -lt 8) { $global:LASTEXITCODE = $null }
           robocopy "temp" "src-tauri" "hash_list.txt" "hash_list.txt"; if ($lastexitcode -lt 8) { $global:LASTEXITCODE = $null }
 
       - name: Clear temp
@@ -166,11 +166,11 @@ jobs:
           filename: Portable.zip
           path: src-tauri/target/release/portable
 
-      - name: Create intellisense scripts ZIP
+      - name: Create game file extensions ZIP
         uses: TheDoctor0/zip-release@4fb9e4ff72847dd3d1c111cf63834e353ed7cb3d
         with:
-          filename: Intellisense_Scripts.zip
-          path: "intellisense-scripts"
+          filename: Game_File_Extensions_Scripts.zip
+          path: "game-file-extensions"
 
       - name: Rename installer zip
         run: |
@@ -185,18 +185,18 @@ jobs:
 
             Download the `QuickEntity.Editor_${{ steps.latestTag.outputs.tag }}_x64_en-US.msi.zip` file for an installer with automatic update capability, or the `Portable.zip` file, which makes no guarantees about automatic updates.
 
-            To enable game file extensions, which makes working with entities far easier, extract `Intellisense_Scripts.zip` to a drive with at least 8 GB of space, run `doTheThing.bat` and follow the instructions it gives.
+            To enable game file extensions, which makes working with entities far easier, extract `Game_File_Extensions_Scripts.zip` to a drive with at least 6 GB of space, run `doTheThing.bat` and follow the instructions it gives.
           tag_name: ${{ steps.latestTag.outputs.tag }}
           repository: atampy25/quickentity-editor-next
           files: |
             src-tauri/target/release/bundle/msi/QuickEntity.Editor_${{ steps.latestTag.outputs.tag }}_x64_en-US.msi.zip
             Portable.zip
-            Intellisense_Scripts.zip
+            Game_File_Extensions_Scripts.zip
       
       - name: Remove ZIPs
         run: |
           Remove-Item Portable.zip
-          Remove-Item Intellisense_Scripts.zip
+          Remove-Item Game_File_Extensions_Scripts.zip
       
       - name: Format
         run: |
