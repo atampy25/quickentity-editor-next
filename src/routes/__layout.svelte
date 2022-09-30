@@ -46,6 +46,7 @@
 	import Chart_3D from "carbon-icons-svelte/lib/Chart_3D.svelte"
 	import { shortcut } from "$lib/shortcut"
 	import { gameServer } from "$lib/in-vivo/gameServer"
+	import cloneDeep from "lodash/cloneDeep"
 
 	let displayNotifications: { kind: "error" | "info" | "info-square" | "success" | "warning" | "warning-alt"; title: string; subtitle: string }[] = []
 
@@ -83,6 +84,45 @@
 			void gameServer.client.send(gameServer.lastAddress, "Ping")
 		}
 	}, 100)
+
+	function getEntityAsText() {
+		const ent = cloneDeep($entity)
+
+		if ($appSettings.inVivoExtensions && gameServer.connected) {
+			ent.entities["abcdefcadc2e258e"] = {
+				parent: null,
+				name: "QNE In-Vivo Helper Entity",
+				template: "[modules:/zmultiparentspatialentity.class].pc_entitytype",
+				blueprint: "[modules:/zmultiparentspatialentity.class].pc_entityblueprint",
+				properties: {
+					m_aParents: {
+						type: "TArray<SEntityTemplateReference>",
+						value: Object.keys(ent.entities).filter((a) => a != "abcdefcadc2e258e" && a != "abcdefcadc77e4f2")
+					}
+				}
+			}
+
+			ent.entities["abcdefcadc77e4f2"] = {
+				parent: "abcdefcadc2e258e",
+				name: "QNE In-Vivo Helper Entity GameEventListener",
+				template: "[modules:/zgameeventlistenerentity.class].pc_entitytype",
+				blueprint: "[modules:/zgameeventlistenerentity.class].pc_entityblueprint",
+				properties: {
+					m_eEvent: {
+						type: "EGameEventType",
+						value: "GET_IntroCutEnd"
+					}
+				},
+				events: {
+					EventOccurred: {
+						GetIndex: ["abcdefcadc2e258e"]
+					}
+				}
+			}
+		}
+
+		return json.stringify(ent)
+	}
 </script>
 
 {#if ready}
@@ -113,6 +153,10 @@
 							$entityMetadata.saveAsEntityPath = $entityMetadata.originalEntityPath
 							$entityMetadata.loadedFromGameFiles = false
 							$entity = json.parse(await readTextFile(x))
+							if ($entity.entities["abcdefcadc2e258e"]) {
+								delete $entity.entities["abcdefcadc2e258e"]
+								delete $entity.entities["abcdefcadc77e4f2"]
+							}
 						}
 					}}
 				>
@@ -166,6 +210,10 @@
 						$entityMetadata.saveAsPatchPath = y
 						$entityMetadata.loadedFromGameFiles = false
 						$entity = patched
+						if ($entity.entities["abcdefcadc2e258e"]) {
+							delete $entity.entities["abcdefcadc2e258e"]
+							delete $entity.entities["abcdefcadc77e4f2"]
+						}
 					}}
 				>
 					<HeaderNavItem href="#" text="Load entity from patch" />
@@ -188,7 +236,7 @@
 
 						if (!x) return
 
-						await writeTextFile(x, json.stringify($entity))
+						await writeTextFile(x, getEntityAsText())
 
 						$entityMetadata.saveAsPatch = false
 						$entityMetadata.saveAsEntityPath = x
@@ -219,7 +267,7 @@
 
 						if (!x) return
 
-						await writeTextFile("entity.json", json.stringify($entity), { dir: BaseDirectory.App })
+						await writeTextFile("entity.json", getEntityAsText(), { dir: BaseDirectory.App })
 
 						await Command.sidecar("sidecar/quickentity-rs", [
 							"patch",
@@ -252,7 +300,7 @@
 						role="none"
 						use:shortcut={{ control: true, key: "s" }}
 						on:click={async () => {
-							await writeTextFile("entity.json", json.stringify($entity), { dir: BaseDirectory.App })
+							await writeTextFile("entity.json", getEntityAsText(), { dir: BaseDirectory.App })
 
 							await Command.sidecar("sidecar/quickentity-rs", [
 								"patch",
@@ -283,7 +331,7 @@
 						role="none"
 						use:shortcut={{ control: true, key: "s" }}
 						on:click={async () => {
-							await writeTextFile($entityMetadata.saveAsEntityPath, json.stringify($entity))
+							await writeTextFile($entityMetadata.saveAsEntityPath, getEntityAsText())
 
 							$entityMetadata.loadedFromGameFiles = false
 
@@ -382,6 +430,10 @@
 			$entityMetadata.loadedFromGameFiles = true
 
 			$entity = json.parse(await readTextFile(await join($appSettings.gameFileExtensionsDataPath, "TEMP", x + ".TEMP.entity.json")))
+			if ($entity.entities["abcdefcadc2e258e"]) {
+				delete $entity.entities["abcdefcadc2e258e"]
+				delete $entity.entities["abcdefcadc77e4f2"]
+			}
 		}}
 	>
 		<p>What game file would you like to load? Give either the hash or the path.</p>

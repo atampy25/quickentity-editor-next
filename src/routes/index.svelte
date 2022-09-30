@@ -207,7 +207,7 @@
 									$entity = $entity
 
 									$addNotification = {
-										kind: "info",
+										kind: "success",
 										title: "Entity deleted",
 										subtitle: `Deleted ${deletedEntities} entit${deletedEntities == 1 ? "y" : "ies"}${
 											deletedRefs > 0 ? `and ${deletedRefs} reference${deletedRefs == 1 ? "" : "s"}` : ""

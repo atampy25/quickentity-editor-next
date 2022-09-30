@@ -585,20 +585,18 @@
 		tree.settings!.core.data = []
 
 		for (let [entityID, entityData] of Object.entries(entity.entities)) {
-			if (entityID != "abcdefcadc2e258e" && entityID != "abcdefcadc77e4f2") {
-				tree.settings!.core.data.push({
-					id: String(entityID),
-					parent: getReferencedLocalEntity(entityData.parent) || "#",
-					icon:
-						entityData.template == "[modules:/zentity.class].pc_entitytype" && reverseReferences[entityID].some((a) => a.type == "parent")
-							? "far fa-folder"
-							: icons.find((a) => entityData.template.includes(a[0]))
-							? icons.find((a) => entityData.template.includes(a[0]))![1]
-							: "far fa-file",
-					text: `${entityData.name} (ref ${entityID})`,
-					folder: entityData.template == "[modules:/zentity.class].pc_entitytype" && reverseReferences[entityID].some((a) => a.type == "parent") // for sorting and stuff
-				})
-			}
+			tree.settings!.core.data.push({
+				id: String(entityID),
+				parent: getReferencedLocalEntity(entityData.parent) || "#",
+				icon:
+					entityData.template == "[modules:/zentity.class].pc_entitytype" && reverseReferences[entityID].some((a) => a.type == "parent")
+						? "far fa-folder"
+						: icons.find((a) => entityData.template.includes(a[0]))
+						? icons.find((a) => entityData.template.includes(a[0]))![1]
+						: "far fa-file",
+				text: `${entityData.name} (ref ${entityID})`,
+				folder: entityData.template == "[modules:/zentity.class].pc_entitytype" && reverseReferences[entityID].some((a) => a.type == "parent") // for sorting and stuff
+			})
 		}
 
 		let index = 0
@@ -612,39 +610,6 @@
 			})
 
 			index++
-		}
-
-		if (inVivoExtensions && gameServer.connected) {
-			entity.entities["abcdefcadc2e258e"] = {
-				parent: null,
-				name: "QNE In-Vivo Helper Entity",
-				template: "[modules:/zmultiparentspatialentity.class].pc_entitytype",
-				blueprint: "[modules:/zmultiparentspatialentity.class].pc_entityblueprint",
-				properties: {
-					m_aParents: {
-						type: "TArray<SEntityTemplateReference>",
-						value: Object.keys(entity.entities).filter((a) => a != "abcdefcadc2e258e" && a != "abcdefcadc77e4f2")
-					}
-				}
-			}
-
-			entity.entities["abcdefcadc77e4f2"] = {
-				parent: "abcdefcadc2e258e",
-				name: "QNE In-Vivo Helper Entity GameEventListener",
-				template: "[modules:/zgameeventlistenerentity.class].pc_entitytype",
-				blueprint: "[modules:/zgameeventlistenerentity.class].pc_entityblueprint",
-				properties: {
-					m_eEvent: {
-						type: "EGameEventType",
-						value: "GET_IntroCutEnd"
-					}
-				},
-				events: {
-					EventOccurred: {
-						GetIndex: ["abcdefcadc2e258e"]
-					}
-				}
-			}
 		}
 
 		tree.refresh()
