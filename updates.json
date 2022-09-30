@@ -1,11 +1,11 @@
 {
-	"version": "1.5.0",
-	"notes": "Add Adjust Rotation to Player; disable and re-enable in-vivo in settings",
+	"version": "1.5.1",
+	"notes": "Fix deletion of entities with children that reference them",
 	"pub_date": "2022-09-28T09:45:47Z",
 	"platforms": {
 		"windows-x86_64": {
-			"signature": "dW50cnVzdGVkIGNvbW1lbnQ6IHNpZ25hdHVyZSBmcm9tIHRhdXJpIHNlY3JldCBrZXkKUlVScWpVZGd2b0lOTmFucUt1anVMdTNocUhDcXVCb0MrTlB5WUV0YVRQWVhMRUp6Uk1kSzVQSy9OY05TbEI5T2QxaHkzWWRPajRWdEF3VU1MY0hsQ1llMGFlc2tIMnRSRXdjPQp0cnVzdGVkIGNvbW1lbnQ6IHRpbWVzdGFtcDoxNjY0NTMzNTcyCWZpbGU6UXVpY2tFbnRpdHkgRWRpdG9yXzEuNS4wX3g2NF9lbi1VUy5tc2kuemlwCngzb3JHT0ppb2dMUEs0dm1TbUlyQjN1azBGRUNWMnRMbkFId0poN1hobm9FalBVMjYraHZicm01cEVQVFRpYlNwN245NDhvbEVqMUpoMXIyaEo5L0JnPT0K",
-			"url": "https://github.com/atampy25/quickentity-editor-next/releases/download/1.5.0/QuickEntity.Editor_1.5.0_x64_en-US.msi.zip"
+			"signature": "dW50cnVzdGVkIGNvbW1lbnQ6IHNpZ25hdHVyZSBmcm9tIHRhdXJpIHNlY3JldCBrZXkKUlVScWpVZGd2b0lOTmZUNFZrNnpUUFgzRW51cmxERlRJRmVubklldm9xbDB2TTNtTG5hMXdnNWFtb1R2WThKU2NhZDZCZkloOEdZbDRjVzRXa3d4bDJPMy9lZUFVUFhSZndjPQp0cnVzdGVkIGNvbW1lbnQ6IHRpbWVzdGFtcDoxNjY0NTM2OTg5CWZpbGU6UXVpY2tFbnRpdHkgRWRpdG9yXzEuNS4xX3g2NF9lbi1VUy5tc2kuemlwCnhiM0lMTHErakRCcDJhRUk1REVJTHordmJjN0JMTTRRQk1QTVpRU2JaVTUrSUNueUVuMkJScEt3aTJnQjBydnk3UVZTcE1zOXY1blJYZ1p2a0R3ZkF3PT0K",
+			"url": "https://github.com/atampy25/quickentity-editor-next/releases/download/1.5.1/QuickEntity.Editor_1.5.1_x64_en-US.msi.zip"
 		}
 	}
 }
