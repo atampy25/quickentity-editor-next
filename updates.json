@@ -1,11 +1,11 @@
 {
-	"version": "1.5.2",
-	"notes": "Fix deleting of comment entities",
+	"version": "1.5.3",
+	"notes": "Change how multiparent helper entity works",
 	"pub_date": "2022-09-28T09:45:47Z",
 	"platforms": {
 		"windows-x86_64": {
-			"signature": "dW50cnVzdGVkIGNvbW1lbnQ6IHNpZ25hdHVyZSBmcm9tIHRhdXJpIHNlY3JldCBrZXkKUlVScWpVZGd2b0lOTlpoaWRxYmxLUkhTTXdNRDR2MmhaY2dlQzBadzRLeVk4OVRHY2R3SzhkY1pDQnBOQ1NRTVg4M01LUHBrZVZBaGlveFNuQUx3YlJNUGJUdEVZdU1xU0E4PQp0cnVzdGVkIGNvbW1lbnQ6IHRpbWVzdGFtcDoxNjY0NTM5MzQ0CWZpbGU6UXVpY2tFbnRpdHkgRWRpdG9yXzEuNS4yX3g2NF9lbi1VUy5tc2kuemlwCnl0b1FidGVZR01vVWIyOVl2TTBrdC9sajY2cUo1RFZwM3ppT2svdGdEVXlncDk4b2h2aElBT0kyVUZsL3dNcjR5MHVRYzhtUWhWdDk5OFR5MnpNNkJnPT0K",
-			"url": "https://github.com/atampy25/quickentity-editor-next/releases/download/1.5.2/QuickEntity.Editor_1.5.2_x64_en-US.msi.zip"
+			"signature": "dW50cnVzdGVkIGNvbW1lbnQ6IHNpZ25hdHVyZSBmcm9tIHRhdXJpIHNlY3JldCBrZXkKUlVScWpVZGd2b0lOTmRLaU45VzhRRGdWUVc1UkVhekhsVWxmK3NmSnJFZyswU21YbDFBK0pxM1ptVHNySmRkbWZkZzI3M3pWUE00UE9nNUpWNGxEeHFQYmF2Y21IR25Ma1FNPQp0cnVzdGVkIGNvbW1lbnQ6IHRpbWVzdGFtcDoxNjY0NTQyMTg2CWZpbGU6UXVpY2tFbnRpdHkgRWRpdG9yXzEuNS4zX3g2NF9lbi1VUy5tc2kuemlwCmNCdXJQRlB6bnY1a2lKN3BHR2FWQjlTY1BxSHI4b21WQlkwSVZ4ZjlVbTZkaUR5S2Z0OTgrQVUxbk9nL1UzaWtKNkVaYmNzUXlqOFVLMVhxc3ByUENBPT0K",
+			"url": "https://github.com/atampy25/quickentity-editor-next/releases/download/1.5.3/QuickEntity.Editor_1.5.3_x64_en-US.msi.zip"
 		}
 	}
 }
