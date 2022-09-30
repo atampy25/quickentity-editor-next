@@ -148,68 +148,70 @@ export function deleteReferencesToEntity(
 	let deleted = 0
 
 	for (const ref of reverseReferences[target]) {
-		switch (ref.type) {
-			case "property":
-				if (Array.isArray(entity.entities[ref.entity].properties![ref.context![0]])) {
-					entity.entities[ref.entity].properties![ref.context![0]].value = entity.entities[ref.entity].properties![ref.context![0]].value.filter(
-						(a: Ref) => getReferencedLocalEntity(a) != target
+		if (entity.entities[ref.entity]) {
+			switch (ref.type) {
+				case "property":
+					if (Array.isArray(entity.entities[ref.entity].properties![ref.context![0]])) {
+						entity.entities[ref.entity].properties![ref.context![0]].value = entity.entities[ref.entity].properties![ref.context![0]].value.filter(
+							(a: Ref) => getReferencedLocalEntity(a) != target
+						)
+					} else {
+						delete entity.entities[ref.entity].properties![ref.context![0]]
+					}
+					deleted++
+					break
+
+				case "platformSpecificProperty":
+					if (Array.isArray(entity.entities[ref.entity].platformSpecificProperties![ref.context![0]][ref.context![1]])) {
+						entity.entities[ref.entity].platformSpecificProperties![ref.context![0]][ref.context![1]].value = entity.entities[ref.entity].platformSpecificProperties![ref.context![0]][
+							ref.context![1]
+						].value.filter((a: Ref) => getReferencedLocalEntity(a) != target)
+					} else {
+						delete entity.entities[ref.entity].platformSpecificProperties![ref.context![0]][ref.context![1]]
+					}
+					deleted++
+					break
+
+				case "event":
+					entity.entities[ref.entity].events![ref.context![0]][ref.context![1]] = entity.entities[ref.entity].events![ref.context![0]][ref.context![1]].filter(
+						(a) => getReferencedLocalEntity(a && typeof a != "string" && Object.prototype.hasOwnProperty.call(a, "value") ? a.ref : (a as FullRef)) != target
 					)
-				} else {
-					delete entity.entities[ref.entity].properties![ref.context![0]]
-				}
-				deleted++
-				break
+					deleted++
+					break
 
-			case "platformSpecificProperty":
-				if (Array.isArray(entity.entities[ref.entity].platformSpecificProperties![ref.context![0]][ref.context![1]])) {
-					entity.entities[ref.entity].platformSpecificProperties![ref.context![0]][ref.context![1]].value = entity.entities[ref.entity].platformSpecificProperties![ref.context![0]][
-						ref.context![1]
-					].value.filter((a: Ref) => getReferencedLocalEntity(a) != target)
-				} else {
-					delete entity.entities[ref.entity].platformSpecificProperties![ref.context![0]][ref.context![1]]
-				}
-				deleted++
-				break
+				case "inputCopy":
+					entity.entities[ref.entity].inputCopying![ref.context![0]][ref.context![1]] = entity.entities[ref.entity].inputCopying![ref.context![0]][ref.context![1]].filter(
+						(a) => getReferencedLocalEntity(a && typeof a != "string" && Object.prototype.hasOwnProperty.call(a, "value") ? a.ref : (a as FullRef)) != target
+					)
+					deleted++
+					break
 
-			case "event":
-				entity.entities[ref.entity].events![ref.context![0]][ref.context![1]] = entity.entities[ref.entity].events![ref.context![0]][ref.context![1]].filter(
-					(a) => getReferencedLocalEntity(a && typeof a != "string" && Object.prototype.hasOwnProperty.call(a, "value") ? a.ref : (a as FullRef)) != target
-				)
-				deleted++
-				break
+				case "outputCopy":
+					entity.entities[ref.entity].outputCopying![ref.context![0]][ref.context![1]] = entity.entities[ref.entity].outputCopying![ref.context![0]][ref.context![1]].filter(
+						(a) => getReferencedLocalEntity(a && typeof a != "string" && Object.prototype.hasOwnProperty.call(a, "value") ? a.ref : (a as FullRef)) != target
+					)
+					deleted++
+					break
 
-			case "inputCopy":
-				entity.entities[ref.entity].inputCopying![ref.context![0]][ref.context![1]] = entity.entities[ref.entity].inputCopying![ref.context![0]][ref.context![1]].filter(
-					(a) => getReferencedLocalEntity(a && typeof a != "string" && Object.prototype.hasOwnProperty.call(a, "value") ? a.ref : (a as FullRef)) != target
-				)
-				deleted++
-				break
+				case "propertyAlias":
+					entity.entities[ref.entity].propertyAliases![ref.context![0]] = entity.entities[ref.entity].propertyAliases![ref.context![0]].filter(
+						(a) => !isEqual(a, { originalProperty: ref.context![1], originalEntity: target })
+					)
+					deleted++
+					break
 
-			case "outputCopy":
-				entity.entities[ref.entity].outputCopying![ref.context![0]][ref.context![1]] = entity.entities[ref.entity].outputCopying![ref.context![0]][ref.context![1]].filter(
-					(a) => getReferencedLocalEntity(a && typeof a != "string" && Object.prototype.hasOwnProperty.call(a, "value") ? a.ref : (a as FullRef)) != target
-				)
-				deleted++
-				break
+				case "exposedEntity":
+					entity.entities[ref.entity].exposedEntities![ref.context![0]].refersTo = entity.entities[ref.entity].exposedEntities![ref.context![0]].refersTo.filter(
+						(a) => getReferencedLocalEntity(a) != target
+					)
+					deleted++
+					break
 
-			case "propertyAlias":
-				entity.entities[ref.entity].propertyAliases![ref.context![0]] = entity.entities[ref.entity].propertyAliases![ref.context![0]].filter(
-					(a) => !isEqual(a, { originalProperty: ref.context![1], originalEntity: target })
-				)
-				deleted++
-				break
-
-			case "exposedEntity":
-				entity.entities[ref.entity].exposedEntities![ref.context![0]].refersTo = entity.entities[ref.entity].exposedEntities![ref.context![0]].refersTo.filter(
-					(a) => getReferencedLocalEntity(a) != target
-				)
-				deleted++
-				break
-
-			case "exposedInterface":
-				delete entity.entities[ref.entity].exposedInterfaces![ref.context![0]]
-				deleted++
-				break
+				case "exposedInterface":
+					delete entity.entities[ref.entity].exposedInterfaces![ref.context![0]]
+					deleted++
+					break
+			}
 		}
 	}
 
