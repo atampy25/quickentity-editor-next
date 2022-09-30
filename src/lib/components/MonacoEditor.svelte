@@ -8,7 +8,7 @@
 	import tsWorker from "monaco-editor/esm/vs/language/typescript/ts.worker?worker"
 	import type { Entity, SubEntity } from "$lib/quickentity-types"
 	import json from "$lib/json"
-	import { appSettings, intellisense } from "$lib/stores"
+	import { addNotification, appSettings, intellisense } from "$lib/stores"
 	import merge from "lodash/merge"
 	import { basename, dirname, join } from "@tauri-apps/api/path"
 	import { readDir, readTextFile, exists as tauriExists } from "@tauri-apps/api/fs"
@@ -124,6 +124,12 @@
 					const propertyName = editor.getModel()!.getWordAtPosition(ed.getPosition()!)!.word
 
 					await gameServer.updateProperty(subEntityID, propertyName, json.parse(editor.getValue()).properties[propertyName])
+
+					$addNotification = {
+						kind: "success",
+						title: "Property updated",
+						subtitle: `The value of the ${propertyName} property should now be reflected in-game.`
+					}
 				}
 			})
 

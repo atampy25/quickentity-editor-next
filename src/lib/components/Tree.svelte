@@ -12,6 +12,7 @@
 	import json from "$lib/json"
 	import isEqual from "lodash/isEqual"
 	import { gameServer } from "$lib/in-vivo/gameServer"
+	import { addNotification } from "$lib/stores"
 
 	export let entity: Entity
 	export let reverseReferences: Record<
@@ -188,6 +189,12 @@
 													let d = tree.get_node(b.reference)
 
 													await gameServer.highlightEntity(d.id, entity.entities[d.id])
+
+													$addNotification = {
+														kind: "success",
+														title: "Entity highlighted",
+														subtitle: "Check your game; the entity should now be displaying its bounding box."
+													}
 												}
 											},
 											moveToPlayerPosition: {
@@ -228,6 +235,12 @@
 													dispatch("entityUpdated", d.id)
 
 													await gameServer.updateProperty(d.id, "m_mTransform", entity.entities[d.id].properties!.m_mTransform)
+
+													$addNotification = {
+														kind: "success",
+														title: "Entity set to player position",
+														subtitle: "The m_mTransform property has been updated accordingly."
+													}
 												}
 											},
 											adjustRotationToPlayer: {
@@ -264,6 +277,12 @@
 													dispatch("entityUpdated", d.id)
 
 													await gameServer.updateProperty(d.id, "m_mTransform", entity.entities[d.id].properties!.m_mTransform)
+
+													$addNotification = {
+														kind: "success",
+														title: "Entity set to player rotation",
+														subtitle: "The m_mTransform property has been updated accordingly."
+													}
 												}
 											}
 										}

@@ -205,14 +205,16 @@
 									$addNotification = {
 										kind: "info",
 										title: "Entity deleted",
-										subtitle: `Deleted ${deletedEntities} entit${deletedEntities == 1 ? "y" : "ies"} and ${deletedRefs} reference${deletedRefs == 1 ? "" : "s"}`
+										subtitle: `Deleted ${deletedEntities} entit${deletedEntities == 1 ? "y" : "ies"}${
+											deletedRefs > 0 ? `and ${deletedRefs} reference${deletedRefs == 1 ? "" : "s"}` : ""
+										}`
 									}
 
 									selectionType = null
 									tree.deselect()
 								} else {
 									selectionType = null
-									$entity.comments = $entity.comments.filter((a, b) => b == detail[1].node.id)
+									$entity.comments = $entity.comments.filter((a, b) => b == +detail[1].node.id.replace("comment-", ""))
 								}
 							}}
 							on:entityUpdated={({ detail }) => {
