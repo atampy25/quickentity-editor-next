@@ -182,6 +182,10 @@
 							on:nodeRenamed={({ detail }) => {
 								if (!detail[1].node.id.startsWith("comment")) {
 									$entity.entities[detail[1].node.id].name = detail[1].text.replace(/ \(ref .*\)/gi, "")
+
+									if (detail[1].node.id == selectedEntityID) {
+										selectedEntity = $entity.entities[detail[1].node.id]
+									}
 								} else {
 									$entity.comments[detail[1].node.id.replace("comment-", "")].name = detail[1].text.replace(/ \(comment\)/gi, "")
 								}

@@ -46,6 +46,10 @@
 	vertical-align: top;
 	text-align: center;
 }
+.jstree-node input {
+	color: black;
+	height: 1.4rem !important;
+}
 .jstree-ocl {
 	cursor: pointer;
 }
