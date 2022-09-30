@@ -149,7 +149,7 @@
 				]
 			}}
 		>
-			Add an entity
+			Add a property override
 		</Button>
 		<h2 class="mt-2">Override deletes</h2>
 		<div class="flex flex-wrap gap-2">

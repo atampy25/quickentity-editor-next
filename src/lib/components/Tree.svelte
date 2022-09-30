@@ -229,6 +229,42 @@
 
 													await gameServer.updateProperty(d.id, "m_mTransform", entity.entities[d.id].properties!.m_mTransform)
 												}
+											},
+											adjustRotationToPlayer: {
+												separator_before: false,
+												separator_after: false,
+												label: "Adjust Rotation to Player",
+												icon: "fas fa-compass",
+												action: async (b: { reference: string | HTMLElement | JQuery<HTMLElement> }) => {
+													let d = tree.get_node(b.reference)
+
+													let playerRot = await gameServer.getPlayerRotation()
+
+													entity.entities[d.id].properties ??= {}
+													entity.entities[d.id].properties!.m_mTransform ??= {
+														type: "SMatrix43",
+														value: {
+															rotation: {
+																x: 0,
+																y: 0,
+																z: 0
+															},
+															position: {
+																x: 0,
+																y: 0,
+																z: 0
+															}
+														}
+													}
+
+													entity.entities[d.id].properties!.m_mTransform.value.rotation.x = playerRot.x
+													entity.entities[d.id].properties!.m_mTransform.value.rotation.y = playerRot.y
+													entity.entities[d.id].properties!.m_mTransform.value.rotation.z = playerRot.z
+
+													dispatch("entityUpdated", d.id)
+
+													await gameServer.updateProperty(d.id, "m_mTransform", entity.entities[d.id].properties!.m_mTransform)
+												}
 											}
 										}
 									}

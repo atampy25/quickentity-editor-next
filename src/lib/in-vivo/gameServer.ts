@@ -1,7 +1,9 @@
+import { Euler, Matrix4 } from "three"
 import type { Property, Ref, SubEntity } from "$lib/quickentity-types"
 import { getReferencedLocalEntity, normaliseToHash } from "$lib/utils"
 
 import { Decimal } from "decimal.js"
+import { RAD2DEG } from "three/src/math/MathUtils"
 import UDPSocket from "$lib/in-vivo/udp"
 import deepClone from "lodash/cloneDeep"
 import enums from "$lib/enums.json"
@@ -59,6 +61,34 @@ class GameServer {
 				`getHeroPosition${Date.now()}`,
 				({ datagram }) => datagram.startsWith("GetHeroPosition"),
 				({ datagram }) => resolve({ x: +datagram.split("_")[1], y: +datagram.split("_")[2], z: +datagram.split("_")[3] })
+			)
+		)
+	}
+
+	async getPlayerRotation(): Promise<{ x: number; y: number; z: number }> {
+		await this.client.send(this.lastAddress, "GetHeroRotation")
+		return await new Promise((resolve) =>
+			this.client.once(
+				`getHeroRotation${Date.now()}`,
+				({ datagram }) => datagram.startsWith("GetHeroRotation"),
+				({ datagram }) => {
+					const matrix = new Matrix4()
+					matrix.elements[0] = +datagram.split("_")[1]
+					matrix.elements[4] = +datagram.split("_")[2]
+					matrix.elements[8] = +datagram.split("_")[3]
+
+					matrix.elements[1] = +datagram.split("_")[4]
+					matrix.elements[5] = +datagram.split("_")[5]
+					matrix.elements[9] = +datagram.split("_")[6]
+
+					matrix.elements[2] = +datagram.split("_")[7]
+					matrix.elements[6] = +datagram.split("_")[8]
+					matrix.elements[10] = +datagram.split("_")[9]
+
+					const euler = new Euler(0, 0, 0, "XYZ").setFromRotationMatrix(matrix)
+
+					resolve({ x: euler.x * RAD2DEG, y: euler.y * RAD2DEG, z: euler.z * RAD2DEG })
+				}
 			)
 		)
 	}
