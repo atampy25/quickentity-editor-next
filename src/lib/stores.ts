@@ -28,10 +28,12 @@ if (!(await forage.getItem({ key: "appSettings" })())) {
 if (!json.parse(await forage.getItem({ key: "appSettings" })()).logRocketID) {
 	await forage.setItem({
 		key: "appSettings",
-		value: Object.assign({}, json.parse(await forage.getItem({ key: "appSettings" })()), {
-			logRocketID: v4(),
-			logRocketName: ""
-		})
+		value: json.stringify(
+			Object.assign({}, json.parse(await forage.getItem({ key: "appSettings" })()), {
+				logRocketID: v4(),
+				logRocketName: ""
+			})
+		)
 	})()
 }
 

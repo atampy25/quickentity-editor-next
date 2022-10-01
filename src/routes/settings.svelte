@@ -56,7 +56,7 @@
 		<br />
 		<div class="flex items-center gap-2">
 			<div class="flex-shrink">
-				<Checkbox bind:checked={$appSettings.enableLogRocket} labelText="Enable error and performance reporting" />
+				<Checkbox bind:checked={$appSettings.enableLogRocket} labelText="Enable error and performance reporting (requires a restart to take effect)" />
 			</div>
 			<TooltipIcon icon={Information}>
 				<span slot="tooltipText" style="font-size: 0.875rem; margin-top: 0.5rem; margin-bottom: 0.5rem">
