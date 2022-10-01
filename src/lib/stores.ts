@@ -6,11 +6,32 @@ import { forage } from "@tauri-apps/tauri-forage"
 import json from "$lib/json"
 import { Intellisense } from "$lib/intellisense"
 import RPKGInstance from "$lib/rpkg"
+import { v4 } from "uuid"
 
 if (!(await forage.getItem({ key: "appSettings" })())) {
 	await forage.setItem({
 		key: "appSettings",
-		value: json.stringify({ gameFileExtensions: false, gameFileExtensionsDataPath: null, inVivoExtensions: false, runtimePath: "", retailPath: "" })
+		value: json.stringify({
+			gameFileExtensions: false,
+			gameFileExtensionsDataPath: null,
+			inVivoExtensions: false,
+			runtimePath: "",
+			retailPath: "",
+			enableLogRocket: false,
+			logRocketID: v4(),
+			logRocketName: ""
+		})
+	})()
+}
+
+// backwards compatibility
+if (!json.parse(await forage.getItem({ key: "appSettings" })()).logRocketID) {
+	await forage.setItem({
+		key: "appSettings",
+		value: Object.assign({}, json.parse(await forage.getItem({ key: "appSettings" })()), {
+			logRocketID: v4(),
+			logRocketName: ""
+		})
 	})()
 }
 
@@ -20,13 +41,27 @@ export const appSettings: Writable<{
 	runtimePath: string
 	retailPath: string
 	inVivoExtensions: boolean
+	enableLogRocket: boolean
+	logRocketID: string
+	logRocketName: string
 }> = writable(json.parse(await forage.getItem({ key: "appSettings" })()))
 
-appSettings.subscribe((value: { gameFileExtensions: boolean; gameFileExtensionsDataPath: string; runtimePath: string; retailPath: string; inVivoExtensions: boolean }) => {
-	void (async () => {
-		await forage.setItem({ key: "appSettings", value: json.stringify(value) })()
-	})()
-})
+appSettings.subscribe(
+	(value: {
+		gameFileExtensions: boolean
+		gameFileExtensionsDataPath: string
+		runtimePath: string
+		retailPath: string
+		inVivoExtensions: boolean
+		enableLogRocket: boolean
+		logRocketID: string
+		logRocketName: string
+	}) => {
+		void (async () => {
+			await forage.setItem({ key: "appSettings", value: json.stringify(value) })()
+		})()
+	}
+)
 
 export const entityMetadata: Writable<{
 	originalEntityPath?: string

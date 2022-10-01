@@ -61,6 +61,7 @@
 		"jquery": "^3.6.1",
 		"jstree": "^3.3.12",
 		"lodash": "^4.17.21",
+		"logrocket": "^3.0.1",
 		"lossless-json": "^1.0.5",
 		"md5": "^2.3.0",
 		"monaco-editor": "^0.34.0",

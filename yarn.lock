@@ -2796,6 +2796,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"logrocket@npm:^3.0.1":
+  version: 3.0.1
+  resolution: "logrocket@npm:3.0.1"
+  checksum: aa0024101d3696a81f56330726b75bcb20d880a58987f12e61cf83b9bca23964bc3928388ecb0a7bbfb83046db50a9318903de5a812c04ca1deb78b6601fdad1
+  languageName: node
+  linkType: hard
+
 "lossless-json@npm:^1.0.5":
   version: 1.0.5
   resolution: "lossless-json@npm:1.0.5"
@@ -3740,6 +3747,7 @@ __metadata:
     jquery: ^3.6.1
     jstree: ^3.3.12
     lodash: ^4.17.21
+    logrocket: ^3.0.1
     lossless-json: ^1.0.5
     md5: ^2.3.0
     monaco-editor: ^0.34.0

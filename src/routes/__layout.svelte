@@ -36,6 +36,7 @@
 	import { BaseDirectory, createDir, readTextFile, writeTextFile } from "@tauri-apps/api/fs"
 	import { appDir, join, sep } from "@tauri-apps/api/path"
 	import { Command } from "@tauri-apps/api/shell"
+	import { getVersion } from "@tauri-apps/api/app"
 	import jiff from "jiff"
 	import md5 from "md5"
 
@@ -47,6 +48,8 @@
 	import { shortcut } from "$lib/shortcut"
 	import { gameServer } from "$lib/in-vivo/gameServer"
 	import cloneDeep from "lodash/cloneDeep"
+
+	import LogRocket from "logrocket"
 
 	let displayNotifications: { kind: "error" | "info" | "info-square" | "success" | "warning" | "warning-alt"; title: string; subtitle: string }[] = []
 
@@ -123,6 +126,39 @@
 
 		return json.stringify(ent)
 	}
+
+	async function getEntityFromText(x: string) {
+		const ent = json.parse(x)
+		if (ent.entities["abcdefcadc2e258e"]) {
+			delete ent.entities["abcdefcadc2e258e"]
+			delete ent.entities["abcdefcadc77e4f2"]
+		}
+
+		return ent
+	}
+
+	onMount(async () => {
+		if ($appSettings.enableLogRocket) {
+			LogRocket.init("hch9qe/quickentity-editor", {
+				release: await getVersion(),
+				shouldCaptureIP: false,
+				mergeIframes: true
+			})
+
+			if ($appSettings.logRocketName != "") {
+				LogRocket.identify($appSettings.logRocketID, {
+					name: $appSettings.logRocketName,
+					gameFileExtensions: $appSettings.gameFileExtensions,
+					inVivoExtensions: $appSettings.inVivoExtensions
+				})
+			} else {
+				LogRocket.identify($appSettings.logRocketID, {
+					gameFileExtensions: $appSettings.gameFileExtensions,
+					inVivoExtensions: $appSettings.inVivoExtensions
+				})
+			}
+		}
+	})
 </script>
 
 {#if ready}
@@ -152,11 +188,7 @@
 							$entityMetadata.saveAsPatch = false
 							$entityMetadata.saveAsEntityPath = $entityMetadata.originalEntityPath
 							$entityMetadata.loadedFromGameFiles = false
-							$entity = json.parse(await readTextFile(x))
-							if ($entity.entities["abcdefcadc2e258e"]) {
-								delete $entity.entities["abcdefcadc2e258e"]
-								delete $entity.entities["abcdefcadc77e4f2"]
-							}
+							$entity = await getEntityFromText(await readTextFile(x))
 						}
 					}}
 				>
@@ -209,11 +241,7 @@
 						$entityMetadata.saveAsPatch = true
 						$entityMetadata.saveAsPatchPath = y
 						$entityMetadata.loadedFromGameFiles = false
-						$entity = patched
-						if ($entity.entities["abcdefcadc2e258e"]) {
-							delete $entity.entities["abcdefcadc2e258e"]
-							delete $entity.entities["abcdefcadc77e4f2"]
-						}
+						$entity = await getEntityFromText(json.stringify(patched))
 					}}
 				>
 					<HeaderNavItem href="#" text="Load entity from patch" />
@@ -429,11 +457,7 @@
 			$entityMetadata.saveAsEntityPath = $entityMetadata.originalEntityPath
 			$entityMetadata.loadedFromGameFiles = true
 
-			$entity = json.parse(await readTextFile(await join($appSettings.gameFileExtensionsDataPath, "TEMP", x + ".TEMP.entity.json")))
-			if ($entity.entities["abcdefcadc2e258e"]) {
-				delete $entity.entities["abcdefcadc2e258e"]
-				delete $entity.entities["abcdefcadc77e4f2"]
-			}
+			$entity = await getEntityFromText(await readTextFile(await join($appSettings.gameFileExtensionsDataPath, "TEMP", x + ".TEMP.entity.json")))
 		}}
 	>
 		<p>What game file would you like to load? Give either the hash or the path.</p>

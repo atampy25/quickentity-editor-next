@@ -54,9 +54,24 @@
 			</TooltipIcon>
 		</div>
 		<br />
-		<TextInput labelText="Runtime path" placeholder={documentsPath + "blabla"} bind:value={$appSettings.runtimePath} />
+		<div class="flex items-center gap-2">
+			<div class="flex-shrink">
+				<Checkbox bind:checked={$appSettings.enableLogRocket} labelText="Enable error and performance reporting" />
+			</div>
+			<TooltipIcon icon={Information}>
+				<span slot="tooltipText" style="font-size: 0.875rem; margin-top: 0.5rem; margin-bottom: 0.5rem">
+					Will effectively screen-record your QNE window (doesn't include file explorer windows and such). Don't enter passwords in QNE I guess?
+				</span>
+			</TooltipIcon>
+		</div>
 		<br />
+		{#if $appSettings.enableLogRocket}
+			<TextInput labelText="Identifier for reporting" placeholder={"EpicGamer123 (leave blank to be anonymous)"} bind:value={$appSettings.logRocketName} />
+			<br />
+		{/if}
 		<TextInput labelText="Retail path" placeholder={documentsPath + "blabla"} bind:value={$appSettings.retailPath} />
+		<br />
+		<TextInput labelText="Runtime path" placeholder={documentsPath + "blabla"} bind:value={$appSettings.runtimePath} />
 		<br />
 		<h1>Information</h1>
 		<p>
