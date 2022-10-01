@@ -51,6 +51,7 @@
 
 	import * as Sentry from "@sentry/browser"
 	import { BrowserTracing } from "@sentry/tracing"
+	import SentryRRWeb from "@sentry/rrweb"
 
 	let displayNotifications: { kind: "error" | "info" | "info-square" | "success" | "warning" | "warning-alt"; title: string; subtitle: string }[] = []
 
@@ -142,7 +143,7 @@
 		if ($appSettings.enableLogRocket) {
 			Sentry.init({
 				dsn: "https://7be7af4147884b6093b380e65750e9f6@o1144555.ingest.sentry.io/4503907590537216",
-				integrations: [new BrowserTracing()],
+				integrations: [new BrowserTracing(), new SentryRRWeb()],
 				tracesSampleRate: 1.0,
 				release: await getVersion()
 			})

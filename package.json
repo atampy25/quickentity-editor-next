@@ -47,6 +47,7 @@
 	"private": true,
 	"dependencies": {
 		"@sentry/browser": "^7.14.0",
+		"@sentry/rrweb": "^0.3.3",
 		"@sentry/tracing": "^7.14.0",
 		"@simonwep/pickr": "^1.8.2",
 		"@tauri-apps/api": "^1.1.0",
@@ -66,6 +67,7 @@
 		"lossless-json": "^1.0.5",
 		"md5": "^2.3.0",
 		"monaco-editor": "^0.34.0",
+		"rrweb": "^2.0.0-alpha.3",
 		"svelte-splitpanes": "^0.7.3",
 		"three": "^0.144.0",
 		"uuid": "^9.0.0"
