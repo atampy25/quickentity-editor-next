@@ -15,7 +15,11 @@
 
 <div class="flex flex-col h-full">
 	<div>
-		<h1>Settings</h1>
+		<h1 class="mb-2">Settings</h1>
+		<TextInput labelText="Retail path (required)" placeholder={documentsPath + "blabla"} bind:value={$appSettings.retailPath} />
+		<br />
+		<TextInput labelText="Runtime path (required)" placeholder={documentsPath + "blabla"} bind:value={$appSettings.runtimePath} />
+		<br />
 		<div class="flex items-center gap-2">
 			<div class="flex-shrink"><Checkbox bind:checked={$appSettings.gameFileExtensions} labelText="Enable game-file extensions" /></div>
 			<TooltipIcon icon={Information}>
@@ -27,7 +31,7 @@
 		</div>
 		<br />
 		{#if $appSettings.gameFileExtensions}
-			<TextInput labelText="Path to game file data" placeholder={documentsPath + "blabla"} bind:value={$appSettings.gameFileExtensionsDataPath} />
+			<TextInput labelText="Path to game file data (required)" placeholder={documentsPath + "blabla"} bind:value={$appSettings.gameFileExtensionsDataPath} />
 			<br />
 		{/if}
 		<div class="flex items-center gap-2">
@@ -69,10 +73,6 @@
 			<TextInput labelText="Identifier for reporting" placeholder={"EpicGamer123 (leave blank to be anonymous)"} bind:value={$appSettings.logRocketName} />
 			<br />
 		{/if}
-		<TextInput labelText="Retail path" placeholder={documentsPath + "blabla"} bind:value={$appSettings.retailPath} />
-		<br />
-		<TextInput labelText="Runtime path" placeholder={documentsPath + "blabla"} bind:value={$appSettings.runtimePath} />
-		<br />
 		<h1>Information</h1>
 		<p>
 			QuickEntity Editor is licensed under the GNU General Public License version 3.0 (GPLv3). The in-vivo extensions are a result of work from primarly piepieonline, re-compiled for the newest
