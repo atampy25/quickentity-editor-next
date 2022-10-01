@@ -49,7 +49,8 @@
 	import { gameServer } from "$lib/in-vivo/gameServer"
 	import cloneDeep from "lodash/cloneDeep"
 
-	import LogRocket from "logrocket"
+	import * as Sentry from "@sentry/browser"
+	import { BrowserTracing } from "@sentry/tracing"
 
 	let displayNotifications: { kind: "error" | "info" | "info-square" | "success" | "warning" | "warning-alt"; title: string; subtitle: string }[] = []
 
@@ -139,23 +140,22 @@
 
 	onMount(async () => {
 		if ($appSettings.enableLogRocket) {
-			LogRocket.init("hch9qe/quickentity-editor", {
-				release: await getVersion(),
-				shouldCaptureIP: false,
-				mergeIframes: true
+			Sentry.init({
+				dsn: "https://7be7af4147884b6093b380e65750e9f6@o1144555.ingest.sentry.io/4503907590537216",
+				integrations: [new BrowserTracing()],
+				tracesSampleRate: 1.0,
+				release: await getVersion()
 			})
 
 			if ($appSettings.logRocketName != "") {
-				LogRocket.identify($appSettings.logRocketID, {
-					name: $appSettings.logRocketName,
+				Sentry.setUser({
+					id: $appSettings.logRocketID,
+					username: $appSettings.logRocketName,
 					gameFileExtensions: $appSettings.gameFileExtensions,
 					inVivoExtensions: $appSettings.inVivoExtensions
 				})
 			} else {
-				LogRocket.identify($appSettings.logRocketID, {
-					gameFileExtensions: $appSettings.gameFileExtensions,
-					inVivoExtensions: $appSettings.inVivoExtensions
-				})
+				Sentry.setUser({ id: $appSettings.logRocketID, gameFileExtensions: $appSettings.gameFileExtensions, inVivoExtensions: $appSettings.inVivoExtensions })
 			}
 		}
 	})

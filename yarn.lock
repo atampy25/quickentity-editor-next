@@ -186,6 +186,70 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@sentry/browser@npm:^7.14.0":
+  version: 7.14.0
+  resolution: "@sentry/browser@npm:7.14.0"
+  dependencies:
+    "@sentry/core": 7.14.0
+    "@sentry/types": 7.14.0
+    "@sentry/utils": 7.14.0
+    tslib: ^1.9.3
+  checksum: e005547751ef5f38a53c85bf1f1d9e727f0d3a9e03aac634412bae52f1513b3a1975619915f97d873cacbe59a3341bfcfee0589bb88e933bb27b56e8406e1476
+  languageName: node
+  linkType: hard
+
+"@sentry/core@npm:7.14.0":
+  version: 7.14.0
+  resolution: "@sentry/core@npm:7.14.0"
+  dependencies:
+    "@sentry/hub": 7.14.0
+    "@sentry/types": 7.14.0
+    "@sentry/utils": 7.14.0
+    tslib: ^1.9.3
+  checksum: 3c8532992c83c99c6fd4bde77620078e8bdeb39fbc1c796cbc7f9701fe373e91e990a9d8740d4c1836167b7eeae5907233feeafe17ab38c74b64e65a8008cdce
+  languageName: node
+  linkType: hard
+
+"@sentry/hub@npm:7.14.0":
+  version: 7.14.0
+  resolution: "@sentry/hub@npm:7.14.0"
+  dependencies:
+    "@sentry/types": 7.14.0
+    "@sentry/utils": 7.14.0
+    tslib: ^1.9.3
+  checksum: 7a8302bfe948d520c3505e1bf4fecc409a058e723797c9f20d6b4e2cd3be9298d623e2b220f254fc39fb8f3f5c243e39b661fc8aeb7a002b6ab45967c02d88a2
+  languageName: node
+  linkType: hard
+
+"@sentry/tracing@npm:^7.14.0":
+  version: 7.14.0
+  resolution: "@sentry/tracing@npm:7.14.0"
+  dependencies:
+    "@sentry/hub": 7.14.0
+    "@sentry/types": 7.14.0
+    "@sentry/utils": 7.14.0
+    tslib: ^1.9.3
+  checksum: 6103241608a44c870df4c4beb6155c669d267a5a9b2569cf810d313c95cdc427882dc55682b833e594e022c765ed959ea3a86b0ff1e70d094365b776ebcb5087
+  languageName: node
+  linkType: hard
+
+"@sentry/types@npm:7.14.0":
+  version: 7.14.0
+  resolution: "@sentry/types@npm:7.14.0"
+  checksum: daae2f0609790ae619c359b27d6a87269c1e136374514e3b41c87c0fe40ce3171822ebcdc2fbc05fdda86725d42147e1562cf32973c26c9179f2e5ba751d3396
+  languageName: node
+  linkType: hard
+
+"@sentry/utils@npm:7.14.0":
+  version: 7.14.0
+  resolution: "@sentry/utils@npm:7.14.0"
+  dependencies:
+    "@sentry/types": 7.14.0
+    tslib: ^1.9.3
+  checksum: f0587a542d1ac3b47e8fabe0237b1339de8e928d9be46e937e33c2b174f8b79aa5520d692ff51377cafd67de297aa052feca11e476b2b7d948d59aa3c81dcf5d
+  languageName: node
+  linkType: hard
+
 "@simonwep/pickr@npm:^1.8.2":
   version: 1.8.2
   resolution: "@simonwep/pickr@npm:1.8.2"
@@ -2796,13 +2860,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"logrocket@npm:^3.0.1":
-  version: 3.0.1
-  resolution: "logrocket@npm:3.0.1"
-  checksum: aa0024101d3696a81f56330726b75bcb20d880a58987f12e61cf83b9bca23964bc3928388ecb0a7bbfb83046db50a9318903de5a812c04ca1deb78b6601fdad1
-  languageName: node
-  linkType: hard
-
 "lossless-json@npm:^1.0.5":
   version: 1.0.5
   resolution: "lossless-json@npm:1.0.5"
@@ -3716,6 +3773,8 @@ __metadata:
   resolution: "quickentity-editor@workspace:."
   dependencies:
     "@fortawesome/free-solid-svg-icons": ^6.2.0
+    "@sentry/browser": ^7.14.0
+    "@sentry/tracing": ^7.14.0
     "@simonwep/pickr": ^1.8.2
     "@sveltejs/adapter-static": 1.0.0-next.38
     "@sveltejs/kit": 1.0.0-next.380
@@ -3747,7 +3806,6 @@ __metadata:
     jquery: ^3.6.1
     jstree: ^3.3.12
     lodash: ^4.17.21
-    logrocket: ^3.0.1
     lossless-json: ^1.0.5
     md5: ^2.3.0
     monaco-editor: ^0.34.0
@@ -4540,7 +4598,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"tslib@npm:^1.8.1, tslib@npm:^1.9.0":
+"tslib@npm:^1.8.1, tslib@npm:^1.9.0, tslib@npm:^1.9.3":
   version: 1.14.1
   resolution: "tslib@npm:1.14.1"
   checksum: dbe628ef87f66691d5d2959b3e41b9ca0045c3ee3c7c7b906cc1e328b39f199bb1ad9e671c39025bd56122ac57dfbf7385a94843b1cc07c60a4db74795829acd
