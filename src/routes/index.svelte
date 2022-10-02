@@ -110,7 +110,7 @@
 	<Pane>
 		<SplitPanes on:resize={() => editor?.layout()} theme="" horizontal={true}>
 			<Pane>
-				<div class="flex flex-col h-full">
+				<div class="flex flex-col h-full shepherd-tree">
 					<div class="flex flex-row gap-4 items-center">
 						<h1>Tree</h1>
 						<Search size="lg" labelText="Filter tree entities" on:input={treeSearch} bind:value={treeSearchInput} />
@@ -234,7 +234,7 @@
 				</div>
 			</Pane>
 			<Pane>
-				<div class="flex flex-col h-full">
+				<div class="flex flex-col h-full shepherd-information">
 					<h1>Information</h1>
 					<div class="flex-grow overflow-y-auto overflow-x-hidden">
 						{#if selectionType}
@@ -353,7 +353,7 @@
 		</SplitPanes>
 	</Pane>
 	<Pane>
-		<div class="flex flex-col h-full">
+		<div class="flex flex-col h-full shepherd-editor">
 			<h1>Editor</h1>
 			<div class="flex-grow overflow-hidden">
 				{#if selectionType}

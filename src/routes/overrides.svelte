@@ -73,14 +73,92 @@
 <div class="flex flex-col h-full">
 	<h1>Overrides</h1>
 	<div class="flex-grow overflow-y-auto overflow-x-hidden">
-		<h2>Property overrides</h2>
-		{#each $entity.propertyOverrides as override}
+		<div class="shepherd-propertyOverrides">
+			<h2>Property overrides</h2>
+			{#each $entity.propertyOverrides as override}
+				<br />
+				<Tile>
+					<h4>Entities</h4>
+					<div class="mt-1 flex flex-wrap gap-2 items-center">
+						{#each override.entities as ref}
+							<div class="inline-flex gap-3 items-center pl-3 bg-neutral-800">
+								{#if $appSettings.gameFileExtensions && ref && typeof ref == "object"}
+									{#if overriddenEntityNames[normaliseToHash(ref?.externalScene) + ref?.ref]}
+										<div>
+											<span style="font-size: 0.7rem">
+												{ref.ref} in {ref.externalScene}
+											</span>
+											<br />
+											<span style="font-size: 1rem">
+												{overriddenEntityNames[normaliseToHash(ref?.externalScene) + ref.ref]}
+											</span>
+										</div>
+									{:else}
+										{ref.ref} in {ref.externalScene}
+									{/if}
+								{:else if ref && typeof ref == "object"}
+									{ref?.ref}
+								{:else}
+									{ref}
+								{/if}
+								<Button
+									kind="ghost"
+									icon={CloseOutline}
+									iconDescription="Remove"
+									on:click={() => {
+										override.entities = override.entities.filter((a) => !isEqual(a, ref))
+									}}
+								/>
+							</div>
+						{/each}
+						<Button
+							icon={Add}
+							on:click={() => {
+								entityReferenceModalType = "property"
+								entityReferenceModalOverride = override
+								entityReferenceModalOpen = true
+							}}
+						>
+							Add an entity
+						</Button>
+					</div>
+					<br />
+					<h4>Properties</h4>
+					<OverrideMonacoEditor jsonToDisplay={override.properties} on:contentChanged={({ detail }) => updatePropertyData(override, detail)} />
+					<br />
+					<Button
+						kind="danger"
+						icon={Close}
+						on:click={() => {
+							$entity.propertyOverrides = $entity.propertyOverrides.filter((a) => !isEqual(a, override))
+						}}
+					>
+						Remove override
+					</Button>
+				</Tile>
+			{/each}
 			<br />
-			<Tile>
-				<h4>Entities</h4>
-				<div class="mt-1 flex flex-wrap gap-2 items-center">
-					{#each override.entities as ref}
-						<div class="inline-flex gap-3 items-center pl-3 bg-neutral-800">
+			<Button
+				icon={Add}
+				on:click={() => {
+					$entity.propertyOverrides = [
+						...$entity.propertyOverrides,
+						{
+							entities: [],
+							properties: {}
+						}
+					]
+				}}
+			>
+				Add a property override
+			</Button>
+		</div>
+		<div class="shepherd-overrideDeletes">
+			<h2 class="mt-2">Override deletes</h2>
+			<div class="flex flex-wrap gap-2">
+				{#each $entity.overrideDeletes as ref}
+					<Tile>
+						<div class="flex items-center gap-4">
 							{#if $appSettings.gameFileExtensions && ref && typeof ref == "object"}
 								{#if overriddenEntityNames[normaliseToHash(ref?.externalScene) + ref?.ref]}
 									<div>
@@ -100,105 +178,31 @@
 							{:else}
 								{ref}
 							{/if}
+
 							<Button
 								kind="ghost"
+								size="small"
 								icon={CloseOutline}
 								iconDescription="Remove"
 								on:click={() => {
-									override.entities = override.entities.filter((a) => !isEqual(a, ref))
+									$entity.overrideDeletes = $entity.overrideDeletes.filter((a) => !isEqual(a, ref))
 								}}
 							/>
 						</div>
-					{/each}
-					<Button
-						icon={Add}
-						on:click={() => {
-							entityReferenceModalType = "property"
-							entityReferenceModalOverride = override
-							entityReferenceModalOpen = true
-						}}
-					>
-						Add an entity
-					</Button>
-				</div>
-				<br />
-				<h4>Properties</h4>
-				<OverrideMonacoEditor jsonToDisplay={override.properties} on:contentChanged={({ detail }) => updatePropertyData(override, detail)} />
-				<br />
-				<Button
-					kind="danger"
-					icon={Close}
-					on:click={() => {
-						$entity.propertyOverrides = $entity.propertyOverrides.filter((a) => !isEqual(a, override))
-					}}
-				>
-					Remove override
-				</Button>
-			</Tile>
-		{/each}
-		<br />
-		<Button
-			icon={Add}
-			on:click={() => {
-				$entity.propertyOverrides = [
-					...$entity.propertyOverrides,
-					{
-						entities: [],
-						properties: {}
-					}
-				]
-			}}
-		>
-			Add a property override
-		</Button>
-		<h2 class="mt-2">Override deletes</h2>
-		<div class="flex flex-wrap gap-2">
-			{#each $entity.overrideDeletes as ref}
-				<Tile>
-					<div class="flex items-center gap-4">
-						{#if $appSettings.gameFileExtensions && ref && typeof ref == "object"}
-							{#if overriddenEntityNames[normaliseToHash(ref?.externalScene) + ref?.ref]}
-								<div>
-									<span style="font-size: 0.7rem">
-										{ref.ref} in {ref.externalScene}
-									</span>
-									<br />
-									<span style="font-size: 1rem">
-										{overriddenEntityNames[normaliseToHash(ref?.externalScene) + ref.ref]}
-									</span>
-								</div>
-							{:else}
-								{ref.ref} in {ref.externalScene}
-							{/if}
-						{:else if ref && typeof ref == "object"}
-							{ref?.ref}
-						{:else}
-							{ref}
-						{/if}
-
-						<Button
-							kind="ghost"
-							size="small"
-							icon={CloseOutline}
-							iconDescription="Remove"
-							on:click={() => {
-								$entity.overrideDeletes = $entity.overrideDeletes.filter((a) => !isEqual(a, ref))
-							}}
-						/>
-					</div>
-				</Tile>
-			{/each}
+					</Tile>
+				{/each}
+			</div>
+			<br />
+			<Button
+				icon={Add}
+				on:click={() => {
+					entityReferenceModalType = "delete"
+					entityReferenceModalOpen = true
+				}}
+			>
+				Add an override delete
+			</Button>
 		</div>
-		<br />
-		<Button
-			icon={Add}
-			on:click={() => {
-				entityReferenceModalType = "delete"
-				entityReferenceModalOpen = true
-			}}
-		>
-			Add an override delete
-		</Button>
 	</div>
 </div>
 

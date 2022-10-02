@@ -68,6 +68,7 @@
 		"md5": "^2.3.0",
 		"monaco-editor": "^0.34.0",
 		"rrweb": "^2.0.0-alpha.3",
+		"shepherd.js": "^10.0.1",
 		"svelte-splitpanes": "^0.7.3",
 		"three": "^0.144.0",
 		"uuid": "^9.0.0"

@@ -2,6 +2,7 @@
 	import "../app.css"
 	import "carbon-components-svelte/css/g90.css"
 	import "$lib/fontawesome/css/all.css"
+	import "shepherd.js/dist/css/shepherd.css"
 
 	import { onMount } from "svelte"
 
@@ -28,6 +29,8 @@
 
 	import { addNotification, appSettings, entity, entityMetadata } from "$lib/stores"
 	import json from "$lib/json"
+	import { shortcut } from "$lib/shortcut"
+	import { gameServer } from "$lib/in-vivo/gameServer"
 
 	import { page } from "$app/stores"
 	import { fade, fly } from "svelte/transition"
@@ -39,15 +42,14 @@
 	import { getVersion } from "@tauri-apps/api/app"
 	import jiff from "jiff"
 	import md5 from "md5"
+	import Shepherd from "shepherd.js"
+	import cloneDeep from "lodash/cloneDeep"
 
 	import Data2 from "carbon-icons-svelte/lib/Data_2.svelte"
 	import Edit from "carbon-icons-svelte/lib/Edit.svelte"
 	import TreeView from "carbon-icons-svelte/lib/TreeView.svelte"
 	import Settings from "carbon-icons-svelte/lib/Settings.svelte"
 	import Chart_3D from "carbon-icons-svelte/lib/Chart_3D.svelte"
-	import { shortcut } from "$lib/shortcut"
-	import { gameServer } from "$lib/in-vivo/gameServer"
-	import cloneDeep from "lodash/cloneDeep"
 
 	import * as Sentry from "@sentry/browser"
 	import { BrowserTracing } from "@sentry/tracing"
@@ -382,6 +384,7 @@
 					<HeaderNavItem
 						href="#"
 						text="{!gameServer.connected ? 'Enable' : 'Disable'} game connection"
+						class="shepherd-gameConnection"
 						on:click={async () => {
 							if (!gameServer.connected) {
 								await gameServer.start()
@@ -406,6 +409,287 @@
 						</li>
 					{/if}
 				{/if}
+			{/if}
+			{#if $page.url.pathname == "/metadata" || $page.url.pathname == "/overrides" || $page.url.pathname == "/" || $page.url.pathname == "/3d"}
+				<HeaderNavItem
+					href="#"
+					on:click={() => {
+						if ($page.url.pathname == "/metadata") {
+							const tour = new Shepherd.Tour({
+								useModalOverlay: true,
+								defaultStepOptions: {
+									classes: "shadow-md bg-purple-dark",
+									scrollTo: true
+								}
+							})
+
+							tour.addStep({
+								id: "page",
+								text: "You're looking at the Metadata view, where you can customise general properties of the opened entity.",
+								buttons: [
+									{
+										text: "Next",
+										action: tour.next
+									}
+								]
+							})
+
+							tour.addStep({
+								id: "factoryHash",
+								text: "This is the alphanumeric 16 character game hash of the factory (TEMP) of the opened entity.",
+								attachTo: {
+									element: ".shepherd-factoryHash",
+									on: "bottom"
+								},
+								buttons: [
+									{
+										text: "Next",
+										action: tour.next
+									}
+								]
+							})
+
+							tour.addStep({
+								id: "blueprintHash",
+								text: "This is the alphanumeric 16 character game hash of the blueprint (TBLU) of the opened entity.",
+								attachTo: {
+									element: ".shepherd-blueprintHash",
+									on: "bottom"
+								},
+								buttons: [
+									{
+										text: "Next",
+										action: tour.next
+									}
+								]
+							})
+
+							tour.addStep({
+								id: "rootEntity",
+								text: "This is the entity ID of the root entity. For templates, the root entity should be the one that implements the required interfaces, exposes the required entities and aliases the required properties; properties of the template in another brick are propagated to the root entity. For scenes and bricks, the root entity should be a spatial entity which the other entities are parented to.",
+								attachTo: {
+									element: ".shepherd-rootEntity",
+									on: "bottom"
+								},
+								buttons: [
+									{
+										text: "Next",
+										action: tour.next
+									}
+								]
+							})
+
+							tour.addStep({
+								id: "entityType",
+								text: "This is the entity's type. Scenes are entities that are loaded by contract JSONs; they're the highest up in the hierarchy. Bricks are entities that are loaded by scenes. Templates are entities designed for a specific purpose that are then used by other entities.",
+								attachTo: {
+									element: ".shepherd-entityType",
+									on: "bottom"
+								},
+								buttons: [
+									{
+										text: "Next",
+										action: tour.next
+									}
+								]
+							})
+
+							tour.addStep({
+								id: "externalScenes",
+								text: "These are the external scenes that this entity references. Anything used in an externalScene property of a reference should be here, as well as any other bricks or entities you might want to load alongside this entity.",
+								attachTo: {
+									element: ".shepherd-externalScenes",
+									on: "bottom"
+								},
+								buttons: [
+									{
+										text: "Next",
+										action: tour.next
+									}
+								]
+							})
+
+							tour.addStep({
+								id: "extraDependencies",
+								text: "If you want to add any extra dependencies to the factory or blueprint, you can do so here.",
+								attachTo: {
+									element: ".shepherd-extraDependencies",
+									on: "bottom"
+								},
+								buttons: [
+									{
+										text: "Next",
+										action: tour.next
+									}
+								]
+							})
+
+							tour.start()
+						}
+
+						if ($page.url.pathname == "/overrides") {
+							const tour = new Shepherd.Tour({
+								useModalOverlay: true,
+								defaultStepOptions: {
+									classes: "shadow-md bg-purple-dark",
+									scrollTo: true
+								}
+							})
+
+							tour.addStep({
+								id: "page",
+								text: "You're looking at the Overrides view, where you can customise how this entity overrides other entities when it's loaded. This is usually used by bricks or scenes.",
+								buttons: [
+									{
+										text: "Next",
+										action: tour.next
+									}
+								]
+							})
+
+							tour.addStep({
+								id: "propertyOverrides",
+								text: "These are entity properties that will be overriden when this entity is loaded.",
+								attachTo: {
+									element: ".shepherd-propertyOverrides",
+									on: "auto"
+								},
+								buttons: [
+									{
+										text: "Next",
+										action: tour.next
+									}
+								]
+							})
+
+							tour.addStep({
+								id: "overrideDeletes",
+								text: "These are entities that will be removed when this entity is loaded.",
+								attachTo: {
+									element: ".shepherd-overrideDeletes",
+									on: "auto"
+								},
+								buttons: [
+									{
+										text: "Next",
+										action: tour.next
+									}
+								]
+							})
+
+							tour.start()
+						}
+
+						if ($page.url.pathname == "/") {
+							const tour = new Shepherd.Tour({
+								useModalOverlay: true,
+								defaultStepOptions: {
+									classes: "shadow-md bg-purple-dark",
+									scrollTo: true
+								}
+							})
+
+							tour.addStep({
+								id: "page",
+								text: "You're looking at the Tree view, where you'll spend most of your time in QuickEntity Editor. There are three components to this view: the tree, the information pane and the editor.",
+								buttons: [
+									{
+										text: "Next",
+										action: tour.next
+									}
+								]
+							})
+
+							tour.addStep({
+								id: "tree",
+								text: "This is the tree itself. It displays the sub-entities of the game entity you're looking at. You can also right click on sub-entities to create new ones, delete them, rename them, add comments or access other advanced options. The tree is sorted alphabetically, and you can drag sub-entities to re-parent them.",
+								attachTo: {
+									element: ".shepherd-tree",
+									on: "right"
+								},
+								buttons: [
+									{
+										text: "Next",
+										action: tour.next
+									}
+								]
+							})
+
+							tour.addStep({
+								id: "information",
+								text: "When you select an entity in the tree, you'll see relevant information show up here, like entities that reference the entity you clicked, or a 3D preview of the entity.",
+								attachTo: {
+									element: ".shepherd-information",
+									on: "right"
+								},
+								buttons: [
+									{
+										text: "Next",
+										action: tour.next
+									}
+								]
+							})
+
+							tour.addStep({
+								id: "editor",
+								text: "You'll also see an editor show up here, allowing you to change the properties of an entity or edit the text of a comment. Some properties, like colours, have visual editors as well, which will show up below the main JSON editor.",
+								attachTo: {
+									element: ".shepherd-editor",
+									on: "left"
+								},
+								buttons: [
+									{
+										text: "Next",
+										action: tour.next
+									}
+								]
+							})
+
+							if ($appSettings.inVivoExtensions) {
+								tour.addStep({
+									id: "gameConnection",
+									text: "Since you've enabled in-vivo extensions, you can connect to a running instance of the game using this (you should turn this on before launching the game). If you save an entity while the game connection is enabled, a helper sub-entity will be added to allow you to perform in-game actions on everything in the entity - if something isn't working right, save while the game connection is enabled and re-deploy.",
+									attachTo: {
+										element: ".shepherd-gameConnection",
+										on: "left"
+									},
+									buttons: [
+										{
+											text: "Next",
+											action: tour.next
+										}
+									]
+								})
+							}
+
+							tour.start()
+						}
+
+						if ($page.url.pathname == "/3d") {
+							const tour = new Shepherd.Tour({
+								useModalOverlay: true,
+								defaultStepOptions: {
+									classes: "shadow-md bg-purple-dark",
+									scrollTo: true
+								}
+							})
+
+							tour.addStep({
+								id: "page",
+								text: "You're looking at the 3D Preview. It's currently very experimental and probably won't work.",
+								buttons: [
+									{
+										text: "Next",
+										action: tour.next
+									}
+								]
+							})
+
+							tour.start()
+						}
+					}}
+					text="Help"
+				/>
 			{/if}
 		</HeaderNav>
 
