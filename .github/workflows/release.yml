@@ -43,6 +43,18 @@ jobs:
           name: rpkg
           latest: true
           path: './temp'
+
+      - name: Download ResourceTool
+        uses: aochmann/actions-download-artifact@5709392f11b5937bd316e52687ad87f7deced5f5
+        with:
+          repo: OrfeasZ/ZHMTools
+          name: ResourceTool-win-x64
+          latest: true
+          path: 'src-tauri'
+
+      - name: Rename ResourceTool binary
+        run: |
+          ren src-tauri\ResourceTool.exe ResourceTool-x86_64-pc-windows-msvc.exe
       
       - name: Download quickentity-rs
         uses: robinraju/release-downloader@v1.5

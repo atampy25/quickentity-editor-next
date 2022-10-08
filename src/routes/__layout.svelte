@@ -36,8 +36,8 @@
 	import { fade, fly } from "svelte/transition"
 	import { flip } from "svelte/animate"
 	import { open, save } from "@tauri-apps/api/dialog"
-	import { BaseDirectory, createDir, readTextFile, writeTextFile } from "@tauri-apps/api/fs"
-	import { appDir, join, sep } from "@tauri-apps/api/path"
+	import { BaseDirectory, createDir, exists as tauriExists, readDir, readTextFile, removeDir, writeTextFile } from "@tauri-apps/api/fs"
+	import { appDir, join, runtimeDir, sep } from "@tauri-apps/api/path"
 	import { Command } from "@tauri-apps/api/shell"
 	import { getVersion } from "@tauri-apps/api/app"
 	import jiff from "jiff"
@@ -54,6 +54,8 @@
 	import * as Sentry from "@sentry/browser"
 	import { BrowserTracing } from "@sentry/tracing"
 	import SentryRRWeb from "@sentry/rrweb"
+	import { camelCase } from "jquery"
+	import { endsWith } from "lodash"
 
 	let displayNotifications: { kind: "error" | "info" | "info-square" | "success" | "warning" | "warning-alt"; title: string; subtitle: string }[] = []
 
@@ -91,6 +93,14 @@
 			void gameServer.client.send(gameServer.lastAddress, "Ping")
 		}
 	}, 100)
+
+	const exists = async (path: string) => {
+		try {
+			return (await tauriExists(path)) as unknown as boolean
+		} catch {
+			return false
+		}
+	}
 
 	function getEntityAsText() {
 		const ent = cloneDeep($entity)
@@ -197,17 +207,15 @@
 				>
 					<HeaderNavItem href="#" text="Load entity from file" />
 				</li>
-				{#if $appSettings.gameFileExtensions}
-					<li
-						role="none"
-						use:shortcut={{ control: true, alt: true, key: "o" }}
-						on:click={() => {
-							askGameFileModalOpen = true
-						}}
-					>
-						<HeaderNavItem href="#" text="Load entity from game" />
-					</li>
-				{/if}
+				<li
+					role="none"
+					use:shortcut={{ control: true, alt: true, key: "o" }}
+					on:click={() => {
+						askGameFileModalOpen = true
+					}}
+				>
+					<HeaderNavItem href="#" text="Load entity from game" />
+				</li>
 				<li
 					role="none"
 					use:shortcut={{ control: true, shift: true, key: "O" }}
@@ -730,19 +738,103 @@
 		secondaryButtonText="Cancel"
 		on:click:button--secondary={() => (askGameFileModalOpen = false)}
 		on:submit={async () => {
-			askGameFileModalOpen = false
-
 			let x = askGameFileModalResult
 			if (x.includes(":")) {
 				x = ("00" + md5(x).slice(2, 16)).toUpperCase()
 			}
 
-			$entityMetadata.originalEntityPath = await join($appSettings.gameFileExtensionsDataPath, "TEMP", x + ".TEMP.entity.json")
+			if (await exists(await join(await appDir(), "inspection"))) {
+				await removeDir(await join(await appDir(), "inspection"), { recursive: true })
+			}
+
+			askGameFileModalOpen = false
+
+			$addNotification = {
+				kind: "info",
+				title: "Extracting TEMP files",
+				subtitle: "Extracting binary TEMP files"
+			}
+
+			await Command.sidecar("sidecar/rpkg-cli", ["-extract_from_rpkgs", $appSettings.runtimePath, "-filter", x, "-output_path", await join(await appDir(), "inspection")]).execute()
+
+			let tempPath, tempMetaPath, tbluPath, tbluMetaPath
+
+			let latestChunkTemp = /is in: (.*?.rpkg)/gi.exec((await Command.sidecar("sidecar/rpkg-cli", ["-latest_hash", $appSettings.runtimePath, "-filter", x]).execute()).stdout)[1]
+
+			$addNotification = {
+				kind: "info",
+				title: "Converting TEMP files",
+				subtitle: "Converting TEMP files to JSON"
+			}
+
+			for (let entry of (await readDir(await join(await appDir(), "inspection", latestChunkTemp), { recursive: true })).flatMap((a) => a.children || a)) {
+				if (entry.path.endsWith(".TEMP")) {
+					await Command.sidecar("ResourceTool", ["HM3", "convert", "TEMP", entry.path, entry.path + ".json", "--simple"]).execute()
+					tempPath = entry.path + ".json"
+				} else if (entry.path.endsWith(".TEMP.meta")) {
+					await Command.sidecar("sidecar/rpkg-cli", ["-hash_meta_to_json", entry.path]).execute()
+					tempMetaPath = entry.path + ".JSON"
+				}
+			}
+
+			let tbluHash = json.parse(await readTextFile(tempMetaPath)).hash_reference_data[json.parse(await readTextFile(tempPath)).blueprintIndexInResourceHeader].hash
+			if (tbluHash.includes(":")) {
+				tbluHash = ("00" + md5(tbluHash).slice(2, 16)).toUpperCase()
+			}
+
+			let latestChunkTblu = /is in: (.*?.rpkg)/gi.exec((await Command.sidecar("sidecar/rpkg-cli", ["-latest_hash", $appSettings.runtimePath, "-filter", tbluHash]).execute()).stdout)[1]
+
+			$addNotification = {
+				kind: "info",
+				title: "Extracting TBLU files",
+				subtitle: "Extracting binary TBLU files"
+			}
+
+			await Command.sidecar("sidecar/rpkg-cli", ["-extract_from_rpkgs", $appSettings.runtimePath, "-filter", tbluHash, "-output_path", await join(await appDir(), "inspection")]).execute()
+
+			$addNotification = {
+				kind: "info",
+				title: "Converting TBLU files",
+				subtitle: "Converting TBLU files to JSON"
+			}
+
+			for (let entry of (await readDir(await join(await appDir(), "inspection", latestChunkTblu), { recursive: true })).flatMap((a) => a.children || a)) {
+				if (entry.path.endsWith(".TBLU")) {
+					await Command.sidecar("ResourceTool", ["HM3", "convert", "TBLU", entry.path, entry.path + ".json", "--simple"]).execute()
+					tbluPath = entry.path + ".json"
+				} else if (entry.path.endsWith(".TBLU.meta")) {
+					await Command.sidecar("sidecar/rpkg-cli", ["-hash_meta_to_json", entry.path]).execute()
+					tbluMetaPath = entry.path + ".JSON"
+				}
+			}
+
+			$addNotification = {
+				kind: "info",
+				title: "Converting to QuickEntity",
+				subtitle: "Converting source JSON files to QuickEntity JSON"
+			}
+
+			await Command.sidecar("sidecar/quickentity-rs", [
+				"entity",
+				"convert",
+				"--input-factory",
+				tempPath,
+				"--input-factory-meta",
+				tempMetaPath,
+				"--input-blueprint",
+				tbluPath,
+				"--input-blueprint-meta",
+				tbluMetaPath,
+				"--output",
+				await join(await appDir(), "inspection", "entity.json")
+			]).execute()
+
+			$entityMetadata.originalEntityPath = await join(await appDir(), "inspection", "entity.json")
 			$entityMetadata.saveAsPatch = false
 			$entityMetadata.saveAsEntityPath = $entityMetadata.originalEntityPath
 			$entityMetadata.loadedFromGameFiles = true
 
-			$entity = await getEntityFromText(await readTextFile(await join($appSettings.gameFileExtensionsDataPath, "TEMP", x + ".TEMP.entity.json")))
+			$entity = await getEntityFromText(await readTextFile(await join(await appDir(), "inspection", "entity.json")))
 		}}
 	>
 		<p>What game file would you like to load? Give either the hash or the path.</p>

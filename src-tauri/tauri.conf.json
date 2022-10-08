@@ -26,6 +26,11 @@
 						"name": "sidecar/rpkg-cli",
 						"args": true,
 						"sidecar": true
+					},
+					{
+						"name": "ResourceTool",
+						"args": true,
+						"sidecar": true
 					}
 				]
 			},
@@ -46,7 +51,7 @@
 			"deb": {
 				"depends": []
 			},
-			"externalBin": ["sidecar/quickentity-rs", "sidecar/rpkg-cli"],
+			"externalBin": ["sidecar/quickentity-rs", "sidecar/rpkg-cli", "ResourceTool"],
 			"icon": ["icons/32x32.png", "icons/128x128.png", "icons/128x128@2x.png", "icons/icon.icns", "icons/icon.ico"],
 			"identifier": "app.quickentity.editor",
 			"longDescription": "",
@@ -57,7 +62,7 @@
 				"providerShortName": null,
 				"signingIdentity": null
 			},
-			"resources": ["hash_list.txt", "LogPins.dll", "LogPins.pdb"],
+			"resources": ["hash_list.txt", "LogPins.dll", "LogPins.pdb", "ResourceLib_HM2016.dll", "ResourceLib_HM2.dll", "ResourceLib_HM3.dll", "ResourceLib_HMA.dll"],
 			"shortDescription": "",
 			"targets": "all",
 			"windows": {
