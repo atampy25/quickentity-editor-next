@@ -1,11 +1,11 @@
 {
-	"version": "1.8.0",
-	"notes": "Rework loading from game files to allow use of hash list",
+	"version": "1.8.1",
+	"notes": "Make metadata view scrollable",
 	"pub_date": "2022-09-28T09:45:47Z",
 	"platforms": {
 		"windows-x86_64": {
-			"signature": "dW50cnVzdGVkIGNvbW1lbnQ6IHNpZ25hdHVyZSBmcm9tIHRhdXJpIHNlY3JldCBrZXkKUlVScWpVZGd2b0lOTlNic1dhMXkrblh6ck5MNXdLYkVYOHZvcWd4L3FnUnlkVVhzNk9EWDZRK3EwSGNZZzBaMHJCS0tGTTdWNnBKMnc4amc0MWI5a29VWGpLRTdWSngyTUFzPQp0cnVzdGVkIGNvbW1lbnQ6IHRpbWVzdGFtcDoxNjY1MjM3MjIyCWZpbGU6UXVpY2tFbnRpdHkgRWRpdG9yXzEuOC4wX3g2NF9lbi1VUy5tc2kuemlwClRtcW1pQ2VyR1U3NG5xWnViTU55Yjd1SFY0RUFyWWNLaGxjQVlaQWF4QWFBbnN2R3pLd045cFNSZjd2cWpsdWJPa1RvZUhaVnNCWlVvM2dTOWQ0RkJ3PT0K",
-			"url": "https://github.com/atampy25/quickentity-editor-next/releases/download/1.8.0/QuickEntity.Editor_1.8.0_x64_en-US.msi.zip"
+			"signature": "dW50cnVzdGVkIGNvbW1lbnQ6IHNpZ25hdHVyZSBmcm9tIHRhdXJpIHNlY3JldCBrZXkKUlVScWpVZGd2b0lOTlJUSGlHUjlkSXlRaGlYUkpPenVLU2R4ZGU1UkIzLzlBUm5UWjlTWEZ5SUJMeE5vK01IMVJmYnVVaXRiUmhiMUlKSGZIRWdzcXhxeWNVaG1tN0ZKNEFZPQp0cnVzdGVkIGNvbW1lbnQ6IHRpbWVzdGFtcDoxNjY1Mjc3NTM0CWZpbGU6UXVpY2tFbnRpdHkgRWRpdG9yXzEuOC4xX3g2NF9lbi1VUy5tc2kuemlwCnY3REdDQ2FBNFRzc010enIxOHc2VmZQc3VtVC9HbnBmWTRSbW5qUEN6TTFrZGN4TEt2cEFrdjU2R2RhR2JQcnlLOHFNUGwxdVhDME5aYnAyb0tROEFRPT0K",
+			"url": "https://github.com/atampy25/quickentity-editor-next/releases/download/1.8.1/QuickEntity.Editor_1.8.1_x64_en-US.msi.zip"
 		}
 	}
 }
