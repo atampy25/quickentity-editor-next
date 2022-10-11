@@ -628,6 +628,18 @@
 		tree.deselect_all()
 		currentlySelected = null!
 	}
+
+	export function getMatching(search: string) {
+		return tree.settings!.core.data.filter((node) => {
+			if (search.startsWith(":")) {
+				if (entity.entities[node.id]) {
+					return eval(search.slice(1))(entity.entities[node.id])
+				}
+			} else {
+				return (JSON.stringify(entity.entities[node.id] || entity.comments[Number(node.id.split("-")[1])]) + node.id).toLowerCase().includes(search)
+			}
+		})
+	}
 </script>
 
 <div id={elemID} />

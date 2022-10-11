@@ -21,6 +21,17 @@
 		<TextInput labelText="Runtime path (required)" placeholder={documentsPath + "blabla"} bind:value={$appSettings.runtimePath} />
 		<br />
 		<div class="flex items-center gap-2">
+			<div class="flex-shrink">
+				<Checkbox bind:checked={$appSettings.technicalMode} labelText="Enable technical mode" />
+			</div>
+			<TooltipIcon icon={Information}>
+				<span slot="tooltipText" style="font-size: 0.875rem; margin-top: 0.5rem; margin-bottom: 0.5rem">
+					If you know how to program in JavaScript, you can enable technical mode to add a function evaluation tool to the Tree view.
+				</span>
+			</TooltipIcon>
+		</div>
+		<br />
+		<div class="flex items-center gap-2">
 			<div class="flex-shrink"><Checkbox bind:checked={$appSettings.gameFileExtensions} labelText="Enable game-file extensions" /></div>
 			<TooltipIcon icon={Information}>
 				<span slot="tooltipText" style="font-size: 0.875rem; margin-top: 0.5rem; margin-bottom: 0.5rem">

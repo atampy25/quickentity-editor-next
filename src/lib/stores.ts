@@ -19,7 +19,8 @@ if (!(await forage.getItem({ key: "appSettings" })())) {
 			retailPath: "",
 			enableLogRocket: false,
 			logRocketID: v4(),
-			logRocketName: ""
+			logRocketName: "",
+			technicalMode: false
 		})
 	})()
 }
@@ -46,6 +47,7 @@ export const appSettings: Writable<{
 	enableLogRocket: boolean
 	logRocketID: string
 	logRocketName: string
+	technicalMode: boolean
 }> = writable(json.parse(await forage.getItem({ key: "appSettings" })()))
 
 appSettings.subscribe(
@@ -58,6 +60,7 @@ appSettings.subscribe(
 		enableLogRocket: boolean
 		logRocketID: string
 		logRocketName: string
+		technicalMode: boolean
 	}) => {
 		void (async () => {
 			await forage.setItem({ key: "appSettings", value: json.stringify(value) })()

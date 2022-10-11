@@ -15,7 +15,7 @@
 	import enums from "$lib/enums.json"
 
 	import { Pane, Splitpanes as SplitPanes } from "svelte-splitpanes"
-	import { ClickableTile, Search, Select, TextArea, TextInput } from "carbon-components-svelte"
+	import { Button, ClickableTile, Search, Select, TextArea, TextInput } from "carbon-components-svelte"
 	import debounce from "lodash/debounce"
 	import isEqual from "lodash/isEqual"
 	import { AmbientLight, Canvas, DirectionalLight, Mesh, OrbitControls, PerspectiveCamera } from "@threlte/core"
@@ -23,6 +23,8 @@
 	import { readTextFile, exists as tauriExists } from "@tauri-apps/api/fs"
 	import { DEG2RAD } from "three/src/math/MathUtils"
 	import { CircleGeometry, DoubleSide, MeshStandardMaterial } from "three"
+	import { writeText } from "@tauri-apps/api/clipboard"
+	import deepMerge from "lodash/merge"
 
 	const readJSON = async (path: string) => json.parse(await readTextFile(path))
 	const exists = async (path: string) => {
@@ -104,6 +106,8 @@
 		selectedEntityID = undefined!
 		selectedEntity = undefined!
 	}
+
+	let evaluationPaneInput = ""
 </script>
 
 <SplitPanes on:resize={() => editor?.layout()} theme="">
@@ -230,6 +234,45 @@
 							{editorIsValid}
 							bind:this={tree}
 						/>
+					</div>
+					<div class="flex gap-2 justify-center items-center">
+						<TextInput
+							bind:value={evaluationPaneInput}
+							style="font-family: 'Fira Code', 'IBM Plex Mono', 'Menlo', 'DejaVu Sans Mono', 'Bitstream Vera Sans Mono', Courier, monospace;"
+							placeholder="subEntity => subEntity.name (return values will be copied as an array if there are any; subEntity.id property contains entity ID)"
+						/>
+						<Button
+							size="field"
+							on:click={async () => {
+								try {
+									let rets = []
+
+									for (let ent of treeSearchInput != ""
+										? tree
+												.getMatching(treeSearchInput)
+												.map((a) => deepMerge(json.parse(json.stringify($entity.entities[a.id])), { id: a.id }))
+												.filter((a) => a)
+										: Object.entries($entity.entities).map((a) => deepMerge(json.parse(json.stringify(a[1])), { id: a[0] }))) {
+										let ret = eval(evaluationPaneInput)(ent)
+										if (typeof ret != "undefined") {
+											rets.push(ret)
+										}
+									}
+
+									if (rets.length) {
+										await writeText(json.stringify(rets))
+									}
+								} catch (e) {
+									$addNotification = {
+										kind: "error",
+										title: "Error in evaluation",
+										subtitle: e
+									}
+								}
+							}}
+						>
+							Evaluate
+						</Button>
 					</div>
 				</div>
 			</Pane>
@@ -448,5 +491,9 @@
 
 	.vakata-context {
 		margin-top: -22px;
+	}
+
+	.bx--inline-loading__animation {
+		margin-right: 0px;
 	}
 </style>
