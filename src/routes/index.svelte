@@ -235,45 +235,47 @@
 							bind:this={tree}
 						/>
 					</div>
-					<div class="flex gap-2 justify-center items-center">
-						<TextInput
-							bind:value={evaluationPaneInput}
-							style="font-family: 'Fira Code', 'IBM Plex Mono', 'Menlo', 'DejaVu Sans Mono', 'Bitstream Vera Sans Mono', Courier, monospace;"
-							placeholder="subEntity => subEntity.name (return values will be copied as an array if there are any; subEntity.id property contains entity ID)"
-						/>
-						<Button
-							size="field"
-							on:click={async () => {
-								try {
-									let rets = []
+					{#if $appSettings.technicalMode}
+						<div class="flex gap-2 justify-center items-center">
+							<TextInput
+								bind:value={evaluationPaneInput}
+								style="font-family: 'Fira Code', 'IBM Plex Mono', 'Menlo', 'DejaVu Sans Mono', 'Bitstream Vera Sans Mono', Courier, monospace;"
+								placeholder="subEntity => subEntity.name (return values will be copied as an array if there are any; subEntity.id property contains entity ID)"
+							/>
+							<Button
+								size="field"
+								on:click={async () => {
+									try {
+										let rets = []
 
-									for (let ent of treeSearchInput != ""
-										? tree
-												.getMatching(treeSearchInput)
-												.map((a) => deepMerge(json.parse(json.stringify($entity.entities[a.id])), { id: a.id }))
-												.filter((a) => a)
-										: Object.entries($entity.entities).map((a) => deepMerge(json.parse(json.stringify(a[1])), { id: a[0] }))) {
-										let ret = eval(evaluationPaneInput)(ent)
-										if (typeof ret != "undefined") {
-											rets.push(ret)
+										for (let ent of treeSearchInput != ""
+											? tree
+													.getMatching(treeSearchInput)
+													.map((a) => deepMerge(json.parse(json.stringify($entity.entities[a.id])), { id: a.id }))
+													.filter((a) => a)
+											: Object.entries($entity.entities).map((a) => deepMerge(json.parse(json.stringify(a[1])), { id: a[0] }))) {
+											let ret = eval(evaluationPaneInput)(ent)
+											if (typeof ret != "undefined") {
+												rets.push(ret)
+											}
+										}
+
+										if (rets.length) {
+											await writeText(json.stringify(rets))
+										}
+									} catch (e) {
+										$addNotification = {
+											kind: "error",
+											title: "Error in evaluation",
+											subtitle: e
 										}
 									}
-
-									if (rets.length) {
-										await writeText(json.stringify(rets))
-									}
-								} catch (e) {
-									$addNotification = {
-										kind: "error",
-										title: "Error in evaluation",
-										subtitle: e
-									}
-								}
-							}}
-						>
-							Evaluate
-						</Button>
-					</div>
+								}}
+							>
+								Evaluate
+							</Button>
+						</div>
+					{/if}
 				</div>
 			</Pane>
 			<Pane>
