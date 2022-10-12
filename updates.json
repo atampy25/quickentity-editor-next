@@ -1,11 +1,11 @@
 {
-	"version": "1.9.0",
-	"notes": "Technical mode",
+	"version": "1.9.1",
+	"notes": "Only display evaluation bar in technical mode",
 	"pub_date": "2022-09-28T09:45:47Z",
 	"platforms": {
 		"windows-x86_64": {
-			"signature": "dW50cnVzdGVkIGNvbW1lbnQ6IHNpZ25hdHVyZSBmcm9tIHRhdXJpIHNlY3JldCBrZXkKUlVScWpVZGd2b0lOTlQ1c0RzckFGeXVteFZGaVcxR1hJZmFJak9BYUkxQVJWVldMcG9ReDFVRFA2eHFQU2txdklUSDhIYnhQWjQxSnN2UDVIa3VFTmd3S0phR05qN3NrV2dZPQp0cnVzdGVkIGNvbW1lbnQ6IHRpbWVzdGFtcDoxNjY1NDg3MTE3CWZpbGU6UXVpY2tFbnRpdHkgRWRpdG9yXzEuOS4wX3g2NF9lbi1VUy5tc2kuemlwCkJhR25HZWgwVWlKQmFEbnZIeGxJajR0UmNoRXZQUWVxMGQ5dU1BS3Y1c0pVcUUvUkdVdWREU0owcGgrWmlwL3FPUUozcllRRi9NNDRGemVsWGRPU0RBPT0K",
-			"url": "https://github.com/atampy25/quickentity-editor-next/releases/download/1.9.0/QuickEntity.Editor_1.9.0_x64_en-US.msi.zip"
+			"signature": "dW50cnVzdGVkIGNvbW1lbnQ6IHNpZ25hdHVyZSBmcm9tIHRhdXJpIHNlY3JldCBrZXkKUlVScWpVZGd2b0lOTmZ2OXBwSjhRcFE0WkhHekxBeGZPRmNvc1pIeVdiRmtiVnNaOEw5UUVkL1dqcDljYWRuV21zNzUwcE5MVGtiS1RacnpjYi8zWjFjS2hzaTNabUpjVXdjPQp0cnVzdGVkIGNvbW1lbnQ6IHRpbWVzdGFtcDoxNjY1NTQ5ODQ0CWZpbGU6UXVpY2tFbnRpdHkgRWRpdG9yXzEuOS4xX3g2NF9lbi1VUy5tc2kuemlwCjhyMDRWeWRIU2ttS1Aya243dWVwU0RMZU9hbUdjcXlKNEtRZldkVjJkbC9WTEFXcXY0WlRxNGFkek9kMyt5cWhlM3FpaTY2VTBsM1NsY1FNeEVSUkFnPT0K",
+			"url": "https://github.com/atampy25/quickentity-editor-next/releases/download/1.9.1/QuickEntity.Editor_1.9.1_x64_en-US.msi.zip"
 		}
 	}
 }
