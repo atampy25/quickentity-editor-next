@@ -226,7 +226,7 @@
 													}
 
 													if (entity.entities[d.id].properties!.m_eidParent) {
-														entity.entities[d.id].properties = Object.fromEntries(Object.entries(entity.entities[d.id].properties!).filter((a) => a[0] == "m_eidParent"))
+														entity.entities[d.id].properties = Object.fromEntries(Object.entries(entity.entities[d.id].properties!).filter((a) => a[0] != "m_eidParent"))
 													}
 
 													entity.entities[d.id].properties!.m_mTransform.value.position.x = playerPos.x
