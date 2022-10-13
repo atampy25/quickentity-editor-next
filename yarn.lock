@@ -2735,13 +2735,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"jiff@npm:^0.7.3":
-  version: 0.7.3
-  resolution: "jiff@npm:0.7.3"
-  checksum: 57757d742dae4aa466db2e255eb700661ddec4856864bba650fa4a378c0c922a645bac29b1db89d31deb76e03c05b63a79bab7ba0d15d4a80f885d54f17ecdb0
-  languageName: node
-  linkType: hard
-
 "jquery@npm:>=1.9.1, jquery@npm:^3.6.1":
   version: 3.6.1
   resolution: "jquery@npm:3.6.1"
@@ -3855,7 +3848,6 @@ __metadata:
     eslint: ^8.20.0
     eslint-config-prettier: ^8.3.0
     eslint-plugin-svelte3: ^4.0.0
-    jiff: ^0.7.3
     jquery: ^3.6.1
     jstree: ^3.3.12
     lodash: ^4.17.21
@@ -3867,6 +3859,7 @@ __metadata:
     prettier-eslint-cli: ^6.0.1
     prettier-plugin-svelte: ^2.7.0
     prettier-plugin-toml: ^0.3.1
+    rfc6902: ^5.0.1
     rrweb: ^2.0.0-alpha.3
     shepherd.js: ^10.0.1
     svelte: ^3.44.0
@@ -4045,6 +4038,13 @@ __metadata:
   version: 1.0.4
   resolution: "reusify@npm:1.0.4"
   checksum: c3076ebcc22a6bc252cb0b9c77561795256c22b757f40c0d8110b1300723f15ec0fc8685e8d4ea6d7666f36c79ccc793b1939c748bf36f18f542744a4e379fcc
+  languageName: node
+  linkType: hard
+
+"rfc6902@npm:^5.0.1":
+  version: 5.0.1
+  resolution: "rfc6902@npm:5.0.1"
+  checksum: 614184e841ad7352406eb9caff1c0eb89cc4d29c4deff74756dcd7d70de4046d3705a4b676769ae2041671d387a9b083806dccc4ded2fcb4174965dab3eeddf7
   languageName: node
   linkType: hard
 

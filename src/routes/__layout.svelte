@@ -40,7 +40,7 @@
 	import { appDir, join, runtimeDir, sep } from "@tauri-apps/api/path"
 	import { Command } from "@tauri-apps/api/shell"
 	import { getVersion } from "@tauri-apps/api/app"
-	import jiff from "jiff"
+	import * as rfc6902 from "rfc6902"
 	import md5 from "md5"
 	import Shepherd from "shepherd.js"
 	import cloneDeep from "lodash/cloneDeep"
@@ -246,7 +246,9 @@
 
 						if (!y || Array.isArray(y)) return
 
-						let patched = jiff.patch(json.parse(await readTextFile(x)), json.parse(await readTextFile(y)))
+						let patched = json.parse(await readTextFile(x))
+
+						rfc6902.applyPatch(patched, json.parse(await readTextFile(y)))
 
 						$entityMetadata.originalEntityPath = x
 						$entityMetadata.saveAsPatch = true
@@ -306,18 +308,29 @@
 
 						if (!x) return
 
-						await writeTextFile("entity.json", getEntityAsText(), { dir: BaseDirectory.App })
+						if (Object.keys($entity.entities).length > 50000) {
+							await writeTextFile("entity.json", getEntityAsText(), { dir: BaseDirectory.App })
 
-						await Command.sidecar("sidecar/quickentity-rs", [
-							"patch",
-							"generate",
-							"--input1",
-							String($entityMetadata.originalEntityPath),
-							"--input2",
-							await join(await appDir(), "entity.json"),
-							"--output",
-							x
-						]).execute()
+							await Command.sidecar("sidecar/quickentity-rs", [
+								"patch",
+								"generate",
+								"--input1",
+								String($entityMetadata.originalEntityPath),
+								"--input2",
+								await join(await appDir(), "entity.json"),
+								"--output",
+								x
+							]).execute()
+
+							$addNotification = {
+								kind: "warning",
+								title: "Calculated patch using alternate algorithm",
+								subtitle: "The patch was calculated using a faster but lower quality algorithm; you may want to check the output JSON."
+							}
+						} else {
+							// much smarter but much slower diff algorithm
+							await writeTextFile(x, json.stringify(rfc6902.createPatch(json.parse(await readTextFile($entityMetadata.originalEntityPath)), json.parse(getEntityAsText()))))
+						}
 
 						$entityMetadata.saveAsPatch = true
 						$entityMetadata.saveAsPatchPath = x
@@ -755,11 +768,18 @@
 				subtitle: "Extracting binary TEMP files"
 			}
 
-			await Command.sidecar("sidecar/rpkg-cli", ["-extract_from_rpkgs", $appSettings.runtimePath, "-filter", x, "-output_path", await join(await appDir(), "inspection")]).execute()
+			let latestChunkTemp = /is in: (.*?.rpkg)/gi.exec((await Command.sidecar("sidecar/rpkg-cli", ["-latest_hash", $appSettings.runtimePath, "-filter", x]).execute()).stdout)[1]
+
+			await Command.sidecar("sidecar/rpkg-cli", [
+				"-extract_from_rpkg",
+				await join($appSettings.runtimePath, latestChunkTemp),
+				"-filter",
+				x,
+				"-output_path",
+				await join(await appDir(), "inspection")
+			]).execute()
 
 			let tempPath, tempMetaPath, tbluPath, tbluMetaPath
-
-			let latestChunkTemp = /is in: (.*?.rpkg)/gi.exec((await Command.sidecar("sidecar/rpkg-cli", ["-latest_hash", $appSettings.runtimePath, "-filter", x]).execute()).stdout)[1]
 
 			$addNotification = {
 				kind: "info",
@@ -767,7 +787,7 @@
 				subtitle: "Converting TEMP files to JSON"
 			}
 
-			for (let entry of (await readDir(await join(await appDir(), "inspection", latestChunkTemp), { recursive: true })).flatMap((a) => a.children || a)) {
+			for (let entry of (await readDir(await join(await appDir(), "inspection", latestChunkTemp.replace(".rpkg", "")), { recursive: true })).flatMap((a) => a.children || a)) {
 				if (entry.path.endsWith(".TEMP")) {
 					await Command.sidecar("ResourceTool", ["HM3", "convert", "TEMP", entry.path, entry.path + ".json", "--simple"]).execute()
 					tempPath = entry.path + ".json"
@@ -790,7 +810,14 @@
 				subtitle: "Extracting binary TBLU files"
 			}
 
-			await Command.sidecar("sidecar/rpkg-cli", ["-extract_from_rpkgs", $appSettings.runtimePath, "-filter", tbluHash, "-output_path", await join(await appDir(), "inspection")]).execute()
+			await Command.sidecar("sidecar/rpkg-cli", [
+				"-extract_from_rpkg",
+				await join($appSettings.runtimePath, latestChunkTblu),
+				"-filter",
+				tbluHash,
+				"-output_path",
+				await join(await appDir(), "inspection")
+			]).execute()
 
 			$addNotification = {
 				kind: "info",
@@ -798,7 +825,7 @@
 				subtitle: "Converting TBLU files to JSON"
 			}
 
-			for (let entry of (await readDir(await join(await appDir(), "inspection", latestChunkTblu), { recursive: true })).flatMap((a) => a.children || a)) {
+			for (let entry of (await readDir(await join(await appDir(), "inspection", latestChunkTblu.replace(".rpkg", "")), { recursive: true })).flatMap((a) => a.children || a)) {
 				if (entry.path.endsWith(".TBLU")) {
 					await Command.sidecar("ResourceTool", ["HM3", "convert", "TBLU", entry.path, entry.path + ".json", "--simple"]).execute()
 					tbluPath = entry.path + ".json"
