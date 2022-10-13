@@ -133,6 +133,8 @@ jobs:
             TAURI_KEY_PASSWORD=${{ secrets.KEYPASS }}
 
       - name: Build
+        env:
+          NODE_OPTIONS: "--max-old-space-size=4096"
         run: |
           yarn tauri build
 
