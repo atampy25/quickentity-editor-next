@@ -28,7 +28,7 @@
 	export let currentlySelected: string = null!
 	export let previouslySelected: string = null!
 	export let editorIsValid: boolean
-	export let autoHiglightEntities: boolean
+	export let autoHighlightEntities: boolean
 
 	export const elemID = "tree-" + v4().replaceAll("-", "")
 
@@ -598,7 +598,7 @@
 					previouslySelected = currentlySelected
 					currentlySelected = data[1].node.id
 
-					if (inVivoExtensions && autoHiglightEntities) {
+					if (inVivoExtensions && autoHighlightEntities && gameServer.connected && !data[1].node.id.startsWith("comment")) {
 						gameServer.highlightEntity(data[1].node.id, entity.entities[data[1].node.id])
 					}
 

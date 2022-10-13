@@ -18,7 +18,7 @@ interface AppSettings {
 	logRocketID: string
 	logRocketName: string
 	technicalMode: boolean
-	autoHiglightEntities: boolean
+	autoHighlightEntities: boolean
 }
 
 await forage.setItem({
@@ -35,7 +35,7 @@ await forage.setItem({
 				logRocketID: v4(),
 				logRocketName: "",
 				technicalMode: false,
-				autoHiglightEntities: true
+				autoHighlightEntities: true
 			},
 			json.parse((await forage.getItem({ key: "appSettings" })()) || "{}")
 		)

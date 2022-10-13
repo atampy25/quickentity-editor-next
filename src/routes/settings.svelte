@@ -73,7 +73,7 @@
 		</div>
 		<br />
 		{#if $appSettings.inVivoExtensions}
-			<Checkbox bind:checked={$appSettings.autoHiglightEntities} labelText="Automatically highlight selected entities" />
+			<Checkbox bind:checked={$appSettings.autoHighlightEntities} labelText="Automatically highlight selected entities" />
 			<br />
 		{/if}
 		<div class="flex items-center gap-2">
