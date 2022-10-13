@@ -89,7 +89,7 @@
 				search_callback: (search: string, node: { id: string }) => {
 					if (search.startsWith(":")) {
 						if (entity.entities[node.id]) {
-							return eval(search.slice(1))(entity.entities[node.id])
+							return eval(search.slice(1))({ ...entity.entities[node.id], id: node.id })
 						}
 					} else {
 						return (JSON.stringify(entity.entities[node.id] || entity.comments[Number(node.id.split("-")[1])]) + node.id).toLowerCase().includes(search)
@@ -227,6 +227,12 @@
 
 													if (entity.entities[d.id].properties!.m_eidParent) {
 														entity.entities[d.id].properties = Object.fromEntries(Object.entries(entity.entities[d.id].properties!).filter((a) => a[0] != "m_eidParent"))
+
+														// todo: this isn't always going to work so it should probably be hooked up to intellisense in case of aliases or such
+														entity.entities[d.id].properties!.m_eRoomBehaviour = {
+															type: "ZSpatialEntity.ERoomBehaviour",
+															value: "ROOM_DYNAMIC"
+														}
 													}
 
 													entity.entities[d.id].properties!.m_mTransform.value.position.x = playerPos.x
