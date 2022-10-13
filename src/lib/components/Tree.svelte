@@ -171,7 +171,7 @@
 								c.is_selected(d) ? c.delete_node(c.get_selected()) : c.delete_node(d)
 							}
 						},
-						...(!inVivoExtensions || b.id.startsWith("comment") || !gameServer.connected
+						...(!inVivoExtensions || b.id.startsWith("comment") || !gameServer.connected || !gameServer.lastAddress
 							? {}
 							: {
 									inVivo: {
@@ -598,7 +598,7 @@
 					previouslySelected = currentlySelected
 					currentlySelected = data[1].node.id
 
-					if (inVivoExtensions && autoHighlightEntities && gameServer.connected && !data[1].node.id.startsWith("comment")) {
+					if (inVivoExtensions && autoHighlightEntities && gameServer.connected && gameServer.lastAddress && !data[1].node.id.startsWith("comment")) {
 						gameServer.highlightEntity(data[1].node.id, entity.entities[data[1].node.id])
 					}
 

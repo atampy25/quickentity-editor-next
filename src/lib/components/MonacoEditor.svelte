@@ -104,7 +104,7 @@
 					word = false
 				}
 
-				if (!word || !gameServer.connected) {
+				if (!word || !gameServer.connected || !gameServer.lastAddress) {
 					showUpdatePropertyCondition.set(false)
 				} else {
 					showUpdatePropertyCondition.set(!!json.parse(editor.getValue()).properties[word])
