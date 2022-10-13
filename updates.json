@@ -1,11 +1,11 @@
 {
-	"version": "1.10.2",
-	"notes": "Make it remove eidParent instead of keeping everything except eidParent",
+	"version": "1.10.5",
+	"notes": "Possibly fix CI",
 	"pub_date": "2022-09-28T09:45:47Z",
 	"platforms": {
 		"windows-x86_64": {
-			"signature": "dW50cnVzdGVkIGNvbW1lbnQ6IHNpZ25hdHVyZSBmcm9tIHRhdXJpIHNlY3JldCBrZXkKUlVScWpVZGd2b0lOTmMrUnRlZ0dyZE91dXZDUExVcGl5R3UzZk9nZXZCWCs2ZU5lOFd2WG1pODU3d05iZnBRRmRyQzBJeEtzZ3pDQldFNGRTUXNHdWNIUmUzckFtTlRrTHdvPQp0cnVzdGVkIGNvbW1lbnQ6IHRpbWVzdGFtcDoxNjY1NjUyODk3CWZpbGU6UXVpY2tFbnRpdHkgRWRpdG9yXzEuMTAuMl94NjRfZW4tVVMubXNpLnppcApaWmRSOC85QURQYXJtV1ZIQXNxUVF6UklmVTBzZFdBQTMvdVNkZjMrUE96WjczMDNCOXE3cnYxdHRIUUFXaVFVZERBN3BKMjdFZVVXeDBFQjlsUmhEUT09Cg==",
-			"url": "https://github.com/atampy25/quickentity-editor-next/releases/download/1.10.2/QuickEntity.Editor_1.10.2_x64_en-US.msi.zip"
+			"signature": "dW50cnVzdGVkIGNvbW1lbnQ6IHNpZ25hdHVyZSBmcm9tIHRhdXJpIHNlY3JldCBrZXkKUlVScWpVZGd2b0lOTmFaeTVBNWIyL05rSDlqYkx4VnpjTzRubzhmR3NnL09SeGFDdXZ5TUNFYU8rQmhrV25EdkdDcmxJMW9iOFdMbHFYYUg4WU9jVk8wczAyc3poWlFmTkFNPQp0cnVzdGVkIGNvbW1lbnQ6IHRpbWVzdGFtcDoxNjY1NjYxOTg0CWZpbGU6UXVpY2tFbnRpdHkgRWRpdG9yXzEuMTAuNV94NjRfZW4tVVMubXNpLnppcApreUhyeWw1OWJOKzBiUkU4aG84bzluRFhyU2MwQXUvWTlFUkpZbVhVNHM3ZENxMkhpZ1hCZFpjUkZFdW9wY2RuQkx3am92czlLUER3cDBQZERQWHFCUT09Cg==",
+			"url": "https://github.com/atampy25/quickentity-editor-next/releases/download/1.10.5/QuickEntity.Editor_1.10.5_x64_en-US.msi.zip"
 		}
 	}
 }
