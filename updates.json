@@ -1,11 +1,11 @@
 {
-	"version": "1.9.1",
-	"notes": "Only display evaluation bar in technical mode",
+	"version": "1.10.1",
+	"notes": "Use rfc6902 patch calculation for smaller JSONs",
 	"pub_date": "2022-09-28T09:45:47Z",
 	"platforms": {
 		"windows-x86_64": {
-			"signature": "dW50cnVzdGVkIGNvbW1lbnQ6IHNpZ25hdHVyZSBmcm9tIHRhdXJpIHNlY3JldCBrZXkKUlVScWpVZGd2b0lOTmZ2OXBwSjhRcFE0WkhHekxBeGZPRmNvc1pIeVdiRmtiVnNaOEw5UUVkL1dqcDljYWRuV21zNzUwcE5MVGtiS1RacnpjYi8zWjFjS2hzaTNabUpjVXdjPQp0cnVzdGVkIGNvbW1lbnQ6IHRpbWVzdGFtcDoxNjY1NTQ5ODQ0CWZpbGU6UXVpY2tFbnRpdHkgRWRpdG9yXzEuOS4xX3g2NF9lbi1VUy5tc2kuemlwCjhyMDRWeWRIU2ttS1Aya243dWVwU0RMZU9hbUdjcXlKNEtRZldkVjJkbC9WTEFXcXY0WlRxNGFkek9kMyt5cWhlM3FpaTY2VTBsM1NsY1FNeEVSUkFnPT0K",
-			"url": "https://github.com/atampy25/quickentity-editor-next/releases/download/1.9.1/QuickEntity.Editor_1.9.1_x64_en-US.msi.zip"
+			"signature": "dW50cnVzdGVkIGNvbW1lbnQ6IHNpZ25hdHVyZSBmcm9tIHRhdXJpIHNlY3JldCBrZXkKUlVScWpVZGd2b0lOTlE4YkdhUlFXQUZMNVUzamwvRTRSOERhN2pKdEJMUERBS3FzZm1MdzEwMWRUcWRjQzdaUGNpTTRTNVVNTkJwbzFqdkdlelZGekdxWVZqK2lXTkZZOXdNPQp0cnVzdGVkIGNvbW1lbnQ6IHRpbWVzdGFtcDoxNjY1NjQ5MzU0CWZpbGU6UXVpY2tFbnRpdHkgRWRpdG9yXzEuMTAuMV94NjRfZW4tVVMubXNpLnppcApmRXBUcFhGaDhNY2w0cUs5ek9SMEJzbnpUL3NCaDN1QVNFTmliMzBtTnFLaWQ4TXJIdnZJRGJnWFJFVTdkQS94SXhTbFdPWEpXZW1NQXRXOElDbHFBUT09Cg==",
+			"url": "https://github.com/atampy25/quickentity-editor-next/releases/download/1.10.1/QuickEntity.Editor_1.10.1_x64_en-US.msi.zip"
 		}
 	}
 }
