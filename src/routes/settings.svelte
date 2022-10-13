@@ -32,7 +32,9 @@
 		</div>
 		<br />
 		<div class="flex items-center gap-2">
-			<div class="flex-shrink"><Checkbox bind:checked={$appSettings.gameFileExtensions} labelText="Enable game-file extensions" /></div>
+			<div class="flex-shrink">
+				<Checkbox bind:checked={$appSettings.gameFileExtensions} labelText="Enable game-file extensions" disabled={$appSettings.retailPath == "" || $appSettings.runtimePath == ""} />
+			</div>
 			<TooltipIcon icon={Information}>
 				<span slot="tooltipText" style="font-size: 0.875rem; margin-top: 0.5rem; margin-bottom: 0.5rem">
 					QuickEntity Editor has a set of extensions that make it far easier to work with game entities, including the ability to quickly load any game entity, the ability to preview
@@ -59,6 +61,7 @@
 						}
 					}}
 					labelText="Enable in-vivo extensions"
+					disabled={$appSettings.retailPath == "" || $appSettings.runtimePath == ""}
 				/>
 			</div>
 			<TooltipIcon icon={Information}>
