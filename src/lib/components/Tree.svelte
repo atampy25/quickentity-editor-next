@@ -344,7 +344,7 @@
 												if (changedEntityIDs[ref.entity]) {
 													switch (ref.type) {
 														case "property":
-															if (Array.isArray(ent.properties![ref.context![0]])) {
+															if (Array.isArray(ent.properties![ref.context![0]].value)) {
 																ent.properties![ref.context![0]].value.splice(
 																	ent.properties![ref.context![0]].value.findIndex((a: Ref) => getReferencedLocalEntity(a) == ref.entity),
 																	1,
@@ -362,7 +362,7 @@
 															break
 
 														case "platformSpecificProperty":
-															if (Array.isArray(ent.platformSpecificProperties![ref.context![0]][ref.context![1]])) {
+															if (Array.isArray(ent.platformSpecificProperties![ref.context![0]][ref.context![1]].value)) {
 																ent.platformSpecificProperties![ref.context![0]][ref.context![1]].value.splice(
 																	ent.platformSpecificProperties![ref.context![0]][ref.context![1]].value.findIndex(
 																		(a: Ref) => getReferencedLocalEntity(a) == ref.entity
@@ -481,7 +481,7 @@
 												for (let ref of getReferencedExternalEntities(ent, paste)) {
 													switch (ref.type) {
 														case "property":
-															if (Array.isArray(ent.properties![ref.context![0]])) {
+															if (Array.isArray(ent.properties![ref.context![0]].value)) {
 																ent.properties![ref.context![0]].value = ent.properties![ref.context![0]].value.filter((a: Ref) => !isEqual(a, ref.entity))
 															} else {
 																delete ent.properties![ref.context![0]]
@@ -489,7 +489,7 @@
 															break
 
 														case "platformSpecificProperty":
-															if (Array.isArray(ent.platformSpecificProperties![ref.context![0]][ref.context![1]])) {
+															if (Array.isArray(ent.platformSpecificProperties![ref.context![0]][ref.context![1]].value)) {
 																ent.platformSpecificProperties![ref.context![0]][ref.context![1]].value = ent.platformSpecificProperties![ref.context![0]][
 																	ref.context![1]
 																].value.filter((a: Ref) => !isEqual(a, ref.entity))
@@ -538,7 +538,30 @@
 
 										entity.entities[Object.keys(paste)[0]].parent = changeReferenceToLocalEntity(entity.entities[Object.keys(paste)[0]].parent, d.id)
 
-										entity.entities = entity.entities
+										const refs: Record<
+											string,
+											{
+												type: string
+												entity: string
+												context?: string[]
+											}[]
+										> = {}
+
+										for (const [entityID] of Object.entries(entity.entities)) {
+											refs[entityID] = []
+										}
+
+										for (const [entityID, entityData] of Object.entries(entity.entities)) {
+											for (const ref of getReferencedEntities(entityData)) {
+												refs[ref.entity].push({
+													type: ref.type,
+													entity: entityID,
+													context: ref.context
+												})
+											}
+										}
+
+										refreshTree(entity, refs)
 									}
 								}
 							}
@@ -586,7 +609,17 @@
 		jQuery("#" + elemID).on("delete_node.jstree", (...data) => dispatch("nodeDeleted", data))
 	})
 
-	$: if (tree) {
+	export function refreshTree(
+		entity: Entity,
+		reverseReferences: Record<
+			string,
+			{
+				type: string
+				entity: string
+				context?: string[]
+			}[]
+		>
+	) {
 		tree.settings!.core.data = []
 
 		for (let [entityID, entityData] of Object.entries(entity.entities)) {
@@ -618,6 +651,12 @@
 		}
 
 		tree.refresh()
+	}
+
+	$: if (tree) {
+		if (Object.keys(entity.entities).every((entityID) => reverseReferences[entityID])) {
+			refreshTree(entity, reverseReferences)
+		}
 	}
 
 	export function search(query: string) {
