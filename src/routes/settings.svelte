@@ -72,6 +72,10 @@
 			</TooltipIcon>
 		</div>
 		<br />
+		{#if $appSettings.inVivoExtensions}
+			<Checkbox bind:checked={$appSettings.autoHiglightEntities} labelText="Automatically highlight selected entities" />
+			<br />
+		{/if}
 		<div class="flex items-center gap-2">
 			<div class="flex-shrink">
 				<Checkbox bind:checked={$appSettings.enableLogRocket} labelText="Enable error and performance reporting (requires a restart to take effect)" />

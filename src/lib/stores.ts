@@ -8,37 +8,7 @@ import { Intellisense } from "$lib/intellisense"
 import RPKGInstance from "$lib/rpkg"
 import { v4 } from "uuid"
 
-if (!(await forage.getItem({ key: "appSettings" })())) {
-	await forage.setItem({
-		key: "appSettings",
-		value: json.stringify({
-			gameFileExtensions: false,
-			gameFileExtensionsDataPath: null,
-			inVivoExtensions: false,
-			runtimePath: "",
-			retailPath: "",
-			enableLogRocket: false,
-			logRocketID: v4(),
-			logRocketName: "",
-			technicalMode: false
-		})
-	})()
-}
-
-// backwards compatibility
-if (!json.parse(await forage.getItem({ key: "appSettings" })()).logRocketID) {
-	await forage.setItem({
-		key: "appSettings",
-		value: json.stringify(
-			Object.assign({}, json.parse(await forage.getItem({ key: "appSettings" })()), {
-				logRocketID: v4(),
-				logRocketName: ""
-			})
-		)
-	})()
-}
-
-export const appSettings: Writable<{
+interface AppSettings {
 	gameFileExtensions: boolean
 	gameFileExtensionsDataPath: string
 	runtimePath: string
@@ -48,25 +18,37 @@ export const appSettings: Writable<{
 	logRocketID: string
 	logRocketName: string
 	technicalMode: boolean
-}> = writable(json.parse(await forage.getItem({ key: "appSettings" })()))
+	autoHiglightEntities: boolean
+}
 
-appSettings.subscribe(
-	(value: {
-		gameFileExtensions: boolean
-		gameFileExtensionsDataPath: string
-		runtimePath: string
-		retailPath: string
-		inVivoExtensions: boolean
-		enableLogRocket: boolean
-		logRocketID: string
-		logRocketName: string
-		technicalMode: boolean
-	}) => {
-		void (async () => {
-			await forage.setItem({ key: "appSettings", value: json.stringify(value) })()
-		})()
-	}
-)
+await forage.setItem({
+	key: "appSettings",
+	value: json.stringify(
+		Object.assign(
+			{
+				gameFileExtensions: false,
+				gameFileExtensionsDataPath: null,
+				inVivoExtensions: false,
+				runtimePath: "",
+				retailPath: "",
+				enableLogRocket: false,
+				logRocketID: v4(),
+				logRocketName: "",
+				technicalMode: false,
+				autoHiglightEntities: true
+			},
+			json.parse((await forage.getItem({ key: "appSettings" })()) || "{}")
+		)
+	)
+})()
+
+export const appSettings: Writable<AppSettings> = writable(json.parse(await forage.getItem({ key: "appSettings" })()))
+
+appSettings.subscribe((value: AppSettings) => {
+	void (async () => {
+		await forage.setItem({ key: "appSettings", value: json.stringify(value) })()
+	})()
+})
 
 export const entityMetadata: Writable<{
 	originalEntityPath?: string

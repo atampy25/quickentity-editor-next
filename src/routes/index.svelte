@@ -231,6 +231,7 @@
 							entity={$entity}
 							reverseReferences={$reverseReferences}
 							inVivoExtensions={$appSettings.inVivoExtensions}
+							autoHiglightEntities={$appSettings.autoHiglightEntities}
 							{editorIsValid}
 							bind:this={tree}
 						/>
