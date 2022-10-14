@@ -1,11 +1,11 @@
 {
-	"version": "1.11.0",
-	"notes": "Add manual issue reporting",
+	"version": "1.12.1",
+	"notes": "Save when switching workspace files setting",
 	"pub_date": "2022-09-28T09:45:47Z",
 	"platforms": {
 		"windows-x86_64": {
-			"signature": "dW50cnVzdGVkIGNvbW1lbnQ6IHNpZ25hdHVyZSBmcm9tIHRhdXJpIHNlY3JldCBrZXkKUlVScWpVZGd2b0lOTlh3U0NlbEZQcTc3RlZxYzJzQXRJdzBPdi92SmFYakJ0TlpZcUsyelV5aU1Kc0s4L1E2Q0doYldmU1dVdU1YNVZ2ZWNpMi9KTWJVM05kK0JCRk5rblFZPQp0cnVzdGVkIGNvbW1lbnQ6IHRpbWVzdGFtcDoxNjY1NzI2NDczCWZpbGU6UXVpY2tFbnRpdHkgRWRpdG9yXzEuMTEuMF94NjRfZW4tVVMubXNpLnppcAorL2pPNncwMFlZejNzSHdTTHhHOE13Tzk2Ym9Pa0VmY1hiUEo3azltU3NBQmZwZzVUWWIrOU5rRzlpSVdRcytHTGdrdnFndkJuLzFNWHJWaGVCTFdEZz09Cg==",
-			"url": "https://github.com/atampy25/quickentity-editor-next/releases/download/1.11.0/QuickEntity.Editor_1.11.0_x64_en-US.msi.zip"
+			"signature": "dW50cnVzdGVkIGNvbW1lbnQ6IHNpZ25hdHVyZSBmcm9tIHRhdXJpIHNlY3JldCBrZXkKUlVScWpVZGd2b0lOTlV0WXN3OW9GQzlEN0FQbkZnVjVNbDJSdDlITE84RDBLUXQ3bXZ2Mkw1SnNkd1ByRURaejJRMkJxZ3hyZEMwUmhiZXhhT1l1SUhmZHB2REVVQ3h5ZVFnPQp0cnVzdGVkIGNvbW1lbnQ6IHRpbWVzdGFtcDoxNjY1NzMzODg5CWZpbGU6UXVpY2tFbnRpdHkgRWRpdG9yXzEuMTIuMV94NjRfZW4tVVMubXNpLnppcApxR2Q1SG5kM1N6SjltYXg5blFjblV3aGRySlJkN1ZicUFtQUg2ODI3ckUxQ2dTdmhNYUR4SjZWaEZFSjh6U25GTWc5SXN3eTBEeHdQZ2tBL05QMVdEZz09Cg==",
+			"url": "https://github.com/atampy25/quickentity-editor-next/releases/download/1.12.1/QuickEntity.Editor_1.12.1_x64_en-US.msi.zip"
 		}
 	}
 }
