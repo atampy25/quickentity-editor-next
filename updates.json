@@ -1,11 +1,11 @@
 {
-	"version": "1.12.2",
-	"notes": "Entity deletion fix",
+	"version": "1.12.3",
+	"notes": "Set initial entity version to 3.0",
 	"pub_date": "2022-09-28T09:45:47Z",
 	"platforms": {
 		"windows-x86_64": {
-			"signature": "dW50cnVzdGVkIGNvbW1lbnQ6IHNpZ25hdHVyZSBmcm9tIHRhdXJpIHNlY3JldCBrZXkKUlVScWpVZGd2b0lOTlZNR05SdFpOS0JzVzYwZlVWZ09BL1Fxd0hTR1BJRHJoaVJZbE9MQmtzbTh2S1pBQUpDUjRKL25Ud3dKWHdNTndPM01pZWZhc1RLZ21jeXgzZjgxQkFzPQp0cnVzdGVkIGNvbW1lbnQ6IHRpbWVzdGFtcDoxNjY1NzUxODI2CWZpbGU6UXVpY2tFbnRpdHkgRWRpdG9yXzEuMTIuMl94NjRfZW4tVVMubXNpLnppcAp5UHNadGZmSnJrMmpEREh1ZGxEN3U1bVpvRW80YlA4dVFGSzl3SjFsS0pMclhaY0lRblk0WmNXUEUxRDhjbkRUMUFJTjVWVWlWeWlPeUt0Y1p4OHpCQT09Cg==",
-			"url": "https://github.com/atampy25/quickentity-editor-next/releases/download/1.12.2/QuickEntity.Editor_1.12.2_x64_en-US.msi.zip"
+			"signature": "dW50cnVzdGVkIGNvbW1lbnQ6IHNpZ25hdHVyZSBmcm9tIHRhdXJpIHNlY3JldCBrZXkKUlVScWpVZGd2b0lOTmVseXI1ZWd0U0doRWJjSTJYRnJheG9qWEVqb2hQbFlpYTFOVXoreVV4VG1rSi83Nlh3UVEwWHI1SHhSTFFTOHJwSmQ1MzVRWG0vTnNOVk5VaDFjckFBPQp0cnVzdGVkIGNvbW1lbnQ6IHRpbWVzdGFtcDoxNjY1NzkxNjkwCWZpbGU6UXVpY2tFbnRpdHkgRWRpdG9yXzEuMTIuM194NjRfZW4tVVMubXNpLnppcApPd0RQa085Ym54ZUJTUFB0MGpKeHROZ2lEdWU4U1dqR3U1amgrM0FWMmNPUEhSM2d2d3o5aWp2S0lkV0hCZWpyZ1NYUHBVRzhqYXVYNzVQZzAyQVNCUT09Cg==",
+			"url": "https://github.com/atampy25/quickentity-editor-next/releases/download/1.12.3/QuickEntity.Editor_1.12.3_x64_en-US.msi.zip"
 		}
 	}
 }
