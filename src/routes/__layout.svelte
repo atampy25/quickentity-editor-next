@@ -25,10 +25,11 @@
 		ToastNotification,
 		Modal,
 		TextInput,
-		Select
+		Select,
+		TreeView
 	} from "carbon-components-svelte"
 
-	import { addNotification, appSettings, entity, entityMetadata } from "$lib/stores"
+	import { addNotification, appSettings, entity, sessionMetadata, workspaceData } from "$lib/stores"
 	import json from "$lib/json"
 	import { shortcut } from "$lib/shortcut"
 	import { gameServer } from "$lib/in-vivo/gameServer"
@@ -45,10 +46,11 @@
 	import md5 from "md5"
 	import Shepherd from "shepherd.js"
 	import cloneDeep from "lodash/cloneDeep"
+	import { Pane, Splitpanes as SplitPanes } from "svelte-splitpanes"
 
 	import Data2 from "carbon-icons-svelte/lib/Data_2.svelte"
 	import Edit from "carbon-icons-svelte/lib/Edit.svelte"
-	import TreeView from "carbon-icons-svelte/lib/TreeView.svelte"
+	import TreeViewIcon from "carbon-icons-svelte/lib/TreeView.svelte"
 	import Settings from "carbon-icons-svelte/lib/Settings.svelte"
 	import Chart_3D from "carbon-icons-svelte/lib/Chart_3D.svelte"
 	import WarningAlt from "carbon-icons-svelte/lib/WarningAlt.svelte"
@@ -56,8 +58,6 @@
 	import * as Sentry from "@sentry/browser"
 	import { BrowserTracing } from "@sentry/tracing"
 	import SentryRRWeb from "@sentry/rrweb"
-	import { camelCase } from "jquery"
-	import { endsWith } from "lodash"
 
 	let displayNotifications: { kind: "error" | "info" | "info-square" | "success" | "warning" | "warning-alt"; title: string; subtitle: string }[] = []
 
@@ -186,9 +186,124 @@
 		}
 	}
 
+	async function extractForInspection(tempHash: string) {
+		if (await exists(await join(await appDir(), "inspection"))) {
+			await removeDir(await join(await appDir(), "inspection"), { recursive: true })
+		}
+
+		$addNotification = {
+			kind: "info",
+			title: "Extracting TEMP files",
+			subtitle: "Extracting binary TEMP files"
+		}
+
+		let latestChunkTemp = /is in: (.*?.rpkg)/gi.exec((await Command.sidecar("sidecar/rpkg-cli", ["-latest_hash", $appSettings.runtimePath, "-filter", tempHash]).execute()).stdout)[1]
+
+		await Command.sidecar("sidecar/rpkg-cli", [
+			"-extract_from_rpkg",
+			await join($appSettings.runtimePath, latestChunkTemp),
+			"-filter",
+			tempHash,
+			"-output_path",
+			await join(await appDir(), "inspection")
+		]).execute()
+
+		let tempPath, tempMetaPath, tbluPath, tbluMetaPath
+
+		$addNotification = {
+			kind: "info",
+			title: "Converting TEMP files",
+			subtitle: "Converting TEMP files to JSON"
+		}
+
+		for (let entry of (await readDir(await join(await appDir(), "inspection", latestChunkTemp.replace(".rpkg", "")), { recursive: true })).flatMap((a) => a.children || a)) {
+			if (entry.path.endsWith(".TEMP")) {
+				await Command.sidecar("ResourceTool", ["HM3", "convert", "TEMP", entry.path, entry.path + ".json", "--simple"]).execute()
+				tempPath = entry.path + ".json"
+			} else if (entry.path.endsWith(".TEMP.meta")) {
+				await Command.sidecar("sidecar/rpkg-cli", ["-hash_meta_to_json", entry.path]).execute()
+				tempMetaPath = entry.path + ".JSON"
+			}
+		}
+
+		let tbluHash = json.parse(await readTextFile(tempMetaPath)).hash_reference_data[json.parse(await readTextFile(tempPath)).blueprintIndexInResourceHeader].hash
+		if (tbluHash.includes(":")) {
+			tbluHash = ("00" + md5(tbluHash).slice(2, 16)).toUpperCase()
+		}
+
+		let latestChunkTblu = /is in: (.*?.rpkg)/gi.exec((await Command.sidecar("sidecar/rpkg-cli", ["-latest_hash", $appSettings.runtimePath, "-filter", tbluHash]).execute()).stdout)[1]
+
+		$addNotification = {
+			kind: "info",
+			title: "Extracting TBLU files",
+			subtitle: "Extracting binary TBLU files"
+		}
+
+		await Command.sidecar("sidecar/rpkg-cli", [
+			"-extract_from_rpkg",
+			await join($appSettings.runtimePath, latestChunkTblu),
+			"-filter",
+			tbluHash,
+			"-output_path",
+			await join(await appDir(), "inspection")
+		]).execute()
+
+		$addNotification = {
+			kind: "info",
+			title: "Converting TBLU files",
+			subtitle: "Converting TBLU files to JSON"
+		}
+
+		for (let entry of (await readDir(await join(await appDir(), "inspection", latestChunkTblu.replace(".rpkg", "")), { recursive: true })).flatMap((a) => a.children || a)) {
+			if (entry.path.endsWith(".TBLU")) {
+				await Command.sidecar("ResourceTool", ["HM3", "convert", "TBLU", entry.path, entry.path + ".json", "--simple"]).execute()
+				tbluPath = entry.path + ".json"
+			} else if (entry.path.endsWith(".TBLU.meta")) {
+				await Command.sidecar("sidecar/rpkg-cli", ["-hash_meta_to_json", entry.path]).execute()
+				tbluMetaPath = entry.path + ".JSON"
+			}
+		}
+
+		$addNotification = {
+			kind: "info",
+			title: "Converting to QuickEntity",
+			subtitle: "Converting source JSON files to QuickEntity JSON"
+		}
+
+		await Command.sidecar("sidecar/quickentity-rs", [
+			"entity",
+			"convert",
+			"--input-factory",
+			tempPath,
+			"--input-factory-meta",
+			tempMetaPath,
+			"--input-blueprint",
+			tbluPath,
+			"--input-blueprint-meta",
+			tbluMetaPath,
+			"--output",
+			await join(await appDir(), "inspection", "entity.json")
+		]).execute()
+	}
+
+	function getReadDirAsTree(data) {
+		return data
+			.filter((a) => (a.children && getReadDirAsTree(a.children).length) || a.path.endsWith("entity.json") || a.path.endsWith("entity.patch.json"))
+			.map((a) => {
+				return {
+					id: a.path,
+					text: a.name,
+					children: a.children ? getReadDirAsTree(a.children) : undefined
+				}
+			})
+	}
+
 	let reportIssueModalOpen = false
 	let reportIssueModalSeverity = ""
 	let reportIssueModalIssue = ""
+
+	let selectedWorkspaceTreeItem = ""
+	let previousSelectedWorkspaceTreeItem = ""
 </script>
 
 {#if ready}
@@ -198,6 +313,20 @@
 		</svelte:fragment>
 		<HeaderNav>
 			<HeaderNavMenu text="Load">
+				<HeaderNavItem
+					href="#"
+					text="Load workspace folder"
+					on:click={async () => {
+						let x = await open({
+							directory: true,
+							title: "Select the workspace folder"
+						})
+
+						if (x && !Array.isArray(x)) {
+							$workspaceData.path = x
+						}
+					}}
+				/>
 				<li
 					role="none"
 					use:shortcut={{ control: true, key: "o" }}
@@ -214,10 +343,10 @@
 						})
 
 						if (x && !Array.isArray(x)) {
-							$entityMetadata.originalEntityPath = x
-							$entityMetadata.saveAsPatch = false
-							$entityMetadata.saveAsEntityPath = $entityMetadata.originalEntityPath
-							$entityMetadata.loadedFromGameFiles = false
+							$sessionMetadata.originalEntityPath = x
+							$sessionMetadata.saveAsPatch = false
+							$sessionMetadata.saveAsEntityPath = $sessionMetadata.originalEntityPath
+							$sessionMetadata.loadedFromGameFiles = false
 							$entity = await getEntityFromText(await readTextFile(x))
 
 							breadcrumb("entity", `Loaded ${$entity.tempHash} from file`)
@@ -239,19 +368,6 @@
 					role="none"
 					use:shortcut={{ control: true, shift: true, key: "O" }}
 					on:click={async () => {
-						let x = await open({
-							multiple: false,
-							title: "Select the original entity JSON",
-							filters: [
-								{
-									name: "QuickEntity JSON",
-									extensions: ["json"]
-								}
-							]
-						})
-
-						if (!x || Array.isArray(x)) return
-
 						let y = await open({
 							multiple: false,
 							title: "Select the patch JSON",
@@ -265,14 +381,38 @@
 
 						if (!y || Array.isArray(y)) return
 
-						let patched = json.parse(await readTextFile(x))
+						let patch = json.parse(await readTextFile(y))
+						let patched = {}
 
-						rfc6902.applyPatch(patched, json.parse(await readTextFile(y)))
+						if ($appSettings.gameFileExtensions && (await exists(await join($appSettings.gameFileExtensionsDataPath, "TEMP", patch.tempHash + ".TEMP.entity.json")))) {
+							await extractForInspection(patch.tempHash)
 
-						$entityMetadata.originalEntityPath = x
-						$entityMetadata.saveAsPatch = true
-						$entityMetadata.saveAsPatchPath = y
-						$entityMetadata.loadedFromGameFiles = false
+							$sessionMetadata.originalEntityPath = await join(await appDir(), "inspection", "entity.json")
+
+							patched = json.parse(await readTextFile(await join(await appDir(), "inspection", "entity.json")))
+						} else {
+							let x = await open({
+								multiple: false,
+								title: "Select the original entity JSON",
+								filters: [
+									{
+										name: "QuickEntity JSON",
+										extensions: ["json"]
+									}
+								]
+							})
+
+							if (!x || Array.isArray(x)) return
+
+							$sessionMetadata.originalEntityPath = x
+
+							patched = json.parse(await readTextFile(x))
+						}
+
+						rfc6902.applyPatch(patched, patch.patch)
+						$sessionMetadata.saveAsPatch = true
+						$sessionMetadata.saveAsPatchPath = y
+						$sessionMetadata.loadedFromGameFiles = false
 						$entity = await getEntityFromText(json.stringify(patched))
 
 						breadcrumb("entity", `Loaded ${$entity.tempHash} from patch`)
@@ -300,9 +440,9 @@
 
 						await writeTextFile(x, getEntityAsText())
 
-						$entityMetadata.saveAsPatch = false
-						$entityMetadata.saveAsEntityPath = x
-						$entityMetadata.loadedFromGameFiles = false
+						$sessionMetadata.saveAsPatch = false
+						$sessionMetadata.saveAsEntityPath = x
+						$sessionMetadata.loadedFromGameFiles = false
 
 						breadcrumb("entity", "Saved to file")
 
@@ -338,7 +478,7 @@
 								"patch",
 								"generate",
 								"--input1",
-								String($entityMetadata.originalEntityPath),
+								String($sessionMetadata.originalEntityPath),
 								"--input2",
 								await join(await appDir(), "entity.json"),
 								"--output",
@@ -352,12 +492,12 @@
 							}
 						} else {
 							// much smarter but much slower diff algorithm
-							await writeTextFile(x, json.stringify(rfc6902.createPatch(json.parse(await readTextFile($entityMetadata.originalEntityPath)), json.parse(getEntityAsText()))))
+							await writeTextFile(x, json.stringify(rfc6902.createPatch(json.parse(await readTextFile($sessionMetadata.originalEntityPath)), json.parse(getEntityAsText()))))
 						}
 
-						$entityMetadata.saveAsPatch = true
-						$entityMetadata.saveAsPatchPath = x
-						$entityMetadata.loadedFromGameFiles = false
+						$sessionMetadata.saveAsPatch = true
+						$sessionMetadata.saveAsPatchPath = x
+						$sessionMetadata.loadedFromGameFiles = false
 
 						breadcrumb("entity", "Saved to patch")
 
@@ -371,8 +511,8 @@
 					<HeaderNavItem href="#" text="Save as patch file" />
 				</li>
 			</HeaderNavMenu>
-			{#if $entityMetadata.originalEntityPath && !$entityMetadata.loadedFromGameFiles}
-				{#if $entityMetadata.saveAsPatch}
+			{#if $sessionMetadata.originalEntityPath && !$sessionMetadata.loadedFromGameFiles}
+				{#if $sessionMetadata.saveAsPatch}
 					<li
 						role="none"
 						use:shortcut={{ control: true, key: "s" }}
@@ -383,21 +523,23 @@
 								"patch",
 								"generate",
 								"--input1",
-								String($entityMetadata.originalEntityPath),
+								String($sessionMetadata.originalEntityPath),
 								"--input2",
 								await join(await appDir(), "entity.json"),
 								"--output",
-								$entityMetadata.saveAsPatchPath
+								$sessionMetadata.saveAsPatchPath
 							]).execute()
 
-							$entityMetadata.loadedFromGameFiles = false
+							$sessionMetadata.loadedFromGameFiles = false
 
 							$addNotification = {
 								kind: "success",
 								title: "Saved patch successfully",
 								subtitle:
 									"Saved the changes from the original entity to " +
-									($entityMetadata.saveAsPatchPath.split(sep).length > 3 ? "..." + $entityMetadata.saveAsPatchPath.split(sep).slice(-3).join(sep) : $entityMetadata.saveAsPatchPath)
+									($sessionMetadata.saveAsPatchPath.split(sep).length > 3
+										? "..." + $sessionMetadata.saveAsPatchPath.split(sep).slice(-3).join(sep)
+										: $sessionMetadata.saveAsPatchPath)
 							}
 
 							breadcrumb("entity", "Saved to patch (original path)")
@@ -410,18 +552,18 @@
 						role="none"
 						use:shortcut={{ control: true, key: "s" }}
 						on:click={async () => {
-							await writeTextFile($entityMetadata.saveAsEntityPath, getEntityAsText())
+							await writeTextFile($sessionMetadata.saveAsEntityPath, getEntityAsText())
 
-							$entityMetadata.loadedFromGameFiles = false
+							$sessionMetadata.loadedFromGameFiles = false
 
 							$addNotification = {
 								kind: "success",
 								title: "Saved entity successfully",
 								subtitle:
 									"Saved the entity to " +
-									($entityMetadata.saveAsEntityPath.split(sep).length > 3
-										? "..." + $entityMetadata.saveAsEntityPath.split(sep).slice(-3).join(sep)
-										: $entityMetadata.saveAsEntityPath)
+									($sessionMetadata.saveAsEntityPath.split(sep).length > 3
+										? "..." + $sessionMetadata.saveAsEntityPath.split(sep).slice(-3).join(sep)
+										: $sessionMetadata.saveAsEntityPath)
 							}
 
 							breadcrumb("entity", "Saved to file (original path)")
@@ -753,7 +895,7 @@
 				<SideNavDivider />
 				<SideNavLink icon={Edit} text="Overrides" href="/overrides" isSelected={$page.url.pathname == "/overrides"} />
 				<SideNavDivider />
-				<SideNavLink icon={TreeView} text="Tree View" href="/" isSelected={$page.url.pathname == "/"} />
+				<SideNavLink icon={TreeViewIcon} text="Tree View" href="/" isSelected={$page.url.pathname == "/"} />
 				<SideNavDivider />
 				{#if $appSettings.gameFileExtensions}
 					<SideNavLink icon={Chart_3D} text="3D Preview" href="/3d" isSelected={$page.url.pathname == "/3d"} />
@@ -769,7 +911,82 @@
 	</Header>
 	<Content>
 		<div class="px-16 h-[90vh]">
-			<slot />
+			<SplitPanes theme="">
+				{#if $workspaceData.path}
+					<Pane size={15}>
+						<div class="pt-2 -mb-3.5 px-3">
+							<h1>Workspace</h1>
+						</div>
+						{#await readDir($workspaceData.path, { recursive: true }) then d}
+							<TreeView
+								children={getReadDirAsTree(d)}
+								bind:activeId={selectedWorkspaceTreeItem}
+								selectedIds={[selectedWorkspaceTreeItem]}
+								on:select={async ({ detail }) => {
+									// just for typescript, it's never actually a number
+									if (typeof detail.id == "number") return
+
+									if (!detail.leaf) {
+										selectedWorkspaceTreeItem = previousSelectedWorkspaceTreeItem
+									} else {
+										previousSelectedWorkspaceTreeItem = selectedWorkspaceTreeItem
+										selectedWorkspaceTreeItem = detail.id
+
+										if (detail.id.endsWith("entity.json")) {
+											$sessionMetadata.originalEntityPath = detail.id
+											$sessionMetadata.saveAsPatch = false
+											$sessionMetadata.saveAsEntityPath = $sessionMetadata.originalEntityPath
+											$sessionMetadata.loadedFromGameFiles = false
+											$entity = await getEntityFromText(await readTextFile(detail.id))
+
+											breadcrumb("entity", `Loaded ${$entity.tempHash} from workspace file`)
+										} else if (detail.id.endsWith("entity.patch.json")) {
+											let patch = json.parse(await readTextFile(detail.id))
+											let patched = {}
+
+											if ($appSettings.gameFileExtensions && (await exists(await join($appSettings.gameFileExtensionsDataPath, "TEMP", patch.tempHash + ".TEMP.entity.json")))) {
+												await extractForInspection(patch.tempHash)
+
+												$sessionMetadata.originalEntityPath = await join(await appDir(), "inspection", "entity.json")
+
+												patched = json.parse(await readTextFile(await join(await appDir(), "inspection", "entity.json")))
+											} else {
+												let x = await open({
+													multiple: false,
+													title: "Select the original entity JSON",
+													filters: [
+														{
+															name: "QuickEntity JSON",
+															extensions: ["json"]
+														}
+													]
+												})
+
+												if (!x || Array.isArray(x)) return
+
+												$sessionMetadata.originalEntityPath = x
+
+												patched = json.parse(await readTextFile(x))
+											}
+
+											rfc6902.applyPatch(patched, patch.patch)
+											$sessionMetadata.saveAsPatch = true
+											$sessionMetadata.saveAsPatchPath = detail.id
+											$sessionMetadata.loadedFromGameFiles = false
+											$entity = await getEntityFromText(json.stringify(patched))
+
+											breadcrumb("entity", `Loaded ${$entity.tempHash} from workspace patch`)
+										}
+									}
+								}}
+							/>
+						{/await}
+					</Pane>
+				{/if}
+				<Pane>
+					<slot />
+				</Pane>
+			</SplitPanes>
 		</div>
 	</Content>
 	<div class="absolute h-screen top-0 right-2">
@@ -793,110 +1010,14 @@
 				x = ("00" + md5(x).slice(2, 16)).toUpperCase()
 			}
 
-			if (await exists(await join(await appDir(), "inspection"))) {
-				await removeDir(await join(await appDir(), "inspection"), { recursive: true })
-			}
-
 			askGameFileModalOpen = false
 
-			$addNotification = {
-				kind: "info",
-				title: "Extracting TEMP files",
-				subtitle: "Extracting binary TEMP files"
-			}
+			await extractForInspection(x)
 
-			let latestChunkTemp = /is in: (.*?.rpkg)/gi.exec((await Command.sidecar("sidecar/rpkg-cli", ["-latest_hash", $appSettings.runtimePath, "-filter", x]).execute()).stdout)[1]
-
-			await Command.sidecar("sidecar/rpkg-cli", [
-				"-extract_from_rpkg",
-				await join($appSettings.runtimePath, latestChunkTemp),
-				"-filter",
-				x,
-				"-output_path",
-				await join(await appDir(), "inspection")
-			]).execute()
-
-			let tempPath, tempMetaPath, tbluPath, tbluMetaPath
-
-			$addNotification = {
-				kind: "info",
-				title: "Converting TEMP files",
-				subtitle: "Converting TEMP files to JSON"
-			}
-
-			for (let entry of (await readDir(await join(await appDir(), "inspection", latestChunkTemp.replace(".rpkg", "")), { recursive: true })).flatMap((a) => a.children || a)) {
-				if (entry.path.endsWith(".TEMP")) {
-					await Command.sidecar("ResourceTool", ["HM3", "convert", "TEMP", entry.path, entry.path + ".json", "--simple"]).execute()
-					tempPath = entry.path + ".json"
-				} else if (entry.path.endsWith(".TEMP.meta")) {
-					await Command.sidecar("sidecar/rpkg-cli", ["-hash_meta_to_json", entry.path]).execute()
-					tempMetaPath = entry.path + ".JSON"
-				}
-			}
-
-			let tbluHash = json.parse(await readTextFile(tempMetaPath)).hash_reference_data[json.parse(await readTextFile(tempPath)).blueprintIndexInResourceHeader].hash
-			if (tbluHash.includes(":")) {
-				tbluHash = ("00" + md5(tbluHash).slice(2, 16)).toUpperCase()
-			}
-
-			let latestChunkTblu = /is in: (.*?.rpkg)/gi.exec((await Command.sidecar("sidecar/rpkg-cli", ["-latest_hash", $appSettings.runtimePath, "-filter", tbluHash]).execute()).stdout)[1]
-
-			$addNotification = {
-				kind: "info",
-				title: "Extracting TBLU files",
-				subtitle: "Extracting binary TBLU files"
-			}
-
-			await Command.sidecar("sidecar/rpkg-cli", [
-				"-extract_from_rpkg",
-				await join($appSettings.runtimePath, latestChunkTblu),
-				"-filter",
-				tbluHash,
-				"-output_path",
-				await join(await appDir(), "inspection")
-			]).execute()
-
-			$addNotification = {
-				kind: "info",
-				title: "Converting TBLU files",
-				subtitle: "Converting TBLU files to JSON"
-			}
-
-			for (let entry of (await readDir(await join(await appDir(), "inspection", latestChunkTblu.replace(".rpkg", "")), { recursive: true })).flatMap((a) => a.children || a)) {
-				if (entry.path.endsWith(".TBLU")) {
-					await Command.sidecar("ResourceTool", ["HM3", "convert", "TBLU", entry.path, entry.path + ".json", "--simple"]).execute()
-					tbluPath = entry.path + ".json"
-				} else if (entry.path.endsWith(".TBLU.meta")) {
-					await Command.sidecar("sidecar/rpkg-cli", ["-hash_meta_to_json", entry.path]).execute()
-					tbluMetaPath = entry.path + ".JSON"
-				}
-			}
-
-			$addNotification = {
-				kind: "info",
-				title: "Converting to QuickEntity",
-				subtitle: "Converting source JSON files to QuickEntity JSON"
-			}
-
-			await Command.sidecar("sidecar/quickentity-rs", [
-				"entity",
-				"convert",
-				"--input-factory",
-				tempPath,
-				"--input-factory-meta",
-				tempMetaPath,
-				"--input-blueprint",
-				tbluPath,
-				"--input-blueprint-meta",
-				tbluMetaPath,
-				"--output",
-				await join(await appDir(), "inspection", "entity.json")
-			]).execute()
-
-			$entityMetadata.originalEntityPath = await join(await appDir(), "inspection", "entity.json")
-			$entityMetadata.saveAsPatch = false
-			$entityMetadata.saveAsEntityPath = $entityMetadata.originalEntityPath
-			$entityMetadata.loadedFromGameFiles = true
+			$sessionMetadata.originalEntityPath = await join(await appDir(), "inspection", "entity.json")
+			$sessionMetadata.saveAsPatch = false
+			$sessionMetadata.saveAsEntityPath = $sessionMetadata.originalEntityPath
+			$sessionMetadata.loadedFromGameFiles = true
 
 			$entity = await getEntityFromText(await readTextFile(await join(await appDir(), "inspection", "entity.json")))
 
@@ -958,5 +1079,52 @@
 	a.bx--header__menu-item:hover[disabled] {
 		background-color: inherit;
 		color: inherit;
+	}
+
+	.splitpanes__pane {
+		@apply bg-[#202020] overflow-auto;
+	}
+
+	.splitpanes__splitter {
+		background-color: #262626;
+		position: relative;
+	}
+
+	.splitpanes--vertical > .splitpanes__splitter {
+		cursor: col-resize;
+		width: 5px;
+	}
+
+	.splitpanes--horizontal > .splitpanes__splitter {
+		cursor: row-resize;
+		height: 5px;
+	}
+
+	.splitpanes--vertical > .splitpanes__splitter:before {
+		left: -2.5px;
+		right: -2.5px;
+		height: 100%;
+	}
+
+	.splitpanes--horizontal > .splitpanes__splitter:before {
+		top: -2.5px;
+		bottom: -2.5px;
+		width: 100%;
+	}
+
+	.bx--toast-notification__caption {
+		display: none;
+	}
+
+	.vakata-context {
+		margin-top: -22px;
+	}
+
+	.bx--inline-loading__animation {
+		margin-right: 0px;
+	}
+
+	.bx--tree .bx--tree-node {
+		background-color: inherit;
 	}
 </style>

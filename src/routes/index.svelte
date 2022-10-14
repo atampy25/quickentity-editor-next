@@ -8,7 +8,7 @@
 	import ColorPicker from "$lib/components/ColorPicker.svelte"
 	import Entity3DMesh from "$lib/components/Entity3DMesh.svelte"
 
-	import { addNotification, appSettings, entity, entityMetadata, references, reverseReferences } from "$lib/stores"
+	import { addNotification, appSettings, entity, sessionMetadata, references, reverseReferences } from "$lib/stores"
 	import { changeReferenceToLocalEntity, checkValidityOfEntity, deleteReferencesToEntity, genRandHex, normaliseToHash, traverseEntityTree } from "$lib/utils"
 	import json from "$lib/json"
 
@@ -99,7 +99,7 @@
 
 	let entityPath: string | undefined
 
-	$: entityPath = $entityMetadata.originalEntityPath
+	$: entityPath = $sessionMetadata.originalEntityPath
 
 	$: if (entityPath) {
 		selectionType = null
@@ -114,7 +114,7 @@
 	<Pane>
 		<SplitPanes on:resize={() => editor?.layout()} theme="" horizontal={true}>
 			<Pane>
-				<div class="flex flex-col h-full shepherd-tree">
+				<div class="flex flex-col h-full shepherd-tree p-2 px-3">
 					<div class="flex flex-row gap-4 items-center">
 						<h1>Tree</h1>
 						<Search size="lg" labelText="Filter tree entities" on:input={treeSearch} bind:value={treeSearchInput} />
@@ -282,9 +282,9 @@
 				</div>
 			</Pane>
 			<Pane>
-				<div class="flex flex-col h-full shepherd-information">
+				<div class="flex flex-col h-full shepherd-information p-2 px-3">
 					<h1>Information</h1>
-					<div class="flex-grow overflow-y-auto overflow-x-hidden">
+					<div class="flex-grow overflow-y-auto overflow-x-hidden pr-2">
 						{#if selectionType}
 							{#if selectionType == "entity"}
 								<ExpandableSection initiallyOpen={true}>
@@ -401,7 +401,7 @@
 		</SplitPanes>
 	</Pane>
 	<Pane>
-		<div class="flex flex-col h-full shepherd-editor">
+		<div class="flex flex-col h-full shepherd-editor p-2 px-3">
 			<h1>Editor</h1>
 			<div class="flex-grow overflow-hidden">
 				{#if selectionType}
@@ -459,46 +459,4 @@
 </SplitPanes>
 
 <style global>
-	.splitpanes__pane {
-		@apply bg-[#202020] p-2 px-3 overflow-auto;
-	}
-
-	.splitpanes__splitter {
-		background-color: #262626;
-		position: relative;
-	}
-
-	.splitpanes--vertical > .splitpanes__splitter {
-		cursor: col-resize;
-		width: 5px;
-	}
-
-	.splitpanes--horizontal > .splitpanes__splitter {
-		cursor: row-resize;
-		height: 5px;
-	}
-
-	.splitpanes--vertical > .splitpanes__splitter:before {
-		left: -2.5px;
-		right: -2.5px;
-		height: 100%;
-	}
-
-	.splitpanes--horizontal > .splitpanes__splitter:before {
-		top: -2.5px;
-		bottom: -2.5px;
-		width: 100%;
-	}
-
-	.bx--toast-notification__caption {
-		display: none;
-	}
-
-	.vakata-context {
-		margin-top: -22px;
-	}
-
-	.bx--inline-loading__animation {
-		margin-right: 0px;
-	}
 </style>

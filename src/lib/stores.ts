@@ -1,11 +1,10 @@
 import { writable, derived, readable, type Writable, type Readable } from "svelte/store"
-import type { Entity, FullRef, RefMaybeConstantValue } from "$lib/quickentity-types"
-import { getReferencedEntities, getReferencedLocalEntity } from "$lib/utils"
+import type { Entity } from "$lib/quickentity-types"
+import { getReferencedEntities } from "$lib/utils"
 import Decimal from "decimal.js"
 import { forage } from "@tauri-apps/tauri-forage"
 import json from "$lib/json"
 import { Intellisense } from "$lib/intellisense"
-import RPKGInstance from "$lib/rpkg"
 import { v4 } from "uuid"
 
 interface AppSettings {
@@ -50,12 +49,17 @@ appSettings.subscribe((value: AppSettings) => {
 	})()
 })
 
-export const entityMetadata: Writable<{
+export const sessionMetadata: Writable<{
 	originalEntityPath?: string
 	saveAsPatch?: boolean
 	saveAsEntityPath?: string
 	saveAsPatchPath?: string
 	loadedFromGameFiles?: boolean
+	workspacePath?: string
+}> = writable({})
+
+export const workspaceData: Writable<{
+	path?: string
 }> = writable({})
 
 export const entity: Writable<Entity> = writable({

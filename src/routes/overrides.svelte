@@ -70,7 +70,7 @@
 	}, 500)
 </script>
 
-<div class="flex flex-col h-full">
+<div class="flex flex-col h-full p-2 px-3">
 	<h1>Overrides</h1>
 	<div class="flex-grow overflow-y-auto overflow-x-hidden">
 		<div class="shepherd-propertyOverrides">
