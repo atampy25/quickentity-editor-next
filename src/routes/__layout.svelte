@@ -517,18 +517,32 @@
 						role="none"
 						use:shortcut={{ control: true, key: "s" }}
 						on:click={async () => {
-							await writeTextFile("entity.json", getEntityAsText(), { dir: BaseDirectory.App })
+							if (Object.keys($entity.entities).length > 50000) {
+								await writeTextFile("entity.json", getEntityAsText(), { dir: BaseDirectory.App })
 
-							await Command.sidecar("sidecar/quickentity-rs", [
-								"patch",
-								"generate",
-								"--input1",
-								String($sessionMetadata.originalEntityPath),
-								"--input2",
-								await join(await appDir(), "entity.json"),
-								"--output",
-								$sessionMetadata.saveAsPatchPath
-							]).execute()
+								await Command.sidecar("sidecar/quickentity-rs", [
+									"patch",
+									"generate",
+									"--input1",
+									String($sessionMetadata.originalEntityPath),
+									"--input2",
+									await join(await appDir(), "entity.json"),
+									"--output",
+									$sessionMetadata.saveAsPatchPath
+								]).execute()
+
+								$addNotification = {
+									kind: "warning",
+									title: "Calculated patch using alternate algorithm",
+									subtitle: "The patch was calculated using a faster but lower quality algorithm; you may want to check the output JSON."
+								}
+							} else {
+								// much smarter but much slower diff algorithm
+								await writeTextFile(
+									$sessionMetadata.saveAsPatchPath,
+									json.stringify(rfc6902.createPatch(json.parse(await readTextFile($sessionMetadata.originalEntityPath)), json.parse(getEntityAsText())))
+								)
+							}
 
 							$sessionMetadata.loadedFromGameFiles = false
 
@@ -932,6 +946,51 @@
 										previousSelectedWorkspaceTreeItem = selectedWorkspaceTreeItem
 										selectedWorkspaceTreeItem = detail.id
 
+										// save old file
+										if ($appSettings.autoSaveOnSwitchFile) {
+											if ($sessionMetadata.originalEntityPath && !$sessionMetadata.loadedFromGameFiles) {
+												if ($sessionMetadata.saveAsPatch) {
+													if (Object.keys($entity.entities).length > 50000) {
+														await writeTextFile("entity.json", getEntityAsText(), { dir: BaseDirectory.App })
+
+														await Command.sidecar("sidecar/quickentity-rs", [
+															"patch",
+															"generate",
+															"--input1",
+															String($sessionMetadata.originalEntityPath),
+															"--input2",
+															await join(await appDir(), "entity.json"),
+															"--output",
+															$sessionMetadata.saveAsPatchPath
+														]).execute()
+
+														$addNotification = {
+															kind: "warning",
+															title: "Calculated patch using alternate algorithm",
+															subtitle: "The patch was calculated using a faster but lower quality algorithm; you may want to check the output JSON."
+														}
+													} else {
+														// much smarter but much slower diff algorithm
+														await writeTextFile(
+															$sessionMetadata.saveAsPatchPath,
+															json.stringify(rfc6902.createPatch(json.parse(await readTextFile($sessionMetadata.originalEntityPath)), json.parse(getEntityAsText())))
+														)
+													}
+
+													$sessionMetadata.loadedFromGameFiles = false
+
+													breadcrumb("entity", "Saved to patch (original path) when switching workspace file")
+												} else {
+													await writeTextFile($sessionMetadata.saveAsEntityPath, getEntityAsText())
+
+													$sessionMetadata.loadedFromGameFiles = false
+
+													breadcrumb("entity", "Saved to file (original path) when switching workspace file")
+												}
+											}
+										}
+
+										// load new file
 										if (detail.id.endsWith("entity.json")) {
 											$sessionMetadata.originalEntityPath = detail.id
 											$sessionMetadata.saveAsPatch = false
