@@ -2,9 +2,9 @@
 	import OverrideMonacoEditor from "$lib/components/OverrideMonacoEditor.svelte"
 	import json from "$lib/json"
 	import type { Entity, PropertyOverride } from "$lib/quickentity-types"
-	import { appSettings, entity, parsedEntities } from "$lib/stores"
+	import { appSettings, entity, parsedEntities, workspaceData } from "$lib/stores"
 	import { normaliseToHash } from "$lib/utils"
-	import { readTextFile } from "@tauri-apps/api/fs"
+	import { readTextFile, exists as tauriExists } from "@tauri-apps/api/fs"
 	import { join } from "@tauri-apps/api/path"
 	import { Button, Modal, TextInput, Tile, Checkbox } from "carbon-components-svelte"
 	import { onMount } from "svelte"
@@ -14,6 +14,7 @@
 	import Close from "carbon-icons-svelte/lib/Close.svelte"
 	import CloseOutline from "carbon-icons-svelte/lib/CloseOutline.svelte"
 	import Add from "carbon-icons-svelte/lib/Add.svelte"
+	import md5 from "md5"
 
 	let overriddenEntityNames: Record<string, string> = {}
 
@@ -26,6 +27,16 @@
 	let entityReferenceModalExpEnt: string
 	let entityReferenceModalUseExtScene = false
 	let entityReferenceModalExtScene: string
+
+	let friendlyHashes: Record<string, string> = {}
+
+	const exists = async (path: string) => {
+		try {
+			return (await tauriExists(path)) as unknown as boolean
+		} catch {
+			return false
+		}
+	}
 
 	$: (async () => {
 		if ($appSettings.gameFileExtensions) {
@@ -59,6 +70,14 @@
 				}
 			}
 		}
+
+		if ($workspaceData.path) {
+			if (await exists(await join($workspaceData.path, "project.json"))) {
+				friendlyHashes = Object.fromEntries(
+					JSON.parse(await readTextFile(await join($workspaceData.path, "project.json"))).customPaths.map((a: string) => [("00" + md5(a).slice(2, 16)).toUpperCase(), a])
+				)
+			}
+		}
 	})()
 
 	const updatePropertyData = debounce((override, detail) => {
@@ -86,7 +105,7 @@
 									{#if overriddenEntityNames[normaliseToHash(ref?.externalScene) + ref?.ref]}
 										<div>
 											<span style="font-size: 0.7rem">
-												{ref.ref} in {ref.externalScene}
+												{ref.ref} in {friendlyHashes[ref.externalScene || ""] || ref.externalScene}
 											</span>
 											<br />
 											<span style="font-size: 1rem">
@@ -94,10 +113,10 @@
 											</span>
 										</div>
 									{:else}
-										{ref.ref} in {ref.externalScene}
+										{ref.ref} in {friendlyHashes[ref.externalScene || ""] || ref.externalScene}
 									{/if}
 								{:else if ref && typeof ref == "object"}
-									{ref?.ref}
+									{ref.ref} in {friendlyHashes[ref.externalScene || ""] || ref.externalScene}
 								{:else}
 									{ref}
 								{/if}
@@ -163,7 +182,7 @@
 								{#if overriddenEntityNames[normaliseToHash(ref?.externalScene) + ref?.ref]}
 									<div>
 										<span style="font-size: 0.7rem">
-											{ref.ref} in {ref.externalScene}
+											{ref.ref} in {friendlyHashes[ref.externalScene || ""] || ref.externalScene}
 										</span>
 										<br />
 										<span style="font-size: 1rem">
@@ -171,10 +190,10 @@
 										</span>
 									</div>
 								{:else}
-									{ref.ref} in {ref.externalScene}
+									{ref.ref} in {friendlyHashes[ref.externalScene || ""] || ref.externalScene}
 								{/if}
 							{:else if ref && typeof ref == "object"}
-								{ref?.ref}
+								{ref.ref} in {friendlyHashes[ref.externalScene || ""] || ref.externalScene}
 							{:else}
 								{ref}
 							{/if}

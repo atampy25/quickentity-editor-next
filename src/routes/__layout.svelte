@@ -58,6 +58,7 @@
 	import * as Sentry from "@sentry/browser"
 	import { BrowserTracing } from "@sentry/tracing"
 	import SentryRRWeb from "@sentry/rrweb"
+	import { changeEntityHashesFromFriendly, changeEntityHashesToFriendly } from "$lib/utils"
 
 	let displayNotifications: { kind: "error" | "info" | "info-square" | "success" | "warning" | "warning-alt"; title: string; subtitle: string }[] = []
 
@@ -104,7 +105,7 @@
 		}
 	}
 
-	function getEntityAsText() {
+	async function getEntityAsText() {
 		const ent = cloneDeep($entity)
 
 		if ($appSettings.inVivoExtensions && gameServer.connected) {
@@ -140,14 +141,33 @@
 			}
 		}
 
+		if ($workspaceData.path) {
+			if (await exists(await join($workspaceData.path, "project.json"))) {
+				changeEntityHashesToFriendly(
+					ent,
+					Object.fromEntries(JSON.parse(await readTextFile(await join($workspaceData.path, "project.json"))).customPaths.map((a: string) => [("00" + md5(a).slice(2, 16)).toUpperCase(), a]))
+				)
+			}
+		}
+
 		return json.stringify(ent)
 	}
 
 	async function getEntityFromText(x: string) {
 		const ent = json.parse(x)
+
 		if (ent.entities["abcdefcadc2e258e"]) {
 			delete ent.entities["abcdefcadc2e258e"]
 			delete ent.entities["abcdefcadc77e4f2"]
+		}
+
+		if ($workspaceData.path) {
+			if (await exists(await join($workspaceData.path, "project.json"))) {
+				changeEntityHashesFromFriendly(
+					ent,
+					Object.fromEntries(JSON.parse(await readTextFile(await join($workspaceData.path, "project.json"))).customPaths.map((a: string) => [("00" + md5(a).slice(2, 16)).toUpperCase(), a]))
+				)
+			}
 		}
 
 		return ent
@@ -438,7 +458,7 @@
 
 						if (!x) return
 
-						await writeTextFile(x, getEntityAsText())
+						await writeTextFile(x, await getEntityAsText())
 
 						$sessionMetadata.saveAsPatch = false
 						$sessionMetadata.saveAsEntityPath = x
@@ -472,7 +492,7 @@
 						if (!x) return
 
 						if (Object.keys($entity.entities).length > 50000) {
-							await writeTextFile("entity.json", getEntityAsText(), { dir: BaseDirectory.App })
+							await writeTextFile("entity.json", await getEntityAsText(), { dir: BaseDirectory.App })
 
 							await Command.sidecar("sidecar/quickentity-rs", [
 								"patch",
@@ -492,7 +512,7 @@
 							}
 						} else {
 							// much smarter but much slower diff algorithm
-							await writeTextFile(x, json.stringify(rfc6902.createPatch(json.parse(await readTextFile($sessionMetadata.originalEntityPath)), json.parse(getEntityAsText()))))
+							await writeTextFile(x, json.stringify(rfc6902.createPatch(json.parse(await readTextFile($sessionMetadata.originalEntityPath)), json.parse(await getEntityAsText()))))
 						}
 
 						$sessionMetadata.saveAsPatch = true
@@ -518,7 +538,7 @@
 						use:shortcut={{ control: true, key: "s" }}
 						on:click={async () => {
 							if (Object.keys($entity.entities).length > 50000) {
-								await writeTextFile("entity.json", getEntityAsText(), { dir: BaseDirectory.App })
+								await writeTextFile("entity.json", await getEntityAsText(), { dir: BaseDirectory.App })
 
 								await Command.sidecar("sidecar/quickentity-rs", [
 									"patch",
@@ -540,7 +560,7 @@
 								// much smarter but much slower diff algorithm
 								await writeTextFile(
 									$sessionMetadata.saveAsPatchPath,
-									json.stringify(rfc6902.createPatch(json.parse(await readTextFile($sessionMetadata.originalEntityPath)), json.parse(getEntityAsText())))
+									json.stringify(rfc6902.createPatch(json.parse(await readTextFile($sessionMetadata.originalEntityPath)), json.parse(await getEntityAsText())))
 								)
 							}
 
@@ -566,7 +586,7 @@
 						role="none"
 						use:shortcut={{ control: true, key: "s" }}
 						on:click={async () => {
-							await writeTextFile($sessionMetadata.saveAsEntityPath, getEntityAsText())
+							await writeTextFile($sessionMetadata.saveAsEntityPath, await getEntityAsText())
 
 							$sessionMetadata.loadedFromGameFiles = false
 
@@ -951,7 +971,7 @@
 											if ($sessionMetadata.originalEntityPath && !$sessionMetadata.loadedFromGameFiles) {
 												if ($sessionMetadata.saveAsPatch) {
 													if (Object.keys($entity.entities).length > 50000) {
-														await writeTextFile("entity.json", getEntityAsText(), { dir: BaseDirectory.App })
+														await writeTextFile("entity.json", await getEntityAsText(), { dir: BaseDirectory.App })
 
 														await Command.sidecar("sidecar/quickentity-rs", [
 															"patch",
@@ -973,7 +993,9 @@
 														// much smarter but much slower diff algorithm
 														await writeTextFile(
 															$sessionMetadata.saveAsPatchPath,
-															json.stringify(rfc6902.createPatch(json.parse(await readTextFile($sessionMetadata.originalEntityPath)), json.parse(getEntityAsText())))
+															json.stringify(
+																rfc6902.createPatch(json.parse(await readTextFile($sessionMetadata.originalEntityPath)), json.parse(await getEntityAsText()))
+															)
 														)
 													}
 
@@ -981,7 +1003,7 @@
 
 													breadcrumb("entity", "Saved to patch (original path) when switching workspace file")
 												} else {
-													await writeTextFile($sessionMetadata.saveAsEntityPath, getEntityAsText())
+													await writeTextFile($sessionMetadata.saveAsEntityPath, await getEntityAsText())
 
 													$sessionMetadata.loadedFromGameFiles = false
 

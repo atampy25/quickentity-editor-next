@@ -492,3 +492,94 @@ export function normaliseToHash(path: string): string {
 export function getSchema() {
 	return cloneDeep(schema)
 }
+
+export function changeEntityHashesToFriendly(entity: Entity, friendly: Record<string, string>) {
+	entity.externalScenes = entity.externalScenes.map((a) => friendly[a] || a)
+
+	entity.extraFactoryDependencies = entity.extraFactoryDependencies.map((a) => {
+		if (typeof a == "string") {
+			return friendly[a] || a
+		} else if (a) {
+			return {
+				resource: friendly[a.resource] || a.resource,
+				flag: a.flag
+			}
+		} else {
+			return a
+		}
+	})
+
+	entity.extraBlueprintDependencies = entity.extraBlueprintDependencies.map((a) => {
+		if (typeof a == "string") {
+			return friendly[a] || a
+		} else if (a) {
+			return {
+				resource: friendly[a.resource] || a.resource,
+				flag: a.flag
+			}
+		} else {
+			return a
+		}
+	})
+
+	for (const subEntity of Object.values(entity.entities)) {
+		subEntity.template = friendly[subEntity.template] || subEntity.template
+		subEntity.blueprint = friendly[subEntity.blueprint] || subEntity.blueprint
+
+		if (subEntity.properties) {
+			for (const property of Object.values(subEntity.properties)) {
+				if (property.type == "ZRuntimeResourceID") {
+					if (typeof property.value == "string") {
+						property.value = friendly[property.value] || property.value
+					} else if (property.value) {
+						property.value.resource = friendly[property.value.resource] || property.value.resource
+					}
+				} else if (property.type == "TArray<ZRuntimeResourceID>") {
+					property.value = property.value.map((a) => {
+						if (typeof a == "string") {
+							return friendly[a] || a
+						} else if (a) {
+							return {
+								resource: friendly[a.resource] || a.resource,
+								flag: a.flag
+							}
+						} else {
+							return a
+						}
+					})
+				}
+			}
+		}
+
+		if (subEntity.platformSpecificProperties) {
+			for (const properties of Object.values(subEntity.platformSpecificProperties)) {
+				for (const property of Object.values(properties)) {
+					if (property.type == "ZRuntimeResourceID") {
+						if (typeof property.value == "string") {
+							property.value = friendly[property.value] || property.value
+						} else if (property.value) {
+							property.value.resource = friendly[property.value.resource] || property.value.resource
+						}
+					} else if (property.type == "TArray<ZRuntimeResourceID>") {
+						property.value = property.value.map((a) => {
+							if (typeof a == "string") {
+								return friendly[a] || a
+							} else if (a) {
+								return {
+									resource: friendly[a.resource] || a.resource,
+									flag: a.flag
+								}
+							} else {
+								return a
+							}
+						})
+					}
+				}
+			}
+		}
+	}
+}
+
+export function changeEntityHashesFromFriendly(entity: Entity, friendly: Record<string, string>) {
+	changeEntityHashesToFriendly(entity, Object.fromEntries(Object.entries(friendly).map((a) => [a[1], a[0]])))
+}
