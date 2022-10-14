@@ -24,7 +24,8 @@
 		Grid,
 		ToastNotification,
 		Modal,
-		TextInput
+		TextInput,
+		Select
 	} from "carbon-components-svelte"
 
 	import { addNotification, appSettings, entity, entityMetadata } from "$lib/stores"
@@ -50,6 +51,7 @@
 	import TreeView from "carbon-icons-svelte/lib/TreeView.svelte"
 	import Settings from "carbon-icons-svelte/lib/Settings.svelte"
 	import Chart_3D from "carbon-icons-svelte/lib/Chart_3D.svelte"
+	import WarningAlt from "carbon-icons-svelte/lib/WarningAlt.svelte"
 
 	import * as Sentry from "@sentry/browser"
 	import { BrowserTracing } from "@sentry/tracing"
@@ -156,7 +158,7 @@
 			Sentry.init({
 				dsn: "https://7be7af4147884b6093b380e65750e9f6@o1144555.ingest.sentry.io/4503907590537216",
 				integrations: [new BrowserTracing(), new SentryRRWeb()],
-				tracesSampleRate: 1.0,
+				tracesSampleRate: 0,
 				release: await getVersion()
 			})
 
@@ -172,6 +174,21 @@
 			}
 		}
 	})
+
+	function breadcrumb(category: string, message: string, data: Record<string, string> = {}) {
+		if ($appSettings.enableLogRocket) {
+			Sentry.addBreadcrumb({
+				message,
+				category,
+				data,
+				level: "info"
+			})
+		}
+	}
+
+	let reportIssueModalOpen = false
+	let reportIssueModalSeverity = ""
+	let reportIssueModalIssue = ""
 </script>
 
 {#if ready}
@@ -202,6 +219,8 @@
 							$entityMetadata.saveAsEntityPath = $entityMetadata.originalEntityPath
 							$entityMetadata.loadedFromGameFiles = false
 							$entity = await getEntityFromText(await readTextFile(x))
+
+							breadcrumb("entity", `Loaded ${$entity.tempHash} from file`)
 						}
 					}}
 				>
@@ -255,6 +274,8 @@
 						$entityMetadata.saveAsPatchPath = y
 						$entityMetadata.loadedFromGameFiles = false
 						$entity = await getEntityFromText(json.stringify(patched))
+
+						breadcrumb("entity", `Loaded ${$entity.tempHash} from patch`)
 					}}
 				>
 					<HeaderNavItem href="#" text="Load entity from patch" />
@@ -282,6 +303,8 @@
 						$entityMetadata.saveAsPatch = false
 						$entityMetadata.saveAsEntityPath = x
 						$entityMetadata.loadedFromGameFiles = false
+
+						breadcrumb("entity", "Saved to file")
 
 						$addNotification = {
 							kind: "success",
@@ -336,6 +359,8 @@
 						$entityMetadata.saveAsPatchPath = x
 						$entityMetadata.loadedFromGameFiles = false
 
+						breadcrumb("entity", "Saved to patch")
+
 						$addNotification = {
 							kind: "success",
 							title: "Saved patch successfully",
@@ -374,6 +399,8 @@
 									"Saved the changes from the original entity to " +
 									($entityMetadata.saveAsPatchPath.split(sep).length > 3 ? "..." + $entityMetadata.saveAsPatchPath.split(sep).slice(-3).join(sep) : $entityMetadata.saveAsPatchPath)
 							}
+
+							breadcrumb("entity", "Saved to patch (original path)")
 						}}
 					>
 						<a role="menuitem" tabindex="0" href="#" class="bx--header__menu-item"><span class="bx--text-truncate--end">Save patch</span></a>
@@ -396,6 +423,8 @@
 										? "..." + $entityMetadata.saveAsEntityPath.split(sep).slice(-3).join(sep)
 										: $entityMetadata.saveAsEntityPath)
 							}
+
+							breadcrumb("entity", "Saved to file (original path)")
 						}}
 					>
 						<a role="menuitem" tabindex="0" href="#" class="bx--header__menu-item"><span class="bx--text-truncate--end">Save entity</span></a>
@@ -418,6 +447,8 @@
 							}
 
 							gameServer.connected = gameServer.connected
+
+							breadcrumb("gameserver", `Toggled to ${gameServer.connected}`)
 						}}
 					/>
 					{#if gameServer.connected}
@@ -708,6 +739,8 @@
 
 							tour.start()
 						}
+
+						breadcrumb("ui", "Tour activated")
 					}}
 					text="Help"
 				/>
@@ -727,6 +760,10 @@
 					<SideNavDivider />
 				{/if}
 				<SideNavLink icon={Settings} text="Settings" href="/settings" isSelected={$page.url.pathname == "/settings"} />
+				{#if $appSettings.enableLogRocket}
+					<SideNavDivider />
+					<SideNavLink icon={WarningAlt} href="#" text="Report Issue" on:click={() => (reportIssueModalOpen = true)} />
+				{/if}
 			</SideNavItems>
 		</SideNav>
 	</Header>
@@ -862,11 +899,46 @@
 			$entityMetadata.loadedFromGameFiles = true
 
 			$entity = await getEntityFromText(await readTextFile(await join(await appDir(), "inspection", "entity.json")))
+
+			breadcrumb("entity", `Loaded ${$entity.tempHash} from game files`)
 		}}
 	>
 		<p>What game file would you like to load? Give either the hash or the path.</p>
 		<br />
 		<TextInput bind:value={askGameFileModalResult} labelText="Hash or path of game file" placeholder="00123456789ABCDE" />
+	</Modal>
+	<Modal
+		bind:open={reportIssueModalOpen}
+		modalHeading="Report issue"
+		primaryButtonText="Send report"
+		secondaryButtonText="Cancel"
+		on:click:button--secondary={() => (reportIssueModalOpen = false)}
+		on:submit={async () => {
+			reportIssueModalOpen = false
+
+			Sentry.captureMessage(reportIssueModalIssue, reportIssueModalSeverity)
+
+			$addNotification = {
+				kind: "success",
+				title: "Sent report",
+				subtitle: "A report has been sent, along with a log of some of the recent things you did."
+			}
+		}}
+	>
+		<p>What kind of issue are you reporting?</p>
+		<br />
+		<Select
+			labelText="Type"
+			on:change={({ detail }) => {
+				reportIssueModalSeverity = detail
+			}}
+		>
+			<option selected={reportIssueModalSeverity == "info"} value="info">Suggestion</option>
+			<option selected={reportIssueModalSeverity == "warning"} value="warning">Minor Issue</option>
+			<option selected={reportIssueModalSeverity == "error"} value="error">Major Issue</option>
+		</Select>
+		<br />
+		<TextInput bind:value={reportIssueModalIssue} labelText="Description (be concise)" placeholder="XYZ doesn't work; ABC happens when I do DEF" />
 	</Modal>
 {/if}
 
