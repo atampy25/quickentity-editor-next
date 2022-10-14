@@ -82,7 +82,7 @@ export const entity: Writable<Entity> = writable({
 	pinConnectionOverrideDeletes: [],
 	externalScenes: [],
 	subType: "scene",
-	quickEntityVersion: new Decimal(2.2),
+	quickEntityVersion: new Decimal(3.0),
 	extraFactoryDependencies: [],
 	extraBlueprintDependencies: [],
 	comments: []
