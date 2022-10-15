@@ -93,10 +93,10 @@ class GameServer {
 		)
 	}
 
-	/** Barely works; only here for reference. UPDATE: Removed in 3.130.0 SDK mod update */
-	// async setPlayerPosition(transform: { position: { x: number; y: number; z: number }; rotation: { x: number; y: number; z: number } }) {
-	// 	await this.client.send(this.lastAddress, `SetHeroPosition|blablaunused|${Object.values(transform.position).join("|")}|${Object.values(transform.rotation).join("|")}`)
-	// }
+	/** Barely works; only here for reference. Pending testing after reimplementation. */
+	async setPlayerPosition(transform: { position: { x: number; y: number; z: number }; rotation: { x: number; y: number; z: number } }) {
+		await this.client.send(this.lastAddress, `SetHeroPosition|blablaunused|${Object.values(transform.position).join("|")}|${Object.values(transform.rotation).join("|")}`)
+	}
 
 	async updateProperty(id: string, propertyName: string, property: Property) {
 		let propertyType = property.type
