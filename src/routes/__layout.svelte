@@ -1260,10 +1260,6 @@
 		display: none;
 	}
 
-	.vakata-context {
-		margin-top: -22px;
-	}
-
 	.bx--inline-loading__animation {
 		margin-right: 0px;
 	}

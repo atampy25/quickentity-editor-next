@@ -119,6 +119,9 @@
 .vakata-context {
 	display: none;
 }
+.vakata-context {
+	margin-top: -22px;
+}
 .vakata-context,
 .vakata-context ul {
 	margin: 0;
