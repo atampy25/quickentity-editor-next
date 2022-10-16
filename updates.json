@@ -1,11 +1,11 @@
 {
-	"version": "1.12.4",
-	"notes": "Fix in-vivo SDK mod",
+	"version": "1.13.0",
+	"notes": "Rename SDK mod, preferred highlight colour setting, code cleanup",
 	"pub_date": "2022-09-28T09:45:47Z",
 	"platforms": {
 		"windows-x86_64": {
-			"signature": "dW50cnVzdGVkIGNvbW1lbnQ6IHNpZ25hdHVyZSBmcm9tIHRhdXJpIHNlY3JldCBrZXkKUlVScWpVZGd2b0lOTlhmcWlmVkhsNjF6cVUwa2pTWnp2MHJLTHZJTUpXdDBHdThheG1weVdmQWRxM3pCRWxQa0Y1cHZnL0MvYkdyeXlPdHJtTXZ4QUo3YnI0TjlBRVZrUVFVPQp0cnVzdGVkIGNvbW1lbnQ6IHRpbWVzdGFtcDoxNjY1Nzk0MjIzCWZpbGU6UXVpY2tFbnRpdHkgRWRpdG9yXzEuMTIuNF94NjRfZW4tVVMubXNpLnppcAp6L3N1ZlJSZ3AvaTA1L1BlYWp1ekgxaVFlTW1WWkFoWnBLc2ovOUROS0VxVGptSDNNVllxQ0Z3bFE2LzdNVlZMZ2d2M2pUN1R2LzBJY1RPUFFEWFNBQT09Cg==",
-			"url": "https://github.com/atampy25/quickentity-editor-next/releases/download/1.12.4/QuickEntity.Editor_1.12.4_x64_en-US.msi.zip"
+			"signature": "dW50cnVzdGVkIGNvbW1lbnQ6IHNpZ25hdHVyZSBmcm9tIHRhdXJpIHNlY3JldCBrZXkKUlVScWpVZGd2b0lOTlQ0aENuTWV4SEtWK3lzN3RpZ0JTUU95c3RLS012TXZEcGN6bm1rSWFXazhtUy9uZWtHbFprdklReEFrM0NTSysrS28xSWJHanVMdG1qaDlyM0dDTWdBPQp0cnVzdGVkIGNvbW1lbnQ6IHRpbWVzdGFtcDoxNjY1ODkwNzQyCWZpbGU6UXVpY2tFbnRpdHkgRWRpdG9yXzEuMTMuMF94NjRfZW4tVVMubXNpLnppcAo3d21Fd2tXcVhRbWExNFpwT2lFd1p5KzNSaEdxc1NWTWRzaUN1aW9LSzdVczdNOUlRZkorcHpmK1JSSWYzc0VsUVhtdnVEMTF6YlpIaWxoWndyU1FBQT09Cg==",
+			"url": "https://github.com/atampy25/quickentity-editor-next/releases/download/1.13.0/QuickEntity.Editor_1.13.0_x64_en-US.msi.zip"
 		}
 	}
 }

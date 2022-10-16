@@ -1995,7 +1995,7 @@ dependencies = [
 
 [[package]]
 name = "quickentity-editor"
-version = "1.12.4"
+version = "1.13.0"
 dependencies = [
  "futures-util",
  "rand 0.8.5",
