@@ -8,17 +8,23 @@ import { Intellisense } from "$lib/intellisense"
 import { v4 } from "uuid"
 
 interface AppSettings {
-	gameFileExtensions: boolean
-	gameFileExtensionsDataPath: string
 	runtimePath: string
 	retailPath: string
+
+	autoSaveOnSwitchFile: boolean
+
+	gameFileExtensions: boolean
+	gameFileExtensionsDataPath: string
+
 	inVivoExtensions: boolean
+	autoHighlightEntities: boolean
+	preferredHighlightColour: string
+
 	enableLogRocket: boolean
 	logRocketID: string
 	logRocketName: string
+
 	technicalMode: boolean
-	autoHighlightEntities: boolean
-	autoSaveOnSwitchFile: boolean
 }
 
 await forage.setItem({
@@ -36,7 +42,8 @@ await forage.setItem({
 				logRocketName: "",
 				technicalMode: false,
 				autoHighlightEntities: true,
-				autoSaveOnSwitchFile: true
+				autoSaveOnSwitchFile: true,
+				preferredHighlightColour: "#0000ff"
 			},
 			json.parse((await forage.getItem({ key: "appSettings" })()) || "{}")
 		)

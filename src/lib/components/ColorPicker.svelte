@@ -2,9 +2,10 @@
 	import "@simonwep/pickr/dist/themes/nano.min.css"
 	import Pickr from "@simonwep/pickr"
 	import { v4 } from "uuid"
-	import { onMount } from "svelte"
+	import { createEventDispatcher, onMount } from "svelte"
 
 	const elemID = "colourpicker-" + v4().replaceAll("-", "")
+	const dispatch = createEventDispatcher()
 
 	export let type: "rgb" | "rgba"
 	export let value: string
@@ -36,6 +37,8 @@
 			} else {
 				value = ("#" + colour.toHEXA()[0] + colour.toHEXA()[1] + colour.toHEXA()[2] + (colour.toHEXA()[3] || "ff")).toLowerCase()
 			}
+
+			dispatch("change", value)
 		})
 	})
 </script>

@@ -14,6 +14,7 @@ class GameServer {
 	connected: boolean
 	lastMessage: number
 	lastAddress: string
+	currentHighlightColour: string
 
 	constructor() {
 		this.connected = false
@@ -30,7 +31,7 @@ class GameServer {
 		this.connected = true
 
 		this.client.addListener(({ datagram, address }) => {
-			if (datagram != "PingGame") {
+			if (datagram != "Pong") {
 				console.log("Received datagram", JSON.stringify(datagram), "from", address)
 			}
 			this.lastAddress = address
@@ -55,22 +56,22 @@ class GameServer {
 	}
 
 	async getPlayerPosition(): Promise<{ x: number; y: number; z: number }> {
-		await this.client.send(this.lastAddress, "GetHeroPosition")
+		await this.client.send(this.lastAddress, "GetPlayerPosition")
 		return await new Promise((resolve) =>
 			this.client.once(
-				`getHeroPosition${Date.now()}`,
-				({ datagram }) => datagram.startsWith("GetHeroPosition"),
+				`getPlayerPosition${Date.now()}`,
+				({ datagram }) => datagram.startsWith("PlayerPosition"),
 				({ datagram }) => resolve({ x: +datagram.split("_")[1], y: +datagram.split("_")[2], z: +datagram.split("_")[3] })
 			)
 		)
 	}
 
 	async getPlayerRotation(): Promise<{ x: number; y: number; z: number }> {
-		await this.client.send(this.lastAddress, "GetHeroRotation")
+		await this.client.send(this.lastAddress, "GetPlayerRotation")
 		return await new Promise((resolve) =>
 			this.client.once(
-				`getHeroRotation${Date.now()}`,
-				({ datagram }) => datagram.startsWith("GetHeroRotation"),
+				`getPlayerRotation${Date.now()}`,
+				({ datagram }) => datagram.startsWith("PlayerRotation"),
 				({ datagram }) => {
 					const matrix = new Matrix4()
 					matrix.elements[0] = +datagram.split("_")[1]
@@ -95,7 +96,7 @@ class GameServer {
 
 	/** Barely works; only here for reference. Pending testing after reimplementation. */
 	async setPlayerPosition(transform: { position: { x: number; y: number; z: number }; rotation: { x: number; y: number; z: number } }) {
-		await this.client.send(this.lastAddress, `SetHeroPosition|blablaunused|${Object.values(transform.position).join("|")}|${Object.values(transform.rotation).join("|")}`)
+		await this.client.send(this.lastAddress, `SetPlayerTransform|unused|${Object.values(transform.position).join("|")}|${Object.values(transform.rotation).join("|")}`)
 	}
 
 	async updateProperty(id: string, propertyName: string, property: Property) {
@@ -139,7 +140,7 @@ class GameServer {
 		if (normaliseToHash(ent.template) === "007E948041B18F72" || ent.properties?.m_vGlobalSize) {
 			await this.client.send(
 				this.lastAddress,
-				`C|${new Decimal(`0x${id}`).toFixed()}|${Object.values(ent.properties?.m_mTransform.value.position).join("|")}|${Object.values(ent.properties?.m_mTransform.value.rotation).join(
+				`HighlightVolume|unused|${Object.values(ent.properties?.m_mTransform.value.position).join("|")}|${Object.values(ent.properties?.m_mTransform.value.rotation).join(
 					"|"
 				)}|${(normaliseToHash(ent.template) === "007E948041B18F72"
 					? [+ent.properties?.m_fCoverLength.value, +ent.properties?.m_fCoverDepth.value, ent.properties?.m_eCoverSize.value === "eLowCover" ? 1 : 2]
@@ -147,7 +148,20 @@ class GameServer {
 				).join("|")}`
 			)
 		} else {
-			await this.client.send(this.lastAddress, `H|${new Decimal(`0x${id}`).toFixed()}`)
+			await this.client.send(this.lastAddress, `HighlightEntity|${new Decimal(`0x${id}`).toFixed()}`)
+		}
+	}
+
+	async setHighlightColour(colour: string) {
+		if (this.currentHighlightColour != colour) {
+			await this.client.send(
+				this.lastAddress,
+				`SetHighlightColour|unused|${new Decimal(`0x${colour.slice(1).slice(0, 2)}`).dividedBy(255).toFixed()}|${new Decimal(`0x${colour.slice(1).slice(2, 4)}`)
+					.dividedBy(255)
+					.toFixed()}|${new Decimal(`0x${colour.slice(1).slice(4, 6)}`).dividedBy(255).toFixed()}`
+			)
+
+			this.currentHighlightColour = colour
 		}
 	}
 }

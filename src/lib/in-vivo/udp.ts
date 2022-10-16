@@ -47,6 +47,10 @@ export default class UDPSocket {
 	}
 
 	send(address: string, message: string): Promise<void> {
+		if (message != "Ping") {
+			console.log("Sending datagram", message, "to", address)
+		}
+
 		return invoke("plugin:udp|send", {
 			id: this.id,
 			address,

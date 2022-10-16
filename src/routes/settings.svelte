@@ -1,4 +1,6 @@
 <script lang="ts">
+	import ColorPicker from "$lib/components/ColorPicker.svelte"
+	import { gameServer } from "$lib/in-vivo/gameServer"
 	import { appSettings } from "$lib/stores"
 	import { BaseDirectory, copyFile, removeFile } from "@tauri-apps/api/fs"
 	import { documentDir, join } from "@tauri-apps/api/path"
@@ -60,11 +62,11 @@
 				bind:checked={$appSettings.inVivoExtensions}
 				on:change={async () => {
 					if ($appSettings.inVivoExtensions) {
-						await copyFile("LogPins.dll", await join($appSettings.retailPath, "mods", "LogPins.dll"))
-						await copyFile("LogPins.pdb", await join($appSettings.retailPath, "mods", "LogPins.pdb"))
+						await copyFile("GameConnection.dll", await join($appSettings.retailPath, "mods", "GameConnection.dll"))
+						await copyFile("GameConnection.pdb", await join($appSettings.retailPath, "mods", "GameConnection.pdb"))
 					} else {
-						await removeFile(await join($appSettings.retailPath, "mods", "LogPins.dll"))
-						await removeFile(await join($appSettings.retailPath, "mods", "LogPins.pdb"))
+						await removeFile(await join($appSettings.retailPath, "mods", "GameConnection.dll"))
+						await removeFile(await join($appSettings.retailPath, "mods", "GameConnection.pdb"))
 					}
 				}}
 				labelText="Enable in-vivo extensions"
@@ -81,6 +83,19 @@
 	<br />
 	{#if $appSettings.inVivoExtensions}
 		<Checkbox bind:checked={$appSettings.autoHighlightEntities} labelText="Automatically highlight selected entities" />
+		<br />
+		<div class="flex flex-wrap gap-2 items-center">
+			Preferred highlight colour
+			<ColorPicker
+				type="rgb"
+				bind:value={$appSettings.preferredHighlightColour}
+				on:change={async ({ detail }) => {
+					if (gameServer.connected && gameServer.lastMessage != 0 && Math.max(0, Date.now() - gameServer.lastMessage) > 0) {
+						await gameServer.setHighlightColour(detail)
+					}
+				}}
+			/>
+		</div>
 		<br />
 	{/if}
 	<div class="flex items-center gap-2">

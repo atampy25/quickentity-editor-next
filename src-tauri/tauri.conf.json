@@ -62,7 +62,7 @@
 				"providerShortName": null,
 				"signingIdentity": null
 			},
-			"resources": ["hash_list.txt", "LogPins.dll", "LogPins.pdb", "ResourceLib_HM2016.dll", "ResourceLib_HM2.dll", "ResourceLib_HM3.dll", "ResourceLib_HMA.dll"],
+			"resources": ["hash_list.txt", "GameConnection.dll", "GameConnection.pdb", "ResourceLib_HM2016.dll", "ResourceLib_HM2.dll", "ResourceLib_HM3.dll", "ResourceLib_HMA.dll"],
 			"shortDescription": "",
 			"targets": "all",
 			"windows": {

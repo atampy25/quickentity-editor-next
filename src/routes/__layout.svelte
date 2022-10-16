@@ -88,12 +88,13 @@
 		await createDir("gltf", { dir: BaseDirectory.App, recursive: true })
 	})
 
-	let currentDate = 0
+	let currentTime = 0
 	setInterval(() => {
-		currentDate = Date.now()
+		currentTime = Date.now()
 
 		if (gameServer.connected && gameServer.lastAddress) {
 			void gameServer.client.send(gameServer.lastAddress, "Ping")
+			void gameServer.setHighlightColour($appSettings.preferredHighlightColour)
 		}
 	}, 100)
 
@@ -648,6 +649,8 @@
 						<a role="menuitem" tabindex="0" href="#" class="bx--header__menu-item"><span class="bx--text-truncate--end">Save entity</span></a>
 					</li>
 				{/if}
+			{/if}
+			{#if $sessionMetadata.originalEntityPath}
 				{#if $appSettings.inVivoExtensions}
 					<HeaderNavItem
 						href="#"
@@ -672,8 +675,8 @@
 					{#if gameServer.connected}
 						<li role="none">
 							<a href="#" disabled class="bx--header__menu-item">
-								<span class="bx--text-truncate--end" style:color={currentDate - gameServer.lastMessage < 5000 ? "#bbf7d0" : "#fecaca"}>
-									Last message from game: {currentDate - gameServer.lastMessage != currentDate ? Math.max(0, currentDate - gameServer.lastMessage) : "never"}
+								<span class="bx--text-truncate--end" style:color={currentTime - gameServer.lastMessage < 5000 ? "#bbf7d0" : "#fecaca"}>
+									Last message from game: {gameServer.lastMessage != 0 ? Math.max(0, currentTime - gameServer.lastMessage) : "never"}
 								</span>
 							</a>
 						</li>
