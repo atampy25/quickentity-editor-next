@@ -1,11 +1,11 @@
 {
-	"version": "1.13.0",
-	"notes": "Rename SDK mod, preferred highlight colour setting, code cleanup",
+	"version": "1.13.1",
+	"notes": "It does not in fact include RPKGv3",
 	"pub_date": "2022-09-28T09:45:47Z",
 	"platforms": {
 		"windows-x86_64": {
-			"signature": "dW50cnVzdGVkIGNvbW1lbnQ6IHNpZ25hdHVyZSBmcm9tIHRhdXJpIHNlY3JldCBrZXkKUlVScWpVZGd2b0lOTlQ0aENuTWV4SEtWK3lzN3RpZ0JTUU95c3RLS012TXZEcGN6bm1rSWFXazhtUy9uZWtHbFprdklReEFrM0NTSysrS28xSWJHanVMdG1qaDlyM0dDTWdBPQp0cnVzdGVkIGNvbW1lbnQ6IHRpbWVzdGFtcDoxNjY1ODkwNzQyCWZpbGU6UXVpY2tFbnRpdHkgRWRpdG9yXzEuMTMuMF94NjRfZW4tVVMubXNpLnppcAo3d21Fd2tXcVhRbWExNFpwT2lFd1p5KzNSaEdxc1NWTWRzaUN1aW9LSzdVczdNOUlRZkorcHpmK1JSSWYzc0VsUVhtdnVEMTF6YlpIaWxoWndyU1FBQT09Cg==",
-			"url": "https://github.com/atampy25/quickentity-editor-next/releases/download/1.13.0/QuickEntity.Editor_1.13.0_x64_en-US.msi.zip"
+			"signature": "dW50cnVzdGVkIGNvbW1lbnQ6IHNpZ25hdHVyZSBmcm9tIHRhdXJpIHNlY3JldCBrZXkKUlVScWpVZGd2b0lOTlJLNVpwTzc4bjlxS1AwTlZSMHZPcjMyMVErS2xOUGwzRk1xTzFpU1I2ZklkRkFhSWVkSDIybFlkSVV6UnVscXJERUVxdGdZSGdVZlBIRkN0NXUxTFFrPQp0cnVzdGVkIGNvbW1lbnQ6IHRpbWVzdGFtcDoxNjY1OTg5MDAxCWZpbGU6UXVpY2tFbnRpdHkgRWRpdG9yXzEuMTMuMV94NjRfZW4tVVMubXNpLnppcApsWFRkRllCZGY0SUN2R1FnSDRUZVB4QTdLUFl5cXhJUUpoQWNsTStBSjFIUTdvbTh2K0JjaTliUWhOU3pZbUwvbUR4L0dwWTZ6WG5sVFg0SlpDaXZCdz09Cg==",
+			"url": "https://github.com/atampy25/quickentity-editor-next/releases/download/1.13.1/QuickEntity.Editor_1.13.1_x64_en-US.msi.zip"
 		}
 	}
 }
