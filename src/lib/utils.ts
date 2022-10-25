@@ -152,7 +152,7 @@ export function deleteReferencesToEntity(
 			if (entity.entities[ref.entity]) {
 				switch (ref.type) {
 					case "property":
-						if (Array.isArray(entity.entities[ref.entity].properties![ref.context![0]])) {
+						if (Array.isArray(entity.entities[ref.entity].properties![ref.context![0]].value)) {
 							entity.entities[ref.entity].properties![ref.context![0]].value = entity.entities[ref.entity].properties![ref.context![0]].value.filter(
 								(a: Ref) => getReferencedLocalEntity(a) != target
 							)
@@ -163,7 +163,7 @@ export function deleteReferencesToEntity(
 						break
 
 					case "platformSpecificProperty":
-						if (Array.isArray(entity.entities[ref.entity].platformSpecificProperties![ref.context![0]][ref.context![1]])) {
+						if (Array.isArray(entity.entities[ref.entity].platformSpecificProperties![ref.context![0]][ref.context![1]].value)) {
 							entity.entities[ref.entity].platformSpecificProperties![ref.context![0]][ref.context![1]].value = entity.entities[ref.entity].platformSpecificProperties![ref.context![0]][
 								ref.context![1]
 							].value.filter((a: Ref) => getReferencedLocalEntity(a) != target)
