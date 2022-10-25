@@ -12,7 +12,7 @@
 	import json from "$lib/json"
 	import isEqual from "lodash/isEqual"
 	import { gameServer } from "$lib/in-vivo/gameServer"
-	import { addNotification } from "$lib/stores"
+	import { addNotification, inVivoMetadata } from "$lib/stores"
 
 	export let entity: Entity
 	export let reverseReferences: Record<
@@ -92,7 +92,7 @@
 							return eval(search.slice(1))({ ...entity.entities[node.id], id: node.id })
 						}
 					} else {
-						return (JSON.stringify(entity.entities[node.id] || entity.comments[Number(node.id.split("-")[1])]) + node.id).toLowerCase().includes(search)
+						return (json.stringify(entity.entities[node.id] || entity.comments[Number(node.id.split("-")[1])]) + node.id).toLowerCase().includes(search)
 					}
 				}
 			},
@@ -228,7 +228,7 @@
 													if (entity.entities[d.id].properties!.m_eidParent) {
 														entity.entities[d.id].properties = Object.fromEntries(Object.entries(entity.entities[d.id].properties!).filter((a) => a[0] != "m_eidParent"))
 
-														// todo: this isn't always going to work so it should probably be hooked up to intellisense in case of aliases or such
+														// TODO: this isn't always going to work so it should probably be hooked up to intellisense in case of aliases or such
 														entity.entities[d.id].properties!.m_eRoomBehaviour = {
 															type: "ZSpatialEntity.ERoomBehaviour",
 															value: "ROOM_DYNAMIC"
@@ -242,6 +242,8 @@
 													dispatch("entityUpdated", d.id)
 
 													await gameServer.updateProperty(d.id, "m_mTransform", entity.entities[d.id].properties!.m_mTransform)
+
+													$inVivoMetadata.entities[d.id].dirtyProperties = $inVivoMetadata.entities[d.id].dirtyProperties.filter((a) => a != "m_mTransform")
 
 													$addNotification = {
 														kind: "success",
@@ -284,6 +286,8 @@
 													dispatch("entityUpdated", d.id)
 
 													await gameServer.updateProperty(d.id, "m_mTransform", entity.entities[d.id].properties!.m_mTransform)
+
+													$inVivoMetadata.entities[d.id].dirtyProperties = $inVivoMetadata.entities[d.id].dirtyProperties.filter((a) => a != "m_mTransform")
 
 													$addNotification = {
 														kind: "success",
@@ -686,7 +690,7 @@
 					return eval(search.slice(1))(entity.entities[node.id])
 				}
 			} else {
-				return (JSON.stringify(entity.entities[node.id] || entity.comments[Number(node.id.split("-")[1])]) + node.id).toLowerCase().includes(search)
+				return (json.stringify(entity.entities[node.id] || entity.comments[Number(node.id.split("-")[1])]) + node.id).toLowerCase().includes(search)
 			}
 		})
 	}

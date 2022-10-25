@@ -4,7 +4,7 @@ import Decimal from "decimal.js"
 
 function reviver(key: string, value: any) {
 	if (value && value.isLosslessNumber) {
-		return new Decimal(value.toString())
+		return new Decimal(value.value)
 	} else {
 		return value
 	}

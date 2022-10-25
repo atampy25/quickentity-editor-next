@@ -62,11 +62,21 @@
 				bind:checked={$appSettings.inVivoExtensions}
 				on:change={async () => {
 					if ($appSettings.inVivoExtensions) {
-						await copyFile("GameConnection.dll", await join($appSettings.retailPath, "mods", "GameConnection.dll"))
-						await copyFile("GameConnection.pdb", await join($appSettings.retailPath, "mods", "GameConnection.pdb"))
+						try {
+							await copyFile("GameConnection.dll", await join($appSettings.retailPath, "mods", "GameConnection.dll"))
+						} catch {}
+
+						try {
+							await copyFile("GameConnection.pdb", await join($appSettings.retailPath, "mods", "GameConnection.pdb"))
+						} catch {}
 					} else {
-						await removeFile(await join($appSettings.retailPath, "mods", "GameConnection.dll"))
-						await removeFile(await join($appSettings.retailPath, "mods", "GameConnection.pdb"))
+						try {
+							await removeFile(await join($appSettings.retailPath, "mods", "GameConnection.dll"))
+						} catch {}
+
+						try {
+							await removeFile(await join($appSettings.retailPath, "mods", "GameConnection.pdb"))
+						} catch {}
 					}
 				}}
 				labelText="Enable in-vivo extensions"

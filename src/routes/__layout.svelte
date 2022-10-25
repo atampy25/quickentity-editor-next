@@ -29,7 +29,7 @@
 		TreeView
 	} from "carbon-components-svelte"
 
-	import { addNotification, appSettings, entity, sessionMetadata, workspaceData } from "$lib/stores"
+	import { addNotification, appSettings, entity, inVivoMetadata, sessionMetadata, workspaceData } from "$lib/stores"
 	import json from "$lib/json"
 	import { shortcut } from "$lib/shortcut"
 	import { gameServer } from "$lib/in-vivo/gameServer"
@@ -663,6 +663,8 @@
 								gameServer.client.addListener(({ datagram }) => {
 									gameServer.lastMessage = Date.now()
 								})
+
+								$inVivoMetadata.entities = {}
 							} else {
 								await gameServer.kill()
 							}

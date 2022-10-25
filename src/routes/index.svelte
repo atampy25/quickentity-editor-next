@@ -8,7 +8,7 @@
 	import ColorPicker from "$lib/components/ColorPicker.svelte"
 	import Entity3DMesh from "$lib/components/Entity3DMesh.svelte"
 
-	import { addNotification, appSettings, entity, sessionMetadata, references, reverseReferences } from "$lib/stores"
+	import { addNotification, appSettings, entity, sessionMetadata, references, reverseReferences, inVivoMetadata } from "$lib/stores"
 	import { changeReferenceToLocalEntity, checkValidityOfEntity, deleteReferencesToEntity, genRandHex, normaliseToHash, traverseEntityTree } from "$lib/utils"
 	import json from "$lib/json"
 
@@ -25,6 +25,7 @@
 	import { CircleGeometry, DoubleSide, MeshStandardMaterial } from "three"
 	import { writeText } from "@tauri-apps/api/clipboard"
 	import deepMerge from "lodash/merge"
+	import { gameServer } from "$lib/in-vivo/gameServer"
 
 	const readJSON = async (path: string) => json.parse(await readTextFile(path))
 	const exists = async (path: string) => {
@@ -51,7 +52,7 @@
 	window.onresize = () => editor?.layout()
 
 	const updateEntityData = debounce((entityID, data) => {
-		if (selectionType) {
+		if (selectionType == "entity") {
 			try {
 				json.parse(data)
 			} catch {
@@ -70,7 +71,54 @@
 					editorIsValid = true
 
 					if (!isEqual($entity.entities[entityID], json.parse(data))) {
-						$entity.entities[entityID] = json.parse(data)
+						const parsed = json.parse(data)
+
+						$inVivoMetadata.entities[entityID].dirtyPins =
+							isEqual($entity.entities[entityID].events, parsed.events) &&
+							isEqual($entity.entities[entityID].inputCopying, parsed.inputCopying) &&
+							isEqual($entity.entities[entityID].outputCopying, parsed.outputCopying)
+
+						$inVivoMetadata.entities[entityID].dirtyUnchangeables =
+							$entity.entities[entityID].template != parsed.template ||
+							$entity.entities[entityID].templateFlag != parsed.templateFlag ||
+							$entity.entities[entityID].blueprint != parsed.blueprint ||
+							$entity.entities[entityID].editorOnly != parsed.editorOnly
+
+						$inVivoMetadata.entities[entityID].dirtyExtensions =
+							isEqual($entity.entities[entityID].propertyAliases, parsed.propertyAliases) &&
+							isEqual($entity.entities[entityID].exposedEntities, parsed.exposedEntities) &&
+							isEqual($entity.entities[entityID].exposedInterfaces, parsed.exposedInterfaces) &&
+							isEqual($entity.entities[entityID].subsets, parsed.subsets)
+
+						if (parsed.properties) {
+							if ($entity.entities[entityID].properties) {
+								$inVivoMetadata.entities[entityID].dirtyProperties = [
+									...Object.entries(parsed.properties)
+										.filter(([prop, val]) => !isEqual($entity.entities[entityID].properties![prop], val))
+										.map((a) => a[0]),
+									...Object.keys(parsed.properties).filter((a) => !$entity.entities[entityID].properties![a]),
+									...Object.keys($entity.entities[entityID].properties!).filter((a) => !parsed.properties[a])
+								]
+							} else {
+								$inVivoMetadata.entities[entityID].dirtyProperties = Object.keys(parsed.properties)
+							}
+						} else {
+							if ($entity.entities[entityID].properties) {
+								$inVivoMetadata.entities[entityID].dirtyProperties = Object.keys($entity.entities[entityID].properties!)
+							}
+						}
+
+						if (parsed.platformSpecificProperties) {
+							$inVivoMetadata.entities[entityID].dirtyProperties.push(
+								...Object.entries(parsed.platformSpecificProperties)
+									.filter(([prop, val]) => !isEqual($entity.entities[entityID].platformSpecificProperties![prop], val))
+									.map((a) => a[0]),
+								...Object.keys(parsed.platformSpecificProperties).filter((a) => !$entity.entities[entityID].platformSpecificProperties![a]),
+								...Object.keys($entity.entities[entityID].platformSpecificProperties!).filter((a) => !parsed.platformSpecificProperties[a])
+							)
+						}
+
+						$entity.entities[entityID] = parsed
 					}
 				} else {
 					editorIsValid = false
@@ -126,7 +174,54 @@
 									try {
 										if (checkValidityOfEntity($entity, json.parse(editor.getValue()))) {
 											if (!isEqual($entity.entities[selectedEntityID], json.parse(editor.getValue()))) {
-												$entity.entities[selectedEntityID] = json.parse(editor.getValue())
+												const parsed = json.parse(editor.getValue())
+
+												$inVivoMetadata.entities[selectedEntityID].dirtyPins =
+													isEqual($entity.entities[selectedEntityID].events, parsed.events) &&
+													isEqual($entity.entities[selectedEntityID].inputCopying, parsed.inputCopying) &&
+													isEqual($entity.entities[selectedEntityID].outputCopying, parsed.outputCopying)
+
+												$inVivoMetadata.entities[selectedEntityID].dirtyUnchangeables =
+													$entity.entities[selectedEntityID].template != parsed.template ||
+													$entity.entities[selectedEntityID].templateFlag != parsed.templateFlag ||
+													$entity.entities[selectedEntityID].blueprint != parsed.blueprint ||
+													$entity.entities[selectedEntityID].editorOnly != parsed.editorOnly
+
+												$inVivoMetadata.entities[selectedEntityID].dirtyExtensions =
+													isEqual($entity.entities[selectedEntityID].propertyAliases, parsed.propertyAliases) &&
+													isEqual($entity.entities[selectedEntityID].exposedEntities, parsed.exposedEntities) &&
+													isEqual($entity.entities[selectedEntityID].exposedInterfaces, parsed.exposedInterfaces) &&
+													isEqual($entity.entities[selectedEntityID].subsets, parsed.subsets)
+
+												if (parsed.properties) {
+													if ($entity.entities[selectedEntityID].properties) {
+														$inVivoMetadata.entities[selectedEntityID].dirtyProperties = [
+															...Object.entries(parsed.properties)
+																.filter(([prop, val]) => !isEqual($entity.entities[selectedEntityID].properties[prop], val))
+																.map((a) => a[0]),
+															...Object.keys(parsed.properties).filter((a) => !$entity.entities[selectedEntityID].properties[a]),
+															...Object.keys($entity.entities[selectedEntityID].properties).filter((a) => !parsed.properties[a])
+														]
+													} else {
+														$inVivoMetadata.entities[selectedEntityID].dirtyProperties = Object.keys(parsed.properties)
+													}
+												} else {
+													if ($entity.entities[selectedEntityID].properties) {
+														$inVivoMetadata.entities[selectedEntityID].dirtyProperties = Object.keys($entity.entities[selectedEntityID].properties)
+													}
+												}
+
+												if (parsed.platformSpecificProperties) {
+													$inVivoMetadata.entities[selectedEntityID].dirtyProperties.push(
+														...Object.entries(parsed.platformSpecificProperties)
+															.filter(([prop, val]) => !isEqual($entity.entities[selectedEntityID].platformSpecificProperties[prop], val))
+															.map((a) => a[0]),
+														...Object.keys(parsed.platformSpecificProperties).filter((a) => !$entity.entities[selectedEntityID].platformSpecificProperties[a]),
+														...Object.keys($entity.entities[selectedEntityID].platformSpecificProperties).filter((a) => !parsed.platformSpecificProperties[a])
+													)
+												}
+
+												$entity.entities[selectedEntityID] = parsed
 											}
 										} else {
 											tree.navigateTo(selectedEntityID)
@@ -214,7 +309,7 @@
 										kind: "success",
 										title: "Entity deleted",
 										subtitle: `Deleted ${deletedEntities} entit${deletedEntities == 1 ? "y" : "ies"}${
-											deletedRefs > 0 ? `and ${deletedRefs} reference${deletedRefs == 1 ? "" : "s"}` : ""
+											deletedRefs > 0 ? ` and ${deletedRefs} reference${deletedRefs == 1 ? "" : "s"}` : ""
 										}`
 									}
 
@@ -402,7 +497,31 @@
 	</Pane>
 	<Pane>
 		<div class="flex flex-col h-full shepherd-editor p-2 px-3">
-			<h1>Editor</h1>
+			{#if selectionType == "entity"}
+				<h1>
+					{selectedEntity.name}
+				</h1>
+				<div class="flex mb-2 gap-2">
+					<code>{selectedEntityID}</code>
+					{#if $appSettings.inVivoExtensions && gameServer.connected && gameServer.lastAddress}
+						{#if $inVivoMetadata.entities[selectedEntityID]?.dirtyUnchangeables}
+							<span class="text-red-200">Template/blueprint/editorOnly changes require re-deploy</span>
+						{:else if $inVivoMetadata.entities[selectedEntityID]?.dirtyExtensions}
+							<span class="text-red-200">Other-entity-affecting changes require re-deploy</span>
+						{:else if $inVivoMetadata.entities[selectedEntityID]?.dirtyProperties?.length}
+							<span class="text-yellow-200">Some property changes not reflected in-game ({$inVivoMetadata.entities[selectedEntityID]?.dirtyProperties?.join(", ")})</span>
+						{:else if $inVivoMetadata.entities[selectedEntityID]?.hasSetProperties && $inVivoMetadata.entities[selectedEntityID]?.dirtyPins}
+							<span class="text-yellow-200">Property changes reflected in-game; pin changes require re-deploy</span>
+						{:else if $inVivoMetadata.entities[selectedEntityID]?.hasSetProperties}
+							<span class="text-blue-200">Property changes reflected in-game</span>
+						{:else}
+							<span class="text-green-200">Entity unchanged from game start</span>
+						{/if}
+					{/if}
+				</div>
+			{:else}
+				<h1>Editor</h1>
+			{/if}
 			<div class="flex-grow overflow-hidden">
 				{#if selectionType}
 					{#if selectionType == "entity"}
