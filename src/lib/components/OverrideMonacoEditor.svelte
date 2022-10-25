@@ -10,6 +10,7 @@
 	import json from "$lib/json"
 	import { v4 } from "uuid"
 	import { getSchema } from "$lib/utils"
+	import merge from "lodash/merge"
 
 	let el: HTMLDivElement = null!
 	let Monaco: typeof monaco
@@ -70,12 +71,9 @@
 				{
 					uri: "qne://property-schema.json", // id of the first schema
 					fileMatch: ["qne://property" + id + ".json"], // associate with our model
-					schema: {
-						type: "object",
-						additionalProperties: Object.assign(getSchema(), {
-							$ref: "#/definitions/Property"
-						})
-					}
+					schema: merge({}, getSchema(), {
+						$ref: "#/definitions/SubEntity/properties/properties"
+					})
 				}
 			]
 		})
