@@ -243,6 +243,14 @@
 
 													await gameServer.updateProperty(d.id, "m_mTransform", entity.entities[d.id].properties!.m_mTransform)
 
+													$inVivoMetadata.entities[d.id] ??= {
+														dirtyPins: false,
+														dirtyUnchangeables: false,
+														dirtyExtensions: false,
+														dirtyProperties: [],
+														hasSetProperties: false
+													}
+
 													$inVivoMetadata.entities[d.id].dirtyProperties = $inVivoMetadata.entities[d.id].dirtyProperties.filter((a) => a != "m_mTransform")
 
 													$addNotification = {
@@ -286,6 +294,14 @@
 													dispatch("entityUpdated", d.id)
 
 													await gameServer.updateProperty(d.id, "m_mTransform", entity.entities[d.id].properties!.m_mTransform)
+
+													$inVivoMetadata.entities[d.id] ??= {
+														dirtyPins: false,
+														dirtyUnchangeables: false,
+														dirtyExtensions: false,
+														dirtyProperties: [],
+														hasSetProperties: false
+													}
 
 													$inVivoMetadata.entities[d.id].dirtyProperties = $inVivoMetadata.entities[d.id].dirtyProperties.filter((a) => a != "m_mTransform")
 

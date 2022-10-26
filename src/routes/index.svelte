@@ -73,6 +73,14 @@
 					if (!isEqual($entity.entities[entityID], json.parse(data))) {
 						const parsed = json.parse(data)
 
+						$inVivoMetadata.entities[entityID] ??= {
+							dirtyPins: false,
+							dirtyUnchangeables: false,
+							dirtyExtensions: false,
+							dirtyProperties: [],
+							hasSetProperties: false
+						}
+
 						$inVivoMetadata.entities[entityID].dirtyPins =
 							isEqual($entity.entities[entityID].events, parsed.events) &&
 							isEqual($entity.entities[entityID].inputCopying, parsed.inputCopying) &&
@@ -191,6 +199,14 @@
 
 											if (!isEqual($entity.entities[selectedEntityID], json.parse(editor.getValue()))) {
 												const parsed = json.parse(editor.getValue())
+
+												$inVivoMetadata.entities[selectedEntityID] ??= {
+													dirtyPins: false,
+													dirtyUnchangeables: false,
+													dirtyExtensions: false,
+													dirtyProperties: [],
+													hasSetProperties: false
+												}
 
 												$inVivoMetadata.entities[selectedEntityID].dirtyPins =
 													isEqual($entity.entities[selectedEntityID].events, parsed.events) &&

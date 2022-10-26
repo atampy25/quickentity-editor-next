@@ -125,6 +125,14 @@
 
 					await gameServer.updateProperty(subEntityID, propertyName, json.parse(editor.getValue()).properties[propertyName])
 
+					$inVivoMetadata.entities[subEntityID] ??= {
+						dirtyPins: false,
+						dirtyUnchangeables: false,
+						dirtyExtensions: false,
+						dirtyProperties: [],
+						hasSetProperties: false
+					}
+
 					$inVivoMetadata.entities[subEntityID].dirtyProperties = $inVivoMetadata.entities[subEntityID].dirtyProperties.filter((a) => a != propertyName)
 
 					$addNotification = {
