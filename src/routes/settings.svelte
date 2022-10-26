@@ -40,6 +40,8 @@
 	<br />
 	<Checkbox bind:checked={$appSettings.autoSaveOnSwitchFile} labelText="Automatically save when switching workspace files" />
 	<br />
+	<Checkbox bind:checked={$appSettings.extractModdedFiles} labelText="Load modded versions when loading from game files" />
+	<br />
 	<div class="flex items-center gap-2">
 		<div class="flex-shrink">
 			<Checkbox bind:checked={$appSettings.gameFileExtensions} labelText="Enable game-file extensions" disabled={$appSettings.retailPath == "" || $appSettings.runtimePath == ""} />

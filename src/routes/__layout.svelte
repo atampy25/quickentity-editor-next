@@ -218,7 +218,16 @@
 			subtitle: "Extracting binary TEMP files"
 		}
 
-		let latestChunkTemp = /is in: (.*?.rpkg)/gi.exec((await Command.sidecar("sidecar/rpkg-cli", ["-latest_hash", $appSettings.runtimePath, "-filter", tempHash]).execute()).stdout)[1]
+		let latestChunkTemp = $appSettings.extractModdedFiles
+			? /is in: (.*?.rpkg)/gi.exec((await Command.sidecar("sidecar/rpkg-cli", ["-latest_hash", $appSettings.runtimePath, "-filter", tempHash]).execute()).stdout)![1]
+			: [...(await Command.sidecar("sidecar/rpkg-cli", ["-latest_hash", $appSettings.runtimePath, "-filter", tempHash]).execute()).stdout.matchAll(/was found in RPKG file: (.*?.rpkg)/gi)]
+					.filter((a) => !a[1].includes("patch") || Number(/chunk[0-9]*patch([0-9]*)\.rpkg/g.exec(a[1])![1]) < 10)
+					.sort((a, b) =>
+						b[1].localeCompare(a[1], undefined, {
+							numeric: true,
+							sensitivity: "base"
+						})
+					)[0][1]
 
 		await Command.sidecar("sidecar/rpkg-cli", [
 			"-extract_from_rpkg",
