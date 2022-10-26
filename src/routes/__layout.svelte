@@ -514,7 +514,15 @@
 						} else {
 							try {
 								// much smarter but much slower diff algorithm
-								await writeTextFile(x, json.stringify(rfc6902.createPatch(json.parse(await readTextFile($sessionMetadata.originalEntityPath)), json.parse(await getEntityAsText()))))
+								await writeTextFile(
+									x,
+									json.stringify({
+										tempHash: $entity.tempHash,
+										tbluHash: $entity.tbluHash,
+										patch: rfc6902.createPatch(json.parse(await readTextFile($sessionMetadata.originalEntityPath)), json.parse(await getEntityAsText())),
+										patchVersion: 5
+									})
+								)
 							} catch {
 								await writeTextFile("entity.json", await getEntityAsText(), { dir: BaseDirectory.App })
 
@@ -583,7 +591,12 @@
 									// much smarter but much slower diff algorithm
 									await writeTextFile(
 										$sessionMetadata.saveAsPatchPath,
-										json.stringify(rfc6902.createPatch(json.parse(await readTextFile($sessionMetadata.originalEntityPath)), json.parse(await getEntityAsText())))
+										json.stringify({
+											tempHash: $entity.tempHash,
+											tbluHash: $entity.tbluHash,
+											patch: rfc6902.createPatch(json.parse(await readTextFile($sessionMetadata.originalEntityPath)), json.parse(await getEntityAsText())),
+											patchVersion: 5
+										})
 									)
 								} catch {
 									await writeTextFile("entity.json", await getEntityAsText(), { dir: BaseDirectory.App })
@@ -1041,9 +1054,15 @@
 															// much smarter but much slower diff algorithm
 															await writeTextFile(
 																$sessionMetadata.saveAsPatchPath,
-																json.stringify(
-																	rfc6902.createPatch(json.parse(await readTextFile($sessionMetadata.originalEntityPath)), json.parse(await getEntityAsText()))
-																)
+																json.stringify({
+																	tempHash: $entity.tempHash,
+																	tbluHash: $entity.tbluHash,
+																	patch: rfc6902.createPatch(
+																		json.parse(await readTextFile($sessionMetadata.originalEntityPath)),
+																		json.parse(await getEntityAsText())
+																	),
+																	patchVersion: 5
+																})
 															)
 														} catch {
 															await writeTextFile("entity.json", await getEntityAsText(), { dir: BaseDirectory.App })
