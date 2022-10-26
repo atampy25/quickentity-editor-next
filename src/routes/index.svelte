@@ -128,8 +128,9 @@
 						subtitle: "The entity either references something that doesn't exist or isn't valid according to the schema."
 					}
 				}
-			} catch {
+			} catch (e) {
 				editorIsValid = false
+				console.log("Suppressed validation error", e)
 				$addNotification = {
 					kind: "error",
 					title: "Invalid entity",
@@ -172,7 +173,22 @@
 							on:selectionUpdate={({ detail }) => {
 								if (selectionType == "entity") {
 									try {
+										json.parse(editor.getValue())
+									} catch {
+										editorIsValid = false
+										$addNotification = {
+											kind: "error",
+											title: "Invalid JSON",
+											subtitle: "You've entered invalid JSON."
+										}
+
+										return
+									}
+
+									try {
 										if (checkValidityOfEntity($entity, json.parse(editor.getValue()))) {
+											editorIsValid = true
+
 											if (!isEqual($entity.entities[selectedEntityID], json.parse(editor.getValue()))) {
 												const parsed = json.parse(editor.getValue())
 
@@ -230,16 +246,15 @@
 												title: "Invalid entity",
 												subtitle: "The entity either references something that doesn't exist or isn't valid according to the schema."
 											}
-											return
 										}
-									} catch {
+									} catch (e) {
 										tree.navigateTo(selectedEntityID)
+										console.log("Suppressed validation error", e)
 										$addNotification = {
 											kind: "error",
-											title: "Invalid JSON",
-											subtitle: "You've entered invalid JSON."
+											title: "Invalid entity",
+											subtitle: "The entity either references something that doesn't exist or isn't valid according to the schema."
 										}
-										return
 									}
 								}
 
