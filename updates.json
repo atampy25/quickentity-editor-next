@@ -1,11 +1,11 @@
 {
-	"version": "1.14.3",
-	"notes": "Fix in-vivo status indicator causing entity validation issue",
+	"version": "1.14.4",
+	"notes": "Add setting for modded file extraction",
 	"pub_date": "2022-09-28T09:45:47Z",
 	"platforms": {
 		"windows-x86_64": {
-			"signature": "dW50cnVzdGVkIGNvbW1lbnQ6IHNpZ25hdHVyZSBmcm9tIHRhdXJpIHNlY3JldCBrZXkKUlVScWpVZGd2b0lOTlp2ZE5WUGJVT1BBNjFKc1R0MWkyU25hNnRRY0F6elYzSngyQlBVWW9TQUdJdkUyVHV5RjdPREF3dTRtODJaSFc0bGJKU3I5eDdJYkdKQnJQakRtR3dJPQp0cnVzdGVkIGNvbW1lbnQ6IHRpbWVzdGFtcDoxNjY2NzYxODAzCWZpbGU6UXVpY2tFbnRpdHkgRWRpdG9yXzEuMTQuM194NjRfZW4tVVMubXNpLnppcAo2MTNmQzR2L3U0dXpCMVZHOVIwY05HY29UNWdWZXM3K1dKTlJEMWlOYnlSVE8vMTNEakdWNFNDZm0yVzNHOVp2eUx4bDJpa3BXVTMvZWhxeFJ4dGpDUT09Cg==",
-			"url": "https://github.com/atampy25/quickentity-editor-next/releases/download/1.14.3/QuickEntity.Editor_1.14.3_x64_en-US.msi.zip"
+			"signature": "dW50cnVzdGVkIGNvbW1lbnQ6IHNpZ25hdHVyZSBmcm9tIHRhdXJpIHNlY3JldCBrZXkKUlVScWpVZGd2b0lOTlhuNGpZd084MUh3RUc0OWN6S2NIT2NjZ0l2NkYvTjFXNFpJZmU0SkoyL3Zib25rdjRwTGZTSk0reUdESHZOMlBhbVEvZkljTEd1VVpHbW0xbzl1clFFPQp0cnVzdGVkIGNvbW1lbnQ6IHRpbWVzdGFtcDoxNjY2NzYzMzQ5CWZpbGU6UXVpY2tFbnRpdHkgRWRpdG9yXzEuMTQuNF94NjRfZW4tVVMubXNpLnppcApFUUhDbFVZY0dJR2tudkNmZk4yVGFtcEZ6T2hxQVljNjNMeThtV2Z5N0lPdkIwS1VZV3ZrZ0VzZ2cwWkpseGdQaDRiTnNRWDJsVEU4c1h3c0dOYjZBZz09Cg==",
+			"url": "https://github.com/atampy25/quickentity-editor-next/releases/download/1.14.4/QuickEntity.Editor_1.14.4_x64_en-US.msi.zip"
 		}
 	}
 }
