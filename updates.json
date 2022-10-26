@@ -1,11 +1,11 @@
 {
-	"version": "1.14.0",
-	"notes": "In-vivo entity status indicator",
+	"version": "1.14.1",
+	"notes": "Improve entity validation logic",
 	"pub_date": "2022-09-28T09:45:47Z",
 	"platforms": {
 		"windows-x86_64": {
-			"signature": "dW50cnVzdGVkIGNvbW1lbnQ6IHNpZ25hdHVyZSBmcm9tIHRhdXJpIHNlY3JldCBrZXkKUlVScWpVZGd2b0lOTlY2dEVmdktPVUI4YmVPay9mRUxwS1FtZVM3YXNETUZGWmxheElGK2JRRkxGL2lVa0lzSm5BVENLQWRNMy9zTzVBTDVEK0pMVUZ6OEpVWkFKTExPZkE0PQp0cnVzdGVkIGNvbW1lbnQ6IHRpbWVzdGFtcDoxNjY2NjgxMTk2CWZpbGU6UXVpY2tFbnRpdHkgRWRpdG9yXzEuMTQuMF94NjRfZW4tVVMubXNpLnppcAp4c1hkcllqQ0s0VW15bkxaS3FGeFd1dSszTklGMnY2S1VXSmNCYWNNcTJPVHo2TlAxK3QvelovM1FFYkRmNDVCYkxFaFh1azlTTlVOa1RINzJ1QmJBZz09Cg==",
-			"url": "https://github.com/atampy25/quickentity-editor-next/releases/download/1.14.0/QuickEntity.Editor_1.14.0_x64_en-US.msi.zip"
+			"signature": "dW50cnVzdGVkIGNvbW1lbnQ6IHNpZ25hdHVyZSBmcm9tIHRhdXJpIHNlY3JldCBrZXkKUlVScWpVZGd2b0lOTlREMzRxNUIyalJxditLNkpuZzdvaUFRZEtqQWtqQUxadU5iRlR4ZzVOUTlhN0RQZXJKbVpDOTlxMFlrWnVsV0o3SnB5aXc1aWVPcVhGak1KTTR2Q2dFPQp0cnVzdGVkIGNvbW1lbnQ6IHRpbWVzdGFtcDoxNjY2NzUxMjg5CWZpbGU6UXVpY2tFbnRpdHkgRWRpdG9yXzEuMTQuMV94NjRfZW4tVVMubXNpLnppcApnMWR4WjZiMXJFc1I0dlp6YldJbXBIL2FFVDJ2Z2VnTEdNa0xlYTVGQVZVQkVHWjA0WUhPdXExOUkwcVA5TVgva0tvMXZsTFVLMnpsQU03emtKOFJBQT09Cg==",
+			"url": "https://github.com/atampy25/quickentity-editor-next/releases/download/1.14.1/QuickEntity.Editor_1.14.1_x64_en-US.msi.zip"
 		}
 	}
 }
