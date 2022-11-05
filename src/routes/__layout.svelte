@@ -59,6 +59,7 @@
 	import { BrowserTracing } from "@sentry/tracing"
 	import SentryRRWeb from "@sentry/rrweb"
 	import { changeEntityHashesFromFriendly, changeEntityHashesToFriendly } from "$lib/utils"
+	import Decimal from "decimal.js"
 
 	let displayNotifications: { kind: "error" | "info" | "info-square" | "success" | "warning" | "warning-alt"; title: string; subtitle: string }[] = []
 
@@ -334,6 +335,22 @@
 
 	let selectedWorkspaceTreeItem = ""
 	let previousSelectedWorkspaceTreeItem = ""
+
+	function rfcDiffFunction(input, output, pointer) {
+		if (input instanceof Decimal && output instanceof Decimal) {
+			if (input.toString() !== output.toString()) {
+				return [
+					{
+						op: "replace",
+						path: pointer.toString(),
+						value: output
+					}
+				]
+			} else {
+				return []
+			}
+		}
+	}
 </script>
 
 {#if ready}
@@ -412,14 +429,14 @@
 						if (!y || Array.isArray(y)) return
 
 						let patch = json.parse(await readTextFile(y))
-						let patched = {}
+						let entityPath
 
 						if ($appSettings.gameFileExtensions && (await exists(await join($appSettings.gameFileExtensionsDataPath, "TEMP", patch.tempHash + ".TEMP.entity.json")))) {
 							await extractForInspection(patch.tempHash)
 
 							$sessionMetadata.originalEntityPath = await join(await appDir(), "inspection", "entity.json")
 
-							patched = json.parse(await readTextFile(await join(await appDir(), "inspection", "entity.json")))
+							entityPath = await readTextFile(await join(await appDir(), "inspection", "entity.json"))
 						} else {
 							let x = await open({
 								multiple: false,
@@ -436,14 +453,15 @@
 
 							$sessionMetadata.originalEntityPath = x
 
-							patched = json.parse(await readTextFile(x))
+							entityPath = await readTextFile(x)
 						}
 
-						rfc6902.applyPatch(patched, patch.patch)
+						await Command.sidecar("sidecar/quickentity-rs", ["patch", "apply", "--input", entityPath, "--patch", y, "--output", await join(await appDir(), "patched.json")]).execute()
+
 						$sessionMetadata.saveAsPatch = true
 						$sessionMetadata.saveAsPatchPath = y
 						$sessionMetadata.loadedFromGameFiles = false
-						$entity = await getEntityFromText(json.stringify(patched))
+						$entity = await getEntityFromText(await readTextFile(await join(await appDir(), "patched.json")))
 
 						breadcrumb("entity", `Loaded ${$entity.tempHash} from patch`)
 					}}
@@ -528,7 +546,7 @@
 									json.stringify({
 										tempHash: $entity.tempHash,
 										tbluHash: $entity.tbluHash,
-										patch: rfc6902.createPatch(json.parse(await readTextFile($sessionMetadata.originalEntityPath)), json.parse(await getEntityAsText())),
+										patch: rfc6902.createPatch(json.parse(await readTextFile($sessionMetadata.originalEntityPath)), json.parse(await getEntityAsText()), rfcDiffFunction),
 										patchVersion: 5
 									})
 								)
@@ -603,7 +621,7 @@
 										json.stringify({
 											tempHash: $entity.tempHash,
 											tbluHash: $entity.tbluHash,
-											patch: rfc6902.createPatch(json.parse(await readTextFile($sessionMetadata.originalEntityPath)), json.parse(await getEntityAsText())),
+											patch: rfc6902.createPatch(json.parse(await readTextFile($sessionMetadata.originalEntityPath)), json.parse(await getEntityAsText()), rfcDiffFunction),
 											patchVersion: 5
 										})
 									)
@@ -1068,7 +1086,8 @@
 																	tbluHash: $entity.tbluHash,
 																	patch: rfc6902.createPatch(
 																		json.parse(await readTextFile($sessionMetadata.originalEntityPath)),
-																		json.parse(await getEntityAsText())
+																		json.parse(await getEntityAsText()),
+																		rfcDiffFunction
 																	),
 																	patchVersion: 5
 																})
@@ -1119,14 +1138,14 @@
 											breadcrumb("entity", `Loaded ${$entity.tempHash} from workspace file`)
 										} else if (detail.id.endsWith("entity.patch.json")) {
 											let patch = json.parse(await readTextFile(detail.id))
-											let patched = {}
+											let entityPath
 
 											if ($appSettings.gameFileExtensions && (await exists(await join($appSettings.gameFileExtensionsDataPath, "TEMP", patch.tempHash + ".TEMP.entity.json")))) {
 												await extractForInspection(patch.tempHash)
 
 												$sessionMetadata.originalEntityPath = await join(await appDir(), "inspection", "entity.json")
 
-												patched = json.parse(await readTextFile(await join(await appDir(), "inspection", "entity.json")))
+												entityPath = await readTextFile(await join(await appDir(), "inspection", "entity.json"))
 											} else {
 												let x = await open({
 													multiple: false,
@@ -1143,14 +1162,24 @@
 
 												$sessionMetadata.originalEntityPath = x
 
-												patched = json.parse(await readTextFile(x))
+												entityPath = await readTextFile(x)
 											}
 
-											rfc6902.applyPatch(patched, patch.patch)
+											await Command.sidecar("sidecar/quickentity-rs", [
+												"patch",
+												"apply",
+												"--input",
+												entityPath,
+												"--patch",
+												detail.id,
+												"--output",
+												await join(await appDir(), "patched.json")
+											]).execute()
+
 											$sessionMetadata.saveAsPatch = true
 											$sessionMetadata.saveAsPatchPath = detail.id
 											$sessionMetadata.loadedFromGameFiles = false
-											$entity = await getEntityFromText(json.stringify(patched))
+											$entity = await getEntityFromText(await readTextFile(await join(await appDir(), "patched.json")))
 
 											breadcrumb("entity", `Loaded ${$entity.tempHash} from workspace patch`)
 										}
