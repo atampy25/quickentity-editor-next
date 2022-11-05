@@ -1,6 +1,6 @@
 {
 	"name": "quickentity-editor",
-	"version": "1.14.4",
+	"version": "1.14.5",
 	"license": "GPL-3.0-only",
 	"scripts": {
 		"dev": "vite dev",
