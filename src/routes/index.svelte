@@ -19,7 +19,7 @@
 	import debounce from "lodash/debounce"
 	import isEqual from "lodash/isEqual"
 	import { AmbientLight, Canvas, DirectionalLight, Mesh, OrbitControls, PerspectiveCamera } from "@threlte/core"
-	import { join } from "@tauri-apps/api/path"
+	import { appDir, join } from "@tauri-apps/api/path"
 	import { readTextFile, exists as tauriExists } from "@tauri-apps/api/fs"
 	import { DEG2RAD } from "three/src/math/MathUtils"
 	import { CircleGeometry, DoubleSide, MeshStandardMaterial } from "three"
@@ -156,13 +156,14 @@
 
 	let entityPath: string | undefined
 
-	$: entityPath = $sessionMetadata.originalEntityPath
-
-	$: if (entityPath) {
-		selectionType = null
-		selectedEntityID = undefined!
-		selectedEntity = undefined!
-	}
+	sessionMetadata.subscribe(async (value) => {
+		if (value.originalEntityPath != entityPath || value.originalEntityPath == (await join(await appDir(), "inspection", "entity.json"))) {
+			selectionType = null
+			selectedEntityID = undefined!
+			selectedEntity = undefined!
+			entityPath = value.originalEntityPath
+		}
+	})
 
 	let evaluationPaneInput = ""
 </script>

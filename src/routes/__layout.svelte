@@ -262,7 +262,16 @@
 			tbluHash = ("00" + md5(tbluHash).slice(2, 16)).toUpperCase()
 		}
 
-		let latestChunkTblu = /is in: (.*?.rpkg)/gi.exec((await Command.sidecar("sidecar/rpkg-cli", ["-latest_hash", $appSettings.runtimePath, "-filter", tbluHash]).execute()).stdout)[1]
+		let latestChunkTblu = $appSettings.extractModdedFiles
+			? /is in: (.*?.rpkg)/gi.exec((await Command.sidecar("sidecar/rpkg-cli", ["-latest_hash", $appSettings.runtimePath, "-filter", tbluHash]).execute()).stdout)![1]
+			: [...(await Command.sidecar("sidecar/rpkg-cli", ["-latest_hash", $appSettings.runtimePath, "-filter", tbluHash]).execute()).stdout.matchAll(/was found in RPKG file: (.*?.rpkg)/gi)]
+					.filter((a) => !a[1].includes("patch") || Number(/chunk[0-9]*patch([0-9]*)\.rpkg/g.exec(a[1])![1]) < 10)
+					.sort((a, b) =>
+						b[1].localeCompare(a[1], undefined, {
+							numeric: true,
+							sensitivity: "base"
+						})
+					)[0][1]
 
 		$addNotification = {
 			kind: "info",
@@ -434,9 +443,7 @@
 						if ($appSettings.gameFileExtensions && (await exists(await join($appSettings.gameFileExtensionsDataPath, "TEMP", patch.tempHash + ".TEMP.entity.json")))) {
 							await extractForInspection(patch.tempHash)
 
-							$sessionMetadata.originalEntityPath = await join(await appDir(), "inspection", "entity.json")
-
-							entityPath = await readTextFile(await join(await appDir(), "inspection", "entity.json"))
+							entityPath = await join(await appDir(), "inspection", "entity.json")
 						} else {
 							let x = await open({
 								multiple: false,
@@ -451,9 +458,7 @@
 
 							if (!x || Array.isArray(x)) return
 
-							$sessionMetadata.originalEntityPath = x
-
-							entityPath = await readTextFile(x)
+							entityPath = x
 						}
 
 						await Command.sidecar("sidecar/quickentity-rs", ["patch", "apply", "--input", entityPath, "--patch", y, "--output", await join(await appDir(), "patched.json")]).execute()
@@ -461,6 +466,7 @@
 						$sessionMetadata.saveAsPatch = true
 						$sessionMetadata.saveAsPatchPath = y
 						$sessionMetadata.loadedFromGameFiles = false
+						$sessionMetadata.originalEntityPath = entityPath
 						$entity = await getEntityFromText(await readTextFile(await join(await appDir(), "patched.json")))
 
 						breadcrumb("entity", `Loaded ${$entity.tempHash} from patch`)
@@ -1143,9 +1149,7 @@
 											if ($appSettings.gameFileExtensions && (await exists(await join($appSettings.gameFileExtensionsDataPath, "TEMP", patch.tempHash + ".TEMP.entity.json")))) {
 												await extractForInspection(patch.tempHash)
 
-												$sessionMetadata.originalEntityPath = await join(await appDir(), "inspection", "entity.json")
-
-												entityPath = await readTextFile(await join(await appDir(), "inspection", "entity.json"))
+												entityPath = await join(await appDir(), "inspection", "entity.json")
 											} else {
 												let x = await open({
 													multiple: false,
@@ -1160,9 +1164,7 @@
 
 												if (!x || Array.isArray(x)) return
 
-												$sessionMetadata.originalEntityPath = x
-
-												entityPath = await readTextFile(x)
+												entityPath = x
 											}
 
 											await Command.sidecar("sidecar/quickentity-rs", [
@@ -1179,6 +1181,7 @@
 											$sessionMetadata.saveAsPatch = true
 											$sessionMetadata.saveAsPatchPath = detail.id
 											$sessionMetadata.loadedFromGameFiles = false
+											$sessionMetadata.originalEntityPath = entityPath
 											$entity = await getEntityFromText(await readTextFile(await join(await appDir(), "patched.json")))
 
 											breadcrumb("entity", `Loaded ${$entity.tempHash} from workspace patch`)
