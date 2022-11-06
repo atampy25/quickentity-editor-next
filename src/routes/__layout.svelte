@@ -331,7 +331,7 @@
 			]).execute()
 		}
 
-		await copyFile(await join("inspection-cache"), "entity.json", { dir: BaseDirectory.App })
+		await copyFile(await join(await appDir(), "inspection-cache", tempHash + ".json"), await join(await appDir(), "inspection", "entity.json"))
 	}
 
 	function getReadDirAsTree(data) {
