@@ -38,8 +38,8 @@
 	import { fade, fly } from "svelte/transition"
 	import { flip } from "svelte/animate"
 	import { open, save } from "@tauri-apps/api/dialog"
-	import { BaseDirectory, createDir, exists as tauriExists, readDir, readTextFile, removeDir, writeTextFile } from "@tauri-apps/api/fs"
-	import { appDir, join, runtimeDir, sep } from "@tauri-apps/api/path"
+	import { BaseDirectory, copyFile, createDir, exists as tauriExists, readDir, readTextFile, removeDir, writeTextFile } from "@tauri-apps/api/fs"
+	import { appDir, join, sep } from "@tauri-apps/api/path"
 	import { Command } from "@tauri-apps/api/shell"
 	import { getVersion } from "@tauri-apps/api/app"
 	import * as rfc6902 from "rfc6902"
@@ -209,121 +209,129 @@
 	}
 
 	async function extractForInspection(tempHash: string) {
-		if (await exists(await join(await appDir(), "inspection"))) {
-			await removeDir(await join(await appDir(), "inspection"), { recursive: true })
-		}
-
-		$addNotification = {
-			kind: "info",
-			title: "Extracting TEMP files",
-			subtitle: "Extracting binary TEMP files"
-		}
-
-		let latestChunkTemp = $appSettings.extractModdedFiles
-			? /is in: (.*?.rpkg)/gi.exec((await Command.sidecar("sidecar/rpkg-cli", ["-latest_hash", $appSettings.runtimePath, "-filter", tempHash]).execute()).stdout)![1]
-			: [...(await Command.sidecar("sidecar/rpkg-cli", ["-latest_hash", $appSettings.runtimePath, "-filter", tempHash]).execute()).stdout.matchAll(/was found in RPKG file: (.*?.rpkg)/gi)]
-					.filter((a) => !a[1].includes("patch") || Number(/chunk[0-9]*patch([0-9]*)\.rpkg/g.exec(a[1])![1]) < 10)
-					.sort((a, b) =>
-						b[1].localeCompare(a[1], undefined, {
-							numeric: true,
-							sensitivity: "base"
-						})
-					)[0][1]
-
-		await Command.sidecar("sidecar/rpkg-cli", [
-			"-extract_from_rpkg",
-			await join($appSettings.runtimePath, latestChunkTemp),
-			"-filter",
-			tempHash,
-			"-output_path",
-			await join(await appDir(), "inspection")
-		]).execute()
-
-		let tempPath, tempMetaPath, tbluPath, tbluMetaPath
-
-		$addNotification = {
-			kind: "info",
-			title: "Converting TEMP files",
-			subtitle: "Converting TEMP files to JSON"
-		}
-
-		for (let entry of (await readDir(await join(await appDir(), "inspection", latestChunkTemp.replace(".rpkg", "")), { recursive: true })).flatMap((a) => a.children || a)) {
-			if (entry.path.endsWith(".TEMP")) {
-				await Command.sidecar("ResourceTool", ["HM3", "convert", "TEMP", entry.path, entry.path + ".json", "--simple"]).execute()
-				tempPath = entry.path + ".json"
-			} else if (entry.path.endsWith(".TEMP.meta")) {
-				await Command.sidecar("sidecar/rpkg-cli", ["-hash_meta_to_json", entry.path]).execute()
-				tempMetaPath = entry.path + ".JSON"
+		if (!(await exists(await join(await appDir(), "inspection-cache", tempHash + ".json")))) {
+			if (await exists(await join(await appDir(), "inspection"))) {
+				await removeDir(await join(await appDir(), "inspection"), { recursive: true })
 			}
-		}
 
-		let tbluHash = json.parse(await readTextFile(tempMetaPath)).hash_reference_data[json.parse(await readTextFile(tempPath)).blueprintIndexInResourceHeader].hash
-		if (tbluHash.includes(":")) {
-			tbluHash = ("00" + md5(tbluHash).slice(2, 16)).toUpperCase()
-		}
-
-		let latestChunkTblu = $appSettings.extractModdedFiles
-			? /is in: (.*?.rpkg)/gi.exec((await Command.sidecar("sidecar/rpkg-cli", ["-latest_hash", $appSettings.runtimePath, "-filter", tbluHash]).execute()).stdout)![1]
-			: [...(await Command.sidecar("sidecar/rpkg-cli", ["-latest_hash", $appSettings.runtimePath, "-filter", tbluHash]).execute()).stdout.matchAll(/was found in RPKG file: (.*?.rpkg)/gi)]
-					.filter((a) => !a[1].includes("patch") || Number(/chunk[0-9]*patch([0-9]*)\.rpkg/g.exec(a[1])![1]) < 10)
-					.sort((a, b) =>
-						b[1].localeCompare(a[1], undefined, {
-							numeric: true,
-							sensitivity: "base"
-						})
-					)[0][1]
-
-		$addNotification = {
-			kind: "info",
-			title: "Extracting TBLU files",
-			subtitle: "Extracting binary TBLU files"
-		}
-
-		await Command.sidecar("sidecar/rpkg-cli", [
-			"-extract_from_rpkg",
-			await join($appSettings.runtimePath, latestChunkTblu),
-			"-filter",
-			tbluHash,
-			"-output_path",
-			await join(await appDir(), "inspection")
-		]).execute()
-
-		$addNotification = {
-			kind: "info",
-			title: "Converting TBLU files",
-			subtitle: "Converting TBLU files to JSON"
-		}
-
-		for (let entry of (await readDir(await join(await appDir(), "inspection", latestChunkTblu.replace(".rpkg", "")), { recursive: true })).flatMap((a) => a.children || a)) {
-			if (entry.path.endsWith(".TBLU")) {
-				await Command.sidecar("ResourceTool", ["HM3", "convert", "TBLU", entry.path, entry.path + ".json", "--simple"]).execute()
-				tbluPath = entry.path + ".json"
-			} else if (entry.path.endsWith(".TBLU.meta")) {
-				await Command.sidecar("sidecar/rpkg-cli", ["-hash_meta_to_json", entry.path]).execute()
-				tbluMetaPath = entry.path + ".JSON"
+			$addNotification = {
+				kind: "info",
+				title: "Extracting TEMP files",
+				subtitle: "Extracting binary TEMP files"
 			}
+
+			let latestChunkTemp = $appSettings.extractModdedFiles
+				? /is in: (.*?.rpkg)/gi.exec((await Command.sidecar("sidecar/rpkg-cli", ["-latest_hash", $appSettings.runtimePath, "-filter", tempHash]).execute()).stdout)![1]
+				: [...(await Command.sidecar("sidecar/rpkg-cli", ["-latest_hash", $appSettings.runtimePath, "-filter", tempHash]).execute()).stdout.matchAll(/was found in RPKG file: (.*?.rpkg)/gi)]
+						.filter((a) => !a[1].includes("patch") || Number(/chunk[0-9]*patch([0-9]*)\.rpkg/g.exec(a[1])![1]) < 10)
+						.sort((a, b) =>
+							b[1].localeCompare(a[1], undefined, {
+								numeric: true,
+								sensitivity: "base"
+							})
+						)[0][1]
+
+			await Command.sidecar("sidecar/rpkg-cli", [
+				"-extract_from_rpkg",
+				await join($appSettings.runtimePath, latestChunkTemp),
+				"-filter",
+				tempHash,
+				"-output_path",
+				await join(await appDir(), "inspection")
+			]).execute()
+
+			let tempPath, tempMetaPath, tbluPath, tbluMetaPath
+
+			$addNotification = {
+				kind: "info",
+				title: "Converting TEMP files",
+				subtitle: "Converting TEMP files to JSON"
+			}
+
+			for (let entry of (await readDir(await join(await appDir(), "inspection", latestChunkTemp.replace(".rpkg", "")), { recursive: true })).flatMap((a) => a.children || a)) {
+				if (entry.path.endsWith(".TEMP")) {
+					await Command.sidecar("ResourceTool", ["HM3", "convert", "TEMP", entry.path, entry.path + ".json", "--simple"]).execute()
+					tempPath = entry.path + ".json"
+				} else if (entry.path.endsWith(".TEMP.meta")) {
+					await Command.sidecar("sidecar/rpkg-cli", ["-hash_meta_to_json", entry.path]).execute()
+					tempMetaPath = entry.path + ".JSON"
+				}
+			}
+
+			let tbluHash = json.parse(await readTextFile(tempMetaPath)).hash_reference_data[json.parse(await readTextFile(tempPath)).blueprintIndexInResourceHeader].hash
+			if (tbluHash.includes(":")) {
+				tbluHash = ("00" + md5(tbluHash).slice(2, 16)).toUpperCase()
+			}
+
+			let latestChunkTblu = $appSettings.extractModdedFiles
+				? /is in: (.*?.rpkg)/gi.exec((await Command.sidecar("sidecar/rpkg-cli", ["-latest_hash", $appSettings.runtimePath, "-filter", tbluHash]).execute()).stdout)![1]
+				: [...(await Command.sidecar("sidecar/rpkg-cli", ["-latest_hash", $appSettings.runtimePath, "-filter", tbluHash]).execute()).stdout.matchAll(/was found in RPKG file: (.*?.rpkg)/gi)]
+						.filter((a) => !a[1].includes("patch") || Number(/chunk[0-9]*patch([0-9]*)\.rpkg/g.exec(a[1])![1]) < 10)
+						.sort((a, b) =>
+							b[1].localeCompare(a[1], undefined, {
+								numeric: true,
+								sensitivity: "base"
+							})
+						)[0][1]
+
+			$addNotification = {
+				kind: "info",
+				title: "Extracting TBLU files",
+				subtitle: "Extracting binary TBLU files"
+			}
+
+			await Command.sidecar("sidecar/rpkg-cli", [
+				"-extract_from_rpkg",
+				await join($appSettings.runtimePath, latestChunkTblu),
+				"-filter",
+				tbluHash,
+				"-output_path",
+				await join(await appDir(), "inspection")
+			]).execute()
+
+			$addNotification = {
+				kind: "info",
+				title: "Converting TBLU files",
+				subtitle: "Converting TBLU files to JSON"
+			}
+
+			for (let entry of (await readDir(await join(await appDir(), "inspection", latestChunkTblu.replace(".rpkg", "")), { recursive: true })).flatMap((a) => a.children || a)) {
+				if (entry.path.endsWith(".TBLU")) {
+					await Command.sidecar("ResourceTool", ["HM3", "convert", "TBLU", entry.path, entry.path + ".json", "--simple"]).execute()
+					tbluPath = entry.path + ".json"
+				} else if (entry.path.endsWith(".TBLU.meta")) {
+					await Command.sidecar("sidecar/rpkg-cli", ["-hash_meta_to_json", entry.path]).execute()
+					tbluMetaPath = entry.path + ".JSON"
+				}
+			}
+
+			$addNotification = {
+				kind: "info",
+				title: "Converting to QuickEntity",
+				subtitle: "Converting source JSON files to QuickEntity JSON"
+			}
+
+			try {
+				await createDir("inspection-cache", { dir: BaseDirectory.App, recursive: true })
+			} catch {}
+
+			await Command.sidecar("sidecar/quickentity-rs", [
+				"entity",
+				"convert",
+				"--input-factory",
+				tempPath,
+				"--input-factory-meta",
+				tempMetaPath,
+				"--input-blueprint",
+				tbluPath,
+				"--input-blueprint-meta",
+				tbluMetaPath,
+				"--output",
+				await join(await appDir(), "inspection-cache", tempHash + ".json")
+			]).execute()
 		}
 
-		$addNotification = {
-			kind: "info",
-			title: "Converting to QuickEntity",
-			subtitle: "Converting source JSON files to QuickEntity JSON"
-		}
-
-		await Command.sidecar("sidecar/quickentity-rs", [
-			"entity",
-			"convert",
-			"--input-factory",
-			tempPath,
-			"--input-factory-meta",
-			tempMetaPath,
-			"--input-blueprint",
-			tbluPath,
-			"--input-blueprint-meta",
-			tbluMetaPath,
-			"--output",
-			await join(await appDir(), "inspection", "entity.json")
-		]).execute()
+		await copyFile(await join("inspection-cache"), "entity.json", { dir: BaseDirectory.App })
 	}
 
 	function getReadDirAsTree(data) {
