@@ -1,11 +1,11 @@
 {
-	"version": "1.14.5",
-	"notes": "Fix patching in general\n\nresolves #9",
+	"version": "1.14.6",
+	"notes": "Various inspection fixes",
 	"pub_date": "2022-09-28T09:45:47Z",
 	"platforms": {
 		"windows-x86_64": {
-			"signature": "dW50cnVzdGVkIGNvbW1lbnQ6IHNpZ25hdHVyZSBmcm9tIHRhdXJpIHNlY3JldCBrZXkKUlVScWpVZGd2b0lOTmFmYmo4ZExwanBSYk1PMW5HcFVLeHNRVEJ6L3FLMUVtSE5ZR2lLdjVoY2k5WG9UK2I2MUNRbzVLR1VETTFNNGhWOTExN09Pc1RMREs5MHlwZUFDSXdjPQp0cnVzdGVkIGNvbW1lbnQ6IHRpbWVzdGFtcDoxNjY3NjUxNDQ1CWZpbGU6UXVpY2tFbnRpdHkgRWRpdG9yXzEuMTQuNV94NjRfZW4tVVMubXNpLnppcAorWklIeXNJbHcycUYwcEViemxPcEtkZ095Q0lPYXpTaGtVOWFLUnFWdVk0NXpseVJkWUlVVjRScW5CRnNzdEdMV25KaFBNMGREaHROOVQ3ZHVZalpEQT09Cg==",
-			"url": "https://github.com/atampy25/quickentity-editor-next/releases/download/1.14.5/QuickEntity.Editor_1.14.5_x64_en-US.msi.zip"
+			"signature": "dW50cnVzdGVkIGNvbW1lbnQ6IHNpZ25hdHVyZSBmcm9tIHRhdXJpIHNlY3JldCBrZXkKUlVScWpVZGd2b0lOTlFHaUNnbkVKSWJKRyt2QmdDS05yTWdIOTdDRjRhNFZ6QjVodm02QXIzaEVnT0RVeFUzSktMU0JVK2lsOVVEcC83cnA3eXhrWDdtaWlxVVEzSnFLVGdNPQp0cnVzdGVkIGNvbW1lbnQ6IHRpbWVzdGFtcDoxNjY3NzE5MDQ5CWZpbGU6UXVpY2tFbnRpdHkgRWRpdG9yXzEuMTQuNl94NjRfZW4tVVMubXNpLnppcApRZzBGRkVNeE9vcjJPa3NXM1g1aVVJYlk5Rnl2cGZCU1E1NURzOUdTTzBpaWV6bTZvOWxVTXEwSk9aWlMweXpGQmhSQzJubFUwNEc0YTM4SG4zNVJBUT09Cg==",
+			"url": "https://github.com/atampy25/quickentity-editor-next/releases/download/1.14.6/QuickEntity.Editor_1.14.6_x64_en-US.msi.zip"
 		}
 	}
 }
