@@ -81,10 +81,11 @@
 							hasSetProperties: false
 						}
 
-						$inVivoMetadata.entities[entityID].dirtyPins =
+						$inVivoMetadata.entities[entityID].dirtyPins = !(
 							isEqual($entity.entities[entityID].events, parsed.events) &&
 							isEqual($entity.entities[entityID].inputCopying, parsed.inputCopying) &&
 							isEqual($entity.entities[entityID].outputCopying, parsed.outputCopying)
+						)
 
 						$inVivoMetadata.entities[entityID].dirtyUnchangeables =
 							$entity.entities[entityID].template != parsed.template ||
@@ -92,11 +93,12 @@
 							$entity.entities[entityID].blueprint != parsed.blueprint ||
 							$entity.entities[entityID].editorOnly != parsed.editorOnly
 
-						$inVivoMetadata.entities[entityID].dirtyExtensions =
+						$inVivoMetadata.entities[entityID].dirtyExtensions = !(
 							isEqual($entity.entities[entityID].propertyAliases, parsed.propertyAliases) &&
 							isEqual($entity.entities[entityID].exposedEntities, parsed.exposedEntities) &&
 							isEqual($entity.entities[entityID].exposedInterfaces, parsed.exposedInterfaces) &&
 							isEqual($entity.entities[entityID].subsets, parsed.subsets)
+						)
 
 						if (parsed.properties) {
 							if ($entity.entities[entityID].properties) {
@@ -209,10 +211,11 @@
 													hasSetProperties: false
 												}
 
-												$inVivoMetadata.entities[selectedEntityID].dirtyPins =
+												$inVivoMetadata.entities[selectedEntityID].dirtyPins = !(
 													isEqual($entity.entities[selectedEntityID].events, parsed.events) &&
 													isEqual($entity.entities[selectedEntityID].inputCopying, parsed.inputCopying) &&
 													isEqual($entity.entities[selectedEntityID].outputCopying, parsed.outputCopying)
+												)
 
 												$inVivoMetadata.entities[selectedEntityID].dirtyUnchangeables =
 													$entity.entities[selectedEntityID].template != parsed.template ||
@@ -220,11 +223,12 @@
 													$entity.entities[selectedEntityID].blueprint != parsed.blueprint ||
 													$entity.entities[selectedEntityID].editorOnly != parsed.editorOnly
 
-												$inVivoMetadata.entities[selectedEntityID].dirtyExtensions =
+												$inVivoMetadata.entities[selectedEntityID].dirtyExtensions = !(
 													isEqual($entity.entities[selectedEntityID].propertyAliases, parsed.propertyAliases) &&
 													isEqual($entity.entities[selectedEntityID].exposedEntities, parsed.exposedEntities) &&
 													isEqual($entity.entities[selectedEntityID].exposedInterfaces, parsed.exposedInterfaces) &&
 													isEqual($entity.entities[selectedEntityID].subsets, parsed.subsets)
+												)
 
 												if (parsed.properties) {
 													if ($entity.entities[selectedEntityID].properties) {
