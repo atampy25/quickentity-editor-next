@@ -22,6 +22,7 @@ export class Intellisense {
 	}
 
 	knownCPPTProperties: Record<string, Record<string, any>>
+	knownCPPTPins: Record<string, { input: string[]; output: string[] }>
 	UICBPropTypes: Record<number, string>
 	allUICTs: Set<string>
 
@@ -31,6 +32,7 @@ export class Intellisense {
 
 	async ready() {
 		this.knownCPPTProperties = await readJSON(await join(this.appSettings.gameFileExtensionsDataPath, "props.json"))
+		this.knownCPPTPins = { "002C4526CC9753E6": { input: [], output: [] } } // await readJSON(await join(this.appSettings.gameFileExtensionsDataPath, "pins.json"))
 		this.UICBPropTypes = await readJSON(await join(this.appSettings.gameFileExtensionsDataPath, "foundUICBPropTypes.json"))
 		this.allUICTs = new Set(
 			(await readDir(await join(this.appSettings.gameFileExtensionsDataPath, "UICT")))
@@ -149,8 +151,8 @@ export class Intellisense {
 
 		for (const template of (await exists(await join(this.appSettings.gameFileExtensionsDataPath, "ASET", normaliseToHash(targetedEntity.template) + ".ASET.meta.JSON")))
 			? (await readJSON(await join(this.appSettings.gameFileExtensionsDataPath, "ASET", normaliseToHash(targetedEntity.template) + ".ASET.meta.JSON"))).hash_reference_data
-				.slice(0, -1)
-				.map((a) => a.hash)
+					.slice(0, -1)
+					.map((a) => a.hash)
 			: [normaliseToHash(targetedEntity.template)]) {
 			if (await exists(await join(this.appSettings.gameFileExtensionsDataPath, "TEMP", template + ".TEMP.entity.json"))) {
 				const result = await this.findDefaultPropertyValue(await join(this.appSettings.gameFileExtensionsDataPath, "TEMP", template + ".TEMP.entity.json"), undefined, propertyToFind)
@@ -210,6 +212,108 @@ export class Intellisense {
 						value: this.knownCPPTProperties["002C4526CC9753E6"][propertyToFind][1]
 					} // All UI controls have the properties of ZUIControlEntity
 				}
+			}
+		}
+	}
+
+	async getPins(entity: Entity, subEntity: string, ignoreInternal: boolean, soFar: { input: string[]; output: string[] }): Promise<{ input: string[]; output: string[] }> {
+		const targetedEntity = entity.entities[subEntity]
+
+		if (!ignoreInternal) {
+			if (targetedEntity.events) {
+				soFar.output.push(...Object.keys(targetedEntity.events))
+			}
+			if (targetedEntity.inputCopying) {
+				soFar.input.push(...Object.keys(targetedEntity.inputCopying))
+			}
+			if (targetedEntity.outputCopying) {
+				soFar.output.push(...Object.keys(targetedEntity.outputCopying))
+			}
+
+			for (const ent of Object.values(entity.entities)) {
+				if (ent.events) {
+					for (const [event, data] of Object.entries(ent.events)) {
+						for (const [trigger, refs] of Object.entries(data)) {
+							for (const ref of refs) {
+								if (ref == subEntity) {
+									soFar.input.push(trigger)
+								}
+							}
+						}
+					}
+				}
+
+				if (ent.inputCopying) {
+					for (const [input, data] of Object.entries(ent.inputCopying)) {
+						for (const [trigger, refs] of Object.entries(data)) {
+							for (const ref of refs) {
+								if (ref == subEntity) {
+									soFar.input.push(trigger)
+								}
+							}
+						}
+					}
+				}
+
+				if (ent.outputCopying) {
+					for (const [output, data] of Object.entries(ent.outputCopying)) {
+						for (const [propagated, refs] of Object.entries(data)) {
+							for (const ref of refs) {
+								if (ref == subEntity) {
+									soFar.output.push(propagated)
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+
+		for (const template of (await exists(await join(this.appSettings.gameFileExtensionsDataPath, "ASET", targetedEntity.template + ".ASET.meta.JSON")))
+			? (await readJSON(await join(this.appSettings.gameFileExtensionsDataPath, "ASET", targetedEntity.template + ".ASET.meta.JSON"))).hash_reference_data.slice(0, -1).map((a) => a.hash)
+			: [targetedEntity.template]) {
+			if (await exists(await join(this.appSettings.gameFileExtensionsDataPath, "TEMP", template + ".TEMP.entity.json"))) {
+				const s = await readJSON(await join(this.appSettings.gameFileExtensionsDataPath, "TEMP", template + ".TEMP.entity.json"))
+				await this.getPins(s, s.rootEntity, false, soFar)
+			} else if (this.knownCPPTPins[template]) {
+				soFar.input.push(...Object.keys(this.knownCPPTPins[template].input))
+				soFar.output.push(...Object.keys(this.knownCPPTPins[template].output))
+			} else if (this.allUICTs.has(template)) {
+				soFar.input.push(...Object.keys(this.knownCPPTPins["002C4526CC9753E6"].input)) // All UI controls have the pins of ZUIControlEntity
+				soFar.output.push(...Object.keys(this.knownCPPTPins["002C4526CC9753E6"].output)) // All UI controls have the pins of ZUIControlEntity
+
+				// Get the specific pins from the UICB (though we don't know if they're inputs or outputs)
+				soFar.input.push(
+					...Object.keys(
+						(
+							await readJSON(
+								await join(
+									this.appSettings.gameFileExtensionsDataPath,
+									"UICB",
+									(
+										await readJSON(await join(this.appSettings.gameFileExtensionsDataPath, "UICT", template + ".UICT.meta.JSON"))
+									).hash_reference_data.filter((a) => a.hash != "002C4526CC9753E6")[0].hash + ".UICB.json"
+								)
+							)
+						).pins
+					)
+				)
+
+				soFar.output.push(
+					...Object.keys(
+						(
+							await readJSON(
+								await join(
+									this.appSettings.gameFileExtensionsDataPath,
+									"UICB",
+									(
+										await readJSON(await join(this.appSettings.gameFileExtensionsDataPath, "UICT", template + ".UICT.meta.JSON"))
+									).hash_reference_data.filter((a) => a.hash != "002C4526CC9753E6")[0].hash + ".UICB.json"
+								)
+							)
+						).pins
+					)
+				)
 			}
 		}
 	}

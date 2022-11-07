@@ -214,6 +214,10 @@
 
 					props = {}
 
+					const perfPropertySchemas = Object.fromEntries(
+						getSchema().definitions.SubEntity.properties.properties.additionalProperties.anyOf.map((a) => [a?.properties?.type?.const, a?.properties?.value])
+					)
+
 					if ($intellisense.knownCPPTProperties[normaliseToHash(jsonToDisplay.template)]) {
 						for (let foundProp of allFoundProperties) {
 							props[foundProp] = {
@@ -223,14 +227,9 @@
 										type: "string",
 										const: $intellisense.knownCPPTProperties[normaliseToHash(jsonToDisplay.template)][foundProp][0]
 									},
-									value: merge(
-										getSchema().definitions.SubEntity.properties.properties.additionalProperties.anyOf.find(
-											(a) => a?.properties?.type?.const == $intellisense.knownCPPTProperties[normaliseToHash(jsonToDisplay.template)][foundProp][0]
-										)?.properties?.value,
-										{
-											default: $intellisense.knownCPPTProperties[normaliseToHash(jsonToDisplay.template)][foundProp][1]
-										}
-									)
+									value: merge(perfPropertySchemas[$intellisense.knownCPPTProperties[normaliseToHash(jsonToDisplay.template)][foundProp][0]], {
+										default: $intellisense.knownCPPTProperties[normaliseToHash(jsonToDisplay.template)][foundProp][1]
+									})
 								},
 								default: {
 									type: $intellisense.knownCPPTProperties[normaliseToHash(jsonToDisplay.template)][foundProp][0],
@@ -250,12 +249,9 @@
 											type: "string",
 											const: val.type
 										},
-										value: merge(
-											getSchema().definitions.SubEntity.properties.properties.additionalProperties.anyOf.find((a) => a?.properties?.type?.const == val.type)?.properties?.value,
-											{
-												default: val.value
-											}
-										)
+										value: merge(perfPropertySchemas[val.type], {
+											default: val.value
+										})
 									},
 									default: val
 								}
@@ -263,6 +259,40 @@
 						}
 					}
 				}
+
+				let pins = { input: [], output: [] }
+				await $intellisense.getPins(entity, subEntityID, true, pins)
+				pins = { input: [...new Set(pins.input)], output: [...new Set(pins.output)] }
+
+				let inputs = Object.fromEntries(
+					pins.input.map((a) => [
+						a,
+						{
+							type: "object",
+							additionalProperties: {
+								type: "array",
+								items: {
+									$ref: "#/definitions/RefMaybeConstantValue"
+								}
+							}
+						}
+					])
+				)
+
+				let outputs = Object.fromEntries(
+					pins.output.map((a) => [
+						a,
+						{
+							type: "object",
+							additionalProperties: {
+								type: "array",
+								items: {
+									$ref: "#/definitions/RefMaybeConstantValue"
+								}
+							}
+						}
+					])
+				)
 
 				Monaco.languages.json.jsonDefaults.setDiagnosticsOptions({
 					validate: true,
@@ -277,6 +307,15 @@
 										properties: {
 											properties: {
 												properties: JSON.parse(json.stringify(props))
+											},
+											events: {
+												properties: JSON.parse(json.stringify(outputs))
+											},
+											inputCopying: {
+												properties: JSON.parse(json.stringify(inputs))
+											},
+											outputCopying: {
+												properties: JSON.parse(json.stringify(outputs))
 											}
 										}
 									}
