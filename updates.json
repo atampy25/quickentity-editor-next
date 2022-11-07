@@ -1,11 +1,11 @@
 {
-	"version": "1.16.0",
-	"notes": "Limited pin intellisense",
+	"version": "1.17.1",
+	"notes": "Fix format brekaing\n\nApparently prettier can't handle classes.json",
 	"pub_date": "2022-09-28T09:45:47Z",
 	"platforms": {
 		"windows-x86_64": {
-			"signature": "dW50cnVzdGVkIGNvbW1lbnQ6IHNpZ25hdHVyZSBmcm9tIHRhdXJpIHNlY3JldCBrZXkKUlVScWpVZGd2b0lOTlcwNzByZERJc3RwRkk3cVVRbVc1N3c0b1dZODIyWll0aVpKMy9HMVhFTHVuc1VmekdlV2treUU1bi9EYnlCWm5ubEdBemVXY0RKQTJ3VGM0dVpDTkFVPQp0cnVzdGVkIGNvbW1lbnQ6IHRpbWVzdGFtcDoxNjY3ODA5MzU4CWZpbGU6UXVpY2tFbnRpdHkgRWRpdG9yXzEuMTYuMF94NjRfZW4tVVMubXNpLnppcAo3SjU5QU5vSkFBdlM2WHpXV2Z4L3ptSFQ2Ykx4R1VvSnhxSncvS0NYbEJ4emNwT2NvcmRJS1NrV3FtS3U2Rkh3MWE3c3RSMXRhMDVLSnJaWHphMVhCQT09Cg==",
-			"url": "https://github.com/atampy25/quickentity-editor-next/releases/download/1.16.0/QuickEntity.Editor_1.16.0_x64_en-US.msi.zip"
+			"signature": "dW50cnVzdGVkIGNvbW1lbnQ6IHNpZ25hdHVyZSBmcm9tIHRhdXJpIHNlY3JldCBrZXkKUlVScWpVZGd2b0lOTlIzTmFaa21yRlRCdHF4QkwwM0ZSa01XNlJKa2pSYTZUaXFEdU80OW5WZ21OcHFmbnVkOEpPSDJraytVdTkyZm1Hd3VEUTdSaW1mNG8vWXR6K0paWHdJPQp0cnVzdGVkIGNvbW1lbnQ6IHRpbWVzdGFtcDoxNjY3ODEzNjIyCWZpbGU6UXVpY2tFbnRpdHkgRWRpdG9yXzEuMTcuMV94NjRfZW4tVVMubXNpLnppcAp3L1Q1K1Vkak1hemt6V1UwSG9zNFRxTUpkWDFneXFXOVRvOVc0cFRsVEdYOEVhQi9DVTZnQlJZUG82NDFtYW9FT25BdGQ5TXB6MUVyYVRERFpPZnFEZz09Cg==",
+			"url": "https://github.com/atampy25/quickentity-editor-next/releases/download/1.17.1/QuickEntity.Editor_1.17.1_x64_en-US.msi.zip"
 		}
 	}
 }
