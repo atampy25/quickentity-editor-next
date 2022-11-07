@@ -1,11 +1,11 @@
 {
-	"version": "1.17.2",
-	"notes": "Normalise hashes in intellisense",
+	"version": "1.17.3",
+	"notes": "Scroll on visual editor overflow",
 	"pub_date": "2022-09-28T09:45:47Z",
 	"platforms": {
 		"windows-x86_64": {
-			"signature": "dW50cnVzdGVkIGNvbW1lbnQ6IHNpZ25hdHVyZSBmcm9tIHRhdXJpIHNlY3JldCBrZXkKUlVScWpVZGd2b0lOTlR4c0MwMjhrSG1QTWF6eHZ1cTV2eVN3Ry9BRjVOYlgyczdDVkgyMi9qWG5mT0EzRnlNWU9lZUlXTlZYeHVPRVg3WGQ5U3NnU2xqVkozV1FRamNiS2djPQp0cnVzdGVkIGNvbW1lbnQ6IHRpbWVzdGFtcDoxNjY3ODE1NjcwCWZpbGU6UXVpY2tFbnRpdHkgRWRpdG9yXzEuMTcuMl94NjRfZW4tVVMubXNpLnppcApFd0toYWVKbU1Qei9PZzc0SkdzdHUxWWxoU1dwcjdKcUxkaVVOako0YkxtbVo2bVdJaW11SnRVemhDM05jaWhQcE15U2N2WGJhR2xDZjBjN0t5ckZBUT09Cg==",
-			"url": "https://github.com/atampy25/quickentity-editor-next/releases/download/1.17.2/QuickEntity.Editor_1.17.2_x64_en-US.msi.zip"
+			"signature": "dW50cnVzdGVkIGNvbW1lbnQ6IHNpZ25hdHVyZSBmcm9tIHRhdXJpIHNlY3JldCBrZXkKUlVScWpVZGd2b0lOTmYxamhyUlVwYXhKRVJuQnBKeXhRcGI3ZEFZejkySDRRcjVrS1plVE5TYVBJWWF6dmd2bEtTa2hxS3lFWGl0djg5bG1uUmU2bzZBcnF5M3lwNVhWQkFBPQp0cnVzdGVkIGNvbW1lbnQ6IHRpbWVzdGFtcDoxNjY3ODIzNjQzCWZpbGU6UXVpY2tFbnRpdHkgRWRpdG9yXzEuMTcuM194NjRfZW4tVVMubXNpLnppcAo4STFMZTBUUlpjdjd0c2hJVjdiWXdBNCtDWExpeVhHamU5dmRWWDl4aWovcEN3WjVXZVhMaHgrTStqRVF3ZzV5dENRZEt6UTZVamJTMjdzOTd5SE9Ddz09Cg==",
+			"url": "https://github.com/atampy25/quickentity-editor-next/releases/download/1.17.3/QuickEntity.Editor_1.17.3_x64_en-US.msi.zip"
 		}
 	}
 }
