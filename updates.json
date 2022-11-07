@@ -1,11 +1,11 @@
 {
-	"version": "1.15.2",
-	"notes": "Fix in-vivo status indicator",
+	"version": "1.15.3",
+	"notes": "Fix intellisense property calculation when switching entities",
 	"pub_date": "2022-09-28T09:45:47Z",
 	"platforms": {
 		"windows-x86_64": {
-			"signature": "dW50cnVzdGVkIGNvbW1lbnQ6IHNpZ25hdHVyZSBmcm9tIHRhdXJpIHNlY3JldCBrZXkKUlVScWpVZGd2b0lOTmNEbzlFRzN0dU0xUXdWTFJOelpOYTkrZzE4UHZtam5nU29DR0VFWDlxNU9BVjVJNmRjNldqR0ZBQTN6ajNicEZjUTV1WWlDRjJrdmdKZGY0a1BYbEFNPQp0cnVzdGVkIGNvbW1lbnQ6IHRpbWVzdGFtcDoxNjY3NzM0Mjk5CWZpbGU6UXVpY2tFbnRpdHkgRWRpdG9yXzEuMTUuMl94NjRfZW4tVVMubXNpLnppcAprblV0VlFZQ2g5MFhvNW5GVG9PRnhZVHJFMzYrelhuQy8rVjBEcWFVbVdLTyt4ZHZCRXZUVGNrMWZzT0xqdGpNc25KYWpoN3NRUHhHZkg2dGR5YlZDQT09Cg==",
-			"url": "https://github.com/atampy25/quickentity-editor-next/releases/download/1.15.2/QuickEntity.Editor_1.15.2_x64_en-US.msi.zip"
+			"signature": "dW50cnVzdGVkIGNvbW1lbnQ6IHNpZ25hdHVyZSBmcm9tIHRhdXJpIHNlY3JldCBrZXkKUlVScWpVZGd2b0lOTldzY3dDSEh0MXpVT0FvRXNadG1WLzN5NWpGeHdIcXJWRm1jeGxKeTJOMXBjZ1Npbjg0SjhJQUszU2xmMDlRd3ExdWdQb1lLQmFkQzZ0WjBSSEdNQWdrPQp0cnVzdGVkIGNvbW1lbnQ6IHRpbWVzdGFtcDoxNjY3ODA2OTE3CWZpbGU6UXVpY2tFbnRpdHkgRWRpdG9yXzEuMTUuM194NjRfZW4tVVMubXNpLnppcApOeXk5M3I1MUNmNFJOVnhPamw3cEk0V0dnY2ptaUJZMjAwVGVVWUR1VHFrUFcrS2NSRWZuOGdrMzVDMWVCSFV4ajBvRjQyUjFmbVpFM1JlaU5hR2JDUT09Cg==",
+			"url": "https://github.com/atampy25/quickentity-editor-next/releases/download/1.15.3/QuickEntity.Editor_1.15.3_x64_en-US.msi.zip"
 		}
 	}
 }
