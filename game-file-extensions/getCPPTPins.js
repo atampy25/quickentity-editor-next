@@ -58,7 +58,7 @@ for (let filePath of allFiles) {
     }
 }
 
-for (const c of fs.readJSONSync("./classes.json").classes) {
+for (const c of fs.readJSONSync("./classes").classes) {
     let bla = hashes["[modules:/" + c.name.toLowerCase() + ".class].pc_entitytype"]
     if (bla) {
         data[bla] ??= { input: new Set(), output: new Set() }

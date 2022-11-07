@@ -22,7 +22,7 @@ node convertAllUICTMetas
 node convertAllQNs
 node findUICBPropTypes
 node getCPPTInfo
-node getCPPTOutputPins
+node getCPPTPins
 
 echo Done! Enable game file extensions and input this folder's path in QuickEntity Editor to unlock the extra features.
 pause
