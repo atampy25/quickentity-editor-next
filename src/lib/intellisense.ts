@@ -56,9 +56,11 @@ export class Intellisense {
 			foundProperties.push(...Object.keys(targetedEntity.properties))
 		}
 
-		for (const template of (await exists(await join(this.appSettings.gameFileExtensionsDataPath, "ASET", targetedEntity.template + ".ASET.meta.JSON")))
-			? (await readJSON(await join(this.appSettings.gameFileExtensionsDataPath, "ASET", targetedEntity.template + ".ASET.meta.JSON"))).hash_reference_data.slice(0, -1).map((a) => a.hash)
-			: [targetedEntity.template]) {
+		for (const template of (await exists(await join(this.appSettings.gameFileExtensionsDataPath, "ASET", normaliseToHash(targetedEntity.template) + ".ASET.meta.JSON")))
+			? (await readJSON(await join(this.appSettings.gameFileExtensionsDataPath, "ASET", normaliseToHash(targetedEntity.template) + ".ASET.meta.JSON"))).hash_reference_data
+				.slice(0, -1)
+				.map((a) => a.hash)
+			: [normaliseToHash(targetedEntity.template)]) {
 			if (await exists(await join(this.appSettings.gameFileExtensionsDataPath, "TEMP", template + ".TEMP.entity.json"))) {
 				await this.findProperties(await join(this.appSettings.gameFileExtensionsDataPath, "TEMP", template + ".TEMP.entity.json"), foundProperties)
 			} else if (this.knownCPPTProperties[template]) {
@@ -269,9 +271,11 @@ export class Intellisense {
 			}
 		}
 
-		for (const template of (await exists(await join(this.appSettings.gameFileExtensionsDataPath, "ASET", targetedEntity.template + ".ASET.meta.JSON")))
-			? (await readJSON(await join(this.appSettings.gameFileExtensionsDataPath, "ASET", targetedEntity.template + ".ASET.meta.JSON"))).hash_reference_data.slice(0, -1).map((a) => a.hash)
-			: [targetedEntity.template]) {
+		for (const template of (await exists(await join(this.appSettings.gameFileExtensionsDataPath, "ASET", normaliseToHash(targetedEntity.template) + ".ASET.meta.JSON")))
+			? (await readJSON(await join(this.appSettings.gameFileExtensionsDataPath, "ASET", normaliseToHash(targetedEntity.template) + ".ASET.meta.JSON"))).hash_reference_data
+				.slice(0, -1)
+				.map((a) => a.hash)
+			: [normaliseToHash(targetedEntity.template)]) {
 			if (await exists(await join(this.appSettings.gameFileExtensionsDataPath, "TEMP", template + ".TEMP.entity.json"))) {
 				const s = await readJSON(await join(this.appSettings.gameFileExtensionsDataPath, "TEMP", template + ".TEMP.entity.json"))
 				await this.getPins(s, s.rootEntity, false, soFar)
