@@ -32,7 +32,7 @@ export class Intellisense {
 
 	async ready() {
 		this.knownCPPTProperties = await readJSON(await join(this.appSettings.gameFileExtensionsDataPath, "props.json"))
-		this.knownCPPTPins = { "002C4526CC9753E6": { input: [], output: [] } } // await readJSON(await join(this.appSettings.gameFileExtensionsDataPath, "pins.json"))
+		this.knownCPPTPins = await readJSON(await join(this.appSettings.gameFileExtensionsDataPath, "pins.json"))
 		this.UICBPropTypes = await readJSON(await join(this.appSettings.gameFileExtensionsDataPath, "foundUICBPropTypes.json"))
 		this.allUICTs = new Set(
 			(await readDir(await join(this.appSettings.gameFileExtensionsDataPath, "UICT")))
@@ -279,9 +279,6 @@ export class Intellisense {
 				soFar.input.push(...Object.keys(this.knownCPPTPins[template].input))
 				soFar.output.push(...Object.keys(this.knownCPPTPins[template].output))
 			} else if (this.allUICTs.has(template)) {
-				soFar.input.push(...Object.keys(this.knownCPPTPins["002C4526CC9753E6"].input)) // All UI controls have the pins of ZUIControlEntity
-				soFar.output.push(...Object.keys(this.knownCPPTPins["002C4526CC9753E6"].output)) // All UI controls have the pins of ZUIControlEntity
-
 				// Get the specific pins from the UICB (though we don't know if they're inputs or outputs)
 				soFar.input.push(
 					...Object.keys(
