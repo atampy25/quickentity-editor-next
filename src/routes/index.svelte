@@ -581,32 +581,34 @@
 			{#if selectionType == "entity" && selectedEntity.properties && Object.entries(selectedEntity.properties).some((a) => a[1].type == "SColorRGB" || a[1].type == "SColorRGBA" || enums[a[1].type])}
 				<div class="mt-2 flex-shrink-0">
 					<h1>Visual editors</h1>
-					<div class="flex flex-wrap gap-4 items-center">
-						{#each Object.entries(selectedEntity.properties).filter((a) => a[1].type == "SColorRGB" || a[1].type == "SColorRGBA") as [propertyName, property]}
-							<div class="flex flex-wrap gap-2 items-center">
-								{propertyName}
-								<ColorPicker type={property.type == "SColorRGB" ? "rgb" : "rgba"} bind:value={selectedEntity.properties[propertyName].value} />
-							</div>
-						{/each}
-					</div>
-					<br />
-					<div class="flex flex-wrap gap-4 items-center">
-						{#each Object.entries(selectedEntity.properties).filter((a) => enums[a[1].type]) as [propertyName, property]}
-							<Select
-								labelText={propertyName}
-								on:change={({ detail }) => {
-									selectedEntity.properties[propertyName].value = detail
-								}}
-							>
-								{#each enums[property.type] as opt}
-									<option selected={selectedEntity.properties[propertyName].value == opt} value={opt}>{opt}</option>
-								{/each}
-							</Select>
-						{/each}
-					</div>
-					{#if Object.entries(selectedEntity.properties).some((a) => enums[a[1].type])}
+					<div class="overflow-y-auto" style="max-height: 30rem">
+						<div class="flex flex-wrap gap-4 items-center">
+							{#each Object.entries(selectedEntity.properties).filter((a) => a[1].type == "SColorRGB" || a[1].type == "SColorRGBA") as [propertyName, property]}
+								<div class="flex flex-wrap gap-2 items-center">
+									{propertyName}
+									<ColorPicker type={property.type == "SColorRGB" ? "rgb" : "rgba"} bind:value={selectedEntity.properties[propertyName].value} />
+								</div>
+							{/each}
+						</div>
 						<br />
-					{/if}
+						<div class="flex flex-wrap gap-4 items-center">
+							{#each Object.entries(selectedEntity.properties).filter((a) => enums[a[1].type]) as [propertyName, property]}
+								<Select
+									labelText={propertyName}
+									on:change={({ detail }) => {
+										selectedEntity.properties[propertyName].value = detail
+									}}
+								>
+									{#each enums[property.type] as opt}
+										<option selected={selectedEntity.properties[propertyName].value == opt} value={opt}>{opt}</option>
+									{/each}
+								</Select>
+							{/each}
+						</div>
+						{#if Object.entries(selectedEntity.properties).some((a) => enums[a[1].type])}
+							<br />
+						{/if}
+					</div>
 				</div>
 			{/if}
 		</div>

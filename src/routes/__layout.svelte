@@ -1222,7 +1222,7 @@
 		secondaryButtonText="Cancel"
 		on:click:button--secondary={() => (askGameFileModalOpen = false)}
 		on:submit={async () => {
-			let x = askGameFileModalResult
+			let x = askGameFileModalResult.trim()
 			if (x.includes(":")) {
 				x = ("00" + md5(x).slice(2, 16)).toUpperCase()
 			}
