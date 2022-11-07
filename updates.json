@@ -1,11 +1,11 @@
 {
-	"version": "1.17.1",
-	"notes": "Fix format brekaing\n\nApparently prettier can't handle classes.json",
+	"version": "1.17.2",
+	"notes": "Normalise hashes in intellisense",
 	"pub_date": "2022-09-28T09:45:47Z",
 	"platforms": {
 		"windows-x86_64": {
-			"signature": "dW50cnVzdGVkIGNvbW1lbnQ6IHNpZ25hdHVyZSBmcm9tIHRhdXJpIHNlY3JldCBrZXkKUlVScWpVZGd2b0lOTlIzTmFaa21yRlRCdHF4QkwwM0ZSa01XNlJKa2pSYTZUaXFEdU80OW5WZ21OcHFmbnVkOEpPSDJraytVdTkyZm1Hd3VEUTdSaW1mNG8vWXR6K0paWHdJPQp0cnVzdGVkIGNvbW1lbnQ6IHRpbWVzdGFtcDoxNjY3ODEzNjIyCWZpbGU6UXVpY2tFbnRpdHkgRWRpdG9yXzEuMTcuMV94NjRfZW4tVVMubXNpLnppcAp3L1Q1K1Vkak1hemt6V1UwSG9zNFRxTUpkWDFneXFXOVRvOVc0cFRsVEdYOEVhQi9DVTZnQlJZUG82NDFtYW9FT25BdGQ5TXB6MUVyYVRERFpPZnFEZz09Cg==",
-			"url": "https://github.com/atampy25/quickentity-editor-next/releases/download/1.17.1/QuickEntity.Editor_1.17.1_x64_en-US.msi.zip"
+			"signature": "dW50cnVzdGVkIGNvbW1lbnQ6IHNpZ25hdHVyZSBmcm9tIHRhdXJpIHNlY3JldCBrZXkKUlVScWpVZGd2b0lOTlR4c0MwMjhrSG1QTWF6eHZ1cTV2eVN3Ry9BRjVOYlgyczdDVkgyMi9qWG5mT0EzRnlNWU9lZUlXTlZYeHVPRVg3WGQ5U3NnU2xqVkozV1FRamNiS2djPQp0cnVzdGVkIGNvbW1lbnQ6IHRpbWVzdGFtcDoxNjY3ODE1NjcwCWZpbGU6UXVpY2tFbnRpdHkgRWRpdG9yXzEuMTcuMl94NjRfZW4tVVMubXNpLnppcApFd0toYWVKbU1Qei9PZzc0SkdzdHUxWWxoU1dwcjdKcUxkaVVOako0YkxtbVo2bVdJaW11SnRVemhDM05jaWhQcE15U2N2WGJhR2xDZjBjN0t5ckZBUT09Cg==",
+			"url": "https://github.com/atampy25/quickentity-editor-next/releases/download/1.17.2/QuickEntity.Editor_1.17.2_x64_en-US.msi.zip"
 		}
 	}
 }
