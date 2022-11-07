@@ -161,117 +161,6 @@
 			}
 		}
 
-		let props: Record<string, any> = {}
-
-		if ($appSettings.gameFileExtensions) {
-			let allFoundProperties = []
-
-			for (let template of (await exists(await join($appSettings.gameFileExtensionsDataPath, "ASET", normaliseToHash(jsonToDisplay.template) + ".ASET.meta.JSON")))
-				? json
-						.parse(await readTextFile(await join($appSettings.gameFileExtensionsDataPath, "ASET", normaliseToHash(jsonToDisplay.template) + ".ASET.meta.JSON")))
-						.hash_reference_data.slice(0, -1)
-						.map((a) => a.hash)
-				: [normaliseToHash(jsonToDisplay.template)]) {
-				if (await exists(await join($appSettings.gameFileExtensionsDataPath, "TEMP", template + ".TEMP.entity.json"))) {
-					await $intellisense.findProperties(await join($appSettings.gameFileExtensionsDataPath, "TEMP", template + ".TEMP.entity.json"), allFoundProperties)
-					jsonToDisplay.propertyAliases && allFoundProperties.push(...Object.keys(jsonToDisplay.propertyAliases))
-				} else if ($intellisense.knownCPPTProperties[template]) {
-					allFoundProperties.push(...Object.keys($intellisense.knownCPPTProperties[template]))
-				} else if ($intellisense.allUICTs.has(template)) {
-					allFoundProperties.push(...Object.keys($intellisense.knownCPPTProperties["002C4526CC9753E6"])) // All UI controls have the properties of ZUIControlEntity
-					allFoundProperties.push(
-						...Object.keys(
-							json.parse(
-								await readTextFile(
-									await join(
-										"./intellisense-data/UICB",
-										json
-											.parse(await readTextFile(await join($appSettings.gameFileExtensionsDataPath, "UICT", template + ".UICT.meta.JSON")))
-											.hash_reference_data.filter((a) => a.hash != "002C4526CC9753E6")[0].hash + ".UICB.json"
-									)
-								)
-							).properties
-						)
-					) // Get the specific properties from the UICB
-				}
-			}
-
-			allFoundProperties = [...new Set(allFoundProperties)]
-
-			props = {}
-
-			if ($intellisense.knownCPPTProperties[normaliseToHash(jsonToDisplay.template)]) {
-				for (let foundProp of allFoundProperties) {
-					props[foundProp] = {
-						type: "object",
-						properties: {
-							type: {
-								type: "string",
-								const: $intellisense.knownCPPTProperties[normaliseToHash(jsonToDisplay.template)][foundProp][0]
-							},
-							value: merge(
-								getSchema().definitions.SubEntity.properties.properties.additionalProperties.anyOf.find(
-									(a) => a?.properties?.type?.const == $intellisense.knownCPPTProperties[normaliseToHash(jsonToDisplay.template)][foundProp][0]
-								)?.properties?.value,
-								{
-									default: $intellisense.knownCPPTProperties[normaliseToHash(jsonToDisplay.template)][foundProp][1]
-								}
-							)
-						},
-						default: {
-							type: $intellisense.knownCPPTProperties[normaliseToHash(jsonToDisplay.template)][foundProp][0],
-							value: $intellisense.knownCPPTProperties[normaliseToHash(jsonToDisplay.template)][foundProp][1]
-						}
-					}
-				}
-			} else {
-				for (let foundProp of allFoundProperties) {
-					let val = await $intellisense.findDefaultPropertyValue(entity.tempHash + ".TEMP.entity.json", subEntityID, foundProp, entity, subEntityID)
-
-					if (val) {
-						props[foundProp] = {
-							type: "object",
-							properties: {
-								type: {
-									type: "string",
-									const: val.type
-								},
-								value: merge(
-									getSchema().definitions.SubEntity.properties.properties.additionalProperties.anyOf.find((a) => a?.properties?.type?.const == val.type)?.properties?.value,
-									{
-										default: val.value
-									}
-								)
-							},
-							default: val
-						}
-					}
-				}
-			}
-		}
-
-		Monaco.languages.json.jsonDefaults.setDiagnosticsOptions({
-			validate: true,
-			schemas: [
-				{
-					uri: "qne://subentity-schema.json", // id of the first schema
-					fileMatch: ["qne://subentity.json"], // associate with our model
-					schema: merge({}, getSchema(), {
-						$ref: "#/definitions/SubEntity",
-						definitions: {
-							SubEntity: {
-								properties: {
-									properties: {
-										properties: JSON.parse(json.stringify(props))
-									}
-								}
-							}
-						}
-					})
-				}
-			]
-		})
-
 		editor.onDidChangeModelContent((e) => {
 			dispatch("contentChanged")
 		})
@@ -285,6 +174,118 @@
 		if (editor && jsonToDisplay) {
 			editor.setValue(json.stringify(jsonToDisplay, "\t"))
 			editor.layout()
+			;(async () => {
+				let props: Record<string, any> = {}
+
+				if ($appSettings.gameFileExtensions) {
+					let allFoundProperties = []
+
+					for (let template of (await exists(await join($appSettings.gameFileExtensionsDataPath, "ASET", normaliseToHash(jsonToDisplay.template) + ".ASET.meta.JSON")))
+						? json
+								.parse(await readTextFile(await join($appSettings.gameFileExtensionsDataPath, "ASET", normaliseToHash(jsonToDisplay.template) + ".ASET.meta.JSON")))
+								.hash_reference_data.slice(0, -1)
+								.map((a) => a.hash)
+						: [normaliseToHash(jsonToDisplay.template)]) {
+						if (await exists(await join($appSettings.gameFileExtensionsDataPath, "TEMP", template + ".TEMP.entity.json"))) {
+							await $intellisense.findProperties(await join($appSettings.gameFileExtensionsDataPath, "TEMP", template + ".TEMP.entity.json"), allFoundProperties)
+							jsonToDisplay.propertyAliases && allFoundProperties.push(...Object.keys(jsonToDisplay.propertyAliases))
+						} else if ($intellisense.knownCPPTProperties[template]) {
+							allFoundProperties.push(...Object.keys($intellisense.knownCPPTProperties[template]))
+						} else if ($intellisense.allUICTs.has(template)) {
+							allFoundProperties.push(...Object.keys($intellisense.knownCPPTProperties["002C4526CC9753E6"])) // All UI controls have the properties of ZUIControlEntity
+							allFoundProperties.push(
+								...Object.keys(
+									json.parse(
+										await readTextFile(
+											await join(
+												"./intellisense-data/UICB",
+												json
+													.parse(await readTextFile(await join($appSettings.gameFileExtensionsDataPath, "UICT", template + ".UICT.meta.JSON")))
+													.hash_reference_data.filter((a) => a.hash != "002C4526CC9753E6")[0].hash + ".UICB.json"
+											)
+										)
+									).properties
+								)
+							) // Get the specific properties from the UICB
+						}
+					}
+
+					allFoundProperties = [...new Set(allFoundProperties)]
+
+					props = {}
+
+					if ($intellisense.knownCPPTProperties[normaliseToHash(jsonToDisplay.template)]) {
+						for (let foundProp of allFoundProperties) {
+							props[foundProp] = {
+								type: "object",
+								properties: {
+									type: {
+										type: "string",
+										const: $intellisense.knownCPPTProperties[normaliseToHash(jsonToDisplay.template)][foundProp][0]
+									},
+									value: merge(
+										getSchema().definitions.SubEntity.properties.properties.additionalProperties.anyOf.find(
+											(a) => a?.properties?.type?.const == $intellisense.knownCPPTProperties[normaliseToHash(jsonToDisplay.template)][foundProp][0]
+										)?.properties?.value,
+										{
+											default: $intellisense.knownCPPTProperties[normaliseToHash(jsonToDisplay.template)][foundProp][1]
+										}
+									)
+								},
+								default: {
+									type: $intellisense.knownCPPTProperties[normaliseToHash(jsonToDisplay.template)][foundProp][0],
+									value: $intellisense.knownCPPTProperties[normaliseToHash(jsonToDisplay.template)][foundProp][1]
+								}
+							}
+						}
+					} else {
+						for (let foundProp of allFoundProperties) {
+							let val = await $intellisense.findDefaultPropertyValue(entity.tempHash + ".TEMP.entity.json", subEntityID, foundProp, entity, subEntityID)
+
+							if (val) {
+								props[foundProp] = {
+									type: "object",
+									properties: {
+										type: {
+											type: "string",
+											const: val.type
+										},
+										value: merge(
+											getSchema().definitions.SubEntity.properties.properties.additionalProperties.anyOf.find((a) => a?.properties?.type?.const == val.type)?.properties?.value,
+											{
+												default: val.value
+											}
+										)
+									},
+									default: val
+								}
+							}
+						}
+					}
+				}
+
+				Monaco.languages.json.jsonDefaults.setDiagnosticsOptions({
+					validate: true,
+					schemas: [
+						{
+							uri: "qne://subentity-schema.json",
+							fileMatch: ["qne://subentity.json"],
+							schema: merge({}, getSchema(), {
+								$ref: "#/definitions/SubEntity",
+								definitions: {
+									SubEntity: {
+										properties: {
+											properties: {
+												properties: JSON.parse(json.stringify(props))
+											}
+										}
+									}
+								}
+							})
+						}
+					]
+				})
+			})()
 		}
 	}
 </script>
