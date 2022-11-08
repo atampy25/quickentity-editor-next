@@ -505,56 +505,59 @@
 
 											if (removeExternalRefs) {
 												for (let ref of getReferencedExternalEntities(ent, paste)) {
-													switch (ref.type) {
-														case "property":
-															if (Array.isArray(ent.properties![ref.context![0]].value)) {
-																ent.properties![ref.context![0]].value = ent.properties![ref.context![0]].value.filter((a: Ref) => !isEqual(a, ref.entity))
-															} else {
-																delete ent.properties![ref.context![0]]
-															}
-															break
+													let localRef = getReferencedLocalEntity(ref.entity)
+													if (!localRef || !entity.entities[localRef]) {
+														switch (ref.type) {
+															case "property":
+																if (Array.isArray(ent.properties![ref.context![0]].value)) {
+																	ent.properties![ref.context![0]].value = ent.properties![ref.context![0]].value.filter((a: Ref) => !isEqual(a, ref.entity))
+																} else {
+																	delete ent.properties![ref.context![0]]
+																}
+																break
 
-														case "platformSpecificProperty":
-															if (Array.isArray(ent.platformSpecificProperties![ref.context![0]][ref.context![1]].value)) {
-																ent.platformSpecificProperties![ref.context![0]][ref.context![1]].value = ent.platformSpecificProperties![ref.context![0]][
-																	ref.context![1]
-																].value.filter((a: Ref) => !isEqual(a, ref.entity))
-															} else {
-																delete ent.platformSpecificProperties![ref.context![0]][ref.context![1]]
-															}
-															break
+															case "platformSpecificProperty":
+																if (Array.isArray(ent.platformSpecificProperties![ref.context![0]][ref.context![1]].value)) {
+																	ent.platformSpecificProperties![ref.context![0]][ref.context![1]].value = ent.platformSpecificProperties![ref.context![0]][
+																		ref.context![1]
+																	].value.filter((a: Ref) => !isEqual(a, ref.entity))
+																} else {
+																	delete ent.platformSpecificProperties![ref.context![0]][ref.context![1]]
+																}
+																break
 
-														case "event":
-															ent.events![ref.context![0]][ref.context![1]] = ent.events![ref.context![0]][ref.context![1]].filter(
-																(a) => !isEqual(a && typeof a != "string" && Object.prototype.hasOwnProperty.call(a, "value") ? a.ref : (a as FullRef), ref.entity)
-															)
-															break
+															case "event":
+																ent.events![ref.context![0]][ref.context![1]] = ent.events![ref.context![0]][ref.context![1]].filter(
+																	(a) => !isEqual(a && typeof a != "string" && Object.prototype.hasOwnProperty.call(a, "value") ? a.ref : (a as FullRef), ref.entity)
+																)
+																break
 
-														case "inputCopy":
-															ent.inputCopying![ref.context![0]][ref.context![1]] = ent.inputCopying![ref.context![0]][ref.context![1]].filter(
-																(a) => !isEqual(a && typeof a != "string" && Object.prototype.hasOwnProperty.call(a, "value") ? a.ref : (a as FullRef), ref.entity)
-															)
-															break
+															case "inputCopy":
+																ent.inputCopying![ref.context![0]][ref.context![1]] = ent.inputCopying![ref.context![0]][ref.context![1]].filter(
+																	(a) => !isEqual(a && typeof a != "string" && Object.prototype.hasOwnProperty.call(a, "value") ? a.ref : (a as FullRef), ref.entity)
+																)
+																break
 
-														case "outputCopy":
-															ent.outputCopying![ref.context![0]][ref.context![1]] = ent.outputCopying![ref.context![0]][ref.context![1]].filter(
-																(a) => !isEqual(a && typeof a != "string" && Object.prototype.hasOwnProperty.call(a, "value") ? a.ref : (a as FullRef), ref.entity)
-															)
-															break
+															case "outputCopy":
+																ent.outputCopying![ref.context![0]][ref.context![1]] = ent.outputCopying![ref.context![0]][ref.context![1]].filter(
+																	(a) => !isEqual(a && typeof a != "string" && Object.prototype.hasOwnProperty.call(a, "value") ? a.ref : (a as FullRef), ref.entity)
+																)
+																break
 
-														case "propertyAlias":
-															ent.propertyAliases![ref.context![0]] = ent.propertyAliases![ref.context![0]].filter(
-																(a) => !isEqual(a, { originalProperty: ref.context![1], originalEntity: ref.entity })
-															)
-															break
+															case "propertyAlias":
+																ent.propertyAliases![ref.context![0]] = ent.propertyAliases![ref.context![0]].filter(
+																	(a) => !isEqual(a, { originalProperty: ref.context![1], originalEntity: ref.entity })
+																)
+																break
 
-														case "exposedEntity":
-															ent.exposedEntities![ref.context![0]].refersTo = ent.exposedEntities![ref.context![0]].refersTo.filter((a) => !isEqual(a, ref.entity))
-															break
+															case "exposedEntity":
+																ent.exposedEntities![ref.context![0]].refersTo = ent.exposedEntities![ref.context![0]].refersTo.filter((a) => !isEqual(a, ref.entity))
+																break
 
-														case "exposedInterface":
-															delete ent.exposedInterfaces![ref.context![0]]
-															break
+															case "exposedInterface":
+																delete ent.exposedInterfaces![ref.context![0]]
+																break
+														}
 													}
 												}
 											}
