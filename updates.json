@@ -1,11 +1,11 @@
 {
-	"version": "1.17.4",
-	"notes": "Preserve locally existing entities in copy/paste",
+	"version": "1.17.5",
+	"notes": "Useless change to trigger update",
 	"pub_date": "2022-09-28T09:45:47Z",
 	"platforms": {
 		"windows-x86_64": {
-			"signature": "dW50cnVzdGVkIGNvbW1lbnQ6IHNpZ25hdHVyZSBmcm9tIHRhdXJpIHNlY3JldCBrZXkKUlVScWpVZGd2b0lOTlVjeTVWLzJxV2J6UlI5TDdzQ0xEbFFheHRwbTZoY25hSmZpcE5ISkdVZElUek96QVkyOXdMb2VQVU1IMmlYbDFMdEhndVZ4eUdBWWd0Si9RN3dQbHdNPQp0cnVzdGVkIGNvbW1lbnQ6IHRpbWVzdGFtcDoxNjY3ODg5MTM0CWZpbGU6UXVpY2tFbnRpdHkgRWRpdG9yXzEuMTcuNF94NjRfZW4tVVMubXNpLnppcApGUHVkRUg4a1Rac3RYNUV6MDd6c3pZZGpCZEllWXVIUERuRWNza2JmMGRadkhVK0pvbm4yUG1iVDJGYmxjdEcxNUNLUk5CZi92empEN2NqUnQvZENEdz09Cg==",
-			"url": "https://github.com/atampy25/quickentity-editor-next/releases/download/1.17.4/QuickEntity.Editor_1.17.4_x64_en-US.msi.zip"
+			"signature": "dW50cnVzdGVkIGNvbW1lbnQ6IHNpZ25hdHVyZSBmcm9tIHRhdXJpIHNlY3JldCBrZXkKUlVScWpVZGd2b0lOTld2WlVNSTBHK0plbDJMZVk0WkdoUWhUK3VnNitzQ0Q0azZQQkFma3ZpUjk1SjlQUjdva2hwNnc1MmNoM054REVwTGhpZWM2K3Roa3hGNmRGd2hNYmdJPQp0cnVzdGVkIGNvbW1lbnQ6IHRpbWVzdGFtcDoxNjY3OTc5NzI5CWZpbGU6UXVpY2tFbnRpdHkgRWRpdG9yXzEuMTcuNV94NjRfZW4tVVMubXNpLnppcApOZm8vcG1UdTg5ZGF6Z0VUQkhPR0U5WCtaVm1jSytHZFdyMWhldHBXUmdzWXg2anRpMU5PMjBrck52SEFQU1A0SWtvUmFlcFluYXBLOXZHZG94MndBQT09Cg==",
+			"url": "https://github.com/atampy25/quickentity-editor-next/releases/download/1.17.5/QuickEntity.Editor_1.17.5_x64_en-US.msi.zip"
 		}
 	}
 }
