@@ -96,7 +96,7 @@ export class Intellisense {
 					if (aliasedName == propertyToFind) {
 						return await this.findDefaultPropertyValue(
 							pathToEntity,
-							aliasData.originalEntity as string /* We can assume that the property alias is a local reference */,
+							aliasData.originalEntity as string, // We can assume that the property alias is a local reference
 							aliasData.originalProperty,
 							useLoadedEntity,
 							excludeEntity
