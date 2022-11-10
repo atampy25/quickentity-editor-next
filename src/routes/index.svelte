@@ -8,7 +8,7 @@
 	import ColorPicker from "$lib/components/ColorPicker.svelte"
 	import Entity3DMesh from "$lib/components/Entity3DMesh.svelte"
 
-	import { addNotification, appSettings, entity, sessionMetadata, references, reverseReferences, inVivoMetadata } from "$lib/stores"
+	import { addNotification, appSettings, entity, sessionMetadata, references, reverseReferences, inVivoMetadata, forceSaveSubEntity } from "$lib/stores"
 	import { changeReferenceToLocalEntity, checkValidityOfEntity, deleteReferencesToEntity, genRandHex, normaliseToHash, traverseEntityTree } from "$lib/utils"
 	import json from "$lib/json"
 
@@ -51,105 +51,6 @@
 
 	window.onresize = () => editor?.layout()
 
-	const updateEntityData = debounce((entityID, data) => {
-		if (selectionType == "entity") {
-			try {
-				json.parse(data)
-			} catch {
-				editorIsValid = false
-				$addNotification = {
-					kind: "error",
-					title: "Invalid JSON",
-					subtitle: "You've entered invalid JSON."
-				}
-
-				return
-			}
-
-			try {
-				if (checkValidityOfEntity($entity, json.parse(data))) {
-					editorIsValid = true
-
-					if (!isEqual($entity.entities[entityID], json.parse(data))) {
-						const parsed = json.parse(data)
-
-						$inVivoMetadata.entities[entityID] ??= {
-							dirtyPins: false,
-							dirtyUnchangeables: false,
-							dirtyExtensions: false,
-							dirtyProperties: [],
-							hasSetProperties: false
-						}
-
-						$inVivoMetadata.entities[entityID].dirtyPins = !(
-							isEqual($entity.entities[entityID].events, parsed.events) &&
-							isEqual($entity.entities[entityID].inputCopying, parsed.inputCopying) &&
-							isEqual($entity.entities[entityID].outputCopying, parsed.outputCopying)
-						)
-
-						$inVivoMetadata.entities[entityID].dirtyUnchangeables =
-							$entity.entities[entityID].template != parsed.template ||
-							$entity.entities[entityID].templateFlag != parsed.templateFlag ||
-							$entity.entities[entityID].blueprint != parsed.blueprint ||
-							$entity.entities[entityID].editorOnly != parsed.editorOnly
-
-						$inVivoMetadata.entities[entityID].dirtyExtensions = !(
-							isEqual($entity.entities[entityID].propertyAliases, parsed.propertyAliases) &&
-							isEqual($entity.entities[entityID].exposedEntities, parsed.exposedEntities) &&
-							isEqual($entity.entities[entityID].exposedInterfaces, parsed.exposedInterfaces) &&
-							isEqual($entity.entities[entityID].subsets, parsed.subsets)
-						)
-
-						if (parsed.properties) {
-							if ($entity.entities[entityID].properties) {
-								$inVivoMetadata.entities[entityID].dirtyProperties = [
-									...Object.entries(parsed.properties)
-										.filter(([prop, val]) => !isEqual($entity.entities[entityID].properties![prop], val))
-										.map((a) => a[0]),
-									...Object.keys(parsed.properties).filter((a) => !$entity.entities[entityID].properties![a]),
-									...Object.keys($entity.entities[entityID].properties!).filter((a) => !parsed.properties[a])
-								]
-							} else {
-								$inVivoMetadata.entities[entityID].dirtyProperties = Object.keys(parsed.properties)
-							}
-						} else {
-							if ($entity.entities[entityID].properties) {
-								$inVivoMetadata.entities[entityID].dirtyProperties = Object.keys($entity.entities[entityID].properties!)
-							}
-						}
-
-						if (parsed.platformSpecificProperties) {
-							$inVivoMetadata.entities[entityID].dirtyProperties.push(
-								...Object.entries(parsed.platformSpecificProperties)
-									.filter(([prop, val]) => !isEqual($entity.entities[entityID].platformSpecificProperties![prop], val))
-									.map((a) => a[0]),
-								...Object.keys(parsed.platformSpecificProperties).filter((a) => !$entity.entities[entityID].platformSpecificProperties![a]),
-								...Object.keys($entity.entities[entityID].platformSpecificProperties!).filter((a) => !parsed.platformSpecificProperties[a])
-							)
-						}
-
-						$entity.entities[entityID] = parsed
-					}
-				} else {
-					editorIsValid = false
-					$addNotification = {
-						kind: "error",
-						title: "Invalid entity",
-						subtitle: "The entity either references something that doesn't exist or isn't valid according to the schema."
-					}
-				}
-			} catch (e) {
-				editorIsValid = false
-				console.log("Suppressed validation error", e)
-				$addNotification = {
-					kind: "error",
-					title: "Invalid entity",
-					subtitle: "The entity either references something that doesn't exist or isn't valid according to the schema."
-				}
-			}
-		}
-	}, 5000)
-
 	let treeSearchInput: string
 
 	const treeSearch = debounce(() => {
@@ -168,6 +69,95 @@
 	})
 
 	let evaluationPaneInput = ""
+
+	function checkEditorValidity(entityID, data) {
+		try {
+			json.parse(data)
+		} catch {
+			editorIsValid = false
+			return
+		}
+
+		try {
+			if (checkValidityOfEntity($entity, json.parse(data))) {
+				editorIsValid = true
+
+				if (!isEqual($entity.entities[entityID], json.parse(data))) {
+					const parsed = json.parse(data)
+
+					$inVivoMetadata.entities[entityID] ??= {
+						dirtyPins: false,
+						dirtyUnchangeables: false,
+						dirtyExtensions: false,
+						dirtyProperties: [],
+						hasSetProperties: false
+					}
+
+					$inVivoMetadata.entities[entityID].dirtyPins = !(
+						isEqual($entity.entities[entityID].events, parsed.events) &&
+						isEqual($entity.entities[entityID].inputCopying, parsed.inputCopying) &&
+						isEqual($entity.entities[entityID].outputCopying, parsed.outputCopying)
+					)
+
+					$inVivoMetadata.entities[entityID].dirtyUnchangeables =
+						$entity.entities[entityID].template != parsed.template ||
+						$entity.entities[entityID].templateFlag != parsed.templateFlag ||
+						$entity.entities[entityID].blueprint != parsed.blueprint ||
+						$entity.entities[entityID].editorOnly != parsed.editorOnly
+
+					$inVivoMetadata.entities[entityID].dirtyExtensions = !(
+						isEqual($entity.entities[entityID].propertyAliases, parsed.propertyAliases) &&
+						isEqual($entity.entities[entityID].exposedEntities, parsed.exposedEntities) &&
+						isEqual($entity.entities[entityID].exposedInterfaces, parsed.exposedInterfaces) &&
+						isEqual($entity.entities[entityID].subsets, parsed.subsets)
+					)
+
+					if (parsed.properties) {
+						if ($entity.entities[entityID].properties) {
+							$inVivoMetadata.entities[entityID].dirtyProperties = [
+								...Object.entries(parsed.properties)
+									.filter(([prop, val]) => !isEqual($entity.entities[entityID].properties![prop], val))
+									.map((a) => a[0]),
+								...Object.keys(parsed.properties).filter((a) => !$entity.entities[entityID].properties![a]),
+								...Object.keys($entity.entities[entityID].properties!).filter((a) => !parsed.properties[a])
+							]
+						} else {
+							$inVivoMetadata.entities[entityID].dirtyProperties = Object.keys(parsed.properties)
+						}
+					} else {
+						if ($entity.entities[entityID].properties) {
+							$inVivoMetadata.entities[entityID].dirtyProperties = Object.keys($entity.entities[entityID].properties!)
+						}
+					}
+
+					if (parsed.platformSpecificProperties) {
+						$inVivoMetadata.entities[entityID].dirtyProperties.push(
+							...Object.entries(parsed.platformSpecificProperties)
+								.filter(([prop, val]) => !isEqual($entity.entities[entityID].platformSpecificProperties![prop], val))
+								.map((a) => a[0]),
+							...Object.keys(parsed.platformSpecificProperties).filter((a) => !$entity.entities[entityID].platformSpecificProperties![a]),
+							...Object.keys($entity.entities[entityID].platformSpecificProperties!).filter((a) => !parsed.platformSpecificProperties[a])
+						)
+					}
+				}
+			} else {
+				editorIsValid = false
+				return
+			}
+		} catch (e) {
+			editorIsValid = false
+			return
+		}
+	}
+
+	forceSaveSubEntity.subscribe(async (value) => {
+		if (value.value) {
+			if (editorIsValid) {
+				$entity.entities[selectedEntityID] = json.parse(editor.getValue())
+				selectedEntity = $entity.entities[selectedEntityID]
+			}
+		}
+	})
 </script>
 
 <SplitPanes on:resize={() => editor?.layout()} theme="">
@@ -183,99 +173,11 @@
 						<Tree
 							on:selectionUpdate={({ detail }) => {
 								if (selectionType == "entity") {
-									try {
-										json.parse(editor.getValue())
-									} catch {
-										editorIsValid = false
-										$addNotification = {
-											kind: "error",
-											title: "Invalid JSON",
-											subtitle: "You've entered invalid JSON."
-										}
-
-										return
-									}
-
-									try {
-										if (checkValidityOfEntity($entity, json.parse(editor.getValue()))) {
-											editorIsValid = true
-
-											if (!isEqual($entity.entities[selectedEntityID], json.parse(editor.getValue()))) {
-												const parsed = json.parse(editor.getValue())
-
-												$inVivoMetadata.entities[selectedEntityID] ??= {
-													dirtyPins: false,
-													dirtyUnchangeables: false,
-													dirtyExtensions: false,
-													dirtyProperties: [],
-													hasSetProperties: false
-												}
-
-												$inVivoMetadata.entities[selectedEntityID].dirtyPins = !(
-													isEqual($entity.entities[selectedEntityID].events, parsed.events) &&
-													isEqual($entity.entities[selectedEntityID].inputCopying, parsed.inputCopying) &&
-													isEqual($entity.entities[selectedEntityID].outputCopying, parsed.outputCopying)
-												)
-
-												$inVivoMetadata.entities[selectedEntityID].dirtyUnchangeables =
-													$entity.entities[selectedEntityID].template != parsed.template ||
-													$entity.entities[selectedEntityID].templateFlag != parsed.templateFlag ||
-													$entity.entities[selectedEntityID].blueprint != parsed.blueprint ||
-													$entity.entities[selectedEntityID].editorOnly != parsed.editorOnly
-
-												$inVivoMetadata.entities[selectedEntityID].dirtyExtensions = !(
-													isEqual($entity.entities[selectedEntityID].propertyAliases, parsed.propertyAliases) &&
-													isEqual($entity.entities[selectedEntityID].exposedEntities, parsed.exposedEntities) &&
-													isEqual($entity.entities[selectedEntityID].exposedInterfaces, parsed.exposedInterfaces) &&
-													isEqual($entity.entities[selectedEntityID].subsets, parsed.subsets)
-												)
-
-												if (parsed.properties) {
-													if ($entity.entities[selectedEntityID].properties) {
-														$inVivoMetadata.entities[selectedEntityID].dirtyProperties = [
-															...Object.entries(parsed.properties)
-																.filter(([prop, val]) => !isEqual($entity.entities[selectedEntityID].properties[prop], val))
-																.map((a) => a[0]),
-															...Object.keys(parsed.properties).filter((a) => !$entity.entities[selectedEntityID].properties[a]),
-															...Object.keys($entity.entities[selectedEntityID].properties).filter((a) => !parsed.properties[a])
-														]
-													} else {
-														$inVivoMetadata.entities[selectedEntityID].dirtyProperties = Object.keys(parsed.properties)
-													}
-												} else {
-													if ($entity.entities[selectedEntityID].properties) {
-														$inVivoMetadata.entities[selectedEntityID].dirtyProperties = Object.keys($entity.entities[selectedEntityID].properties)
-													}
-												}
-
-												if (parsed.platformSpecificProperties) {
-													$inVivoMetadata.entities[selectedEntityID].dirtyProperties.push(
-														...Object.entries(parsed.platformSpecificProperties)
-															.filter(([prop, val]) => !isEqual($entity.entities[selectedEntityID].platformSpecificProperties[prop], val))
-															.map((a) => a[0]),
-														...Object.keys(parsed.platformSpecificProperties).filter((a) => !$entity.entities[selectedEntityID].platformSpecificProperties[a]),
-														...Object.keys($entity.entities[selectedEntityID].platformSpecificProperties).filter((a) => !parsed.platformSpecificProperties[a])
-													)
-												}
-
-												$entity.entities[selectedEntityID] = parsed
-											}
-										} else {
-											tree.navigateTo(selectedEntityID)
-											$addNotification = {
-												kind: "error",
-												title: "Invalid entity",
-												subtitle: "The entity either references something that doesn't exist or isn't valid according to the schema."
-											}
-										}
-									} catch (e) {
+									if (editorIsValid) {
+										$entity.entities[selectedEntityID] = json.parse(editor.getValue())
+									} else {
 										tree.navigateTo(selectedEntityID)
-										console.log("Suppressed validation error", e)
-										$addNotification = {
-											kind: "error",
-											title: "Invalid entity",
-											subtitle: "The entity either references something that doesn't exist or isn't valid according to the schema."
-										}
+										return
 									}
 								}
 
@@ -539,6 +441,11 @@
 				</h1>
 				<div class="flex mb-2 gap-2">
 					<code>{selectedEntityID}</code>
+					{#if editorIsValid}
+						<span class="text-green-200">Valid entity</span>
+					{:else}
+						<span class="text-red-200">Invalid entity</span>
+					{/if}
 					{#if $appSettings.inVivoExtensions && gameServer.connected && gameServer.lastAddress}
 						{#if $inVivoMetadata.entities[selectedEntityID]?.dirtyUnchangeables}
 							<span class="text-red-200">Template/blueprint/editorOnly changes require re-deploy</span>
@@ -567,7 +474,9 @@
 							subEntityID={selectedEntityID}
 							jsonToDisplay={selectedEntity}
 							inVivoExtensions={$appSettings.inVivoExtensions}
-							on:contentChanged={() => updateEntityData(selectedEntityID, editor.getValue())}
+							on:contentChanged={() => {
+								checkEditorValidity(selectedEntityID, editor.getValue())
+							}}
 						/>
 					{:else}
 						<TextInput labelText="Name" bind:value={$entity.comments[selectedComment].name} />

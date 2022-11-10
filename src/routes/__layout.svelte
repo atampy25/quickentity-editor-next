@@ -29,7 +29,7 @@
 		TreeView
 	} from "carbon-components-svelte"
 
-	import { addNotification, appSettings, entity, inVivoMetadata, sessionMetadata, workspaceData } from "$lib/stores"
+	import { addNotification, appSettings, entity, forceSaveSubEntity, inVivoMetadata, sessionMetadata, workspaceData } from "$lib/stores"
 	import json from "$lib/json"
 	import { shortcut } from "$lib/shortcut"
 	import { gameServer } from "$lib/in-vivo/gameServer"
@@ -500,7 +500,11 @@
 
 						if (!x) return
 
+						$forceSaveSubEntity = { value: true }
+
 						await writeTextFile(x, await getEntityAsText())
+
+						$forceSaveSubEntity = { value: false }
 
 						$sessionMetadata.saveAsPatch = false
 						$sessionMetadata.saveAsEntityPath = x
@@ -532,6 +536,8 @@
 						})
 
 						if (!x) return
+
+						$forceSaveSubEntity = { value: true }
 
 						if (Object.keys($entity.entities).length > 25000) {
 							await writeTextFile("entity.json", await getEntityAsText(), { dir: BaseDirectory.App })
@@ -586,6 +592,8 @@
 							}
 						}
 
+						$forceSaveSubEntity = { value: false }
+
 						$sessionMetadata.saveAsPatch = true
 						$sessionMetadata.saveAsPatchPath = x
 						$sessionMetadata.loadedFromGameFiles = false
@@ -608,6 +616,8 @@
 						role="none"
 						use:shortcut={{ control: true, key: "s" }}
 						on:click={async () => {
+							$forceSaveSubEntity = { value: true }
+
 							if (Object.keys($entity.entities).length > 25000) {
 								await writeTextFile("entity.json", await getEntityAsText(), { dir: BaseDirectory.App })
 
@@ -661,6 +671,8 @@
 								}
 							}
 
+							$forceSaveSubEntity = { value: false }
+
 							$sessionMetadata.loadedFromGameFiles = false
 
 							$addNotification = {
@@ -683,7 +695,11 @@
 						role="none"
 						use:shortcut={{ control: true, key: "s" }}
 						on:click={async () => {
+							$forceSaveSubEntity = { value: true }
+
 							await writeTextFile($sessionMetadata.saveAsEntityPath, await getEntityAsText())
+
+							$forceSaveSubEntity = { value: false }
 
 							$sessionMetadata.loadedFromGameFiles = false
 
@@ -1026,17 +1042,69 @@
 
 		<SideNav bind:isOpen={isSideNavOpen} rail>
 			<SideNavItems>
-				<SideNavLink icon={Data2} text="Metadata" href="/metadata" isSelected={$page.url.pathname == "/metadata"} />
+				<SideNavLink
+					icon={Data2}
+					text="Metadata"
+					href="/metadata"
+					on:click={() => {
+						$forceSaveSubEntity = { value: true }
+						setTimeout(() => {
+							$forceSaveSubEntity = { value: false }
+						}, 500)
+					}}
+					isSelected={$page.url.pathname == "/metadata"}
+				/>
 				<SideNavDivider />
-				<SideNavLink icon={Edit} text="Overrides" href="/overrides" isSelected={$page.url.pathname == "/overrides"} />
+				<SideNavLink
+					icon={Edit}
+					text="Overrides"
+					href="/overrides"
+					on:click={() => {
+						$forceSaveSubEntity = { value: true }
+						setTimeout(() => {
+							$forceSaveSubEntity = { value: false }
+						}, 500)
+					}}
+					isSelected={$page.url.pathname == "/overrides"}
+				/>
 				<SideNavDivider />
-				<SideNavLink icon={TreeViewIcon} text="Tree View" href="/" isSelected={$page.url.pathname == "/"} />
+				<SideNavLink
+					icon={TreeViewIcon}
+					text="Tree View"
+					href="/"
+					on:click={() => {
+						$forceSaveSubEntity = { value: true }
+						setTimeout(() => {
+							$forceSaveSubEntity = { value: false }
+						}, 500)
+					}}
+					isSelected={$page.url.pathname == "/"}
+				/>
 				<SideNavDivider />
 				{#if $appSettings.gameFileExtensions}
-					<SideNavLink icon={Chart_3D} text="3D Preview" href="/3d" isSelected={$page.url.pathname == "/3d"} />
+					<SideNavLink
+						icon={Chart_3D}
+						text="3D Preview"
+						href="/3d"
+						on:click={() => {
+							$forceSaveSubEntity = { value: true }
+						}}
+						isSelected={$page.url.pathname == "/3d"}
+					/>
 					<SideNavDivider />
 				{/if}
-				<SideNavLink icon={Settings} text="Settings" href="/settings" isSelected={$page.url.pathname == "/settings"} />
+				<SideNavLink
+					icon={Settings}
+					text="Settings"
+					href="/settings"
+					on:click={() => {
+						$forceSaveSubEntity = { value: true }
+						setTimeout(() => {
+							$forceSaveSubEntity = { value: false }
+						}, 500)
+					}}
+					isSelected={$page.url.pathname == "/settings"}
+				/>
 				{#if $appSettings.enableLogRocket}
 					<SideNavDivider />
 					<SideNavLink icon={WarningAlt} href="#" text="Report Issue" on:click={() => (reportIssueModalOpen = true)} />
@@ -1069,6 +1137,8 @@
 
 										// save old file
 										if ($appSettings.autoSaveOnSwitchFile) {
+											$forceSaveSubEntity = { value: true }
+
 											if ($sessionMetadata.originalEntityPath && !$sessionMetadata.loadedFromGameFiles) {
 												if ($sessionMetadata.saveAsPatch) {
 													if (Object.keys($entity.entities).length > 25000) {
@@ -1139,6 +1209,8 @@
 													breadcrumb("entity", "Saved to file (original path) when switching workspace file")
 												}
 											}
+
+											$forceSaveSubEntity = { value: false }
 										}
 
 										// load new file
