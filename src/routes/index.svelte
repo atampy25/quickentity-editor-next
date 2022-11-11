@@ -475,8 +475,9 @@
 							jsonToDisplay={selectedEntity}
 							inVivoExtensions={$appSettings.inVivoExtensions}
 							on:contentChanged={() => {
-								if (selectionType){
-								checkEditorValidity(selectedEntityID, editor.getValue())}
+								if (selectionType) {
+									checkEditorValidity(selectedEntityID, editor.getValue())
+								}
 							}}
 						/>
 					{:else}

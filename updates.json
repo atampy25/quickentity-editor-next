@@ -1,11 +1,11 @@
 {
-	"version": "1.17.6",
-	"notes": "Replace validity check with status bar indicator\n\nresolves #10, resolves #4",
+	"version": "1.17.7",
+	"notes": "Minor inspection fix",
 	"pub_date": "2022-09-28T09:45:47Z",
 	"platforms": {
 		"windows-x86_64": {
-			"signature": "dW50cnVzdGVkIGNvbW1lbnQ6IHNpZ25hdHVyZSBmcm9tIHRhdXJpIHNlY3JldCBrZXkKUlVScWpVZGd2b0lOTllrbEE1Q0JoUXY0YS9VM0V1Z3pvNHlBL1ArS0hzRzgrVWNFaURHUmFzSWdHTEpVM05Cc3NuTThQZTJIdzBPNm42M3J3NHlLUUJIN0UrZEl5YWl1Z1FvPQp0cnVzdGVkIGNvbW1lbnQ6IHRpbWVzdGFtcDoxNjY4MDY2OTc3CWZpbGU6UXVpY2tFbnRpdHkgRWRpdG9yXzEuMTcuNl94NjRfZW4tVVMubXNpLnppcAoxOW9ZQkFxRFdISjVVSi9mbzVsalZQdjhUak45N0h3MTQxQVlCTWJqZVVUaFdDVnY0Nkg3MVpqbkFSYjV2NXlQaXB5UW9oZkFidVlTZjQyZGpCcVJEUT09Cg==",
-			"url": "https://github.com/atampy25/quickentity-editor-next/releases/download/1.17.6/QuickEntity.Editor_1.17.6_x64_en-US.msi.zip"
+			"signature": "dW50cnVzdGVkIGNvbW1lbnQ6IHNpZ25hdHVyZSBmcm9tIHRhdXJpIHNlY3JldCBrZXkKUlVScWpVZGd2b0lOTll3WVBGTW9lR1diK0hYVnVVakFSWnRXdXJaZjF0UGY0UjM3OW43eDJnVWg4Q1JMbG1QakJoRWJqTXJsZzZ1Y0w5NmN2RVJHd1NxMUVhanpoQWcraWd3PQp0cnVzdGVkIGNvbW1lbnQ6IHRpbWVzdGFtcDoxNjY4MTY1OTYxCWZpbGU6UXVpY2tFbnRpdHkgRWRpdG9yXzEuMTcuN194NjRfZW4tVVMubXNpLnppcApjMEUvSkpYYjZ0ekR3V00xeW1aanFITVV2QkdkaGVuL24vY3UvUEgvTmh1TUtiSnFJSGV4SUR2YmFKMjB3VlVnb3IrTXR6QW5kK1ZSSVZjMXNUUWdDdz09Cg==",
+			"url": "https://github.com/atampy25/quickentity-editor-next/releases/download/1.17.7/QuickEntity.Editor_1.17.7_x64_en-US.msi.zip"
 		}
 	}
 }
