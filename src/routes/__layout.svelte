@@ -331,6 +331,10 @@
 			]).execute()
 		}
 
+		if (!(await exists(await join(await appDir(), "inspection")))) {
+			await createDir(await join(await appDir(), "inspection"))
+		}
+
 		await copyFile(await join(await appDir(), "inspection-cache", tempHash + ".json"), await join(await appDir(), "inspection", "entity.json"))
 	}
 

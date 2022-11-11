@@ -152,7 +152,7 @@
 
 	forceSaveSubEntity.subscribe(async (value) => {
 		if (value.value) {
-			if (editorIsValid) {
+			if (editorIsValid && selectionType == "entity") {
 				$entity.entities[selectedEntityID] = json.parse(editor.getValue())
 				selectedEntity = $entity.entities[selectedEntityID]
 			}
@@ -475,7 +475,8 @@
 							jsonToDisplay={selectedEntity}
 							inVivoExtensions={$appSettings.inVivoExtensions}
 							on:contentChanged={() => {
-								checkEditorValidity(selectedEntityID, editor.getValue())
+								if (selectionType){
+								checkEditorValidity(selectedEntityID, editor.getValue())}
 							}}
 						/>
 					{:else}
