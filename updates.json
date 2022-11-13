@@ -1,11 +1,11 @@
 {
-	"version": "1.17.7",
-	"notes": "Minor inspection fix",
+	"version": "1.17.8",
+	"notes": "Fix CPPT pin intellisense, only refresh tree when necessary",
 	"pub_date": "2022-09-28T09:45:47Z",
 	"platforms": {
 		"windows-x86_64": {
-			"signature": "dW50cnVzdGVkIGNvbW1lbnQ6IHNpZ25hdHVyZSBmcm9tIHRhdXJpIHNlY3JldCBrZXkKUlVScWpVZGd2b0lOTll3WVBGTW9lR1diK0hYVnVVakFSWnRXdXJaZjF0UGY0UjM3OW43eDJnVWg4Q1JMbG1QakJoRWJqTXJsZzZ1Y0w5NmN2RVJHd1NxMUVhanpoQWcraWd3PQp0cnVzdGVkIGNvbW1lbnQ6IHRpbWVzdGFtcDoxNjY4MTY1OTYxCWZpbGU6UXVpY2tFbnRpdHkgRWRpdG9yXzEuMTcuN194NjRfZW4tVVMubXNpLnppcApjMEUvSkpYYjZ0ekR3V00xeW1aanFITVV2QkdkaGVuL24vY3UvUEgvTmh1TUtiSnFJSGV4SUR2YmFKMjB3VlVnb3IrTXR6QW5kK1ZSSVZjMXNUUWdDdz09Cg==",
-			"url": "https://github.com/atampy25/quickentity-editor-next/releases/download/1.17.7/QuickEntity.Editor_1.17.7_x64_en-US.msi.zip"
+			"signature": "dW50cnVzdGVkIGNvbW1lbnQ6IHNpZ25hdHVyZSBmcm9tIHRhdXJpIHNlY3JldCBrZXkKUlVScWpVZGd2b0lOTlNhRmZTVy9kR1BXZVdKSEdPY3dQVW1FL3QrRnd3M05ZZFNvUXZkdWdKQWdvM242T1N4bVp6V0UzaExwTGJ6NXV4MGxiOGtzWVRrdnVPbTd4aVpZNFFrPQp0cnVzdGVkIGNvbW1lbnQ6IHRpbWVzdGFtcDoxNjY4MzAyMTI4CWZpbGU6UXVpY2tFbnRpdHkgRWRpdG9yXzEuMTcuOF94NjRfZW4tVVMubXNpLnppcApBeWFoQ3IyS0xoWStjaDNlVGJaVWszQjY1Rmw5WFY5N3RRcE9LRGZjT05IYVdnNXppWVlydG9IamFabjFGdURNdUxsR0VHM2NEKzFNUTR3RGswYU5BZz09Cg==",
+			"url": "https://github.com/atampy25/quickentity-editor-next/releases/download/1.17.8/QuickEntity.Editor_1.17.8_x64_en-US.msi.zip"
 		}
 	}
 }
