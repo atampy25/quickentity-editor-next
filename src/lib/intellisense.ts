@@ -280,8 +280,8 @@ export class Intellisense {
 				const s = await readJSON(await join(this.appSettings.gameFileExtensionsDataPath, "TEMP", template + ".TEMP.entity.json"))
 				await this.getPins(s, s.rootEntity, false, soFar)
 			} else if (this.knownCPPTPins[template]) {
-				soFar.input.push(...Object.keys(this.knownCPPTPins[template].input))
-				soFar.output.push(...Object.keys(this.knownCPPTPins[template].output))
+				soFar.input.push(...this.knownCPPTPins[template].input)
+				soFar.output.push(...this.knownCPPTPins[template].output)
 			} else if (this.allUICTs.has(template)) {
 				// Get the specific pins from the UICB (though we don't know if they're inputs or outputs)
 				soFar.input.push(

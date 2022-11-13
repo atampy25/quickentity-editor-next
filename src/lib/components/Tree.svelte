@@ -679,12 +679,34 @@
 			index++
 		}
 
+		setTimeout(() => {
+			try {
+				tree.get_node(currentlySelected, true)[0].scrollIntoView()
+			} catch {}
+		}, 100)
+
 		tree.refresh()
 	}
 
+	let oldEntityNames: string[] = []
+	let oldComments = ""
+	let oldEntityCount = 0
+
 	$: if (tree) {
-		if (Object.keys(entity.entities).every((entityID) => reverseReferences[entityID])) {
-			refreshTree(entity, reverseReferences)
+		if (
+			!isEqual(
+				Object.values(entity.entities).map((a) => a.name),
+				oldEntityNames
+			) ||
+			Object.keys(entity.entities).length != oldEntityCount ||
+			entity.comments.map((a) => a.parent + a.name).join("") != oldComments
+		) {
+			if (Object.keys(entity.entities).every((entityID) => reverseReferences[entityID])) {
+				refreshTree(entity, reverseReferences)
+				oldEntityNames = Object.values(entity.entities).map((a) => a.name)
+				oldEntityCount = Object.keys(entity.entities).length
+				oldComments = entity.comments.map((a) => a.parent + a.name).join("")
+			}
 		}
 	}
 
