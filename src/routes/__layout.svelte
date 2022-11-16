@@ -759,7 +759,7 @@
 					{/if}
 				{/if}
 			{/if}
-			{#if $page.url.pathname == "/metadata" || $page.url.pathname == "/overrides" || $page.url.pathname == "/" || $page.url.pathname == "/3d"}
+			{#if $page.url.pathname == "/metadata" || $page.url.pathname == "/overrides" || $page.url.pathname == "/tree" || $page.url.pathname == "/3d"}
 				<HeaderNavItem
 					href="#"
 					on:click={() => {
@@ -929,7 +929,7 @@
 							tour.start()
 						}
 
-						if ($page.url.pathname == "/") {
+						if ($page.url.pathname == "/tree") {
 							const tour = new Shepherd.Tour({
 								useModalOverlay: true,
 								defaultStepOptions: {
@@ -1075,14 +1075,14 @@
 				<SideNavLink
 					icon={TreeViewIcon}
 					text="Tree View"
-					href="/"
+					href="/tree"
 					on:click={() => {
 						$forceSaveSubEntity = { value: true }
 						setTimeout(() => {
 							$forceSaveSubEntity = { value: false }
 						}, 500)
 					}}
-					isSelected={$page.url.pathname == "/"}
+					isSelected={$page.url.pathname == "/tree"}
 				/>
 				<SideNavDivider />
 				{#if $appSettings.gameFileExtensions}
