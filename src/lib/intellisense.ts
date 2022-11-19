@@ -21,19 +21,29 @@ export class Intellisense {
 		gameFileExtensionsDataPath: string
 	}
 
-	knownCPPTProperties: Record<string, Record<string, any>>
-	knownCPPTPins: Record<string, { input: string[]; output: string[] }>
-	UICBPropTypes: Record<number, string>
-	allUICTs: Set<string>
+	knownCPPTProperties!: Record<string, Record<string, any>>
+	knownCPPTPins!: Record<string, { input: string[]; output: string[]} >
+	UICBPropTypes!: Record<number, string>
+	allUICTs!: Set<string>
+
+	parsedEntities: Record<string, any> = {}
 
 	constructor(appSettings: { gameFileExtensions: boolean; gameFileExtensionsDataPath: string }) {
 		this.appSettings = appSettings
 	}
 
+	async readJSONFile(path: string) {
+		if (!this.parsedEntities[path]) {
+			this.parsedEntities[path] = await readJSON(path)
+		}
+
+		return this.parsedEntities[path]
+	}
+
 	async ready() {
-		this.knownCPPTProperties = await readJSON(await join(this.appSettings.gameFileExtensionsDataPath, "props.json"))
-		this.knownCPPTPins = await readJSON(await join(this.appSettings.gameFileExtensionsDataPath, "pins.json"))
-		this.UICBPropTypes = await readJSON(await join(this.appSettings.gameFileExtensionsDataPath, "foundUICBPropTypes.json"))
+		this.knownCPPTProperties = await this.readJSONFile(await join(this.appSettings.gameFileExtensionsDataPath, "props.json"))
+		this.knownCPPTPins = await this.readJSONFile(await join(this.appSettings.gameFileExtensionsDataPath, "pins.json"))
+		this.UICBPropTypes = await this.readJSONFile(await join(this.appSettings.gameFileExtensionsDataPath, "foundUICBPropTypes.json"))
 		this.allUICTs = new Set(
 			(await readDir(await join(this.appSettings.gameFileExtensionsDataPath, "UICT")))
 				.map((a) => a.name?.split(".")[0])
@@ -43,7 +53,7 @@ export class Intellisense {
 	}
 
 	async findProperties(pathToEntity: string, foundProperties: string[]) {
-		const entity: Entity = await readJSON(pathToEntity)
+		const entity: Entity = await this.readJSONFile(pathToEntity)
 		const targetedEntity = entity.entities[entity.rootEntity]
 
 		if (targetedEntity.propertyAliases) {
@@ -57,7 +67,7 @@ export class Intellisense {
 		}
 
 		for (const template of (await exists(await join(this.appSettings.gameFileExtensionsDataPath, "ASET", normaliseToHash(targetedEntity.template) + ".ASET.meta.JSON")))
-			? (await readJSON(await join(this.appSettings.gameFileExtensionsDataPath, "ASET", normaliseToHash(targetedEntity.template) + ".ASET.meta.JSON"))).hash_reference_data
+			? (await this.readJSONFile(await join(this.appSettings.gameFileExtensionsDataPath, "ASET", normaliseToHash(targetedEntity.template) + ".ASET.meta.JSON"))).hash_reference_data
 				.slice(0, -1)
 				.map((a) => a.hash)
 			: [normaliseToHash(targetedEntity.template)]) {
@@ -70,12 +80,12 @@ export class Intellisense {
 				foundProperties.push(
 					...Object.keys(
 						(
-							await readJSON(
+							await this.readJSONFile(
 								await join(
 									this.appSettings.gameFileExtensionsDataPath,
 									"UICB",
 									(
-										await readJSON(await join(this.appSettings.gameFileExtensionsDataPath, "UICT", template + ".UICT.meta.JSON"))
+										await this.readJSONFile(await join(this.appSettings.gameFileExtensionsDataPath, "UICT", template + ".UICT.meta.JSON"))
 									).hash_reference_data.filter((a) => a.hash != "002C4526CC9753E6")[0].hash + ".UICB.json"
 								)
 							)
@@ -86,8 +96,8 @@ export class Intellisense {
 		}
 	}
 
-	async findDefaultPropertyValue(pathToEntity: string, targetEntity: string | undefined, propertyToFind: string, useLoadedEntity?: Entity, excludeEntity?: string): any {
-		const loadedEntity: Entity = useLoadedEntity || (await readJSON(pathToEntity))
+	async findDefaultPropertyValue(pathToEntity: string, targetEntity: string | undefined, propertyToFind: string, useLoadedEntity?: Entity, excludeEntity?: string): Promise<any> {
+		const loadedEntity: Entity = useLoadedEntity || (await this.readJSONFile(pathToEntity))
 		const targetedEntity = loadedEntity.entities[targetEntity || loadedEntity.rootEntity]
 
 		if (targetedEntity.propertyAliases) {
@@ -152,7 +162,7 @@ export class Intellisense {
 		}
 
 		for (const template of (await exists(await join(this.appSettings.gameFileExtensionsDataPath, "ASET", normaliseToHash(targetedEntity.template) + ".ASET.meta.JSON")))
-			? (await readJSON(await join(this.appSettings.gameFileExtensionsDataPath, "ASET", normaliseToHash(targetedEntity.template) + ".ASET.meta.JSON"))).hash_reference_data
+			? (await this.readJSONFile(await join(this.appSettings.gameFileExtensionsDataPath, "ASET", normaliseToHash(targetedEntity.template) + ".ASET.meta.JSON"))).hash_reference_data
 				.slice(0, -1)
 				.map((a) => a.hash)
 			: [normaliseToHash(targetedEntity.template)]) {
@@ -167,13 +177,13 @@ export class Intellisense {
 			} else if (this.allUICTs.has(template)) {
 				if (
 					(
-						await readJSON(
+						await this.readJSONFile(
 							await join(
 								this.appSettings.gameFileExtensionsDataPath,
 								"UICB",
 								(
-									await readJSON(await join(this.appSettings.gameFileExtensionsDataPath, "UICT", template + ".UICT.meta.JSON"))
-								).hash_reference_data.filter((a) => a.hash != "002C4526CC9753E6")[0].hash + ".UICB.json"
+									await this.readJSONFile(await join(this.appSettings.gameFileExtensionsDataPath, "UICT", template + ".UICT.meta.JSON"))
+								).hash_reference_data.find((a) => a.hash != "002C4526CC9753E6").hash + ".UICB.json"
 							)
 						)
 					).properties[propertyToFind]
@@ -181,13 +191,13 @@ export class Intellisense {
 					return {
 						type: this.UICBPropTypes[
 							(
-								await readJSON(
+								await this.readJSONFile(
 									await join(
 										this.appSettings.gameFileExtensionsDataPath,
 										"UICB",
-										(await readJSON(await join(this.appSettings.gameFileExtensionsDataPath, "UICT", template + ".UICT.meta.JSON")).hash_reference_data.filter(
-											(a) => a.hash != "002C4526CC9753E6"
-										)[0].hash) + ".UICB.json"
+										(
+											await this.readJSONFile(await join(this.appSettings.gameFileExtensionsDataPath, "UICT", template + ".UICT.meta.JSON"))
+										).hash_reference_data.find((a) => a.hash != "002C4526CC9753E6").hash + ".UICB.json"
 									)
 								)
 							).properties[propertyToFind]
@@ -195,13 +205,13 @@ export class Intellisense {
 						value: { ZString: "", bool: false, float32: 0 }[
 							this.UICBPropTypes[
 								(
-									await readJSON(
+									await this.readJSONFile(
 										await join(
 											this.appSettings.gameFileExtensionsDataPath,
 											"UICB",
-											(await readJSON(await join(this.appSettings.gameFileExtensionsDataPath, "UICT", template + ".UICT.meta.JSON")).hash_reference_data.filter(
-												(a) => a.hash != "002C4526CC9753E6"
-											)[0].hash) + ".UICB.json"
+											(
+												await this.readJSONFile(await join(this.appSettings.gameFileExtensionsDataPath, "UICT", template + ".UICT.meta.JSON"))
+											).hash_reference_data.find((a) => a.hash != "002C4526CC9753E6").hash + ".UICB.json"
 										)
 									)
 								).properties[propertyToFind]
@@ -218,7 +228,7 @@ export class Intellisense {
 		}
 	}
 
-	async getPins(entity: Entity, subEntity: string, ignoreInternal: boolean, soFar: { input: string[]; output: string[] }): Promise<{ input: string[]; output: string[] }> {
+	async getPins(entity: Entity, subEntity: string, ignoreInternal: boolean, soFar: { input: string[]; output: string[] }) {
 		const targetedEntity = entity.entities[subEntity]
 
 		if (!ignoreInternal) {
@@ -272,12 +282,12 @@ export class Intellisense {
 		}
 
 		for (const template of (await exists(await join(this.appSettings.gameFileExtensionsDataPath, "ASET", normaliseToHash(targetedEntity.template) + ".ASET.meta.JSON")))
-			? (await readJSON(await join(this.appSettings.gameFileExtensionsDataPath, "ASET", normaliseToHash(targetedEntity.template) + ".ASET.meta.JSON"))).hash_reference_data
+			? (await this.readJSONFile(await join(this.appSettings.gameFileExtensionsDataPath, "ASET", normaliseToHash(targetedEntity.template) + ".ASET.meta.JSON"))).hash_reference_data
 				.slice(0, -1)
 				.map((a) => a.hash)
 			: [normaliseToHash(targetedEntity.template)]) {
 			if (await exists(await join(this.appSettings.gameFileExtensionsDataPath, "TEMP", template + ".TEMP.entity.json"))) {
-				const s = await readJSON(await join(this.appSettings.gameFileExtensionsDataPath, "TEMP", template + ".TEMP.entity.json"))
+				const s = await this.readJSONFile(await join(this.appSettings.gameFileExtensionsDataPath, "TEMP", template + ".TEMP.entity.json"))
 				await this.getPins(s, s.rootEntity, false, soFar)
 			} else if (this.knownCPPTPins[template]) {
 				soFar.input.push(...this.knownCPPTPins[template].input)
@@ -287,12 +297,12 @@ export class Intellisense {
 				soFar.input.push(
 					...Object.keys(
 						(
-							await readJSON(
+							await this.readJSONFile(
 								await join(
 									this.appSettings.gameFileExtensionsDataPath,
 									"UICB",
 									(
-										await readJSON(await join(this.appSettings.gameFileExtensionsDataPath, "UICT", template + ".UICT.meta.JSON"))
+										await this.readJSONFile(await join(this.appSettings.gameFileExtensionsDataPath, "UICT", template + ".UICT.meta.JSON"))
 									).hash_reference_data.filter((a) => a.hash != "002C4526CC9753E6")[0].hash + ".UICB.json"
 								)
 							)
@@ -303,12 +313,12 @@ export class Intellisense {
 				soFar.output.push(
 					...Object.keys(
 						(
-							await readJSON(
+							await this.readJSONFile(
 								await join(
 									this.appSettings.gameFileExtensionsDataPath,
 									"UICB",
 									(
-										await readJSON(await join(this.appSettings.gameFileExtensionsDataPath, "UICT", template + ".UICT.meta.JSON"))
+										await this.readJSONFile(await join(this.appSettings.gameFileExtensionsDataPath, "UICT", template + ".UICT.meta.JSON"))
 									).hash_reference_data.filter((a) => a.hash != "002C4526CC9753E6")[0].hash + ".UICB.json"
 								)
 							)

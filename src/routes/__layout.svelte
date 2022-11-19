@@ -60,6 +60,7 @@
 	import SentryRRWeb from "@sentry/rrweb"
 	import { changeEntityHashesFromFriendly, changeEntityHashesToFriendly } from "$lib/utils"
 	import Decimal from "decimal.js"
+	import { goto } from "$app/navigation"
 
 	let displayNotifications: { kind: "error" | "info" | "info-square" | "success" | "warning" | "warning-alt"; title: string; subtitle: string }[] = []
 
@@ -392,6 +393,8 @@
 
 						if (x && !Array.isArray(x)) {
 							$workspaceData.path = x
+
+							goto("/tree")
 						}
 					}}
 				/>
@@ -418,6 +421,8 @@
 							$entity = await getEntityFromText(await readTextFile(x))
 
 							breadcrumb("entity", `Loaded ${$entity.tempHash} from file`)
+
+							goto("/tree")
 						}
 					}}
 				>
@@ -482,6 +487,8 @@
 						$entity = await getEntityFromText(await readTextFile(await join(await appDir(), "patched.json")))
 
 						breadcrumb("entity", `Loaded ${$entity.tempHash} from patch`)
+
+						goto("/tree")
 					}}
 				>
 					<HeaderNavItem href="#" text="Load entity from patch" />
@@ -1315,6 +1322,8 @@
 			$entity = await getEntityFromText(await readTextFile(await join(await appDir(), "inspection", "entity.json")))
 
 			breadcrumb("entity", `Loaded ${$entity.tempHash} from game files`)
+
+			goto("/tree")
 		}}
 	>
 		<p>What game file would you like to load? Give either the hash or the path.</p>
