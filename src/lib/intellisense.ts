@@ -22,7 +22,7 @@ export class Intellisense {
 	}
 
 	knownCPPTProperties!: Record<string, Record<string, any>>
-	knownCPPTPins!: Record<string, { input: string[]; output: string[]} >
+	knownCPPTPins!: Record<string, { input: string[]; output: string[] }>
 	UICBPropTypes!: Record<number, string>
 	allUICTs!: Set<string>
 
