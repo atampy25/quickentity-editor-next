@@ -229,7 +229,10 @@
 									},
 									value: merge(perfPropertySchemas[$intellisense.knownCPPTProperties[normaliseToHash(jsonToDisplay.template)][foundProp][0]], {
 										default: $intellisense.knownCPPTProperties[normaliseToHash(jsonToDisplay.template)][foundProp][1]
-									})
+									}),
+									postInit: {
+										type: "boolean"
+									}
 								},
 								default: {
 									type: $intellisense.knownCPPTProperties[normaliseToHash(jsonToDisplay.template)][foundProp][0],
@@ -251,7 +254,10 @@
 										},
 										value: merge(perfPropertySchemas[val.type], {
 											default: val.value
-										})
+										}),
+										postInit: {
+											type: "boolean"
+										}
 									},
 									default: val
 								}

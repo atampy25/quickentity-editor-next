@@ -129,7 +129,7 @@ export function traverseEntityTree(entity: Entity, startingPoint: string): strin
 		}
 	} catch {}
 
-	return copiedEntity.filter((thing, index, self) => index === self.findIndex((t) => t == thing))
+	return copiedEntity
 }
 
 /** Deletes all references to a given entity ID, mutating the passed entity. */
@@ -210,6 +210,11 @@ export function deleteReferencesToEntity(
 
 					case "exposedInterface":
 						delete entity.entities[ref.entity].exposedInterfaces![ref.context![0]]
+						deleted++
+						break
+
+					case "subset":
+						entity.entities[ref.entity].subsets![ref.context![0]] = entity.entities[ref.entity].subsets![ref.context![0]].filter((a) => a != target)
 						deleted++
 						break
 				}
@@ -338,6 +343,18 @@ export function getReferencedEntities(entityData: SubEntity): {
 		}
 	}
 
+	if (entityData.subsets) {
+		for (const [subset, entities] of Object.entries(entityData.subsets)) {
+			for (const ent of entities) {
+				refs.push({
+					type: "subset",
+					entity: ent,
+					context: [subset]
+				})
+			}
+		}
+	}
+
 	return refs
 }
 
@@ -458,6 +475,20 @@ export function getReferencedExternalEntities(
 					entity: implementor,
 					context: [exposedInterface]
 				})
+			}
+		}
+	}
+
+	if (entityData.subsets) {
+		for (const [subset, entities] of Object.entries(entityData.subsets)) {
+			for (const ent of entities) {
+				if (!entityToCheckWith[ent]) {
+					refs.push({
+						type: "subset",
+						entity: ent,
+						context: [subset]
+					})
+				}
 			}
 		}
 	}

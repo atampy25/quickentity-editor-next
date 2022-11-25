@@ -332,7 +332,18 @@
 										let copiedEntity: Record<string, any> = {}
 
 										copiedEntity[d.id] = json.parse(json.stringify(entity.entities[d.id]))
-										Object.assign(copiedEntity, json.parse(json.stringify(Object.fromEntries(traverseEntityTree(entity, d.id).map((a) => [a, entity.entities[a]])))))
+										Object.assign(
+											copiedEntity,
+											json.parse(
+												json.stringify(
+													Object.fromEntries(
+														traverseEntityTree(entity, d.id)
+															.map((a) => [a, entity.entities[a]])
+															.filter((thing, index, self) => index === self.findIndex((t) => t == thing))
+													)
+												)
+											)
+										)
 
 										copiedEntity.origin = entity.tempHash
 
@@ -499,6 +510,14 @@
 														case "exposedInterface":
 															ent.exposedInterfaces![ref.context![0]] = changedEntityIDs[ref.entity]
 															break
+
+														case "subset":
+															ent.subsets![ref.context![0]].splice(
+																ent.subsets![ref.context![0]].findIndex((a) => getReferencedLocalEntity(a) == ref.entity),
+																1,
+																changedEntityIDs[ref.entity]
+															)
+															break
 													}
 												}
 											}
@@ -556,6 +575,10 @@
 
 															case "exposedInterface":
 																delete ent.exposedInterfaces![ref.context![0]]
+																break
+
+															case "subset":
+																ent.subsets![ref.context![0]] = ent.subsets![ref.context![0]].filter((a) => a != ref.entity)
 																break
 														}
 													}

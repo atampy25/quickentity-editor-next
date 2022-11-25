@@ -77,6 +77,7 @@
 				}
 			</script>
 			{#if qotdLastAnswers}
+				<br />
 				Last question's results: {qotdLastAnswers}
 			{/if}
 		{/if}
