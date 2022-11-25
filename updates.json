@@ -1,11 +1,11 @@
 {
-	"version": "1.18.1",
-	"notes": "Cache intellisense files, navigate after loading on welcome page",
+	"version": "1.18.2",
+	"notes": "Account for subsets in entity reference calculation",
 	"pub_date": "2022-09-28T09:45:47Z",
 	"platforms": {
 		"windows-x86_64": {
-			"signature": "dW50cnVzdGVkIGNvbW1lbnQ6IHNpZ25hdHVyZSBmcm9tIHRhdXJpIHNlY3JldCBrZXkKUlVScWpVZGd2b0lOTlNoVnZPNUx6OWtyUHBaS0hzTE5RWWxjdjZCa21EVzU5Z2NZRXlsYm5rQmxyZkZxM2FwaVRBVEFQRUhsc0tOTXNvMTFzK3FTYVZady83QjcxMHpCeGdzPQp0cnVzdGVkIGNvbW1lbnQ6IHRpbWVzdGFtcDoxNjY4ODIyMjMwCWZpbGU6UXVpY2tFbnRpdHkgRWRpdG9yXzEuMTguMV94NjRfZW4tVVMubXNpLnppcAo2SXduWnh1MXUwZzEwVUdERG1ERlQvaDZhL050Y08vUTg5bmd6bmhuVkpjd1BJcXNlUHJkdjhPRU5UUVcwK0tPNmRuRldoeitObXBzaFMvY1pUUkpEQT09Cg==",
-			"url": "https://github.com/atampy25/quickentity-editor-next/releases/download/1.18.1/QuickEntity.Editor_1.18.1_x64_en-US.msi.zip"
+			"signature": "dW50cnVzdGVkIGNvbW1lbnQ6IHNpZ25hdHVyZSBmcm9tIHRhdXJpIHNlY3JldCBrZXkKUlVScWpVZGd2b0lOTlFaL3ZEZWI2SFN3VEl2a3pZc1BObWJsZktqbWU1aUhGU29nVlhxSmVKUmVBZ2V2UFBiYUlVdTR4OEIxMThLTWR1TUlZcW54SUxKVXE5NkRNaFpiTmdBPQp0cnVzdGVkIGNvbW1lbnQ6IHRpbWVzdGFtcDoxNjY5MzM4NTE3CWZpbGU6UXVpY2tFbnRpdHkgRWRpdG9yXzEuMTguMl94NjRfZW4tVVMubXNpLnppcApEYVRVd2ppMGhKd2xTSkV6ZzJ5ektGaVN0VEptV21rYnJ1K0MxOHVZZFplU3R1ci9lZGU2QkVVWU93Q0UraEJkNnEwNUtRREl1ZVVxaDFiSW5lTDdCQT09Cg==",
+			"url": "https://github.com/atampy25/quickentity-editor-next/releases/download/1.18.2/QuickEntity.Editor_1.18.2_x64_en-US.msi.zip"
 		}
 	}
 }
