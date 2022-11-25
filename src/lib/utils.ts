@@ -114,18 +114,25 @@ export function changeReferenceToLocalEntity(ref: Ref, ent: string) {
 }
 
 /** Traverses the entity tree to find all entities logically parented under a given entity, returning their entity IDs. */
-export function traverseEntityTree(entity: Entity, startingPoint: string): string[] {
+export function traverseEntityTree(
+	entity: Entity,
+	startingPoint: string,
+	reverseReferences: Record<
+		string,
+		{
+			type: string
+			entity: string
+			context?: string[]
+		}[]
+	>
+): string[] {
 	const copiedEntity = []
 
 	try {
-		copiedEntity.push(
-			...Object.entries(entity.entities)
-				.filter((a) => getReferencedLocalEntity(a[1].parent) == startingPoint)
-				.map((a) => a[0])
-		)
+		copiedEntity.push(...reverseReferences[startingPoint].filter((a) => a.type == "parent").map((a) => a.entity))
 
 		for (const newEntity of copiedEntity) {
-			copiedEntity.push(...traverseEntityTree(entity, newEntity))
+			copiedEntity.push(...traverseEntityTree(entity, newEntity, reverseReferences))
 		}
 	} catch {}
 

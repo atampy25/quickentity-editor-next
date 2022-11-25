@@ -334,15 +334,7 @@
 										copiedEntity[d.id] = json.parse(json.stringify(entity.entities[d.id]))
 										Object.assign(
 											copiedEntity,
-											json.parse(
-												json.stringify(
-													Object.fromEntries(
-														traverseEntityTree(entity, d.id)
-															.map((a) => [a, entity.entities[a]])
-															.filter((thing, index, self) => index === self.findIndex((t) => t == thing))
-													)
-												)
-											)
+											json.parse(json.stringify(Object.fromEntries([...new Set(traverseEntityTree(entity, d.id, reverseReferences))].map((a) => [a, entity.entities[a]]))))
 										)
 
 										copiedEntity.origin = entity.tempHash
@@ -590,30 +582,7 @@
 
 										entity.entities[Object.keys(paste)[0]].parent = changeReferenceToLocalEntity(entity.entities[Object.keys(paste)[0]].parent, d.id)
 
-										const refs: Record<
-											string,
-											{
-												type: string
-												entity: string
-												context?: string[]
-											}[]
-										> = {}
-
-										for (const [entityID] of Object.entries(entity.entities)) {
-											refs[entityID] = []
-										}
-
-										for (const [entityID, entityData] of Object.entries(entity.entities)) {
-											for (const ref of getReferencedEntities(entityData)) {
-												refs[ref.entity].push({
-													type: ref.type,
-													entity: entityID,
-													context: ref.context
-												})
-											}
-										}
-
-										refreshTree(entity, refs)
+										dispatch("forceUpdateEntity")
 									}
 								}
 							}

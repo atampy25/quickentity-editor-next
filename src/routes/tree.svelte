@@ -231,7 +231,7 @@
 								if (!detail[1].node.id.startsWith("comment")) {
 									let deletedEntities = 1
 									let deletedRefs = 0
-									for (let ent of traverseEntityTree($entity, detail[1].node.id)) {
+									for (let ent of new Set(traverseEntityTree($entity, detail[1].node.id, $reverseReferences))) {
 										deletedRefs += deleteReferencesToEntity($entity, $reverseReferences, ent)
 										delete $entity.entities[ent]
 
@@ -260,6 +260,10 @@
 							}}
 							on:entityUpdated={({ detail }) => {
 								selectedEntity = $entity.entities[detail]
+							}}
+							on:forceUpdateEntity={() => {
+								$entity.bla = Math.random()
+								delete $entity.bla
 							}}
 							entity={$entity}
 							reverseReferences={$reverseReferences}
