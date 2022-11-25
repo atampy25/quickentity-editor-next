@@ -1,11 +1,11 @@
 {
-	"version": "1.18.2",
-	"notes": "Account for subsets in entity reference calculation",
+	"version": "1.18.3",
+	"notes": "Significant copy/paste/delete perf improvement",
 	"pub_date": "2022-09-28T09:45:47Z",
 	"platforms": {
 		"windows-x86_64": {
-			"signature": "dW50cnVzdGVkIGNvbW1lbnQ6IHNpZ25hdHVyZSBmcm9tIHRhdXJpIHNlY3JldCBrZXkKUlVScWpVZGd2b0lOTlFaL3ZEZWI2SFN3VEl2a3pZc1BObWJsZktqbWU1aUhGU29nVlhxSmVKUmVBZ2V2UFBiYUlVdTR4OEIxMThLTWR1TUlZcW54SUxKVXE5NkRNaFpiTmdBPQp0cnVzdGVkIGNvbW1lbnQ6IHRpbWVzdGFtcDoxNjY5MzM4NTE3CWZpbGU6UXVpY2tFbnRpdHkgRWRpdG9yXzEuMTguMl94NjRfZW4tVVMubXNpLnppcApEYVRVd2ppMGhKd2xTSkV6ZzJ5ektGaVN0VEptV21rYnJ1K0MxOHVZZFplU3R1ci9lZGU2QkVVWU93Q0UraEJkNnEwNUtRREl1ZVVxaDFiSW5lTDdCQT09Cg==",
-			"url": "https://github.com/atampy25/quickentity-editor-next/releases/download/1.18.2/QuickEntity.Editor_1.18.2_x64_en-US.msi.zip"
+			"signature": "dW50cnVzdGVkIGNvbW1lbnQ6IHNpZ25hdHVyZSBmcm9tIHRhdXJpIHNlY3JldCBrZXkKUlVScWpVZGd2b0lOTlVFZWRLL0Yrcm1aVk5pQVdkRk9lZHA1enArR3BhcVBLcytEV01IN3BvQTl4TXYwaFdXMzJsT0dOcmRBV0xIeXlScnU1bnMrdzNUd2c5V0M2bGlHcXc4PQp0cnVzdGVkIGNvbW1lbnQ6IHRpbWVzdGFtcDoxNjY5MzQxNDY1CWZpbGU6UXVpY2tFbnRpdHkgRWRpdG9yXzEuMTguM194NjRfZW4tVVMubXNpLnppcApFUmZ5VWdVY3VrM2xGYnZXcEdncGFmQTgwZ3o3aXdOaGs3Vm16RVBMMnlXN0IvZEVyYXJJL2cwaVJBRHprazM2Z2gxVXZabk9XWXN0TkEvNm55QUhBdz09Cg==",
+			"url": "https://github.com/atampy25/quickentity-editor-next/releases/download/1.18.3/QuickEntity.Editor_1.18.3_x64_en-US.msi.zip"
 		}
 	}
 }
