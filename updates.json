@@ -1,11 +1,11 @@
 {
-	"version": "1.18.3",
-	"notes": "Significant copy/paste/delete perf improvement",
+	"version": "1.18.4",
+	"notes": "Don't ignore local entity pin forwarding in intellisense",
 	"pub_date": "2022-09-28T09:45:47Z",
 	"platforms": {
 		"windows-x86_64": {
-			"signature": "dW50cnVzdGVkIGNvbW1lbnQ6IHNpZ25hdHVyZSBmcm9tIHRhdXJpIHNlY3JldCBrZXkKUlVScWpVZGd2b0lOTlVFZWRLL0Yrcm1aVk5pQVdkRk9lZHA1enArR3BhcVBLcytEV01IN3BvQTl4TXYwaFdXMzJsT0dOcmRBV0xIeXlScnU1bnMrdzNUd2c5V0M2bGlHcXc4PQp0cnVzdGVkIGNvbW1lbnQ6IHRpbWVzdGFtcDoxNjY5MzQxNDY1CWZpbGU6UXVpY2tFbnRpdHkgRWRpdG9yXzEuMTguM194NjRfZW4tVVMubXNpLnppcApFUmZ5VWdVY3VrM2xGYnZXcEdncGFmQTgwZ3o3aXdOaGs3Vm16RVBMMnlXN0IvZEVyYXJJL2cwaVJBRHprazM2Z2gxVXZabk9XWXN0TkEvNm55QUhBdz09Cg==",
-			"url": "https://github.com/atampy25/quickentity-editor-next/releases/download/1.18.3/QuickEntity.Editor_1.18.3_x64_en-US.msi.zip"
+			"signature": "dW50cnVzdGVkIGNvbW1lbnQ6IHNpZ25hdHVyZSBmcm9tIHRhdXJpIHNlY3JldCBrZXkKUlVScWpVZGd2b0lOTlJSdlg0SlliNFdtU3RtQkp2VDZnWm1nVDJMYWZ2Mm5iMXJFQUUvRTBtK2MyR0ZsamdiQjRMTVVNWkNXV0dqWDVkMThDV3EzNndWY0VoUFhCemVlWnc4PQp0cnVzdGVkIGNvbW1lbnQ6IHRpbWVzdGFtcDoxNjY5NzI1OTcxCWZpbGU6UXVpY2tFbnRpdHkgRWRpdG9yXzEuMTguNF94NjRfZW4tVVMubXNpLnppcAo5c3hwaHJDeHZnU0w4Skt4VTNSZTc1aUJiazRreWVodEJnM1BQTS9mZWk3M3owRHpzM2pMUEJhZTR6UkJzUDdBTGdwekJuUVlOdEhSMkFoOGZ5Q0xCQT09Cg==",
+			"url": "https://github.com/atampy25/quickentity-editor-next/releases/download/1.18.4/QuickEntity.Editor_1.18.4_x64_en-US.msi.zip"
 		}
 	}
 }
