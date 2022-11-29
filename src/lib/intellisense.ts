@@ -228,10 +228,10 @@ export class Intellisense {
 		}
 	}
 
-	async getPins(entity: Entity, subEntity: string, ignoreInternal: boolean, soFar: { input: string[]; output: string[] }) {
+	async getPins(entity: Entity, subEntity: string, ignoreTargeted: boolean, soFar: { input: string[]; output: string[] }) {
 		const targetedEntity = entity.entities[subEntity]
 
-		if (!ignoreInternal) {
+		if (!ignoreTargeted) {
 			if (targetedEntity.events) {
 				soFar.output.push(...Object.keys(targetedEntity.events))
 			}
@@ -241,39 +241,39 @@ export class Intellisense {
 			if (targetedEntity.outputCopying) {
 				soFar.output.push(...Object.keys(targetedEntity.outputCopying))
 			}
+		}
 
-			for (const ent of Object.values(entity.entities)) {
-				if (ent.events) {
-					for (const [event, data] of Object.entries(ent.events)) {
-						for (const [trigger, refs] of Object.entries(data)) {
-							for (const ref of refs) {
-								if (ref == subEntity) {
-									soFar.input.push(trigger)
-								}
+		for (const ent of Object.values(entity.entities)) {
+			if (ent.events) {
+				for (const [event, data] of Object.entries(ent.events)) {
+					for (const [trigger, refs] of Object.entries(data)) {
+						for (const ref of refs) {
+							if (ref == subEntity) {
+								soFar.input.push(trigger)
 							}
 						}
 					}
 				}
+			}
 
-				if (ent.inputCopying) {
-					for (const [input, data] of Object.entries(ent.inputCopying)) {
-						for (const [trigger, refs] of Object.entries(data)) {
-							for (const ref of refs) {
-								if (ref == subEntity) {
-									soFar.input.push(trigger)
-								}
+			if (ent.inputCopying) {
+				for (const [input, data] of Object.entries(ent.inputCopying)) {
+					for (const [trigger, refs] of Object.entries(data)) {
+						for (const ref of refs) {
+							if (ref == subEntity) {
+								soFar.input.push(trigger)
 							}
 						}
 					}
 				}
+			}
 
-				if (ent.outputCopying) {
-					for (const [output, data] of Object.entries(ent.outputCopying)) {
-						for (const [propagated, refs] of Object.entries(data)) {
-							for (const ref of refs) {
-								if (ref == subEntity) {
-									soFar.output.push(propagated)
-								}
+			if (ent.outputCopying) {
+				for (const [output, data] of Object.entries(ent.outputCopying)) {
+					for (const [propagated, refs] of Object.entries(data)) {
+						for (const ref of refs) {
+							if (ref == subEntity) {
+								soFar.output.push(propagated)
 							}
 						}
 					}
