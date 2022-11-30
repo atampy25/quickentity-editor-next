@@ -4,7 +4,7 @@
 	import "./treeview.css"
 
 	import type { Entity, FullRef, Ref, RefWithConstantValue, SubEntity } from "$lib/quickentity-types"
-	import { changeReferenceToLocalEntity, genRandHex, getReferencedEntities, getReferencedExternalEntities, getReferencedLocalEntity, traverseEntityTree } from "$lib/utils"
+	import { changeReferenceToLocalEntity, genRandHex, getReferencedEntities, getReferencedExternalEntities, getReferencedLocalEntity, normaliseToHash, traverseEntityTree } from "$lib/utils"
 
 	import { createEventDispatcher, onMount } from "svelte"
 	import { v4 } from "uuid"
@@ -12,7 +12,9 @@
 	import json from "$lib/json"
 	import isEqual from "lodash/isEqual"
 	import { gameServer } from "$lib/in-vivo/gameServer"
-	import { addNotification, inVivoMetadata } from "$lib/stores"
+	import { addNotification, appSettings, intellisense, inVivoMetadata } from "$lib/stores"
+	import { readTextFile } from "@tauri-apps/api/fs"
+	import { join } from "@tauri-apps/api/path"
 
 	export let entity: Entity
 	export let reverseReferences: Record<
@@ -34,7 +36,21 @@
 
 	export let tree: JSTree = null!
 
+	export let helpMenuOpen: boolean = false
+	export let helpMenuTemplate: string = ""
+	export let helpMenuProps: SubEntity["properties"] = {}
+	export let helpMenuInputs: string[] = []
+	export let helpMenuOutputs: string[] = []
+
 	const dispatch = createEventDispatcher()
+
+	const exists = async (path: string) => {
+		try {
+			return await tauriExists(path)
+		} catch {
+			return false
+		}
+	}
 
 	const icons = Object.entries({
 		"[assembly:/templates/gameplay/ai2/actors.template?/npcactor.entitytemplate].pc_entitytype": "far fa-user",
@@ -598,7 +614,91 @@
 
 								clipboard.writeText(d.id)
 							}
-						}
+						},
+						...(!currentlySelected || !$appSettings.gameFileExtensions || b.id.startsWith("comment")
+							? {}
+							: {
+									help: {
+										separator_before: false,
+										separator_after: false,
+										_disabled: false,
+										label: "Help",
+										icon: "far fa-circle-question",
+										action: async function (b: { reference: string | HTMLElement | JQuery<HTMLElement> }) {
+											let d = tree.get_node(b.reference)
+
+											let entityID = d.id
+											let entityData = entity.entities[d.id]
+
+											helpMenuTemplate = entityData.template
+											helpMenuProps = {}
+											helpMenuInputs = []
+											helpMenuOutputs = []
+
+											let allFoundProperties = []
+
+											for (let template of (await exists(await join($appSettings.gameFileExtensionsDataPath, "ASET", normaliseToHash(entityData.template) + ".ASET.meta.JSON")))
+												? json
+														.parse(
+															await readTextFile(await join($appSettings.gameFileExtensionsDataPath, "ASET", normaliseToHash(entityData.template) + ".ASET.meta.JSON"))
+														)
+														.hash_reference_data.slice(0, -1)
+														.map((a) => a.hash)
+												: [normaliseToHash(entityData.template)]) {
+												if (await exists(await join($appSettings.gameFileExtensionsDataPath, "TEMP", template + ".TEMP.entity.json"))) {
+													await $intellisense.findProperties(await join($appSettings.gameFileExtensionsDataPath, "TEMP", template + ".TEMP.entity.json"), allFoundProperties)
+													entityData.propertyAliases && allFoundProperties.push(...Object.keys(entityData.propertyAliases))
+												} else if ($intellisense.knownCPPTProperties[template]) {
+													allFoundProperties.push(...Object.keys($intellisense.knownCPPTProperties[template]))
+												} else if ($intellisense.allUICTs.has(template)) {
+													allFoundProperties.push(...Object.keys($intellisense.knownCPPTProperties["002C4526CC9753E6"])) // All UI controls have the properties of ZUIControlEntity
+													allFoundProperties.push(
+														...Object.keys(
+															json.parse(
+																await readTextFile(
+																	await join(
+																		"./intellisense-data/UICB",
+																		json
+																			.parse(await readTextFile(await join($appSettings.gameFileExtensionsDataPath, "UICT", template + ".UICT.meta.JSON")))
+																			.hash_reference_data.filter((a) => a.hash != "002C4526CC9753E6")[0].hash + ".UICB.json"
+																	)
+																)
+															).properties
+														)
+													) // Get the specific properties from the UICB
+												}
+											}
+
+											allFoundProperties = [...new Set(allFoundProperties)]
+
+											helpMenuProps = {}
+
+											if ($intellisense.knownCPPTProperties[normaliseToHash(entityData.template)]) {
+												for (let foundProp of allFoundProperties) {
+													helpMenuProps[foundProp] = {
+														type: $intellisense.knownCPPTProperties[normaliseToHash(entityData.template)][foundProp][0],
+														value: $intellisense.knownCPPTProperties[normaliseToHash(entityData.template)][foundProp][1]
+													}
+												}
+											} else {
+												for (let foundProp of allFoundProperties) {
+													let val = await $intellisense.findDefaultPropertyValue(entity.tempHash + ".TEMP.entity.json", entityID, foundProp, entity, entityID)
+
+													if (val) {
+														helpMenuProps[foundProp] = val
+													}
+												}
+											}
+
+											let pins = { input: [], output: [] }
+											await $intellisense.getPins(entity, entityID, true, pins)
+											helpMenuInputs = [...new Set(pins.input)]
+											helpMenuOutputs = [...new Set(pins.output)]
+
+											helpMenuOpen = true
+										}
+									}
+							  })
 					}
 				}
 			},

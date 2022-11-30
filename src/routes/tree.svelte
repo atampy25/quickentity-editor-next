@@ -15,7 +15,7 @@
 	import enums from "$lib/enums.json"
 
 	import { Pane, Splitpanes as SplitPanes } from "svelte-splitpanes"
-	import { Button, ClickableTile, Search, Select, TextArea, TextInput } from "carbon-components-svelte"
+	import { Button, ClickableTile, Modal, Search, Select, TextArea, TextInput } from "carbon-components-svelte"
 	import debounce from "lodash/debounce"
 	import isEqual from "lodash/isEqual"
 	import { AmbientLight, Canvas, DirectionalLight, Mesh, OrbitControls, PerspectiveCamera } from "@threlte/core"
@@ -158,6 +158,14 @@
 			}
 		}
 	})
+
+	let helpMenuOpen = false
+	let helpMenuTemplate = ""
+	let helpMenuProps = {}
+	let helpMenuInputs: string[] = []
+	let helpMenuOutputs: string[] = []
+
+	let editorComponent: MonacoEditor
 </script>
 
 <SplitPanes on:resize={() => editor?.layout()} theme="">
@@ -270,6 +278,11 @@
 							inVivoExtensions={$appSettings.inVivoExtensions}
 							autoHighlightEntities={$appSettings.autoHighlightEntities}
 							{editorIsValid}
+							bind:helpMenuOpen
+							bind:helpMenuTemplate
+							bind:helpMenuProps
+							bind:helpMenuInputs
+							bind:helpMenuOutputs
 							bind:this={tree}
 						/>
 					</div>
@@ -474,6 +487,7 @@
 					{#if selectionType == "entity"}
 						<MonacoEditor
 							bind:editor
+							bind:this={editorComponent}
 							entity={$entity}
 							subEntityID={selectedEntityID}
 							jsonToDisplay={selectedEntity}
@@ -529,6 +543,40 @@
 		</div>
 	</Pane>
 </SplitPanes>
+
+<Modal bind:open={helpMenuOpen} modalHeading="Help for {helpMenuTemplate}" passiveModal>
+	<div class="grid grid-cols-2 gap-4">
+		<div>
+			<h2>Default properties</h2>
+			{#if editorComponent && editorComponent.Monaco}
+				{#await editorComponent.coloriseJSON(helpMenuProps) then colorisedHTML}
+					<pre class="mt-1 rounded-sm bg-[#1e1e1e] p-2"><code>{@html colorisedHTML}</code></pre>
+				{/await}
+			{/if}
+		</div>
+		<div>
+			<h2>Pins</h2>
+
+			{#if helpMenuInputs.length}
+				<h3>Inputs</h3>
+				<div class="mt-1 flex flex-row gap-2 flex-wrap">
+					{#each helpMenuInputs as pin}
+						<div class="inline-flex items-center p-2 rounded-sm bg-neutral-800">{pin}</div>
+					{/each}
+				</div>
+			{/if}
+
+			{#if helpMenuOutputs.length}
+				<h3 class:mt-2={helpMenuInputs.length}>Outputs</h3>
+				<div class="mt-1 flex flex-row gap-2 flex-wrap">
+					{#each helpMenuOutputs as pin}
+						<div class="inline-flex items-center p-2 rounded-sm bg-neutral-800">{pin}</div>
+					{/each}
+				</div>
+			{/if}
+		</div>
+	</div>
+</Modal>
 
 <style global>
 </style>

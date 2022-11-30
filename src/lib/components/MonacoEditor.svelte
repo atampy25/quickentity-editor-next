@@ -1,3 +1,5 @@
+<svelte:options accessors />
+
 <script lang="ts">
 	import type monaco from "monaco-editor"
 	import { createEventDispatcher, onMount } from "svelte"
@@ -16,7 +18,7 @@
 	import { gameServer } from "$lib/in-vivo/gameServer"
 
 	let el: HTMLDivElement = null!
-	let Monaco: typeof monaco
+	export let Monaco: typeof monaco
 
 	export let editor: monaco.editor.IStandaloneCodeEditor = null!
 
@@ -176,6 +178,8 @@
 			editor.layout()
 			;(async () => {
 				let props: Record<string, any> = {}
+				let inputs: Record<string, any> = {}
+				let outputs: Record<string, any> = {}
 
 				if ($appSettings.gameFileExtensions) {
 					let allFoundProperties = []
@@ -264,41 +268,41 @@
 							}
 						}
 					}
+
+					let pins = { input: [], output: [] }
+					await $intellisense.getPins(entity, subEntityID, true, pins)
+					pins = { input: [...new Set(pins.input)], output: [...new Set(pins.output)] }
+
+					inputs = Object.fromEntries(
+						pins.input.map((a) => [
+							a,
+							{
+								type: "object",
+								additionalProperties: {
+									type: "array",
+									items: {
+										$ref: "#/definitions/RefMaybeConstantValue"
+									}
+								}
+							}
+						])
+					)
+
+					outputs = Object.fromEntries(
+						pins.output.map((a) => [
+							a,
+							{
+								type: "object",
+								additionalProperties: {
+									type: "array",
+									items: {
+										$ref: "#/definitions/RefMaybeConstantValue"
+									}
+								}
+							}
+						])
+					)
 				}
-
-				let pins = { input: [], output: [] }
-				await $intellisense.getPins(entity, subEntityID, true, pins)
-				pins = { input: [...new Set(pins.input)], output: [...new Set(pins.output)] }
-
-				let inputs = Object.fromEntries(
-					pins.input.map((a) => [
-						a,
-						{
-							type: "object",
-							additionalProperties: {
-								type: "array",
-								items: {
-									$ref: "#/definitions/RefMaybeConstantValue"
-								}
-							}
-						}
-					])
-				)
-
-				let outputs = Object.fromEntries(
-					pins.output.map((a) => [
-						a,
-						{
-							type: "object",
-							additionalProperties: {
-								type: "array",
-								items: {
-									$ref: "#/definitions/RefMaybeConstantValue"
-								}
-							}
-						}
-					])
-				)
 
 				Monaco.languages.json.jsonDefaults.setDiagnosticsOptions({
 					validate: true,
@@ -332,6 +336,10 @@
 				})
 			})()
 		}
+	}
+
+	export async function coloriseJSON(jsonData: any) {
+		return await Monaco.editor.colorize(json.stringify(jsonData, "\t"), "json", {})
 	}
 </script>
 
