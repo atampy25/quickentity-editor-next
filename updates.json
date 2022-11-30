@@ -1,11 +1,11 @@
 {
-	"version": "1.18.4",
-	"notes": "Don't ignore local entity pin forwarding in intellisense",
-	"pub_date": "2022-09-28T09:45:47Z",
+	"version": "1.19.0",
+	"notes": "Add GFE help menu to entity right-click",
+	"pub_date": "2022-11-29T12:33:17Z",
 	"platforms": {
 		"windows-x86_64": {
-			"signature": "dW50cnVzdGVkIGNvbW1lbnQ6IHNpZ25hdHVyZSBmcm9tIHRhdXJpIHNlY3JldCBrZXkKUlVScWpVZGd2b0lOTlJSdlg0SlliNFdtU3RtQkp2VDZnWm1nVDJMYWZ2Mm5iMXJFQUUvRTBtK2MyR0ZsamdiQjRMTVVNWkNXV0dqWDVkMThDV3EzNndWY0VoUFhCemVlWnc4PQp0cnVzdGVkIGNvbW1lbnQ6IHRpbWVzdGFtcDoxNjY5NzI1OTcxCWZpbGU6UXVpY2tFbnRpdHkgRWRpdG9yXzEuMTguNF94NjRfZW4tVVMubXNpLnppcAo5c3hwaHJDeHZnU0w4Skt4VTNSZTc1aUJiazRreWVodEJnM1BQTS9mZWk3M3owRHpzM2pMUEJhZTR6UkJzUDdBTGdwekJuUVlOdEhSMkFoOGZ5Q0xCQT09Cg==",
-			"url": "https://github.com/atampy25/quickentity-editor-next/releases/download/1.18.4/QuickEntity.Editor_1.18.4_x64_en-US.msi.zip"
+			"signature": "dW50cnVzdGVkIGNvbW1lbnQ6IHNpZ25hdHVyZSBmcm9tIHRhdXJpIHNlY3JldCBrZXkKUlVScWpVZGd2b0lOTmR5RVBVajRTUE9qcWlYRmdDSXdTNjFXbWxETHYxRitPNUxOODNXellaeGVBYkNhbW95U3N2VlJuOXhxblNPRklvd3Z1emlTcER0WmFJSGlhR2U1Z0FBPQp0cnVzdGVkIGNvbW1lbnQ6IHRpbWVzdGFtcDoxNjY5Nzc4MzY2CWZpbGU6UXVpY2tFbnRpdHkgRWRpdG9yXzEuMTkuMF94NjRfZW4tVVMubXNpLnppcApINERGbUw5NVlvQTNyZ01MdWo5V3lSaThnckhxMmRkc1M4VW9JcG1pYU1DSC9WY2k2Szl0VjAwaDlhMkk1elJCWkVLZTNuUVljajRVWktsTy9ycmpDZz09Cg==",
+			"url": "https://github.com/atampy25/quickentity-editor-next/releases/download/1.19.0/QuickEntity.Editor_1.19.0_x64_en-US.msi.zip"
 		}
 	}
 }
