@@ -46,6 +46,8 @@
 	"type": "module",
 	"private": true,
 	"dependencies": {
+		"@baklavajs/core": "2.0.2-beta.1",
+		"@baklavajs/renderer-vue": "2.0.2-beta.1",
 		"@sentry/browser": "^7.14.0",
 		"@sentry/rrweb": "^0.3.3",
 		"@sentry/tracing": "^7.14.0",
@@ -60,6 +62,7 @@
 		"@types/uuid": "^8.3.4",
 		"ajv": "^8.11.0",
 		"decimal.js": "^10.4.1",
+		"elkjs": "^0.8.2",
 		"jquery": "^3.6.1",
 		"jstree": "^3.3.12",
 		"lodash": "^4.17.21",
@@ -71,7 +74,8 @@
 		"shepherd.js": "^10.0.1",
 		"svelte-splitpanes": "^0.7.3",
 		"three": "^0.144.0",
-		"uuid": "^9.0.0"
+		"uuid": "^9.0.0",
+		"web-worker": "^1.2.0"
 	},
 	"packageManager": "yarn@3.2.3"
 }

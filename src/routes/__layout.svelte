@@ -54,6 +54,7 @@
 	import Settings from "carbon-icons-svelte/lib/Settings.svelte"
 	import Chart_3D from "carbon-icons-svelte/lib/Chart_3D.svelte"
 	import WarningAlt from "carbon-icons-svelte/lib/WarningAlt.svelte"
+	import DataUnstructured from "carbon-icons-svelte/lib/DataUnstructured.svelte"
 
 	import * as Sentry from "@sentry/browser"
 	import { BrowserTracing } from "@sentry/tracing"
@@ -1091,8 +1092,21 @@
 					}}
 					isSelected={$page.url.pathname == "/tree"}
 				/>
-				<SideNavDivider />
 				{#if $appSettings.gameFileExtensions}
+					<SideNavDivider />
+					<SideNavLink
+						icon={DataUnstructured}
+						text="Graph View"
+						href="/graph"
+						on:click={() => {
+							$forceSaveSubEntity = { value: true }
+							setTimeout(() => {
+								$forceSaveSubEntity = { value: false }
+							}, 500)
+						}}
+						isSelected={$page.url.pathname == "/graph"}
+					/>
+					<SideNavDivider />
 					<SideNavLink
 						icon={Chart_3D}
 						text="3D Preview"

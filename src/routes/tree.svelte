@@ -175,7 +175,7 @@
 				<div class="flex flex-col h-full shepherd-tree p-2 px-3">
 					<div class="flex flex-row gap-4 items-center">
 						<h1>Tree</h1>
-						<Search size="lg" labelText="Filter tree entities" on:input={treeSearch} bind:value={treeSearchInput} />
+						<Search size="lg" placeholder="Filter tree entities" on:input={treeSearch} bind:value={treeSearchInput} />
 					</div>
 					<div class="flex-grow overflow-auto">
 						<Tree

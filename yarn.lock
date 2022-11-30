@@ -5,6 +5,33 @@ __metadata:
   version: 6
   cacheKey: 8
 
+"@baklavajs/core@npm:2.0.2-beta.1, @baklavajs/core@npm:^2.0.2-beta.1":
+  version: 2.0.2-beta.1
+  resolution: "@baklavajs/core@npm:2.0.2-beta.1"
+  dependencies:
+    "@baklavajs/events": ^2.0.2-alpha.5
+    uuid: ^8.3.2
+  checksum: 7ba1f72894151d77c294681e47625030b550cd8d2863ef39e8b948a704f087beb50dc5912a2c1b994344734431adc9fbf0f5a642fce801ab79f8b61e2c394ead
+  languageName: node
+  linkType: hard
+
+"@baklavajs/events@npm:^2.0.2-alpha.5":
+  version: 2.0.2-alpha.5
+  resolution: "@baklavajs/events@npm:2.0.2-alpha.5"
+  checksum: 8431684e5f37a5cf773c9e08fc0bf59e4e91af7f18fb6003cc5e65a70c7282775b451fbe768869e634924a16ee3e1e8c151a3100e480a671faf42c5d43e286e6
+  languageName: node
+  linkType: hard
+
+"@baklavajs/renderer-vue@npm:2.0.2-beta.1":
+  version: 2.0.2-beta.1
+  resolution: "@baklavajs/renderer-vue@npm:2.0.2-beta.1"
+  dependencies:
+    "@baklavajs/core": ^2.0.2-beta.1
+    "@baklavajs/events": ^2.0.2-alpha.5
+  checksum: 0c95dd0f5904549901404453409092a979acad5740fae71cd29d34fa4a9eefea4c850bb1ff67bf7455031aa33a0865fef50a972c8e7a8d4d3956acc89b3248cf
+  languageName: node
+  linkType: hard
+
 "@esbuild/android-arm@npm:0.15.8":
   version: 0.15.8
   resolution: "@esbuild/android-arm@npm:0.15.8"
@@ -1636,6 +1663,13 @@ __metadata:
   version: 1.4.254
   resolution: "electron-to-chromium@npm:1.4.254"
   checksum: 32f0ecb621db44d37fc93017f742a2b1da7302c778b4d6c0fa122cc662f9c50e6576d214048dcac5c9baf835340c954c624f09f2e02c6dea9049c4a839e862e2
+  languageName: node
+  linkType: hard
+
+"elkjs@npm:^0.8.2":
+  version: 0.8.2
+  resolution: "elkjs@npm:0.8.2"
+  checksum: ed615c485fa4ac1e858af509df24fdc9f61f2c6576df5f79f6a31c733fda69f235f53cd36af037aa9d2b8a935cb4f823fbd89d784b67f6e51be5100306ea1b39
   languageName: node
   linkType: hard
 
@@ -3817,6 +3851,8 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "quickentity-editor@workspace:."
   dependencies:
+    "@baklavajs/core": 2.0.2-beta.1
+    "@baklavajs/renderer-vue": 2.0.2-beta.1
     "@fortawesome/free-solid-svg-icons": ^6.2.0
     "@sentry/browser": ^7.14.0
     "@sentry/rrweb": ^0.3.3
@@ -3844,6 +3880,7 @@ __metadata:
     carbon-icons-svelte: ^11.2.0
     carbon-preprocess-svelte: ^0.9.1
     decimal.js: ^10.4.1
+    elkjs: ^0.8.2
     env-cmd: ^10.1.0
     eslint: ^8.20.0
     eslint-config-prettier: ^8.3.0
@@ -3873,6 +3910,7 @@ __metadata:
     typescript: ^4.7.4
     uuid: ^9.0.0
     vite: ^3.0.0
+    web-worker: ^1.2.0
   languageName: unknown
   linkType: soft
 
@@ -4842,6 +4880,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"uuid@npm:^8.3.2":
+  version: 8.3.2
+  resolution: "uuid@npm:8.3.2"
+  bin:
+    uuid: dist/bin/uuid
+  checksum: 5575a8a75c13120e2f10e6ddc801b2c7ed7d8f3c8ac22c7ed0c7b2ba6383ec0abda88c905085d630e251719e0777045ae3236f04c812184b7c765f63a70e58df
+  languageName: node
+  linkType: hard
+
 "uuid@npm:^9.0.0":
   version: 9.0.0
   resolution: "uuid@npm:9.0.0"
@@ -4904,6 +4951,13 @@ __metadata:
   peerDependencies:
     eslint: ">=6.0.0"
   checksum: 8cc751e9fc2bfba93664ad8945732ab1c97791f9123e703de8669b65670d1e01906d80436bf4932d7ee6fa6174ed4545e8abb059206c88f4bd71957ca6cf7ba8
+  languageName: node
+  linkType: hard
+
+"web-worker@npm:^1.2.0":
+  version: 1.2.0
+  resolution: "web-worker@npm:1.2.0"
+  checksum: 1bb28348ddcf9b2e7c62c5fd02e49a84098795856cd905456de957271bba288e9618941cf69d8960f0a7ae81f5dfb74b427c0634be47ec69e3e955c4ec5213be
   languageName: node
   linkType: hard
 
