@@ -1,11 +1,11 @@
 {
-	"version": "1.20.1",
-	"notes": "Stability improvements",
+	"version": "1.21.0",
+	"notes": "Add rename right click option to graph view tree",
 	"pub_date": "2022-11-29T12:33:17Z",
 	"platforms": {
 		"windows-x86_64": {
-			"signature": "dW50cnVzdGVkIGNvbW1lbnQ6IHNpZ25hdHVyZSBmcm9tIHRhdXJpIHNlY3JldCBrZXkKUlVScWpVZGd2b0lOTmZFQVF3dGd5cjVibHAvTnJCcDJmZjdBTWhJSCtFZEZhYTM1ZUM5d3hYMThFaWZMWHhuS3UwMElSaXFYR1hnY1ltZnVDTDJoa1VmZUpPdWZDdWd2Y2dVPQp0cnVzdGVkIGNvbW1lbnQ6IHRpbWVzdGFtcDoxNjY5OTU0MjYyCWZpbGU6UXVpY2tFbnRpdHkgRWRpdG9yXzEuMjAuMV94NjRfZW4tVVMubXNpLnppcAprekNpdURCT3RhMXMyekRxS2huZHovTXNGcVN6WXhHQlBnaEVpbmIxcy84NXVEN05TQUdGWmVuUXBMRE9aQ0RiSmRaMzc3a1NUN1E5aXhBcU1kOXBEUT09Cg==",
-			"url": "https://github.com/atampy25/quickentity-editor-next/releases/download/1.20.1/QuickEntity.Editor_1.20.1_x64_en-US.msi.zip"
+			"signature": "dW50cnVzdGVkIGNvbW1lbnQ6IHNpZ25hdHVyZSBmcm9tIHRhdXJpIHNlY3JldCBrZXkKUlVScWpVZGd2b0lOTlpzNCtFT3FVTUFOTk1KU0RMcFdnV1B4UDRCRXJBUm5kNVUzLzkxRHU3Nnl6NnhJNmE1TUNURkJ1WDVOMTNjbXRseHU4c0ZadEc5a3Z3a2drM29XOGdRPQp0cnVzdGVkIGNvbW1lbnQ6IHRpbWVzdGFtcDoxNjY5OTU1OTE4CWZpbGU6UXVpY2tFbnRpdHkgRWRpdG9yXzEuMjEuMF94NjRfZW4tVVMubXNpLnppcAoxMHlhK2hZMDg2aVpIdlRxMldLOTRwblFKQXFRQzBYWjhTNlUzT0N0WHp5UTl4RFNjWmo3QWFtbVZ1YUM0bEhwaDVKRWdCSkJsY0hKNkZYYUplVDhEUT09Cg==",
+			"url": "https://github.com/atampy25/quickentity-editor-next/releases/download/1.21.0/QuickEntity.Editor_1.21.0_x64_en-US.msi.zip"
 		}
 	}
 }
