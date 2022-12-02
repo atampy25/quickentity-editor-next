@@ -10,7 +10,7 @@
 	import type baklavaRendererVue from "@baklavajs/renderer-vue"
 	import ELK from "elkjs"
 
-	import { onMount } from "svelte"
+	import { onDestroy, onMount } from "svelte"
 	import type { FullRef } from "$lib/quickentity-types"
 	import { merge } from "lodash"
 	import { v4 } from "uuid"
@@ -106,13 +106,15 @@
 		})
 	})
 
-	forceSaveSubEntity.subscribe((value) => {
-		if (value.value && graphView) {
+	const unsubscribe = forceSaveSubEntity.subscribe((value) => {
+		if (value.value && graphView && Object.keys($entity.entities).every((a) => graphView.editor.graph.nodes.some((b) => b.id == a))) {
 			for (const node of graphView.editor.graph.nodes) {
 				$entity.entities[node.id].name = node.title.replace(/<br>.*/gi, "")
 			}
 		}
 	})
+
+	onDestroy(unsubscribe)
 
 	export async function displayGraphForFolder(folderEntityID: string) {
 		currentlyLoadingGraph = true

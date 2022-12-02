@@ -26,6 +26,7 @@
 	import { writeText } from "@tauri-apps/api/clipboard"
 	import deepMerge from "lodash/merge"
 	import { gameServer } from "$lib/in-vivo/gameServer"
+	import { onDestroy } from "svelte"
 
 	const readJSON = async (path: string) => json.parse(await readTextFile(path))
 	const exists = async (path: string) => {
@@ -150,14 +151,17 @@
 		}
 	}
 
-	forceSaveSubEntity.subscribe(async (value) => {
+	const unsubscribe = forceSaveSubEntity.subscribe(async (value) => {
 		if (value.value) {
 			if (editorIsValid && selectionType == "entity") {
 				$entity.entities[selectedEntityID] = json.parse(editor.getValue())
+				console.log("Updated", selectedEntityID, "with", json.parse(editor.getValue()))
 				selectedEntity = $entity.entities[selectedEntityID]
 			}
 		}
 	})
+
+	onDestroy(unsubscribe)
 
 	let helpMenuOpen = false
 	let helpMenuTemplate = ""

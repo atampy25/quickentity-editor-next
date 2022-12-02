@@ -514,21 +514,23 @@
 
 						$forceSaveSubEntity = { value: true }
 
-						await writeTextFile(x, await getEntityAsText())
+						setTimeout(async () => {
+							await writeTextFile(x, await getEntityAsText())
 
-						$forceSaveSubEntity = { value: false }
+							$forceSaveSubEntity = { value: false }
 
-						$sessionMetadata.saveAsPatch = false
-						$sessionMetadata.saveAsEntityPath = x
-						$sessionMetadata.loadedFromGameFiles = false
+							$sessionMetadata.saveAsPatch = false
+							$sessionMetadata.saveAsEntityPath = x
+							$sessionMetadata.loadedFromGameFiles = false
 
-						breadcrumb("entity", "Saved to file")
+							breadcrumb("entity", "Saved to file")
 
-						$addNotification = {
-							kind: "success",
-							title: "Saved entity successfully",
-							subtitle: "Saved the entity to the selected path"
-						}
+							$addNotification = {
+								kind: "success",
+								title: "Saved entity successfully",
+								subtitle: "Saved the entity to the selected path"
+							}
+						}, 500)
 					}}
 				>
 					<HeaderNavItem href="#" text="Save as entity file" />
@@ -551,38 +553,8 @@
 
 						$forceSaveSubEntity = { value: true }
 
-						if (Object.keys($entity.entities).length > 25000) {
-							await writeTextFile("entity.json", await getEntityAsText(), { dir: BaseDirectory.App })
-
-							await Command.sidecar("sidecar/quickentity-rs", [
-								"patch",
-								"generate",
-								"--input1",
-								String($sessionMetadata.originalEntityPath),
-								"--input2",
-								await join(await appDir(), "entity.json"),
-								"--output",
-								x
-							]).execute()
-
-							$addNotification = {
-								kind: "warning",
-								title: "Calculated patch using alternate algorithm",
-								subtitle: "The patch was calculated using a faster but lower quality algorithm; you may want to check the output JSON."
-							}
-						} else {
-							try {
-								// much smarter but much slower diff algorithm
-								await writeTextFile(
-									x,
-									json.stringify({
-										tempHash: $entity.tempHash,
-										tbluHash: $entity.tbluHash,
-										patch: rfc6902.createPatch(json.parse(await readTextFile($sessionMetadata.originalEntityPath)), json.parse(await getEntityAsText()), rfcDiffFunction),
-										patchVersion: 5
-									})
-								)
-							} catch {
+						setTimeout(async () => {
+							if (Object.keys($entity.entities).length > 25000) {
 								await writeTextFile("entity.json", await getEntityAsText(), { dir: BaseDirectory.App })
 
 								await Command.sidecar("sidecar/quickentity-rs", [
@@ -601,59 +573,11 @@
 									title: "Calculated patch using alternate algorithm",
 									subtitle: "The patch was calculated using a faster but lower quality algorithm; you may want to check the output JSON."
 								}
-							}
-						}
-
-						$forceSaveSubEntity = { value: false }
-
-						$sessionMetadata.saveAsPatch = true
-						$sessionMetadata.saveAsPatchPath = x
-						$sessionMetadata.loadedFromGameFiles = false
-
-						breadcrumb("entity", "Saved to patch")
-
-						$addNotification = {
-							kind: "success",
-							title: "Saved patch successfully",
-							subtitle: "Saved the changes from the original entity to the selected path"
-						}
-					}}
-				>
-					<HeaderNavItem href="#" text="Save as patch file" />
-				</li>
-			</HeaderNavMenu>
-			{#if $sessionMetadata.originalEntityPath && !$sessionMetadata.loadedFromGameFiles}
-				{#if $sessionMetadata.saveAsPatch}
-					<li
-						role="none"
-						use:shortcut={{ control: true, key: "s" }}
-						on:click={async () => {
-							$forceSaveSubEntity = { value: true }
-
-							if (Object.keys($entity.entities).length > 25000) {
-								await writeTextFile("entity.json", await getEntityAsText(), { dir: BaseDirectory.App })
-
-								await Command.sidecar("sidecar/quickentity-rs", [
-									"patch",
-									"generate",
-									"--input1",
-									String($sessionMetadata.originalEntityPath),
-									"--input2",
-									await join(await appDir(), "entity.json"),
-									"--output",
-									$sessionMetadata.saveAsPatchPath
-								]).execute()
-
-								$addNotification = {
-									kind: "warning",
-									title: "Calculated patch using alternate algorithm",
-									subtitle: "The patch was calculated using a faster but lower quality algorithm; you may want to check the output JSON."
-								}
 							} else {
 								try {
 									// much smarter but much slower diff algorithm
 									await writeTextFile(
-										$sessionMetadata.saveAsPatchPath,
+										x,
 										json.stringify({
 											tempHash: $entity.tempHash,
 											tbluHash: $entity.tbluHash,
@@ -672,7 +596,7 @@
 										"--input2",
 										await join(await appDir(), "entity.json"),
 										"--output",
-										$sessionMetadata.saveAsPatchPath
+										x
 									]).execute()
 
 									$addNotification = {
@@ -685,19 +609,101 @@
 
 							$forceSaveSubEntity = { value: false }
 
+							$sessionMetadata.saveAsPatch = true
+							$sessionMetadata.saveAsPatchPath = x
 							$sessionMetadata.loadedFromGameFiles = false
+
+							breadcrumb("entity", "Saved to patch")
 
 							$addNotification = {
 								kind: "success",
 								title: "Saved patch successfully",
-								subtitle:
-									"Saved the changes from the original entity to " +
-									($sessionMetadata.saveAsPatchPath.split(sep).length > 3
-										? "..." + $sessionMetadata.saveAsPatchPath.split(sep).slice(-3).join(sep)
-										: $sessionMetadata.saveAsPatchPath)
+								subtitle: "Saved the changes from the original entity to the selected path"
 							}
+						}, 500)
+					}}
+				>
+					<HeaderNavItem href="#" text="Save as patch file" />
+				</li>
+			</HeaderNavMenu>
+			{#if $sessionMetadata.originalEntityPath && !$sessionMetadata.loadedFromGameFiles}
+				{#if $sessionMetadata.saveAsPatch}
+					<li
+						role="none"
+						use:shortcut={{ control: true, key: "s" }}
+						on:click={async () => {
+							$forceSaveSubEntity = { value: true }
 
-							breadcrumb("entity", "Saved to patch (original path)")
+							setTimeout(async () => {
+								if (Object.keys($entity.entities).length > 25000) {
+									await writeTextFile("entity.json", await getEntityAsText(), { dir: BaseDirectory.App })
+
+									await Command.sidecar("sidecar/quickentity-rs", [
+										"patch",
+										"generate",
+										"--input1",
+										String($sessionMetadata.originalEntityPath),
+										"--input2",
+										await join(await appDir(), "entity.json"),
+										"--output",
+										$sessionMetadata.saveAsPatchPath
+									]).execute()
+
+									$addNotification = {
+										kind: "warning",
+										title: "Calculated patch using alternate algorithm",
+										subtitle: "The patch was calculated using a faster but lower quality algorithm; you may want to check the output JSON."
+									}
+								} else {
+									try {
+										// much smarter but much slower diff algorithm
+										await writeTextFile(
+											$sessionMetadata.saveAsPatchPath,
+											json.stringify({
+												tempHash: $entity.tempHash,
+												tbluHash: $entity.tbluHash,
+												patch: rfc6902.createPatch(json.parse(await readTextFile($sessionMetadata.originalEntityPath)), json.parse(await getEntityAsText()), rfcDiffFunction),
+												patchVersion: 5
+											})
+										)
+									} catch {
+										await writeTextFile("entity.json", await getEntityAsText(), { dir: BaseDirectory.App })
+
+										await Command.sidecar("sidecar/quickentity-rs", [
+											"patch",
+											"generate",
+											"--input1",
+											String($sessionMetadata.originalEntityPath),
+											"--input2",
+											await join(await appDir(), "entity.json"),
+											"--output",
+											$sessionMetadata.saveAsPatchPath
+										]).execute()
+
+										$addNotification = {
+											kind: "warning",
+											title: "Calculated patch using alternate algorithm",
+											subtitle: "The patch was calculated using a faster but lower quality algorithm; you may want to check the output JSON."
+										}
+									}
+								}
+
+								$forceSaveSubEntity = { value: false }
+
+								$sessionMetadata.loadedFromGameFiles = false
+
+								$addNotification = {
+									kind: "success",
+									title: "Saved patch successfully",
+									subtitle:
+										"Saved the changes from the original entity to " +
+										($sessionMetadata.saveAsPatchPath.split(sep).length > 3
+											? "..." + $sessionMetadata.saveAsPatchPath.split(sep).slice(-3).join(sep)
+											: $sessionMetadata.saveAsPatchPath)
+								}
+
+								breadcrumb("entity", "Saved to patch (original path)")
+							}, 500)
 						}}
 					>
 						<a role="menuitem" tabindex="0" href="#" class="bx--header__menu-item"><span class="bx--text-truncate--end">Save patch</span></a>
@@ -709,23 +715,25 @@
 						on:click={async () => {
 							$forceSaveSubEntity = { value: true }
 
-							await writeTextFile($sessionMetadata.saveAsEntityPath, await getEntityAsText())
+							setTimeout(async () => {
+								await writeTextFile($sessionMetadata.saveAsEntityPath, await getEntityAsText())
 
-							$forceSaveSubEntity = { value: false }
+								$forceSaveSubEntity = { value: false }
 
-							$sessionMetadata.loadedFromGameFiles = false
+								$sessionMetadata.loadedFromGameFiles = false
 
-							$addNotification = {
-								kind: "success",
-								title: "Saved entity successfully",
-								subtitle:
-									"Saved the entity to " +
-									($sessionMetadata.saveAsEntityPath.split(sep).length > 3
-										? "..." + $sessionMetadata.saveAsEntityPath.split(sep).slice(-3).join(sep)
-										: $sessionMetadata.saveAsEntityPath)
-							}
+								$addNotification = {
+									kind: "success",
+									title: "Saved entity successfully",
+									subtitle:
+										"Saved the entity to " +
+										($sessionMetadata.saveAsEntityPath.split(sep).length > 3
+											? "..." + $sessionMetadata.saveAsEntityPath.split(sep).slice(-3).join(sep)
+											: $sessionMetadata.saveAsEntityPath)
+								}
 
-							breadcrumb("entity", "Saved to file (original path)")
+								breadcrumb("entity", "Saved to file (original path)")
+							}, 500)
 						}}
 					>
 						<a role="menuitem" tabindex="0" href="#" class="bx--header__menu-item"><span class="bx--text-truncate--end">Save entity</span></a>
@@ -1113,6 +1121,9 @@
 						href="/3d"
 						on:click={() => {
 							$forceSaveSubEntity = { value: true }
+							setTimeout(() => {
+								$forceSaveSubEntity = { value: false }
+							}, 500)
 						}}
 						isSelected={$page.url.pathname == "/3d"}
 					/>
@@ -1164,44 +1175,11 @@
 										if ($appSettings.autoSaveOnSwitchFile) {
 											$forceSaveSubEntity = { value: true }
 
-											if ($sessionMetadata.originalEntityPath && !$sessionMetadata.loadedFromGameFiles) {
-												if ($sessionMetadata.saveAsPatch) {
-													if (Object.keys($entity.entities).length > 25000) {
-														await writeTextFile("entity.json", await getEntityAsText(), { dir: BaseDirectory.App })
-
-														await Command.sidecar("sidecar/quickentity-rs", [
-															"patch",
-															"generate",
-															"--input1",
-															String($sessionMetadata.originalEntityPath),
-															"--input2",
-															await join(await appDir(), "entity.json"),
-															"--output",
-															$sessionMetadata.saveAsPatchPath
-														]).execute()
-
-														$addNotification = {
-															kind: "warning",
-															title: "Calculated patch using alternate algorithm",
-															subtitle: "The patch was calculated using a faster but lower quality algorithm; you may want to check the output JSON."
-														}
-													} else {
-														try {
-															// much smarter but much slower diff algorithm
-															await writeTextFile(
-																$sessionMetadata.saveAsPatchPath,
-																json.stringify({
-																	tempHash: $entity.tempHash,
-																	tbluHash: $entity.tbluHash,
-																	patch: rfc6902.createPatch(
-																		json.parse(await readTextFile($sessionMetadata.originalEntityPath)),
-																		json.parse(await getEntityAsText()),
-																		rfcDiffFunction
-																	),
-																	patchVersion: 5
-																})
-															)
-														} catch {
+											setTimeout(async () => {
+												$forceSaveSubEntity = { value: false }
+												if ($sessionMetadata.originalEntityPath && !$sessionMetadata.loadedFromGameFiles) {
+													if ($sessionMetadata.saveAsPatch) {
+														if (Object.keys($entity.entities).length > 25000) {
 															await writeTextFile("entity.json", await getEntityAsText(), { dir: BaseDirectory.App })
 
 															await Command.sidecar("sidecar/quickentity-rs", [
@@ -1220,22 +1198,56 @@
 																title: "Calculated patch using alternate algorithm",
 																subtitle: "The patch was calculated using a faster but lower quality algorithm; you may want to check the output JSON."
 															}
+														} else {
+															try {
+																// much smarter but much slower diff algorithm
+																await writeTextFile(
+																	$sessionMetadata.saveAsPatchPath,
+																	json.stringify({
+																		tempHash: $entity.tempHash,
+																		tbluHash: $entity.tbluHash,
+																		patch: rfc6902.createPatch(
+																			json.parse(await readTextFile($sessionMetadata.originalEntityPath)),
+																			json.parse(await getEntityAsText()),
+																			rfcDiffFunction
+																		),
+																		patchVersion: 5
+																	})
+																)
+															} catch {
+																await writeTextFile("entity.json", await getEntityAsText(), { dir: BaseDirectory.App })
+
+																await Command.sidecar("sidecar/quickentity-rs", [
+																	"patch",
+																	"generate",
+																	"--input1",
+																	String($sessionMetadata.originalEntityPath),
+																	"--input2",
+																	await join(await appDir(), "entity.json"),
+																	"--output",
+																	$sessionMetadata.saveAsPatchPath
+																]).execute()
+
+																$addNotification = {
+																	kind: "warning",
+																	title: "Calculated patch using alternate algorithm",
+																	subtitle: "The patch was calculated using a faster but lower quality algorithm; you may want to check the output JSON."
+																}
+															}
 														}
+
+														$sessionMetadata.loadedFromGameFiles = false
+
+														breadcrumb("entity", "Saved to patch (original path) when switching workspace file")
+													} else {
+														await writeTextFile($sessionMetadata.saveAsEntityPath, await getEntityAsText())
+
+														$sessionMetadata.loadedFromGameFiles = false
+
+														breadcrumb("entity", "Saved to file (original path) when switching workspace file")
 													}
-
-													$sessionMetadata.loadedFromGameFiles = false
-
-													breadcrumb("entity", "Saved to patch (original path) when switching workspace file")
-												} else {
-													await writeTextFile($sessionMetadata.saveAsEntityPath, await getEntityAsText())
-
-													$sessionMetadata.loadedFromGameFiles = false
-
-													breadcrumb("entity", "Saved to file (original path) when switching workspace file")
 												}
-											}
-
-											$forceSaveSubEntity = { value: false }
+											}, 500)
 										}
 
 										// load new file
