@@ -253,7 +253,7 @@
 		graphView.editor.load(graph)
 
 		await recomputeLayout()
-		setTimeout(async () => await recomputeLayout(), 100)
+		setTimeout(async () => await recomputeLayout(), 500)
 	}
 
 	export async function recomputeLayout() {
@@ -265,8 +265,8 @@
 			children: graphView.editor.graph.nodes.map((a) => {
 				return {
 					id: a.id,
-					width: (document.getElementById(a.id) || { clientWidth: 250 }).clientWidth + 30,
-					height: (document.getElementById(a.id) || { clientHeight: 150 }).clientHeight + 30,
+					width: (document.querySelector(".baklava-node#" + a.id) || { clientWidth: 250 }).clientWidth + 30,
+					height: (document.querySelector(".baklava-node#" + a.id) || { clientHeight: 150 }).clientHeight + 30,
 					x: a.position.x,
 					y: a.position.y
 				}
@@ -310,6 +310,16 @@
 						if (!detail[1].node.id.startsWith("comment-")) {
 							selectedEntityID = detail[1].node.id
 							await displayGraphForFolder(detail[1].node.id)
+						}
+					}}
+					on:nodeRenamed={async ({ detail }) => {
+						if (!detail[1].node.id.startsWith("comment")) {
+							$entity.entities[detail[1].node.id].name = detail[1].text.replace(/ \(ref .*\)/gi, "")
+							if (currentlyDisplayedFolder) {
+								await displayGraphForFolder(currentlyDisplayedFolder)
+							}
+						} else {
+							$entity.comments[detail[1].node.id.replace("comment-", "")].name = detail[1].text.replace(/ \(comment\)/gi, "")
 						}
 					}}
 				/>

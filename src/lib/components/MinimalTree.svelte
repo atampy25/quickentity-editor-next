@@ -99,7 +99,26 @@
 					return (this.get_node(a).original ? this.get_node(a).original : this.get_node(a)).folder ? -1 : 1
 				}
 			},
-			plugins: ["search", "sort"]
+			contextmenu: {
+				select_node: false,
+				items: (b: { id: string }, c: any) => {
+					return {
+						rename: {
+							separator_before: false,
+							separator_after: false,
+							_disabled: false,
+							label: "Rename",
+							icon: "far fa-pen-to-square",
+							action: function (b: { reference: string | HTMLElement | JQuery<HTMLElement> }) {
+								var c = jQuery.jstree!.reference(b.reference),
+									d = c.get_node(b.reference)
+								c.edit(d)
+							}
+						}
+					}
+				}
+			},
+			plugins: ["contextmenu", "search", "sort"]
 		})
 
 		tree = jQuery("#" + elemID).jstree()
@@ -110,6 +129,7 @@
 				dispatch("selectionUpdate", data)
 			}
 		})
+		jQuery("#" + elemID).on("rename_node.jstree", (...data) => dispatch("nodeRenamed", data))
 	})
 
 	export function refreshTree(
