@@ -1,11 +1,11 @@
 {
-	"version": "1.20.0",
-	"notes": "Add flowchart view for pins",
+	"version": "1.20.1",
+	"notes": "Stability improvements",
 	"pub_date": "2022-11-29T12:33:17Z",
 	"platforms": {
 		"windows-x86_64": {
-			"signature": "dW50cnVzdGVkIGNvbW1lbnQ6IHNpZ25hdHVyZSBmcm9tIHRhdXJpIHNlY3JldCBrZXkKUlVScWpVZGd2b0lOTll2OU1ad25ua29vQTdxSXF1em9qaWl1aVZMblRwV0lmelRWclVuOW1uMkIrYVhtV09Hd2hqdUFMVTdIc2tZcnJwZTYwalI3ajFVTFBVQk1yaHIwWVEwPQp0cnVzdGVkIGNvbW1lbnQ6IHRpbWVzdGFtcDoxNjY5Nzk0MDg4CWZpbGU6UXVpY2tFbnRpdHkgRWRpdG9yXzEuMjAuMF94NjRfZW4tVVMubXNpLnppcAp6WjZXUTZaazlWeitLbjhNUGlBeGgyVnZyME9oZWRaRjhJTVhjRnhRbkFaZ0V6RWx5QTJDdTFnRC81dDRGT1ZySHowcVhaOEExdGxZeVlhVU8zZFRBQT09Cg==",
-			"url": "https://github.com/atampy25/quickentity-editor-next/releases/download/1.20.0/QuickEntity.Editor_1.20.0_x64_en-US.msi.zip"
+			"signature": "dW50cnVzdGVkIGNvbW1lbnQ6IHNpZ25hdHVyZSBmcm9tIHRhdXJpIHNlY3JldCBrZXkKUlVScWpVZGd2b0lOTmZFQVF3dGd5cjVibHAvTnJCcDJmZjdBTWhJSCtFZEZhYTM1ZUM5d3hYMThFaWZMWHhuS3UwMElSaXFYR1hnY1ltZnVDTDJoa1VmZUpPdWZDdWd2Y2dVPQp0cnVzdGVkIGNvbW1lbnQ6IHRpbWVzdGFtcDoxNjY5OTU0MjYyCWZpbGU6UXVpY2tFbnRpdHkgRWRpdG9yXzEuMjAuMV94NjRfZW4tVVMubXNpLnppcAprekNpdURCT3RhMXMyekRxS2huZHovTXNGcVN6WXhHQlBnaEVpbmIxcy84NXVEN05TQUdGWmVuUXBMRE9aQ0RiSmRaMzc3a1NUN1E5aXhBcU1kOXBEUT09Cg==",
+			"url": "https://github.com/atampy25/quickentity-editor-next/releases/download/1.20.1/QuickEntity.Editor_1.20.1_x64_en-US.msi.zip"
 		}
 	}
 }
