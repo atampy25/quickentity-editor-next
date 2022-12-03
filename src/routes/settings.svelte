@@ -27,6 +27,8 @@
 	<br />
 	<TextInput labelText="Runtime path (required)" placeholder={documentsPath + "blabla"} bind:value={$appSettings.runtimePath} />
 	<br />
+	<Checkbox bind:checked={$appSettings.h1} labelText="Above paths are from HITMAN™ (2016) install" />
+	<br />
 	<div class="flex items-center gap-2">
 		<div class="flex-shrink">
 			<Checkbox bind:checked={$appSettings.technicalMode} labelText="Enable technical mode" />

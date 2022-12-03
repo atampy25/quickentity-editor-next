@@ -11,6 +11,8 @@ interface AppSettings {
 	runtimePath: string
 	retailPath: string
 
+	h1: boolean
+
 	autoSaveOnSwitchFile: boolean
 	extractModdedFiles: boolean
 
@@ -45,7 +47,8 @@ await forage.setItem({
 				autoHighlightEntities: true,
 				autoSaveOnSwitchFile: true,
 				preferredHighlightColour: "#0000ff",
-				extractModdedFiles: false
+				extractModdedFiles: false,
+				h1: false
 			},
 			json.parse((await forage.getItem({ key: "appSettings" })()) || "{}")
 		)
