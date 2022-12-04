@@ -1,11 +1,11 @@
 {
-	"version": "1.22.0",
-	"notes": "HITMAN 1 support for inspection",
+	"version": "1.22.1",
+	"notes": "Fix metadata view scrolling",
 	"pub_date": "2022-11-29T12:33:17Z",
 	"platforms": {
 		"windows-x86_64": {
-			"signature": "dW50cnVzdGVkIGNvbW1lbnQ6IHNpZ25hdHVyZSBmcm9tIHRhdXJpIHNlY3JldCBrZXkKUlVScWpVZGd2b0lOTlhxZTJyMzlpRGs4UkVPYmhhWHNzMzhjV0ZYdmY1SWErc3FFMk5Na0ZQczg0cWI5UTRCUXFmS2hITzRsbnppY0pHSkIzaGZZUHpxeFYyM3p4ZTdPNkFFPQp0cnVzdGVkIGNvbW1lbnQ6IHRpbWVzdGFtcDoxNjcwMDcyMTgzCWZpbGU6UXVpY2tFbnRpdHkgRWRpdG9yXzEuMjIuMF94NjRfZW4tVVMubXNpLnppcAp4Ynk3bzR6bjNSWTM5enVDd043akpHejFIT1l0Tzhmcm9NZDRyQ1A4MlFyN2QrUXVmdkVjbEdsQ1dxVm8xUTVjVXlwdDM1QVZRVDZmWGpsazFMb1JDdz09Cg==",
-			"url": "https://github.com/atampy25/quickentity-editor-next/releases/download/1.22.0/QuickEntity.Editor_1.22.0_x64_en-US.msi.zip"
+			"signature": "dW50cnVzdGVkIGNvbW1lbnQ6IHNpZ25hdHVyZSBmcm9tIHRhdXJpIHNlY3JldCBrZXkKUlVScWpVZGd2b0lOTlhCcjhYb1NQYm8vYzgzL2dtc0h0VDZOZnE2NENEeFFGZThEQlZ6Qi9TTnNpa3hHZ2MrR05LSUptakVEa2g2ZE1vTEpYNjN0Rm1ubUFBQ2J4dEpxdmdjPQp0cnVzdGVkIGNvbW1lbnQ6IHRpbWVzdGFtcDoxNjcwMTIwOTc5CWZpbGU6UXVpY2tFbnRpdHkgRWRpdG9yXzEuMjIuMV94NjRfZW4tVVMubXNpLnppcApKK0xSUXlVdzVZRW9QdktIMVQzYktKbkpGQmxwRVR0TVNhUHdCNGxCUEdEWGIzVVVhbGExVWV1T01wNkhwcjRZOFhQNllZakNZMzU0ZjVBNGNwUlBCUT09Cg==",
+			"url": "https://github.com/atampy25/quickentity-editor-next/releases/download/1.22.1/QuickEntity.Editor_1.22.1_x64_en-US.msi.zip"
 		}
 	}
 }
