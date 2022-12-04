@@ -775,7 +775,7 @@
 					{/if}
 				{/if}
 			{/if}
-			{#if $page.url.pathname == "/metadata" || $page.url.pathname == "/overrides" || $page.url.pathname == "/tree" || $page.url.pathname == "/3d"}
+			{#if $page.url.pathname == "/metadata" || $page.url.pathname == "/overrides" || $page.url.pathname == "/tree" || $page.url.pathname == "/graph" || $page.url.pathname == "/3d"}
 				<HeaderNavItem
 					href="#"
 					on:click={() => {
@@ -1042,6 +1042,74 @@
 							tour.addStep({
 								id: "page",
 								text: "You're looking at the 3D Preview. It's currently very experimental and probably won't work.",
+								buttons: [
+									{
+										text: "Next",
+										action: tour.next
+									}
+								]
+							})
+
+							tour.start()
+						}
+
+						if ($page.url.pathname == "/graph") {
+							const tour = new Shepherd.Tour({
+								useModalOverlay: true,
+								defaultStepOptions: {
+									classes: "shadow-md bg-purple-dark",
+									scrollTo: true
+								}
+							})
+
+							tour.addStep({
+								id: "page",
+								text: "You're looking at the Graph view, where you can wire up events and triggers in a visual way. Forwarding (input and output copying) isn't supported in this view, at least right now.",
+								buttons: [
+									{
+										text: "Next",
+										action: tour.next
+									}
+								]
+							})
+
+							tour.addStep({
+								id: "graphTree",
+								text: "This is the tree view. Select an entity here and its children will be displayed on the graph. It's slimmed down compared to the Tree view; the only right-click action supported, currently, is Rename.",
+								attachTo: {
+									element: ".shepherd-graphTree",
+									on: "bottom"
+								},
+								buttons: [
+									{
+										text: "Next",
+										action: tour.next
+									}
+								]
+							})
+
+							tour.addStep({
+								id: "graph",
+								text: "This is the graph itself. It displays entities, their inputs and their outputs, in a visual way allowing you to drag to connect events. You can add a new entity by dragging it from the left pane to the main view.",
+								attachTo: {
+									element: ".shepherd-graph",
+									on: "bottom"
+								},
+								buttons: [
+									{
+										text: "Next",
+										action: tour.next
+									}
+								]
+							})
+
+							tour.addStep({
+								id: "graph",
+								text: "You can format the graph by clicking this button; the nodes will be automatically re-arranged in a way that makes everything as clean and visible as possible.",
+								attachTo: {
+									element: ".shepherd-formatGraphButton",
+									on: "bottom"
+								},
 								buttons: [
 									{
 										text: "Next",

@@ -54,7 +54,7 @@
 
 		document.getElementsByClassName(
 			"baklava-toolbar"
-		)[0].innerHTML += `<button class="baklava-toolbar-entry baklava-toolbar-button" title="Format Graph"><svg class="baklava-icon" fill="none" stroke="currentColor" width="24" height="24" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 5a1 1 0 011-1h14a1 1 0 011 1v2a1 1 0 01-1 1H5a1 1 0 01-1-1V5zM4 13a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H5a1 1 0 01-1-1v-6zM16 13a1 1 0 011-1h2a1 1 0 011 1v6a1 1 0 01-1 1h-2a1 1 0 01-1-1v-6z"></path></svg></button>`
+		)[0].innerHTML += `<button class="baklava-toolbar-entry baklava-toolbar-button shepherd-formatGraphButton" title="Format Graph"><svg class="baklava-icon" fill="none" stroke="currentColor" width="24" height="24" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 5a1 1 0 011-1h14a1 1 0 011 1v2a1 1 0 01-1 1H5a1 1 0 01-1-1V5zM4 13a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H5a1 1 0 01-1-1v-6zM16 13a1 1 0 011-1h2a1 1 0 011 1v6a1 1 0 01-1 1h-2a1 1 0 01-1-1v-6z"></path></svg></button>`
 		;[...document.getElementsByClassName("baklava-toolbar")[0].children].at(-1).addEventListener("click", recomputeLayout)
 
 		graphView.editor.graphEvents.addConnection.subscribe("addConnection", (connection) => {
@@ -296,7 +296,7 @@
 
 <SplitPanes theme="">
 	<Pane>
-		<div class="flex flex-col h-full shepherd-tree p-2 px-3">
+		<div class="flex flex-col h-full shepherd-graphTree p-2 px-3">
 			<div class="flex flex-row gap-4 items-center">
 				<h1>Tree</h1>
 				<Search size="lg" placeholder="Filter tree entities" on:input={treeSearch} bind:value={treeSearchInput} />
