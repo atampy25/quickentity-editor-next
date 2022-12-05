@@ -42,7 +42,7 @@
 	import { appDir, join, sep } from "@tauri-apps/api/path"
 	import { Command } from "@tauri-apps/api/shell"
 	import { getVersion } from "@tauri-apps/api/app"
-	import * as rfc6902 from "rfc6902"
+	import * as rfc6902 from "$lib/rfc6902"
 	import md5 from "md5"
 	import Shepherd from "shepherd.js"
 	import cloneDeep from "lodash/cloneDeep"
@@ -62,6 +62,7 @@
 	import { changeEntityHashesFromFriendly, changeEntityHashesToFriendly } from "$lib/utils"
 	import Decimal from "decimal.js"
 	import { goto } from "$app/navigation"
+	import type { Entity } from "$lib/quickentity-types"
 
 	let displayNotifications: { kind: "error" | "info" | "info-square" | "success" | "warning" | "warning-alt"; title: string; subtitle: string }[] = []
 
@@ -147,7 +148,7 @@
 
 		if ($workspaceData.path) {
 			if (await exists(await join($workspaceData.path, "project.json"))) {
-				changeEntityHashesToFriendly(
+				changeEntityHashesFromFriendly(
 					ent,
 					Object.fromEntries(JSON.parse(await readTextFile(await join($workspaceData.path, "project.json"))).customPaths.map((a: string) => [("00" + md5(a).slice(2, 16)).toUpperCase(), a]))
 				)
@@ -167,7 +168,7 @@
 
 		if ($workspaceData.path) {
 			if (await exists(await join($workspaceData.path, "project.json"))) {
-				changeEntityHashesFromFriendly(
+				changeEntityHashesToFriendly(
 					ent,
 					Object.fromEntries(JSON.parse(await readTextFile(await join($workspaceData.path, "project.json"))).customPaths.map((a: string) => [("00" + md5(a).slice(2, 16)).toUpperCase(), a]))
 				)
@@ -374,6 +375,10 @@
 			}
 		}
 	}
+
+	function diffEntities(original: Entity, modified: Entity) {
+		return rfc6902.createPatch(original, modified, rfcDiffFunction)
+	}
 </script>
 
 {#if ready}
@@ -554,58 +559,15 @@
 						$forceSaveSubEntity = { value: true }
 
 						setTimeout(async () => {
-							if (Object.keys($entity.entities).length > 25000) {
-								await writeTextFile("entity.json", await getEntityAsText(), { dir: BaseDirectory.App })
-
-								await Command.sidecar("sidecar/quickentity-rs", [
-									"patch",
-									"generate",
-									"--input1",
-									String($sessionMetadata.originalEntityPath),
-									"--input2",
-									await join(await appDir(), "entity.json"),
-									"--output",
-									x
-								]).execute()
-
-								$addNotification = {
-									kind: "warning",
-									title: "Calculated patch using alternate algorithm",
-									subtitle: "The patch was calculated using a faster but lower quality algorithm; you may want to check the output JSON."
-								}
-							} else {
-								try {
-									// much smarter but much slower diff algorithm
-									await writeTextFile(
-										x,
-										json.stringify({
-											tempHash: $entity.tempHash,
-											tbluHash: $entity.tbluHash,
-											patch: rfc6902.createPatch(json.parse(await readTextFile($sessionMetadata.originalEntityPath)), json.parse(await getEntityAsText()), rfcDiffFunction),
-											patchVersion: 5
-										})
-									)
-								} catch {
-									await writeTextFile("entity.json", await getEntityAsText(), { dir: BaseDirectory.App })
-
-									await Command.sidecar("sidecar/quickentity-rs", [
-										"patch",
-										"generate",
-										"--input1",
-										String($sessionMetadata.originalEntityPath),
-										"--input2",
-										await join(await appDir(), "entity.json"),
-										"--output",
-										x
-									]).execute()
-
-									$addNotification = {
-										kind: "warning",
-										title: "Calculated patch using alternate algorithm",
-										subtitle: "The patch was calculated using a faster but lower quality algorithm; you may want to check the output JSON."
-									}
-								}
-							}
+							await writeTextFile(
+								x,
+								json.stringify({
+									tempHash: $entity.tempHash,
+									tbluHash: $entity.tbluHash,
+									patch: diffEntities(json.parse(await readTextFile($sessionMetadata.originalEntityPath)), json.parse(await getEntityAsText())),
+									patchVersion: 5
+								})
+							)
 
 							$forceSaveSubEntity = { value: false }
 
@@ -635,58 +597,15 @@
 							$forceSaveSubEntity = { value: true }
 
 							setTimeout(async () => {
-								if (Object.keys($entity.entities).length > 25000) {
-									await writeTextFile("entity.json", await getEntityAsText(), { dir: BaseDirectory.App })
-
-									await Command.sidecar("sidecar/quickentity-rs", [
-										"patch",
-										"generate",
-										"--input1",
-										String($sessionMetadata.originalEntityPath),
-										"--input2",
-										await join(await appDir(), "entity.json"),
-										"--output",
-										$sessionMetadata.saveAsPatchPath
-									]).execute()
-
-									$addNotification = {
-										kind: "warning",
-										title: "Calculated patch using alternate algorithm",
-										subtitle: "The patch was calculated using a faster but lower quality algorithm; you may want to check the output JSON."
-									}
-								} else {
-									try {
-										// much smarter but much slower diff algorithm
-										await writeTextFile(
-											$sessionMetadata.saveAsPatchPath,
-											json.stringify({
-												tempHash: $entity.tempHash,
-												tbluHash: $entity.tbluHash,
-												patch: rfc6902.createPatch(json.parse(await readTextFile($sessionMetadata.originalEntityPath)), json.parse(await getEntityAsText()), rfcDiffFunction),
-												patchVersion: 5
-											})
-										)
-									} catch {
-										await writeTextFile("entity.json", await getEntityAsText(), { dir: BaseDirectory.App })
-
-										await Command.sidecar("sidecar/quickentity-rs", [
-											"patch",
-											"generate",
-											"--input1",
-											String($sessionMetadata.originalEntityPath),
-											"--input2",
-											await join(await appDir(), "entity.json"),
-											"--output",
-											$sessionMetadata.saveAsPatchPath
-										]).execute()
-
-										$addNotification = {
-											kind: "warning",
-											title: "Calculated patch using alternate algorithm",
-											subtitle: "The patch was calculated using a faster but lower quality algorithm; you may want to check the output JSON."
-										}
-									}
-								}
+								await writeTextFile(
+									$sessionMetadata.saveAsPatchPath,
+									json.stringify({
+										tempHash: $entity.tempHash,
+										tbluHash: $entity.tbluHash,
+										patch: diffEntities(json.parse(await readTextFile($sessionMetadata.originalEntityPath)), json.parse(await getEntityAsText())),
+										patchVersion: 5
+									})
+								)
 
 								$forceSaveSubEntity = { value: false }
 
@@ -1255,62 +1174,15 @@
 												$forceSaveSubEntity = { value: false }
 												if ($sessionMetadata.originalEntityPath && !$sessionMetadata.loadedFromGameFiles) {
 													if ($sessionMetadata.saveAsPatch) {
-														if (Object.keys($entity.entities).length > 25000) {
-															await writeTextFile("entity.json", await getEntityAsText(), { dir: BaseDirectory.App })
-
-															await Command.sidecar("sidecar/quickentity-rs", [
-																"patch",
-																"generate",
-																"--input1",
-																String($sessionMetadata.originalEntityPath),
-																"--input2",
-																await join(await appDir(), "entity.json"),
-																"--output",
-																$sessionMetadata.saveAsPatchPath
-															]).execute()
-
-															$addNotification = {
-																kind: "warning",
-																title: "Calculated patch using alternate algorithm",
-																subtitle: "The patch was calculated using a faster but lower quality algorithm; you may want to check the output JSON."
-															}
-														} else {
-															try {
-																// much smarter but much slower diff algorithm
-																await writeTextFile(
-																	$sessionMetadata.saveAsPatchPath,
-																	json.stringify({
-																		tempHash: $entity.tempHash,
-																		tbluHash: $entity.tbluHash,
-																		patch: rfc6902.createPatch(
-																			json.parse(await readTextFile($sessionMetadata.originalEntityPath)),
-																			json.parse(await getEntityAsText()),
-																			rfcDiffFunction
-																		),
-																		patchVersion: 5
-																	})
-																)
-															} catch {
-																await writeTextFile("entity.json", await getEntityAsText(), { dir: BaseDirectory.App })
-
-																await Command.sidecar("sidecar/quickentity-rs", [
-																	"patch",
-																	"generate",
-																	"--input1",
-																	String($sessionMetadata.originalEntityPath),
-																	"--input2",
-																	await join(await appDir(), "entity.json"),
-																	"--output",
-																	$sessionMetadata.saveAsPatchPath
-																]).execute()
-
-																$addNotification = {
-																	kind: "warning",
-																	title: "Calculated patch using alternate algorithm",
-																	subtitle: "The patch was calculated using a faster but lower quality algorithm; you may want to check the output JSON."
-																}
-															}
-														}
+														await writeTextFile(
+															$sessionMetadata.saveAsPatchPath,
+															json.stringify({
+																tempHash: $entity.tempHash,
+																tbluHash: $entity.tbluHash,
+																patch: diffEntities(json.parse(await readTextFile($sessionMetadata.originalEntityPath)), json.parse(await getEntityAsText())),
+																patchVersion: 5
+															})
+														)
 
 														$sessionMetadata.loadedFromGameFiles = false
 
