@@ -748,6 +748,14 @@
 						class="shepherd-gameConnection"
 						on:click={async () => {
 							if (!gameServer.connected) {
+								try {
+									await copyFile("GameConnection.dll", await join($appSettings.retailPath, "mods", "GameConnection.dll"))
+								} catch {}
+
+								try {
+									await copyFile("GameConnection.pdb", await join($appSettings.retailPath, "mods", "GameConnection.pdb"))
+								} catch {}
+
 								await gameServer.start()
 
 								gameServer.client.addListener(({ datagram }) => {

@@ -3,8 +3,8 @@ import * as LosslessJSON from "lossless-json"
 import Decimal from "decimal.js"
 
 function reviver(key: string, value: any) {
-	if (value && value.isLosslessNumber) {
-		return new Decimal(value.value)
+	if (typeof value === "string" && value.startsWith("~|")) {
+		return new Decimal(value.slice(2))
 	} else {
 		return value
 	}
@@ -18,7 +18,7 @@ function replacer(key: string, value: any) {
 	}
 }
 
-export const parse = (val: string) => LosslessJSON.parse(val, reviver)
+export const parse = (val: string) => JSON.parse(val.replace(/:\s*([-+Ee0-9.]+)/g, ': "~|$1"'), reviver)
 export const stringify = (val: Record<string, any>, sp: string | undefined = undefined) => LosslessJSON.stringify(val, replacer, sp)
 
 export default {
