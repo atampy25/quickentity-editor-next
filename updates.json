@@ -1,11 +1,11 @@
 {
-	"version": "1.22.2",
-	"notes": "Filter on enter press only, add loading indicator\n\nresolves #5",
+	"version": "1.23.0",
+	"notes": "Smart patching with no entity size limit",
 	"pub_date": "2022-11-29T12:33:17Z",
 	"platforms": {
 		"windows-x86_64": {
-			"signature": "dW50cnVzdGVkIGNvbW1lbnQ6IHNpZ25hdHVyZSBmcm9tIHRhdXJpIHNlY3JldCBrZXkKUlVScWpVZGd2b0lOTlQ5ODRBQThNaXNFWmYxN1U3WERVNkpZNTVkUGZHUUorWjNnMGwvSmJtRHVoWmhoSlRCVzhVZXhpMGFKTTduUkkvVXpFK2U1RmdzMWdtQThodm5yb0FNPQp0cnVzdGVkIGNvbW1lbnQ6IHRpbWVzdGFtcDoxNjcwMjExNzk3CWZpbGU6UXVpY2tFbnRpdHkgRWRpdG9yXzEuMjIuMl94NjRfZW4tVVMubXNpLnppcAo0a3JuV3ZOSkQ4ZFJVZ3lvaU5wblFCR2wrdnl1cGgzS1REbHZsRHhRRjd2VVQ0bnhyUmNPVTA1RnlWdFg4bDE2TWtpSmhwckJWdFg0U1pkZXVxL2xBQT09Cg==",
-			"url": "https://github.com/atampy25/quickentity-editor-next/releases/download/1.22.2/QuickEntity.Editor_1.22.2_x64_en-US.msi.zip"
+			"signature": "dW50cnVzdGVkIGNvbW1lbnQ6IHNpZ25hdHVyZSBmcm9tIHRhdXJpIHNlY3JldCBrZXkKUlVScWpVZGd2b0lOTlY3ZU84NkdZS3Z5UGRvRmhURzdTK1dycjhPQnRWbkFYcUUzOEJncHJ5NEhKR2prWnhCOVEydHJWNWwydjRSMUVmaUJ2SmxLMmhSN1U3NzdCSitINlFrPQp0cnVzdGVkIGNvbW1lbnQ6IHRpbWVzdGFtcDoxNjcwMjQ4NTAyCWZpbGU6UXVpY2tFbnRpdHkgRWRpdG9yXzEuMjMuMF94NjRfZW4tVVMubXNpLnppcApUemhYUjhKSWV4NVVsK3Q0MXM1Mm1teGdoMTB1U3VRYkxib2kzK3IzZm9PWTZZanBPT1dPUzJHNzdTbUMzNmljREgrSWpXZEpQMDNabkdlQmNoQzFBQT09Cg==",
+			"url": "https://github.com/atampy25/quickentity-editor-next/releases/download/1.23.0/QuickEntity.Editor_1.23.0_x64_en-US.msi.zip"
 		}
 	}
 }

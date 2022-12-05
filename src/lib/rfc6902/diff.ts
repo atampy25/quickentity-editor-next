@@ -171,11 +171,11 @@ interface DynamicAlternative {
 }
 
 function buildOperations(memo: Array<Array<DynamicAlternative>>, i: number, j: number) {
-	var memoized: DynamicAlternative = memo[i][j]
+	let memoized: DynamicAlternative = memo[i][j]
 	if (!memoized) {
 		throw new Error("invalid memo")
 	}
-	let operations: ArrayOperation[] = []
+	const operations: ArrayOperation[] = []
 	while (memoized && memoized.prev && memoized.operation) {
 		operations.push(memoized.operation)
 		const index = memoized.prev.split(",")
@@ -217,10 +217,10 @@ export function diffArrays<T>(input: T[], output: T[], ptr: Pointer, diff: Diff 
 		diff = diffAny
 	}
 	// set up cost matrix (very simple initialization: just a map)
-	var input_length = isNaN(input.length) || input.length <= 0 ? 0 : input.length
-	var output_length = isNaN(output.length) || output.length <= 0 ? 0 : output.length
-	var input_end = input_length
-	var output_end = output_length
+	const input_length = isNaN(input.length) || input.length <= 0 ? 0 : input.length
+	const output_length = isNaN(output.length) || output.length <= 0 ? 0 : output.length
+	let input_end = input_length
+	let output_end = output_length
 	while (input_end > 0 && output_end > 0) {
 		// accelerate same arrays
 		if (isEqual(input[input_end - 1], output[output_end - 1])) {
@@ -231,7 +231,7 @@ export function diffArrays<T>(input: T[], output: T[], ptr: Pointer, diff: Diff 
 		}
 	}
 	const memo: Array<Array<DynamicAlternative>> = new Array(input_end + 1)
-	for (var i = 0; i <= input_end; i++) {
+	for (let i = 0; i <= input_end; i++) {
 		memo[i] = new Array(output_end + 1)
 	}
 	memo[0][0] = { prev: null, operation: null, cost: 0 }
@@ -249,16 +249,16 @@ export function diffArrays<T>(input: T[], output: T[], ptr: Pointer, diff: Diff 
 	// properties by using 0 for everything but positive numbers
 	for (let i = 0; i <= input_end; i++) {
 		for (let j = 0; j <= output_end; j++) {
-			var memoized = memo[i][j]
+			let memoized = memo[i][j]
 			if (memoized) continue
 			const add_prev_key = `${i},${j - 1}`
 			const remove_prev_key = `${i - 1},${j}`
 			const replace_prev_key = `${i - 1},${j - 1}`
-			var remove_operation: ArrayRemove = {
+			const remove_operation: ArrayRemove = {
 				op: "remove",
 				index: i - 1
 			}
-			var add_operation: ArrayAdd = {
+			const add_operation: ArrayAdd = {
 				op: "add",
 				index: i - 1,
 				value: output[j - 1]
@@ -281,7 +281,7 @@ export function diffArrays<T>(input: T[], output: T[], ptr: Pointer, diff: Diff 
 					} else if (add_prev.cost === min_cost) {
 						memoized = { prev: add_prev_key, operation: add_operation, cost: memo[i][j - 1].cost + 1 }
 					} else {
-						var replace_operation: ArrayReplace = {
+						const replace_operation: ArrayReplace = {
 							op: "replace",
 							index: i - 1,
 							original: input[i - 1],
@@ -294,7 +294,7 @@ export function diffArrays<T>(input: T[], output: T[], ptr: Pointer, diff: Diff 
 			memo[i][j] = memoized
 		}
 	}
-	var array_operations = buildOperations(memo, input_end, output_end)
+	const array_operations = buildOperations(memo, input_end, output_end)
 	const [padded_operations] = array_operations.reduce<[Operation[], number]>(
 		([operations, padding], array_operation) => {
 			if (isArrayAdd(array_operation)) {

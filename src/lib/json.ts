@@ -18,7 +18,7 @@ function replacer(key: string, value: any) {
 	}
 }
 
-export const parse = (val: string) => JSON.parse(val.replace(/:\s*([-+Ee0-9.]+)/g, ': "~|$1"'), reviver)
+export const parse = (val: string) => JSON.parse(val.replace(/:\s*([-+Ee0-9.]+)/g, ": \"~|$1\""), reviver)
 export const stringify = (val: Record<string, any>, sp: string | undefined = undefined) => LosslessJSON.stringify(val, replacer, sp)
 
 export default {
