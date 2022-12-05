@@ -1,7 +1,7 @@
 <script lang="ts">
 	import MinimalTree from "$lib/components/MinimalTree.svelte"
 	import { appSettings, entity, forceSaveSubEntity, intellisense, reverseReferences } from "$lib/stores"
-	import { Search } from "carbon-components-svelte"
+	import { InlineLoading, Search } from "carbon-components-svelte"
 	import debounce from "lodash/debounce"
 	import { Pane, Splitpanes as SplitPanes } from "svelte-splitpanes"
 	import { genRandHex, getReferencedLocalEntity, normaliseToHash, traverseEntityTree } from "$lib/utils"
@@ -29,10 +29,15 @@
 
 	let tree: MinimalTree
 	let treeSearchInput: string
+	let treeSearching: boolean = false
 
-	const treeSearch = debounce(() => {
-		tree.search(treeSearchInput)
-	}, 2500)
+	const treeSearch = () => {
+		treeSearching = true
+		setTimeout(() => {
+			tree.search(treeSearchInput)
+			treeSearching = false
+		}, 10)
+	}
 
 	let selectedEntityID: string | null
 
@@ -299,7 +304,23 @@
 		<div class="flex flex-col h-full shepherd-graphTree p-2 px-3">
 			<div class="flex flex-row gap-4 items-center">
 				<h1>Tree</h1>
-				<Search size="lg" placeholder="Filter tree entities" on:input={treeSearch} bind:value={treeSearchInput} />
+				<div class="flex-grow flex flex-row gap-4 items-center">
+					<Search
+						size="lg"
+						placeholder="Filter tree entities (press Enter to search)"
+						on:keyup={(evt) => {
+							if (evt.code == "Enter") {
+								treeSearch()
+							}
+						}}
+						bind:value={treeSearchInput}
+					/>
+					{#if treeSearching}
+						<div>
+							<InlineLoading />
+						</div>
+					{/if}
+				</div>
 			</div>
 			<div class="flex-grow overflow-auto">
 				<MinimalTree

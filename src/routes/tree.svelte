@@ -15,7 +15,7 @@
 	import enums from "$lib/enums.json"
 
 	import { Pane, Splitpanes as SplitPanes } from "svelte-splitpanes"
-	import { Button, ClickableTile, Modal, Search, Select, TextArea, TextInput } from "carbon-components-svelte"
+	import { Button, ClickableTile, InlineLoading, Modal, Search, Select, TextArea, TextInput } from "carbon-components-svelte"
 	import debounce from "lodash/debounce"
 	import isEqual from "lodash/isEqual"
 	import { AmbientLight, Canvas, DirectionalLight, Mesh, OrbitControls, PerspectiveCamera } from "@threlte/core"
@@ -53,10 +53,15 @@
 	window.onresize = () => editor?.layout()
 
 	let treeSearchInput: string
+	let treeSearching: boolean = false
 
-	const treeSearch = debounce(() => {
-		tree.search(treeSearchInput)
-	}, 2500)
+	const treeSearch = () => {
+		treeSearching = true
+		setTimeout(() => {
+			tree.search(treeSearchInput)
+			treeSearching = false
+		}, 10)
+	}
 
 	let entityPath: string | undefined
 
@@ -179,7 +184,23 @@
 				<div class="flex flex-col h-full shepherd-tree p-2 px-3">
 					<div class="flex flex-row gap-4 items-center">
 						<h1>Tree</h1>
-						<Search size="lg" placeholder="Filter tree entities" on:input={treeSearch} bind:value={treeSearchInput} />
+						<div class="flex-grow flex flex-row gap-2 items-center">
+							<Search
+								size="lg"
+								placeholder="Filter tree entities (press Enter to search)"
+								on:keyup={(evt) => {
+									if (evt.code == "Enter") {
+										treeSearch()
+									}
+								}}
+								bind:value={treeSearchInput}
+							/>
+							{#if treeSearching}
+								<div>
+									<InlineLoading />
+								</div>
+							{/if}
+						</div>
 					</div>
 					<div class="flex-grow overflow-auto">
 						<Tree
