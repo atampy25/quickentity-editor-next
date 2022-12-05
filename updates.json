@@ -1,11 +1,11 @@
 {
-	"version": "1.22.1",
-	"notes": "Fix metadata view scrolling",
+	"version": "1.22.2",
+	"notes": "Filter on enter press only, add loading indicator\n\nresolves #5",
 	"pub_date": "2022-11-29T12:33:17Z",
 	"platforms": {
 		"windows-x86_64": {
-			"signature": "dW50cnVzdGVkIGNvbW1lbnQ6IHNpZ25hdHVyZSBmcm9tIHRhdXJpIHNlY3JldCBrZXkKUlVScWpVZGd2b0lOTlhCcjhYb1NQYm8vYzgzL2dtc0h0VDZOZnE2NENEeFFGZThEQlZ6Qi9TTnNpa3hHZ2MrR05LSUptakVEa2g2ZE1vTEpYNjN0Rm1ubUFBQ2J4dEpxdmdjPQp0cnVzdGVkIGNvbW1lbnQ6IHRpbWVzdGFtcDoxNjcwMTIwOTc5CWZpbGU6UXVpY2tFbnRpdHkgRWRpdG9yXzEuMjIuMV94NjRfZW4tVVMubXNpLnppcApKK0xSUXlVdzVZRW9QdktIMVQzYktKbkpGQmxwRVR0TVNhUHdCNGxCUEdEWGIzVVVhbGExVWV1T01wNkhwcjRZOFhQNllZakNZMzU0ZjVBNGNwUlBCUT09Cg==",
-			"url": "https://github.com/atampy25/quickentity-editor-next/releases/download/1.22.1/QuickEntity.Editor_1.22.1_x64_en-US.msi.zip"
+			"signature": "dW50cnVzdGVkIGNvbW1lbnQ6IHNpZ25hdHVyZSBmcm9tIHRhdXJpIHNlY3JldCBrZXkKUlVScWpVZGd2b0lOTlQ5ODRBQThNaXNFWmYxN1U3WERVNkpZNTVkUGZHUUorWjNnMGwvSmJtRHVoWmhoSlRCVzhVZXhpMGFKTTduUkkvVXpFK2U1RmdzMWdtQThodm5yb0FNPQp0cnVzdGVkIGNvbW1lbnQ6IHRpbWVzdGFtcDoxNjcwMjExNzk3CWZpbGU6UXVpY2tFbnRpdHkgRWRpdG9yXzEuMjIuMl94NjRfZW4tVVMubXNpLnppcAo0a3JuV3ZOSkQ4ZFJVZ3lvaU5wblFCR2wrdnl1cGgzS1REbHZsRHhRRjd2VVQ0bnhyUmNPVTA1RnlWdFg4bDE2TWtpSmhwckJWdFg0U1pkZXVxL2xBQT09Cg==",
+			"url": "https://github.com/atampy25/quickentity-editor-next/releases/download/1.22.2/QuickEntity.Editor_1.22.2_x64_en-US.msi.zip"
 		}
 	}
 }
