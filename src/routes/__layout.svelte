@@ -60,6 +60,7 @@
 	import SentryRRWeb from "@sentry/rrweb"
 	import { changeEntityHashesFromFriendly, changeEntityHashesToFriendly } from "$lib/utils"
 	import { goto } from "$app/navigation"
+	import Decimal from "decimal.js"
 
 	let displayNotifications: { kind: "error" | "info" | "info-square" | "success" | "warning" | "warning-alt"; title: string; subtitle: string }[] = []
 
@@ -157,6 +158,20 @@
 
 	async function getEntityFromText(x: string) {
 		const ent = json.parse(x)
+
+		if (Number(ent.quickEntityVersion) < 3.1) {
+			for (const x of ent.entities) {
+				x.factory = x.template
+				delete x.template
+
+				if (x.templateFlag) {
+					x.factoryFlag = x.templateFlag
+					delete x.templateFlag
+				}
+			}
+
+			ent.quickEntityVersion = new Decimal(3.1)
+		}
 
 		if (ent.entities["abcdefcadc2e258e"]) {
 			delete ent.entities["abcdefcadc2e258e"]
@@ -461,7 +476,11 @@
 							entityPath = x
 						}
 
-						await Command.sidecar("sidecar/quickentity-rs", ["patch", "apply", "--input", entityPath, "--patch", y, "--output", await join(await appDir(), "patched.json")]).execute()
+						if (Number(patch.patchVersion) < 6) {
+							await Command.sidecar("sidecar/quickentity-3", ["patch", "apply", "--input", entityPath, "--patch", y, "--output", await join(await appDir(), "patched.json")]).execute()
+						} else {
+							await Command.sidecar("sidecar/quickentity-rs", ["patch", "apply", "--input", entityPath, "--patch", y, "--output", await join(await appDir(), "patched.json")]).execute()
+						}
 
 						$sessionMetadata.saveAsPatch = true
 						$sessionMetadata.saveAsPatchPath = y
