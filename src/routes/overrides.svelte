@@ -244,6 +244,8 @@
 					  }
 					: entityReferenceModalRef
 			)
+
+			$entity.propertyOverrides = $entity.propertyOverrides
 		} else {
 			$entity.overrideDeletes = [
 				...$entity.overrideDeletes,
