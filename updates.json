@@ -1,11 +1,11 @@
 {
-	"version": "1.24.1",
-	"notes": "Fix auto-upgrade of QN 3.0 JSONs",
+	"version": "1.24.2",
+	"notes": "Fix override UI reactivity",
 	"pub_date": "2022-11-29T12:33:17Z",
 	"platforms": {
 		"windows-x86_64": {
-			"signature": "dW50cnVzdGVkIGNvbW1lbnQ6IHNpZ25hdHVyZSBmcm9tIHRhdXJpIHNlY3JldCBrZXkKUlVScWpVZGd2b0lOTlpDODB2ZnJuVzFFaHFZc3l5Wlk3ZDZid2MzWXIyTXE2ZXRXeW9lT2pueTg3MkZjYWYwb0drcTBRZnZrQTkvcXVhOWRyYm9xYWxtN3hjS0RRVzRYRHc0PQp0cnVzdGVkIGNvbW1lbnQ6IHRpbWVzdGFtcDoxNjcwNDk3Njk1CWZpbGU6UXVpY2tFbnRpdHkgRWRpdG9yXzEuMjQuMV94NjRfZW4tVVMubXNpLnppcApXWFNDOWdQR0dBSVpoeExHRlNud0I3RDlUUjdzeDY0UEtLVnpSWE1wUWk4RUpTZHpHRTJvRklvUFBaWTZJNnNZaFVzTytOeUZSOU1xUDdtTkRmKzNCUT09Cg==",
-			"url": "https://github.com/atampy25/quickentity-editor-next/releases/download/1.24.1/QuickEntity.Editor_1.24.1_x64_en-US.msi.zip"
+			"signature": "dW50cnVzdGVkIGNvbW1lbnQ6IHNpZ25hdHVyZSBmcm9tIHRhdXJpIHNlY3JldCBrZXkKUlVScWpVZGd2b0lOTlhpWUtxOWJqVTU5RXFwRFpnS05OY3JWM1hNV29qRzJpOGpPdWl1eElnTTFUMnRZSWVsMlI1ZnBOMWh1VmsrZUJlRVkyaTZtZmpTMVhocFJuQUF1L1E0PQp0cnVzdGVkIGNvbW1lbnQ6IHRpbWVzdGFtcDoxNjcwNTAwNDI3CWZpbGU6UXVpY2tFbnRpdHkgRWRpdG9yXzEuMjQuMl94NjRfZW4tVVMubXNpLnppcApqWFc1WkFUWE8wWmtkcXVWWEdKZzhHMTBiUnJSNUNHNStKaUpiY05LMitVRDNwRUxxYzBEL25aRDFXRDQyai9PUjNBYnpzdmljcTAvVWc2K1JEV2FDUT09Cg==",
+			"url": "https://github.com/atampy25/quickentity-editor-next/releases/download/1.24.2/QuickEntity.Editor_1.24.2_x64_en-US.msi.zip"
 		}
 	}
 }
