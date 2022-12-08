@@ -1304,7 +1304,7 @@
 
 			askGameFileModalOpen = false
 
-			await extractForInspection(x)
+			await extractForInspection(x, 6)
 
 			$sessionMetadata.originalEntityPath = await join(await appDir(), "inspection", "entity.json")
 			$sessionMetadata.saveAsPatch = false
