@@ -160,7 +160,7 @@
 		const ent = json.parse(x)
 
 		if (Number(ent.quickEntityVersion) < 3.1) {
-			for (const x of ent.entities) {
+			for (const x of Object.values(ent.entities)) {
 				x.factory = x.template
 				delete x.template
 
@@ -223,8 +223,8 @@
 		}
 	}
 
-	async function extractForInspection(tempHash: string) {
-		if (!(await exists(await join(await appDir(), "inspection-cache", tempHash + ".json")))) {
+	async function extractForInspection(tempHash: string, patchVersion: number) {
+		if (!(await exists(await join(await appDir(), "inspection-cache-" + patchVersion, tempHash + ".json")))) {
 			if (await exists(await join(await appDir(), "inspection"))) {
 				await removeDir(await join(await appDir(), "inspection"), { recursive: true })
 			}
@@ -327,10 +327,10 @@
 			}
 
 			try {
-				await createDir("inspection-cache", { dir: BaseDirectory.App, recursive: true })
+				await createDir("inspection-cache-" + patchVersion, { dir: BaseDirectory.App, recursive: true })
 			} catch {}
 
-			await Command.sidecar("sidecar/quickentity-rs", [
+			await Command.sidecar("sidecar/quickentity-" + (patchVersion == 5 ? "3" : "rs"), [
 				"entity",
 				"convert",
 				"--input-factory",
@@ -342,7 +342,7 @@
 				"--input-blueprint-meta",
 				tbluMetaPath,
 				"--output",
-				await join(await appDir(), "inspection-cache", tempHash + ".json")
+				await join(await appDir(), "inspection-cache-" + patchVersion, tempHash + ".json")
 			]).execute()
 		}
 
@@ -350,7 +350,7 @@
 			await createDir(await join(await appDir(), "inspection"))
 		}
 
-		await copyFile(await join(await appDir(), "inspection-cache", tempHash + ".json"), await join(await appDir(), "inspection", "entity.json"))
+		await copyFile(await join(await appDir(), "inspection-cache-" + patchVersion, tempHash + ".json"), await join(await appDir(), "inspection", "entity.json"))
 	}
 
 	function getReadDirAsTree(data) {
@@ -456,7 +456,7 @@
 						let entityPath
 
 						if ($appSettings.gameFileExtensions && (await exists(await join($appSettings.gameFileExtensionsDataPath, "TEMP", patch.tempHash + ".TEMP.entity.json")))) {
-							await extractForInspection(patch.tempHash)
+							await extractForInspection(patch.tempHash, Number(patch.patchVersion))
 
 							entityPath = await join(await appDir(), "inspection", "entity.json")
 						} else {
@@ -1217,7 +1217,7 @@
 											let entityPath
 
 											if ($appSettings.gameFileExtensions && (await exists(await join($appSettings.gameFileExtensionsDataPath, "TEMP", patch.tempHash + ".TEMP.entity.json")))) {
-												await extractForInspection(patch.tempHash)
+												await extractForInspection(patch.tempHash, Number(patch.patchVersion))
 
 												entityPath = await join(await appDir(), "inspection", "entity.json")
 											} else {
@@ -1237,16 +1237,29 @@
 												entityPath = x
 											}
 
-											await Command.sidecar("sidecar/quickentity-rs", [
-												"patch",
-												"apply",
-												"--input",
-												entityPath,
-												"--patch",
-												detail.id,
-												"--output",
-												await join(await appDir(), "patched.json")
-											]).execute()
+											if (Number(patch.patchVersion) < 6) {
+												await Command.sidecar("sidecar/quickentity-3", [
+													"patch",
+													"apply",
+													"--input",
+													entityPath,
+													"--patch",
+													detail.id,
+													"--output",
+													await join(await appDir(), "patched.json")
+												]).execute()
+											} else {
+												await Command.sidecar("sidecar/quickentity-rs", [
+													"patch",
+													"apply",
+													"--input",
+													entityPath,
+													"--patch",
+													detail.id,
+													"--output",
+													await join(await appDir(), "patched.json")
+												]).execute()
+											}
 
 											$sessionMetadata.saveAsPatch = true
 											$sessionMetadata.saveAsPatchPath = detail.id
