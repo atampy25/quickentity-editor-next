@@ -1,11 +1,11 @@
 {
-	"version": "1.24.2",
-	"notes": "Fix override UI reactivity",
+	"version": "1.24.3",
+	"notes": "Minor inspection fix",
 	"pub_date": "2022-11-29T12:33:17Z",
 	"platforms": {
 		"windows-x86_64": {
-			"signature": "dW50cnVzdGVkIGNvbW1lbnQ6IHNpZ25hdHVyZSBmcm9tIHRhdXJpIHNlY3JldCBrZXkKUlVScWpVZGd2b0lOTlhpWUtxOWJqVTU5RXFwRFpnS05OY3JWM1hNV29qRzJpOGpPdWl1eElnTTFUMnRZSWVsMlI1ZnBOMWh1VmsrZUJlRVkyaTZtZmpTMVhocFJuQUF1L1E0PQp0cnVzdGVkIGNvbW1lbnQ6IHRpbWVzdGFtcDoxNjcwNTAwNDI3CWZpbGU6UXVpY2tFbnRpdHkgRWRpdG9yXzEuMjQuMl94NjRfZW4tVVMubXNpLnppcApqWFc1WkFUWE8wWmtkcXVWWEdKZzhHMTBiUnJSNUNHNStKaUpiY05LMitVRDNwRUxxYzBEL25aRDFXRDQyai9PUjNBYnpzdmljcTAvVWc2K1JEV2FDUT09Cg==",
-			"url": "https://github.com/atampy25/quickentity-editor-next/releases/download/1.24.2/QuickEntity.Editor_1.24.2_x64_en-US.msi.zip"
+			"signature": "dW50cnVzdGVkIGNvbW1lbnQ6IHNpZ25hdHVyZSBmcm9tIHRhdXJpIHNlY3JldCBrZXkKUlVScWpVZGd2b0lOTlppQmRPR21jY0swRTg0QS9uOFlQVHpDNFN0ZDhJYk9hOGx0UnIrTTJwUzZJblFIdFZMMkVGQ3RKMlAwSDhGbVlHUm82UTV3OUxmNmplZWFPd09ub0FFPQp0cnVzdGVkIGNvbW1lbnQ6IHRpbWVzdGFtcDoxNjcwNTAyNDIzCWZpbGU6UXVpY2tFbnRpdHkgRWRpdG9yXzEuMjQuM194NjRfZW4tVVMubXNpLnppcApKTDhKamtKanU2RkF3cVZORkFHcFQ4RWoxdG5WWExmMmdOOElWUDNVZTA0bUgzc2h0VHVmZldQc0N1eGw0YnhMYzdUcEpESmY5cVZJY2ZCMUdsY2xEZz09Cg==",
+			"url": "https://github.com/atampy25/quickentity-editor-next/releases/download/1.24.3/QuickEntity.Editor_1.24.3_x64_en-US.msi.zip"
 		}
 	}
 }
