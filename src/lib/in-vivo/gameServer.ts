@@ -137,12 +137,12 @@ class GameServer {
 	}
 
 	async highlightEntity(id: string, ent: SubEntity) {
-		if (normaliseToHash(ent.template) === "007E948041B18F72" || ent.properties?.m_vGlobalSize) {
+		if (normaliseToHash(ent.factory) === "007E948041B18F72" || ent.properties?.m_vGlobalSize) {
 			await this.client.send(
 				this.lastAddress,
 				`HighlightVolume|unused|${Object.values(ent.properties?.m_mTransform.value.position).join("|")}|${Object.values(ent.properties?.m_mTransform.value.rotation).join(
 					"|"
-				)}|${(normaliseToHash(ent.template) === "007E948041B18F72"
+				)}|${(normaliseToHash(ent.factory) === "007E948041B18F72"
 					? [+ent.properties?.m_fCoverLength.value, +ent.properties?.m_fCoverDepth.value, ent.properties?.m_eCoverSize.value === "eLowCover" ? 1 : 2]
 					: Object.values(ent.properties?.m_vGlobalSize.value)
 				).join("|")}`

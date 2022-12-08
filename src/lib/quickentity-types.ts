@@ -48,6 +48,29 @@ export interface OverriddenProperty {
 	value: any
 }
 
+export type PatchOperation =
+	| { SetRootEntity: string }
+	| { SetSubType: SubType }
+	| { AddEntity: [string, SubEntity] }
+	| { RemoveEntityByID: string }
+	| { SubEntityOperation: [string, SubEntityOperation] }
+	| { AddPropertyOverride: PropertyOverride }
+	| { RemovePropertyOverride: PropertyOverride }
+	| { AddOverrideDelete: Ref }
+	| { RemoveOverrideDelete: Ref }
+	| { AddPinConnectionOverride: PinConnectionOverride }
+	| { RemovePinConnectionOverride: PinConnectionOverride }
+	| { AddPinConnectionOverrideDelete: PinConnectionOverrideDelete }
+	| { RemovePinConnectionOverrideDelete: PinConnectionOverrideDelete }
+	| { AddExternalScene: string }
+	| { RemoveExternalScene: string }
+	| { AddExtraFactoryDependency: Dependency }
+	| { RemoveExtraFactoryDependency: Dependency }
+	| { AddExtraBlueprintDependency: Dependency }
+	| { RemoveExtraBlueprintDependency: Dependency }
+	| { AddComment: CommentEntity }
+	| { RemoveComment: CommentEntity }
+
 export interface PinConnectionOverride {
 	fromEntity: Ref
 	fromPin: string
@@ -97,8 +120,8 @@ export interface SimpleProperty {
 export interface SubEntity {
 	parent: Ref
 	name: string
-	template: string
-	templateFlag?: string
+	factory: string
+	factoryFlag?: string
 	blueprint: string
 	editorOnly?: boolean
 	properties?: Record<string, Property>
@@ -111,5 +134,46 @@ export interface SubEntity {
 	exposedInterfaces?: Record<string, string>
 	subsets?: Record<string, Array<string>>
 }
+
+export type SubEntityOperation =
+	| { SetParent: Ref }
+	| { SetName: string }
+	| { SetFactory: string }
+	| { SetFactoryFlag: string | null }
+	| { SetBlueprint: string }
+	| { SetEditorOnly: boolean | null }
+	| { AddProperty: [string, Property] }
+	| { SetPropertyType: [string, string] }
+	| { SetPropertyValue: { property_name: string; value: any } }
+	| { SetPropertyPostInit: [string, boolean] }
+	| { RemovePropertyByName: string }
+	| { AddPlatformSpecificProperty: [string, string, Property] }
+	| { SetPlatformSpecificPropertyType: [string, string, string] }
+	| { SetPlatformSpecificPropertyValue: { platform: string; property_name: string; value: any } }
+	| { SetPlatformSpecificPropertyPostInit: [string, string, boolean] }
+	| { RemovePlatformSpecificPropertyByName: [string, string] }
+	| { RemovePlatformSpecificPropertiesForPlatform: string }
+	| { AddEventConnection: [string, string, RefMaybeConstantValue] }
+	| { RemoveEventConnection: [string, string, RefMaybeConstantValue] }
+	| { RemoveAllEventConnectionsForTrigger: [string, string] }
+	| { RemoveAllEventConnectionsForEvent: string }
+	| { AddInputCopyConnection: [string, string, RefMaybeConstantValue] }
+	| { RemoveInputCopyConnection: [string, string, RefMaybeConstantValue] }
+	| { RemoveAllInputCopyConnectionsForTrigger: [string, string] }
+	| { RemoveAllInputCopyConnectionsForInput: string }
+	| { AddOutputCopyConnection: [string, string, RefMaybeConstantValue] }
+	| { RemoveOutputCopyConnection: [string, string, RefMaybeConstantValue] }
+	| { RemoveAllOutputCopyConnectionsForPropagate: [string, string] }
+	| { RemoveAllOutputCopyConnectionsForOutput: string }
+	| { AddPropertyAliasConnection: [string, PropertyAlias] }
+	| { RemovePropertyAlias: string }
+	| { RemoveConnectionForPropertyAlias: [string, PropertyAlias] }
+	| { SetExposedEntity: [string, ExposedEntity] }
+	| { RemoveExposedEntity: string }
+	| { SetExposedInterface: [string, string] }
+	| { RemoveExposedInterface: string }
+	| { AddSubset: [string, string] }
+	| { RemoveSubset: [string, string] }
+	| { RemoveAllSubsetsFor: string }
 
 export type SubType = "brick" | "scene" | "template"

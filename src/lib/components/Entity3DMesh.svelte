@@ -31,7 +31,7 @@
 		}
 	}
 
-	let templates: Record<string, string[]> = {}
+	let factories: Record<string, string[]> = {}
 	let finalTransforms: Record<
 		string,
 		{
@@ -89,22 +89,22 @@
 		)
 	}
 
-	function isGeom(template: string) {
-		return normaliseToHash(template) == "0071AB29D6B30F6B" || normaliseToHash(template) == "00EC8416C5D64860"
+	function isGeom(factory: string) {
+		return normaliseToHash(factory) == "0071AB29D6B30F6B" || normaliseToHash(factory) == "00EC8416C5D64860"
 	}
 
 	onMount(async () => {
 		await rpkg.waitForInitialised()
 
 		for (const [entityID, entityData] of Object.entries(entity.entities)) {
-			templates[entityID] = (await exists(await join($appSettings.gameFileExtensionsDataPath, "ASET", normaliseToHash(entityData.template) + ".ASET.meta.JSON")))
-				? (await readJSON(await join($appSettings.gameFileExtensionsDataPath, "ASET", normaliseToHash(entityData.template) + ".ASET.meta.JSON"))).hash_reference_data
+			factories[entityID] = (await exists(await join($appSettings.gameFileExtensionsDataPath, "ASET", normaliseToHash(entityData.factory) + ".ASET.meta.JSON")))
+				? (await readJSON(await join($appSettings.gameFileExtensionsDataPath, "ASET", normaliseToHash(entityData.factory) + ".ASET.meta.JSON"))).hash_reference_data
 						.slice(0, -1)
 						.map((a) => a.hash)
-				: [normaliseToHash(entityData.template)]
+				: [normaliseToHash(entityData.factory)]
 
-			for (const template of templates[entityID]) {
-				if (isGeom(template)) {
+			for (const factory of factories[entityID]) {
+				if (isGeom(factory)) {
 					if (
 						!(await exists(
 							`gltf/${
@@ -158,8 +158,8 @@
 								typeof entityData.properties!.m_ResourceID.value == "string" ? entityData.properties!.m_ResourceID.value : entityData.properties!.m_ResourceID.value.resource
 							] = value)
 					)
-				} else if (await exists(await join($appSettings.gameFileExtensionsDataPath, "TEMP", normaliseToHash(template) + ".TEMP.entity.json"))) {
-					$parsedEntities[normaliseToHash(template)] = await readJSON(await join($appSettings.gameFileExtensionsDataPath, "TEMP", normaliseToHash(template) + ".TEMP.entity.json"))
+				} else if (await exists(await join($appSettings.gameFileExtensionsDataPath, "TEMP", normaliseToHash(factory) + ".TEMP.entity.json"))) {
+					$parsedEntities[normaliseToHash(factory)] = await readJSON(await join($appSettings.gameFileExtensionsDataPath, "TEMP", normaliseToHash(factory) + ".TEMP.entity.json"))
 				}
 			}
 
@@ -169,7 +169,7 @@
 		ready = true
 
 		if (
-			Object.entries(templates)
+			Object.entries(factories)
 				.filter((a) => a[1].some((b) => isGeom(b)))
 				.map((a) =>
 					a[1]
@@ -180,13 +180,13 @@
 								: entity.entities[a[0]].properties!.m_ResourceID.value.resource
 						)
 				).length ||
-			Object.entries(templates)
+			Object.entries(factories)
 				.filter((a) => a[1].some((b) => isGeom(b)))
 				.map((a) => [finalTransforms[a[0]], getAllTransforms(a[0])]).length
 		) {
 			console.log(
 				"Readied 3d mesh layer with geometry",
-				Object.entries(templates)
+				Object.entries(factories)
 					.filter((a) => a[1].some((b) => isGeom(b)))
 					.map((a) =>
 						a[1]
@@ -197,7 +197,7 @@
 									: entity.entities[a[0]].properties!.m_ResourceID.value.resource
 							)
 					),
-				Object.entries(templates)
+				Object.entries(factories)
 					.filter((a) => a[1].some((b) => isGeom(b)))
 					.map((a) => [finalTransforms[a[0]], getAllTransforms(a[0])])
 			)
@@ -216,9 +216,9 @@
 <!-- Cube -->
 <Group {position} {rotation} {scale}>
 	{#if ready}
-		{#each Object.entries(templates) as [subEntityID, temps]}
-			{#each temps as template}
-				{#if isGeom(template) && loadedGeometry[typeof entity.entities[subEntityID].properties?.m_ResourceID.value == "string" ? entity.entities[subEntityID].properties?.m_ResourceID.value : entity.entities[subEntityID].properties?.m_ResourceID.value.resource]?.nodes}
+		{#each Object.entries(factories) as [subEntityID, temps]}
+			{#each temps as factory}
+				{#if isGeom(factory) && loadedGeometry[typeof entity.entities[subEntityID].properties?.m_ResourceID.value == "string" ? entity.entities[subEntityID].properties?.m_ResourceID.value : entity.entities[subEntityID].properties?.m_ResourceID.value.resource]?.nodes}
 					<Group rotation={new Euler(-90 * DEG2RAD, 0, 0, "XYZ")}>
 						<Group
 							castShadow
@@ -235,9 +235,9 @@
 							{/each}
 						</Group>
 					</Group>
-				{:else if $parsedEntities[normaliseToHash(template)]}
+				{:else if $parsedEntities[normaliseToHash(factory)]}
 					<svelte:self
-						entity={$parsedEntities[normaliseToHash(template)]}
+						entity={$parsedEntities[normaliseToHash(factory)]}
 						position={{ x: finalTransforms[subEntityID].position.x, y: finalTransforms[subEntityID].position.z, z: finalTransforms[subEntityID].position.y }}
 						rotation={new Euler(
 							finalTransforms[subEntityID].rotation.x * DEG2RAD,

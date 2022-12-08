@@ -84,7 +84,7 @@ export const entity: Writable<Entity> = writable({
 		fffffffffffffffe: {
 			parent: null,
 			name: "Scene",
-			template: "[modules:/zspatialentity.class].pc_entitytype",
+			factory: "[modules:/zspatialentity.class].pc_entitytype",
 			blueprint: "[modules:/zspatialentity.class].pc_entityblueprint"
 		}
 	},
@@ -94,7 +94,7 @@ export const entity: Writable<Entity> = writable({
 	pinConnectionOverrideDeletes: [],
 	externalScenes: [],
 	subType: "scene",
-	quickEntityVersion: new Decimal(3.0),
+	quickEntityVersion: new Decimal(3.1),
 	extraFactoryDependencies: [],
 	extraBlueprintDependencies: [],
 	comments: []
