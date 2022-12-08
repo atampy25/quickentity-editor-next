@@ -42,7 +42,6 @@
 	import { appDir, join, sep } from "@tauri-apps/api/path"
 	import { Command } from "@tauri-apps/api/shell"
 	import { getVersion } from "@tauri-apps/api/app"
-	import * as rfc6902 from "$lib/rfc6902"
 	import md5 from "md5"
 	import Shepherd from "shepherd.js"
 	import cloneDeep from "lodash/cloneDeep"
@@ -60,9 +59,7 @@
 	import { BrowserTracing } from "@sentry/tracing"
 	import SentryRRWeb from "@sentry/rrweb"
 	import { changeEntityHashesFromFriendly, changeEntityHashesToFriendly } from "$lib/utils"
-	import Decimal from "decimal.js"
 	import { goto } from "$app/navigation"
-	import type { Entity } from "$lib/quickentity-types"
 
 	let displayNotifications: { kind: "error" | "info" | "info-square" | "success" | "warning" | "warning-alt"; title: string; subtitle: string }[] = []
 
@@ -359,26 +356,6 @@
 
 	let selectedWorkspaceTreeItem = ""
 	let previousSelectedWorkspaceTreeItem = ""
-
-	function rfcDiffFunction(input, output, pointer) {
-		if (input instanceof Decimal && output instanceof Decimal) {
-			if (input.toString() !== output.toString()) {
-				return [
-					{
-						op: "replace",
-						path: pointer.toString(),
-						value: output
-					}
-				]
-			} else {
-				return []
-			}
-		}
-	}
-
-	function diffEntities(original: Entity, modified: Entity) {
-		return rfc6902.createPatch(original, modified, rfcDiffFunction)
-	}
 </script>
 
 {#if ready}
@@ -559,15 +536,18 @@
 						$forceSaveSubEntity = { value: true }
 
 						setTimeout(async () => {
-							await writeTextFile(
-								x,
-								json.stringify({
-									tempHash: $entity.tempHash,
-									tbluHash: $entity.tbluHash,
-									patch: diffEntities(json.parse(await readTextFile($sessionMetadata.originalEntityPath)), json.parse(await getEntityAsText())),
-									patchVersion: 5
-								})
-							)
+							await writeTextFile("entity.json", await getEntityAsText(), { dir: BaseDirectory.App })
+
+							await Command.sidecar("sidecar/quickentity-rs", [
+								"patch",
+								"generate",
+								"--input1",
+								String($sessionMetadata.originalEntityPath),
+								"--input2",
+								await join(await appDir(), "entity.json"),
+								"--output",
+								x
+							]).execute()
 
 							$forceSaveSubEntity = { value: false }
 
@@ -597,15 +577,18 @@
 							$forceSaveSubEntity = { value: true }
 
 							setTimeout(async () => {
-								await writeTextFile(
-									$sessionMetadata.saveAsPatchPath,
-									json.stringify({
-										tempHash: $entity.tempHash,
-										tbluHash: $entity.tbluHash,
-										patch: diffEntities(json.parse(await readTextFile($sessionMetadata.originalEntityPath)), json.parse(await getEntityAsText())),
-										patchVersion: 5
-									})
-								)
+								await writeTextFile("entity.json", await getEntityAsText(), { dir: BaseDirectory.App })
+
+								await Command.sidecar("sidecar/quickentity-rs", [
+									"patch",
+									"generate",
+									"--input1",
+									String($sessionMetadata.originalEntityPath),
+									"--input2",
+									await join(await appDir(), "entity.json"),
+									"--output",
+									String($sessionMetadata.saveAsPatchPath)
+								]).execute()
 
 								$forceSaveSubEntity = { value: false }
 
@@ -1174,15 +1157,18 @@
 												$forceSaveSubEntity = { value: false }
 												if ($sessionMetadata.originalEntityPath && !$sessionMetadata.loadedFromGameFiles) {
 													if ($sessionMetadata.saveAsPatch) {
-														await writeTextFile(
-															$sessionMetadata.saveAsPatchPath,
-															json.stringify({
-																tempHash: $entity.tempHash,
-																tbluHash: $entity.tbluHash,
-																patch: diffEntities(json.parse(await readTextFile($sessionMetadata.originalEntityPath)), json.parse(await getEntityAsText())),
-																patchVersion: 5
-															})
-														)
+														await writeTextFile("entity.json", await getEntityAsText(), { dir: BaseDirectory.App })
+
+														await Command.sidecar("sidecar/quickentity-rs", [
+															"patch",
+															"generate",
+															"--input1",
+															String($sessionMetadata.originalEntityPath),
+															"--input2",
+															await join(await appDir(), "entity.json"),
+															"--output",
+															String($sessionMetadata.saveAsPatchPath)
+														]).execute()
 
 														$sessionMetadata.loadedFromGameFiles = false
 

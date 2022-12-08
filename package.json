@@ -69,7 +69,6 @@
 		"lossless-json": "^1.0.5",
 		"md5": "^2.3.0",
 		"monaco-editor": "^0.34.0",
-		"rfc6902": "^5.0.1",
 		"rrweb": "^2.0.0-alpha.3",
 		"shepherd.js": "^10.0.1",
 		"svelte-splitpanes": "^0.7.3",
