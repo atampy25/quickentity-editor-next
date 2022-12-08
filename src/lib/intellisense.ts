@@ -66,16 +66,16 @@ export class Intellisense {
 			foundProperties.push(...Object.keys(targetedEntity.properties))
 		}
 
-		for (const template of (await exists(await join(this.appSettings.gameFileExtensionsDataPath, "ASET", normaliseToHash(targetedEntity.template) + ".ASET.meta.JSON")))
-			? (await this.readJSONFile(await join(this.appSettings.gameFileExtensionsDataPath, "ASET", normaliseToHash(targetedEntity.template) + ".ASET.meta.JSON"))).hash_reference_data
+		for (const factory of (await exists(await join(this.appSettings.gameFileExtensionsDataPath, "ASET", normaliseToHash(targetedEntity.factory) + ".ASET.meta.JSON")))
+			? (await this.readJSONFile(await join(this.appSettings.gameFileExtensionsDataPath, "ASET", normaliseToHash(targetedEntity.factory) + ".ASET.meta.JSON"))).hash_reference_data
 				.slice(0, -1)
 				.map((a) => a.hash)
-			: [normaliseToHash(targetedEntity.template)]) {
-			if (await exists(await join(this.appSettings.gameFileExtensionsDataPath, "TEMP", template + ".TEMP.entity.json"))) {
-				await this.findProperties(await join(this.appSettings.gameFileExtensionsDataPath, "TEMP", template + ".TEMP.entity.json"), foundProperties)
-			} else if (this.knownCPPTProperties[template]) {
-				foundProperties.push(...Object.keys(this.knownCPPTProperties[template]))
-			} else if (this.allUICTs.has(template)) {
+			: [normaliseToHash(targetedEntity.factory)]) {
+			if (await exists(await join(this.appSettings.gameFileExtensionsDataPath, "TEMP", factory + ".TEMP.entity.json"))) {
+				await this.findProperties(await join(this.appSettings.gameFileExtensionsDataPath, "TEMP", factory + ".TEMP.entity.json"), foundProperties)
+			} else if (this.knownCPPTProperties[factory]) {
+				foundProperties.push(...Object.keys(this.knownCPPTProperties[factory]))
+			} else if (this.allUICTs.has(factory)) {
 				foundProperties.push(...Object.keys(this.knownCPPTProperties["002C4526CC9753E6"])) // All UI controls have the properties of ZUIControlEntity
 				foundProperties.push(
 					...Object.keys(
@@ -85,7 +85,7 @@ export class Intellisense {
 									this.appSettings.gameFileExtensionsDataPath,
 									"UICB",
 									(
-										await this.readJSONFile(await join(this.appSettings.gameFileExtensionsDataPath, "UICT", template + ".UICT.meta.JSON"))
+										await this.readJSONFile(await join(this.appSettings.gameFileExtensionsDataPath, "UICT", factory + ".UICT.meta.JSON"))
 									).hash_reference_data.filter((a) => a.hash != "002C4526CC9753E6")[0].hash + ".UICB.json"
 								)
 							)
@@ -161,20 +161,20 @@ export class Intellisense {
 			return prop
 		}
 
-		for (const template of (await exists(await join(this.appSettings.gameFileExtensionsDataPath, "ASET", normaliseToHash(targetedEntity.template) + ".ASET.meta.JSON")))
-			? (await this.readJSONFile(await join(this.appSettings.gameFileExtensionsDataPath, "ASET", normaliseToHash(targetedEntity.template) + ".ASET.meta.JSON"))).hash_reference_data
+		for (const factory of (await exists(await join(this.appSettings.gameFileExtensionsDataPath, "ASET", normaliseToHash(targetedEntity.factory) + ".ASET.meta.JSON")))
+			? (await this.readJSONFile(await join(this.appSettings.gameFileExtensionsDataPath, "ASET", normaliseToHash(targetedEntity.factory) + ".ASET.meta.JSON"))).hash_reference_data
 				.slice(0, -1)
 				.map((a) => a.hash)
-			: [normaliseToHash(targetedEntity.template)]) {
-			if (await exists(await join(this.appSettings.gameFileExtensionsDataPath, "TEMP", template + ".TEMP.entity.json"))) {
-				const result = await this.findDefaultPropertyValue(await join(this.appSettings.gameFileExtensionsDataPath, "TEMP", template + ".TEMP.entity.json"), undefined, propertyToFind)
+			: [normaliseToHash(targetedEntity.factory)]) {
+			if (await exists(await join(this.appSettings.gameFileExtensionsDataPath, "TEMP", factory + ".TEMP.entity.json"))) {
+				const result = await this.findDefaultPropertyValue(await join(this.appSettings.gameFileExtensionsDataPath, "TEMP", factory + ".TEMP.entity.json"), undefined, propertyToFind)
 				if (result) return result
-			} else if (this.knownCPPTProperties[template] && this.knownCPPTProperties[template][propertyToFind]) {
+			} else if (this.knownCPPTProperties[factory] && this.knownCPPTProperties[factory][propertyToFind]) {
 				return {
-					type: this.knownCPPTProperties[template][propertyToFind][0],
-					value: this.knownCPPTProperties[template][propertyToFind][1]
+					type: this.knownCPPTProperties[factory][propertyToFind][0],
+					value: this.knownCPPTProperties[factory][propertyToFind][1]
 				}
-			} else if (this.allUICTs.has(template)) {
+			} else if (this.allUICTs.has(factory)) {
 				if (
 					(
 						await this.readJSONFile(
@@ -182,7 +182,7 @@ export class Intellisense {
 								this.appSettings.gameFileExtensionsDataPath,
 								"UICB",
 								(
-									await this.readJSONFile(await join(this.appSettings.gameFileExtensionsDataPath, "UICT", template + ".UICT.meta.JSON"))
+									await this.readJSONFile(await join(this.appSettings.gameFileExtensionsDataPath, "UICT", factory + ".UICT.meta.JSON"))
 								).hash_reference_data.find((a) => a.hash != "002C4526CC9753E6").hash + ".UICB.json"
 							)
 						)
@@ -196,7 +196,7 @@ export class Intellisense {
 										this.appSettings.gameFileExtensionsDataPath,
 										"UICB",
 										(
-											await this.readJSONFile(await join(this.appSettings.gameFileExtensionsDataPath, "UICT", template + ".UICT.meta.JSON"))
+											await this.readJSONFile(await join(this.appSettings.gameFileExtensionsDataPath, "UICT", factory + ".UICT.meta.JSON"))
 										).hash_reference_data.find((a) => a.hash != "002C4526CC9753E6").hash + ".UICB.json"
 									)
 								)
@@ -210,7 +210,7 @@ export class Intellisense {
 											this.appSettings.gameFileExtensionsDataPath,
 											"UICB",
 											(
-												await this.readJSONFile(await join(this.appSettings.gameFileExtensionsDataPath, "UICT", template + ".UICT.meta.JSON"))
+												await this.readJSONFile(await join(this.appSettings.gameFileExtensionsDataPath, "UICT", factory + ".UICT.meta.JSON"))
 											).hash_reference_data.find((a) => a.hash != "002C4526CC9753E6").hash + ".UICB.json"
 										)
 									)
@@ -281,18 +281,18 @@ export class Intellisense {
 			}
 		}
 
-		for (const template of (await exists(await join(this.appSettings.gameFileExtensionsDataPath, "ASET", normaliseToHash(targetedEntity.template) + ".ASET.meta.JSON")))
-			? (await this.readJSONFile(await join(this.appSettings.gameFileExtensionsDataPath, "ASET", normaliseToHash(targetedEntity.template) + ".ASET.meta.JSON"))).hash_reference_data
+		for (const factory of (await exists(await join(this.appSettings.gameFileExtensionsDataPath, "ASET", normaliseToHash(targetedEntity.factory) + ".ASET.meta.JSON")))
+			? (await this.readJSONFile(await join(this.appSettings.gameFileExtensionsDataPath, "ASET", normaliseToHash(targetedEntity.factory) + ".ASET.meta.JSON"))).hash_reference_data
 				.slice(0, -1)
 				.map((a) => a.hash)
-			: [normaliseToHash(targetedEntity.template)]) {
-			if (await exists(await join(this.appSettings.gameFileExtensionsDataPath, "TEMP", template + ".TEMP.entity.json"))) {
-				const s = await this.readJSONFile(await join(this.appSettings.gameFileExtensionsDataPath, "TEMP", template + ".TEMP.entity.json"))
+			: [normaliseToHash(targetedEntity.factory)]) {
+			if (await exists(await join(this.appSettings.gameFileExtensionsDataPath, "TEMP", factory + ".TEMP.entity.json"))) {
+				const s = await this.readJSONFile(await join(this.appSettings.gameFileExtensionsDataPath, "TEMP", factory + ".TEMP.entity.json"))
 				await this.getPins(s, s.rootEntity, false, soFar)
-			} else if (this.knownCPPTPins[template]) {
-				soFar.input.push(...this.knownCPPTPins[template].input)
-				soFar.output.push(...this.knownCPPTPins[template].output)
-			} else if (this.allUICTs.has(template)) {
+			} else if (this.knownCPPTPins[factory]) {
+				soFar.input.push(...this.knownCPPTPins[factory].input)
+				soFar.output.push(...this.knownCPPTPins[factory].output)
+			} else if (this.allUICTs.has(factory)) {
 				// Get the specific pins from the UICB (though we don't know if they're inputs or outputs)
 				soFar.input.push(
 					...Object.keys(
@@ -302,7 +302,7 @@ export class Intellisense {
 									this.appSettings.gameFileExtensionsDataPath,
 									"UICB",
 									(
-										await this.readJSONFile(await join(this.appSettings.gameFileExtensionsDataPath, "UICT", template + ".UICT.meta.JSON"))
+										await this.readJSONFile(await join(this.appSettings.gameFileExtensionsDataPath, "UICT", factory + ".UICT.meta.JSON"))
 									).hash_reference_data.filter((a) => a.hash != "002C4526CC9753E6")[0].hash + ".UICB.json"
 								)
 							)
@@ -318,7 +318,7 @@ export class Intellisense {
 									this.appSettings.gameFileExtensionsDataPath,
 									"UICB",
 									(
-										await this.readJSONFile(await join(this.appSettings.gameFileExtensionsDataPath, "UICT", template + ".UICT.meta.JSON"))
+										await this.readJSONFile(await join(this.appSettings.gameFileExtensionsDataPath, "UICT", factory + ".UICT.meta.JSON"))
 									).hash_reference_data.filter((a) => a.hash != "002C4526CC9753E6")[0].hash + ".UICB.json"
 								)
 							)

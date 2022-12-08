@@ -117,7 +117,7 @@
 			ent.entities["abcdefcadc2e258e"] = {
 				parent: null,
 				name: "QNE In-Vivo Helper Entity",
-				template: "[modules:/zmultiparentspatialentity.class].pc_entitytype",
+				factory: "[modules:/zmultiparentspatialentity.class].pc_entitytype",
 				blueprint: "[modules:/zmultiparentspatialentity.class].pc_entityblueprint",
 				properties: {
 					m_aParents: {
@@ -130,7 +130,7 @@
 			ent.entities["abcdefcadc77e4f2"] = {
 				parent: "abcdefcadc2e258e",
 				name: "QNE In-Vivo Helper Entity GameEventListener",
-				template: "[modules:/zgameeventlistenerentity.class].pc_entitytype",
+				factory: "[modules:/zgameeventlistenerentity.class].pc_entitytype",
 				blueprint: "[modules:/zgameeventlistenerentity.class].pc_entityblueprint",
 				properties: {
 					m_eEvent: {

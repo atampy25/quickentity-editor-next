@@ -184,18 +184,18 @@
 				if ($appSettings.gameFileExtensions) {
 					let allFoundProperties = []
 
-					for (let template of (await exists(await join($appSettings.gameFileExtensionsDataPath, "ASET", normaliseToHash(jsonToDisplay.template) + ".ASET.meta.JSON")))
+					for (let factory of (await exists(await join($appSettings.gameFileExtensionsDataPath, "ASET", normaliseToHash(jsonToDisplay.factory) + ".ASET.meta.JSON")))
 						? json
-								.parse(await readTextFile(await join($appSettings.gameFileExtensionsDataPath, "ASET", normaliseToHash(jsonToDisplay.template) + ".ASET.meta.JSON")))
+								.parse(await readTextFile(await join($appSettings.gameFileExtensionsDataPath, "ASET", normaliseToHash(jsonToDisplay.factory) + ".ASET.meta.JSON")))
 								.hash_reference_data.slice(0, -1)
 								.map((a) => a.hash)
-						: [normaliseToHash(jsonToDisplay.template)]) {
-						if (await exists(await join($appSettings.gameFileExtensionsDataPath, "TEMP", template + ".TEMP.entity.json"))) {
-							await $intellisense.findProperties(await join($appSettings.gameFileExtensionsDataPath, "TEMP", template + ".TEMP.entity.json"), allFoundProperties)
+						: [normaliseToHash(jsonToDisplay.factory)]) {
+						if (await exists(await join($appSettings.gameFileExtensionsDataPath, "TEMP", factory + ".TEMP.entity.json"))) {
+							await $intellisense.findProperties(await join($appSettings.gameFileExtensionsDataPath, "TEMP", factory + ".TEMP.entity.json"), allFoundProperties)
 							jsonToDisplay.propertyAliases && allFoundProperties.push(...Object.keys(jsonToDisplay.propertyAliases))
-						} else if ($intellisense.knownCPPTProperties[template]) {
-							allFoundProperties.push(...Object.keys($intellisense.knownCPPTProperties[template]))
-						} else if ($intellisense.allUICTs.has(template)) {
+						} else if ($intellisense.knownCPPTProperties[factory]) {
+							allFoundProperties.push(...Object.keys($intellisense.knownCPPTProperties[factory]))
+						} else if ($intellisense.allUICTs.has(factory)) {
 							allFoundProperties.push(...Object.keys($intellisense.knownCPPTProperties["002C4526CC9753E6"])) // All UI controls have the properties of ZUIControlEntity
 							allFoundProperties.push(
 								...Object.keys(
@@ -204,7 +204,7 @@
 											await join(
 												"./intellisense-data/UICB",
 												json
-													.parse(await readTextFile(await join($appSettings.gameFileExtensionsDataPath, "UICT", template + ".UICT.meta.JSON")))
+													.parse(await readTextFile(await join($appSettings.gameFileExtensionsDataPath, "UICT", factory + ".UICT.meta.JSON")))
 													.hash_reference_data.filter((a) => a.hash != "002C4526CC9753E6")[0].hash + ".UICB.json"
 											)
 										)
@@ -222,25 +222,25 @@
 						getSchema().definitions.SubEntity.properties.properties.additionalProperties.anyOf.map((a) => [a?.properties?.type?.const, a?.properties?.value])
 					)
 
-					if ($intellisense.knownCPPTProperties[normaliseToHash(jsonToDisplay.template)]) {
+					if ($intellisense.knownCPPTProperties[normaliseToHash(jsonToDisplay.factory)]) {
 						for (let foundProp of allFoundProperties) {
 							props[foundProp] = {
 								type: "object",
 								properties: {
 									type: {
 										type: "string",
-										const: $intellisense.knownCPPTProperties[normaliseToHash(jsonToDisplay.template)][foundProp][0]
+										const: $intellisense.knownCPPTProperties[normaliseToHash(jsonToDisplay.factory)][foundProp][0]
 									},
-									value: merge(perfPropertySchemas[$intellisense.knownCPPTProperties[normaliseToHash(jsonToDisplay.template)][foundProp][0]], {
-										default: $intellisense.knownCPPTProperties[normaliseToHash(jsonToDisplay.template)][foundProp][1]
+									value: merge(perfPropertySchemas[$intellisense.knownCPPTProperties[normaliseToHash(jsonToDisplay.factory)][foundProp][0]], {
+										default: $intellisense.knownCPPTProperties[normaliseToHash(jsonToDisplay.factory)][foundProp][1]
 									}),
 									postInit: {
 										type: "boolean"
 									}
 								},
 								default: {
-									type: $intellisense.knownCPPTProperties[normaliseToHash(jsonToDisplay.template)][foundProp][0],
-									value: $intellisense.knownCPPTProperties[normaliseToHash(jsonToDisplay.template)][foundProp][1]
+									type: $intellisense.knownCPPTProperties[normaliseToHash(jsonToDisplay.factory)][foundProp][0],
+									value: $intellisense.knownCPPTProperties[normaliseToHash(jsonToDisplay.factory)][foundProp][1]
 								}
 							}
 						}

@@ -46,7 +46,7 @@ for (let filePath of allFiles) {
 	if (fs.existsSync(filePath)) {
 		/** @type import("../src/lib/quickentity-types").Entity */
 		const entity = readLossless(filePath)
-		if (allCPPTs.has(entity.entities[entity.rootEntity].template)) {
+		if (allCPPTs.has(entity.entities[entity.rootEntity].factory)) {
 			const discount = new Set()
 
 			for (const subEntity of Object.values(entity.entities)) {
@@ -68,7 +68,7 @@ for (let filePath of allFiles) {
 
 			cpptEntityRootsSet.add(entity.tempHash)
 			cpptEntityRootsData[entity.tempHash] = {
-				cppt: entity.entities[entity.rootEntity].template,
+				cppt: entity.entities[entity.rootEntity].factory,
 				discount
 			}
 		}
@@ -88,10 +88,10 @@ for (let filePath of allFiles) {
 		/** @type import("../src/lib/quickentity-types").Entity */
 		const entity = readLossless(filePath)
 		for (const [subEntityID, subEntity] of Object.entries(entity.entities)) {
-			const isCPPTRooted = cpptEntityRootsSet.has(subEntity.template)
-			if (isCPPTRooted || allCPPTs.has(subEntity.template)) {
+			const isCPPTRooted = cpptEntityRootsSet.has(subEntity.factory)
+			if (isCPPTRooted || allCPPTs.has(subEntity.factory)) {
 				if (subEntity.events) {
-					data[isCPPTRooted ? cpptEntityRootsData[subEntity.template].cppt : subEntity.template] ??= { output: new Set() }
+					data[isCPPTRooted ? cpptEntityRootsData[subEntity.factory].cppt : subEntity.factory] ??= { output: new Set() }
 
 					const outputsToAdd = Object.keys(subEntity.events)
 						.filter(
@@ -105,15 +105,15 @@ for (let filePath of allFiles) {
 										)
 								)
 						)
-						.filter(isCPPTRooted ? (evt) => !cpptEntityRootsData[subEntity.template].discount.has(evt) : (evt) => true)
+						.filter(isCPPTRooted ? (evt) => !cpptEntityRootsData[subEntity.factory].discount.has(evt) : (evt) => true)
 
 					if (outputsToAdd.length) {
-						data[isCPPTRooted ? cpptEntityRootsData[subEntity.template].cppt : subEntity.template].output.add(...outputsToAdd)
+						data[isCPPTRooted ? cpptEntityRootsData[subEntity.factory].cppt : subEntity.factory].output.add(...outputsToAdd)
 					}
 				}
 
 				if (subEntity.outputCopying) {
-					data[isCPPTRooted ? cpptEntityRootsData[subEntity.template].cppt : subEntity.template] ??= { output: new Set() }
+					data[isCPPTRooted ? cpptEntityRootsData[subEntity.factory].cppt : subEntity.factory] ??= { output: new Set() }
 
 					const outputsToAdd = Object.keys(subEntity.outputCopying)
 						.filter(
@@ -127,10 +127,10 @@ for (let filePath of allFiles) {
 										)
 								)
 						)
-						.filter(isCPPTRooted ? (evt) => !cpptEntityRootsData[subEntity.template].discount.has(evt) : (evt) => true)
+						.filter(isCPPTRooted ? (evt) => !cpptEntityRootsData[subEntity.factory].discount.has(evt) : (evt) => true)
 
 					if (outputsToAdd.length) {
-						data[isCPPTRooted ? cpptEntityRootsData[subEntity.template].cppt : subEntity.template].output.add(...outputsToAdd)
+						data[isCPPTRooted ? cpptEntityRootsData[subEntity.factory].cppt : subEntity.factory].output.add(...outputsToAdd)
 					}
 				}
 			}

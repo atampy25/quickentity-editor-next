@@ -119,11 +119,11 @@
 					"type": "string",
 					"description": "The name of the entity."
 				},
-				"template": {
+				"factory": {
 					"type": "string",
-					"description": "The factory of the entity. Referred to as 'template' for compatibility reasons."
+					"description": "The factory of the entity."
 				},
-				"templateFlag": {
+				"factoryFlag": {
 					"type": "string",
 					"description": "The factory's flag.",
 					"markdownDescription": "The factory's flag.\n\nYou can leave this out if it's 1F.",
@@ -230,12 +230,12 @@
 					}
 				}
 			},
-			"required": ["parent", "name", "template", "blueprint"],
+			"required": ["parent", "name", "factory", "blueprint"],
 			"additionalProperties": false,
 			"default": {
 				"parent": "fffffffffffffffe",
 				"name": "New Entity",
-				"template": "[modules:/zentity.class].pc_entitytype",
+				"factory": "[modules:/zentity.class].pc_entitytype",
 				"blueprint": "[modules:/zentity.class].pc_entityblueprint"
 			}
 		},

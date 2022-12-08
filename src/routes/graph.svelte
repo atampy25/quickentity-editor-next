@@ -88,7 +88,7 @@
 				$entity.entities["feed" + genRandHex(12)] = {
 					parent: currentlyDisplayedFolder,
 					name: node.title.replace(/<br>.*/gi, ""),
-					template: node.type,
+					factory: node.type,
 					blueprint: (await exists(await join($appSettings.gameFileExtensionsDataPath, "TEMP", node.type + ".TEMP.entity.json")))
 						? json.parse(await readTextFile(await join($appSettings.gameFileExtensionsDataPath, "TEMP", node.type + ".TEMP.entity.json"))).tbluHash
 						: json.parse(await readTextFile(await join($appSettings.gameFileExtensionsDataPath, "CPPT", node.type + ".CPPT.meta.JSON"))).hash_reference_data[
@@ -148,9 +148,9 @@
 
 		for (const childEntityID of Object.keys($entity.entities)) {
 			const childEntity = $entity.entities[childEntityID]
-			readableNodeTypeNames[normaliseToHash(childEntity.template)] ??= childEntity.template
-			if (childEntity.template.includes(":")) {
-				readableNodeTypeNames[normaliseToHash(childEntity.template)] ??= childEntity.template
+			readableNodeTypeNames[normaliseToHash(childEntity.factory)] ??= childEntity.factory
+			if (childEntity.factory.includes(":")) {
+				readableNodeTypeNames[normaliseToHash(childEntity.factory)] ??= childEntity.factory
 			}
 		}
 
@@ -159,11 +159,11 @@
 
 			let placeNode = false
 
-			if (!graphView.editor.nodeTypes.get(normaliseToHash(childEntity.template))) {
+			if (!graphView.editor.nodeTypes.get(normaliseToHash(childEntity.factory))) {
 				let pins = { input: [], output: [] }
 
 				for (const childEntityID of entitiesInFolder) {
-					if (normaliseToHash($entity.entities[childEntityID].template) == normaliseToHash(childEntity.template)) {
+					if (normaliseToHash($entity.entities[childEntityID].factory) == normaliseToHash(childEntity.factory)) {
 						await $intellisense.getPins($entity, childEntityID, true, pins)
 					}
 				}
@@ -176,8 +176,8 @@
 
 					graphView.editor.registerNodeType(
 						baklava.Core.defineNode({
-							type: normaliseToHash(childEntity.template),
-							title: readableNodeTypeNames[normaliseToHash(childEntity.template)],
+							type: normaliseToHash(childEntity.factory),
+							title: readableNodeTypeNames[normaliseToHash(childEntity.factory)],
 							inputs: Object.fromEntries(
 								pins.input.map((a) => {
 									return ["in_" + btoa(a), () => new baklava.Core.NodeInterface(a, 0)]
@@ -195,7 +195,7 @@
 				let pins = { input: [], output: [] }
 
 				for (const childEntityID of entitiesInFolder) {
-					if (normaliseToHash($entity.entities[childEntityID].template) == normaliseToHash(childEntity.template)) {
+					if (normaliseToHash($entity.entities[childEntityID].factory) == normaliseToHash(childEntity.factory)) {
 						await $intellisense.getPins($entity, childEntityID, true, pins)
 					}
 				}
@@ -209,10 +209,10 @@
 			}
 
 			if (placeNode) {
-				const foundNodeType = graphView.editor.nodeTypes.get(normaliseToHash(childEntity.template))!.type
+				const foundNodeType = graphView.editor.nodeTypes.get(normaliseToHash(childEntity.factory))!.type
 
 				const elem = new DOMParser().parseFromString(`<div><span class="mt-1 text-gray-200 text-xs"></span></div>`, "text/html")
-				elem.querySelector("span")!.innerText = readableNodeTypeNames[normaliseToHash(childEntity.template)]
+				elem.querySelector("span")!.innerText = readableNodeTypeNames[normaliseToHash(childEntity.factory)]
 
 				graph.graph.nodes.push(
 					merge(new foundNodeType(), {

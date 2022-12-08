@@ -106,8 +106,8 @@
 					)
 
 					$inVivoMetadata.entities[entityID].dirtyUnchangeables =
-						$entity.entities[entityID].template != parsed.template ||
-						$entity.entities[entityID].templateFlag != parsed.templateFlag ||
+						$entity.entities[entityID].factory != parsed.factory ||
+						$entity.entities[entityID].factoryFlag != parsed.factoryFlag ||
 						$entity.entities[entityID].blueprint != parsed.blueprint ||
 						$entity.entities[entityID].editorOnly != parsed.editorOnly
 
@@ -169,7 +169,7 @@
 	onDestroy(unsubscribe)
 
 	let helpMenuOpen = false
-	let helpMenuTemplate = ""
+	let helpMenuFactory = ""
 	let helpMenuProps = {}
 	let helpMenuInputs: string[] = []
 	let helpMenuOutputs: string[] = []
@@ -245,7 +245,7 @@
 								$entity.entities[entityID] = {
 									parent: detail[1].parent,
 									name: "New Entity",
-									template: "[modules:/zentity.class].pc_entitytype",
+									factory: "[modules:/zentity.class].pc_entitytype",
 									blueprint: "[modules:/zentity.class].pc_entityblueprint"
 								}
 							}}
@@ -304,7 +304,7 @@
 							autoHighlightEntities={$appSettings.autoHighlightEntities}
 							{editorIsValid}
 							bind:helpMenuOpen
-							bind:helpMenuTemplate
+							bind:helpMenuFactory
 							bind:helpMenuProps
 							bind:helpMenuInputs
 							bind:helpMenuOutputs
@@ -415,7 +415,7 @@
 									</div>
 								</ExpandableSection>
 								{#if $appSettings.gameFileExtensions}
-									{#await join($appSettings.gameFileExtensionsDataPath, "TEMP", normaliseToHash(selectedEntity.template) + ".TEMP.entity.json") then joined}
+									{#await join($appSettings.gameFileExtensionsDataPath, "TEMP", normaliseToHash(selectedEntity.factory) + ".TEMP.entity.json") then joined}
 										{#await exists(joined) then condition}
 											{#if condition}
 												<ExpandableSection initiallyOpen={false}>
@@ -490,7 +490,7 @@
 					{/if}
 					{#if $appSettings.inVivoExtensions && gameServer.connected && gameServer.lastAddress}
 						{#if $inVivoMetadata.entities[selectedEntityID]?.dirtyUnchangeables}
-							<span class="text-red-200">Template/blueprint/editorOnly changes require re-deploy</span>
+							<span class="text-red-200">Factory/blueprint/editorOnly changes require re-deploy</span>
 						{:else if $inVivoMetadata.entities[selectedEntityID]?.dirtyExtensions}
 							<span class="text-red-200">Other-entity-affecting changes require re-deploy</span>
 						{:else if $inVivoMetadata.entities[selectedEntityID]?.dirtyProperties?.length}
@@ -569,7 +569,7 @@
 	</Pane>
 </SplitPanes>
 
-<Modal bind:open={helpMenuOpen} modalHeading="Help for {helpMenuTemplate}" passiveModal>
+<Modal bind:open={helpMenuOpen} modalHeading="Help for {helpMenuFactory}" passiveModal>
 	<div class="grid grid-cols-2 gap-4">
 		<div>
 			<h2>Default properties</h2>

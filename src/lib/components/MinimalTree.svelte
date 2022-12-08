@@ -150,13 +150,13 @@
 				id: String(entityID),
 				parent: getReferencedLocalEntity(entityData.parent) || "#",
 				icon:
-					entityData.template == "[modules:/zentity.class].pc_entitytype" && reverseReferences[entityID].some((a) => a.type == "parent")
+					entityData.factory == "[modules:/zentity.class].pc_entitytype" && reverseReferences[entityID].some((a) => a.type == "parent")
 						? "far fa-folder"
-						: icons.find((a) => entityData.template.includes(a[0]))
-						? icons.find((a) => entityData.template.includes(a[0]))![1]
+						: icons.find((a) => entityData.factory.includes(a[0]))
+						? icons.find((a) => entityData.factory.includes(a[0]))![1]
 						: "far fa-file",
 				text: `${entityData.name} (ref ${entityID})`,
-				folder: entityData.template == "[modules:/zentity.class].pc_entitytype" && reverseReferences[entityID].some((a) => a.type == "parent") // for sorting and stuff
+				folder: entityData.factory == "[modules:/zentity.class].pc_entitytype" && reverseReferences[entityID].some((a) => a.type == "parent") // for sorting and stuff
 			})
 		}
 

@@ -563,7 +563,7 @@ export function changeEntityHashesToFriendly(entity: Entity, friendly: Record<st
 	})
 
 	for (const subEntity of Object.values(entity.entities)) {
-		subEntity.template = friendly[subEntity.template] || subEntity.template
+		subEntity.factory = friendly[subEntity.factory] || subEntity.factory
 		subEntity.blueprint = friendly[subEntity.blueprint] || subEntity.blueprint
 
 		if (subEntity.properties) {
