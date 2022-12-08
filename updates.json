@@ -1,11 +1,11 @@
 {
-	"version": "1.23.0",
-	"notes": "Smart patching with no entity size limit",
+	"version": "1.24.0",
+	"notes": "QuickEntity 3.1 (will automatically update 3.0 JSONs if loaded)",
 	"pub_date": "2022-11-29T12:33:17Z",
 	"platforms": {
 		"windows-x86_64": {
-			"signature": "dW50cnVzdGVkIGNvbW1lbnQ6IHNpZ25hdHVyZSBmcm9tIHRhdXJpIHNlY3JldCBrZXkKUlVScWpVZGd2b0lOTlY3ZU84NkdZS3Z5UGRvRmhURzdTK1dycjhPQnRWbkFYcUUzOEJncHJ5NEhKR2prWnhCOVEydHJWNWwydjRSMUVmaUJ2SmxLMmhSN1U3NzdCSitINlFrPQp0cnVzdGVkIGNvbW1lbnQ6IHRpbWVzdGFtcDoxNjcwMjQ4NTAyCWZpbGU6UXVpY2tFbnRpdHkgRWRpdG9yXzEuMjMuMF94NjRfZW4tVVMubXNpLnppcApUemhYUjhKSWV4NVVsK3Q0MXM1Mm1teGdoMTB1U3VRYkxib2kzK3IzZm9PWTZZanBPT1dPUzJHNzdTbUMzNmljREgrSWpXZEpQMDNabkdlQmNoQzFBQT09Cg==",
-			"url": "https://github.com/atampy25/quickentity-editor-next/releases/download/1.23.0/QuickEntity.Editor_1.23.0_x64_en-US.msi.zip"
+			"signature": "dW50cnVzdGVkIGNvbW1lbnQ6IHNpZ25hdHVyZSBmcm9tIHRhdXJpIHNlY3JldCBrZXkKUlVScWpVZGd2b0lOTmFZcGhRNURZcW5KSllCV3pCNmR0Z1cxeWpoU2lVbGpIKzJDL1hGTHBKdlpuUWJici9HZkFVZ0U0a1NEaVpKN0RHWnlCekUzVWM4dGt1bFlrd0hjT2dJPQp0cnVzdGVkIGNvbW1lbnQ6IHRpbWVzdGFtcDoxNjcwNDc2NTQwCWZpbGU6UXVpY2tFbnRpdHkgRWRpdG9yXzEuMjQuMF94NjRfZW4tVVMubXNpLnppcAp4MVZmRVZ5bGZ4NzJVVjNxdHZ6U2tlTlhSLzlnaW9FWEpuQ0ZRbVRiRDdyNTVVemdSaTF4NVR4cWZEK25odjRpcmdIaEgxNXo4ZWxUdk1KaCtZamdCUT09Cg==",
+			"url": "https://github.com/atampy25/quickentity-editor-next/releases/download/1.24.0/QuickEntity.Editor_1.24.0_x64_en-US.msi.zip"
 		}
 	}
 }
