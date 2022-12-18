@@ -1,11 +1,11 @@
 {
-	"version": "1.24.4",
-	"notes": "Make settings page scrollable again",
+	"version": "1.24.6",
+	"notes": "Use same build data for Sentry sourcemaps",
 	"pub_date": "2022-12-15T00:34:01Z",
 	"platforms": {
 		"windows-x86_64": {
-			"signature": "dW50cnVzdGVkIGNvbW1lbnQ6IHNpZ25hdHVyZSBmcm9tIHRhdXJpIHNlY3JldCBrZXkKUlVScWpVZGd2b0lOTmRTMlk0cVlrUU5Sd1RNNTFvN0hkK2p5dExIMmdqbjFlZEMyOHRJWmZLVkZreHk1TjhpQWxidk9JeUU4Y0dJMU9UK2RTSlZTSDlZeERFY0JkQm9WZ2dnPQp0cnVzdGVkIGNvbW1lbnQ6IHRpbWVzdGFtcDoxNjcxMTU5NzI4CWZpbGU6UXVpY2tFbnRpdHkgRWRpdG9yXzEuMjQuNF94NjRfZW4tVVMubXNpLnppcAplZ2ZEQmhlZ0FVQVlOR0grWTI5VDdLd1BpcXF5QjNRT3d5bWF4VTdBT0M5alhaZlM2WjdwSjVscCs0ejUwRmhlZ3dyNW4wMDVQWTFzV21ySHV0dDRCUT09Cg==",
-			"url": "https://github.com/atampy25/quickentity-editor-next/releases/download/1.24.4/QuickEntity.Editor_1.24.4_x64_en-US.msi.zip"
+			"signature": "dW50cnVzdGVkIGNvbW1lbnQ6IHNpZ25hdHVyZSBmcm9tIHRhdXJpIHNlY3JldCBrZXkKUlVScWpVZGd2b0lOTlFEdzVTSUV1TmRIa1lLckVyZE44eEM1LzZsbmRQNjEwVE93MEllL2hhcDZ3eTlBclNCZTVrMnZncWF3dUlRdjI5ZlFMNDBUQ3I1U3J0QWx4eThnMXd3PQp0cnVzdGVkIGNvbW1lbnQ6IHRpbWVzdGFtcDoxNjcxMzcwNTYxCWZpbGU6UXVpY2tFbnRpdHkgRWRpdG9yXzEuMjQuNl94NjRfZW4tVVMubXNpLnppcAowY2pRaFNhSDJDVGZiQ0oyU2hVV3dBbUJicTNlZ29oWGNEQ3k0WFAwa05PenlCbDJ5aTU2WjVUTklVMTNteFF5TnRDTCsvRGVPbE1HM0o3NmgwWVNCdz09Cg==",
+			"url": "https://github.com/atampy25/quickentity-editor-next/releases/download/1.24.6/QuickEntity.Editor_1.24.6_x64_en-US.msi.zip"
 		}
 	}
 }
