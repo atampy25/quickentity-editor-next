@@ -221,3 +221,42 @@ jobs:
         with:
           default_author: github_actions
           message: "Post-update"
+
+  sentry-release:
+    runs-on: ubuntu-latest
+    if: github.event.action != 'push' || startsWith(github.ref, 'refs/tags/')
+
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          ref: "main"
+          fetch-depth: 0
+      
+      - name: Get latest tag
+        id: latestTag
+        uses: 'WyriHaximus/github-action-get-previous-tag@v1.1.0'
+        with:
+          fallback: unknown
+      
+      - name: Install dependencies
+        run: |
+          yarn set version 3.2.3
+          yarn
+          yarn prepare
+
+      - name: Build
+        env:
+          NODE_OPTIONS: "--max-old-space-size=4096"
+        run: |
+          yarn build
+
+      - name: Sentry release
+        uses: getsentry/action-release@v1.1.6
+        env:
+          SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
+          SENTRY_ORG: ${{ secrets.SENTRY_ORG }}
+          SENTRY_PROJECT: ${{ secrets.SENTRY_PROJECT }}
+        with:
+          environment: production
+          version: ${{ steps.latestTag.outputs.tag }}
+          sourcemaps: './build'

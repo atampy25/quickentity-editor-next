@@ -6,7 +6,16 @@ import preprocess from "svelte-preprocess"
 const config = {
 	// Consult https://github.com/sveltejs/svelte-preprocess
 	// for more information about preprocessors
-	preprocess: [preprocess(), optimizeImports()],
+	preprocess: [
+		preprocess({
+			sourceMap: true
+		}),
+		optimizeImports()
+	],
+
+	compilerOptions: {
+		enableSourcemap: true
+	},
 
 	kit: {
 		adapter: adapter({

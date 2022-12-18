@@ -7,7 +7,8 @@ const config = {
 		port: 3000
 	},
 	build: {
-		target: "es2022"
+		target: "es2022",
+		sourcemap: true
 	},
 	ssr: {
 		noExternal: ["three", "troika-three-text"]
