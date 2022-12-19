@@ -8,7 +8,7 @@ var BaklavaJS = (() => {
 			for (var n in t) ds(e, n, { get: t[n], enumerable: !0 })
 		},
 		Cl = (e, t, n, o) => {
-			if ((t && typeof t == "object") || typeof t == "function") for (let s of Nl(t)) !Ol.call(e, s) && s !== n && ds(e, s, { get: () => t[s], enumerable: !(o = wl(t, s)) || o.enumerable })
+			if ((t && typeof t == "object") || typeof t == "function") for (const s of Nl(t)) !Ol.call(e, s) && s !== n && ds(e, s, { get: () => t[s], enumerable: !(o = wl(t, s)) || o.enumerable })
 			return e
 		}
 	var xl = (e) => Cl(ds({}, "__esModule", { value: !0 }), e)
@@ -91,7 +91,7 @@ var BaklavaJS = (() => {
 	var Se = $l
 	var Ke = class {
 		constructor() {
-			;(this.listenerMap = new Map()), (this._listeners = []), (this.proxyMap = new Map()), (this.proxies = [])
+			(this.listenerMap = new Map()), (this._listeners = []), (this.proxyMap = new Map()), (this.proxies = [])
 		}
 		get listeners() {
 			return this._listeners.concat(this.proxies.flatMap((t) => t()))
@@ -101,14 +101,14 @@ var BaklavaJS = (() => {
 				(console.warn(`Already subscribed. Unsubscribing for you.
 Please check that you don't accidentally use the same token twice to register two different handlers for the same event/hook.`),
 				this.unsubscribe(t)),
-				this.listenerMap.set(t, n),
-				this._listeners.push(n)
+			this.listenerMap.set(t, n),
+			this._listeners.push(n)
 		}
 		unsubscribe(t) {
 			if (this.listenerMap.has(t)) {
-				let n = this.listenerMap.get(t)
+				const n = this.listenerMap.get(t)
 				this.listenerMap.delete(t)
-				let o = this._listeners.indexOf(n)
+				const o = this._listeners.indexOf(n)
 				o >= 0 && this._listeners.splice(o, 1)
 			}
 		}
@@ -117,14 +117,14 @@ Please check that you don't accidentally use the same token twice to register tw
 				(console.warn(`Already subscribed. Unsubscribing for you.
 Please check that you don't accidentally use the same token twice to register two different proxies for the same event/hook.`),
 				this.unregisterProxy(t)),
-				this.proxyMap.set(t, n),
-				this.proxies.push(n)
+			this.proxyMap.set(t, n),
+			this.proxies.push(n)
 		}
 		unregisterProxy(t) {
 			if (!this.proxyMap.has(t)) return
-			let n = this.proxyMap.get(t)
+			const n = this.proxyMap.get(t)
 			this.proxyMap.delete(t)
-			let o = this.proxies.indexOf(n)
+			const o = this.proxies.indexOf(n)
 			o >= 0 && this.proxies.splice(o, 1)
 		}
 	}
@@ -143,14 +143,14 @@ Please check that you don't accidentally use the same token twice to register tw
 			emit(t) {
 				let n = !1,
 					o = () => [(n = !0)]
-				for (let s of Array.from(this.listeners.values())) if ((s(t, o, this.entity), n)) return { prevented: !0 }
+				for (const s of Array.from(this.listeners.values())) if ((s(t, o, this.entity), n)) return { prevented: !0 }
 				return { prevented: !1 }
 			}
 		}
 	var kn = class extends Ke {
 			execute(t, n) {
 				let o = t
-				for (let s of this.listeners) o = s(o, n)
+				for (const s of this.listeners) o = s(o, n)
 				return o
 			}
 		},
@@ -167,13 +167,13 @@ Please check that you don't accidentally use the same token twice to register tw
 				super(), (this.entity = t)
 			}
 			execute(t) {
-				let n = []
-				for (let o of this.listeners) n.push(o(t, this.entity))
+				const n = []
+				for (const o of this.listeners) n.push(o(t, this.entity))
 				return n
 			}
 		}
 	function ze() {
-		let e = Symbol(),
+		const e = Symbol(),
 			t = new Map(),
 			n = new Set(),
 			o = (l, c) => {
@@ -184,15 +184,15 @@ Please check that you don't accidentally use the same token twice to register tw
 					})
 			},
 			s = (l) => {
-				let c = new Ke()
+				const c = new Ke()
 				t.set(l, c), n.forEach((u) => o(l, u[l]))
 			},
 			r = (l) => {
 				n.add(l)
-				for (let c of t.keys()) o(c, l[c])
+				for (const c of t.keys()) o(c, l[c])
 			},
 			i = (l) => {
-				for (let c of t.keys()) l[c] instanceof Ke && l[c].unregisterProxy(e)
+				for (const c of t.keys()) l[c] instanceof Ke && l[c].unregisterProxy(e)
 				n.delete(l)
 			},
 			a = () => {
@@ -227,20 +227,20 @@ Please check that you don't accidentally use the same token twice to register tw
 	}
 	var on = class {
 			constructor() {
-				;(this.id = Se()),
-					(this.events = {
-						loaded: new J(this),
-						beforeAddInput: new he(this),
-						addInput: new J(this),
-						beforeRemoveInput: new he(this),
-						removeInput: new J(this),
-						beforeAddOutput: new he(this),
-						addOutput: new J(this),
-						beforeRemoveOutput: new he(this),
-						removeOutput: new J(this),
-						update: new J(this)
-					}),
-					(this.hooks = { beforeLoad: new me(this), afterSave: new me(this) })
+				(this.id = Se()),
+				(this.events = {
+					loaded: new J(this),
+					beforeAddInput: new he(this),
+					addInput: new J(this),
+					beforeRemoveInput: new he(this),
+					removeInput: new J(this),
+					beforeAddOutput: new he(this),
+					addOutput: new J(this),
+					beforeRemoveOutput: new he(this),
+					removeOutput: new J(this),
+					update: new J(this)
+				}),
+				(this.hooks = { beforeLoad: new me(this), afterSave: new me(this) })
 			}
 			get graph() {
 				return this.graphInstance
@@ -262,18 +262,18 @@ Please check that you don't accidentally use the same token twice to register tw
 			}
 			load(t) {
 				this.hooks.beforeLoad.execute(t),
-					(this.id = t.id),
-					(this.title = t.title),
-					Object.entries(t.inputs).forEach(([n, o]) => {
-						this.inputs[n] && (this.inputs[n].load(o), (this.inputs[n].nodeId = this.id))
-					}),
-					Object.entries(t.outputs).forEach(([n, o]) => {
-						this.outputs[n] && (this.outputs[n].load(o), (this.outputs[n].nodeId = this.id))
-					}),
-					this.events.loaded.emit(this)
+				(this.id = t.id),
+				(this.title = t.title),
+				Object.entries(t.inputs).forEach(([n, o]) => {
+					this.inputs[n] && (this.inputs[n].load(o), (this.inputs[n].nodeId = this.id))
+				}),
+				Object.entries(t.outputs).forEach(([n, o]) => {
+					this.outputs[n] && (this.outputs[n].load(o), (this.outputs[n].nodeId = this.id))
+				}),
+				this.events.loaded.emit(this)
 			}
 			save() {
-				let t = Tn(this.inputs, (s) => s.save()),
+				const t = Tn(this.inputs, (s) => s.save()),
 					n = Tn(this.outputs, (s) => s.save()),
 					o = { type: this.type, id: this.id, title: this.title, inputs: t, outputs: n }
 				return this.hooks.afterSave.execute(o)
@@ -284,16 +284,16 @@ Please check that you don't accidentally use the same token twice to register tw
 				Object.entries(this.inputs).forEach(([t, n]) => this.initializeIntf("input", t, n)), Object.entries(this.outputs).forEach(([t, n]) => this.initializeIntf("output", t, n))
 			}
 			initializeIntf(t, n, o) {
-				;(o.isInput = t === "input"), (o.nodeId = this.id), o.events.setValue.subscribe(this, () => this.events.update.emit({ type: t, name: n, intf: o }))
+				(o.isInput = t === "input"), (o.nodeId = this.id), o.events.setValue.subscribe(this, () => this.events.update.emit({ type: t, name: n, intf: o }))
 			}
 			addInterface(t, n, o) {
-				let s = t === "input" ? this.events.beforeAddInput : this.events.beforeAddOutput,
+				const s = t === "input" ? this.events.beforeAddInput : this.events.beforeAddOutput,
 					r = t === "input" ? this.events.addInput : this.events.addOutput,
 					i = t === "input" ? this.inputs : this.outputs
 				return s.emit(o).prevented ? !1 : ((i[n] = o), this.initializeIntf(t, n, o), r.emit(o), !0)
 			}
 			removeInterface(t, n) {
-				let o = t === "input" ? this.events.beforeRemoveInput : this.events.beforeRemoveOutput,
+				const o = t === "input" ? this.events.beforeRemoveInput : this.events.beforeRemoveOutput,
 					s = t === "input" ? this.events.removeInput : this.events.removeOutput,
 					r = t === "input" ? this.inputs[n] : this.outputs[n]
 				if (!r || o.emit(r).prevented) return !1
@@ -321,14 +321,14 @@ Please check that you don't accidentally use the same token twice to register tw
 			constructor() {
 				var t, n
 				super(),
-					(this.type = e.type),
-					(this.title = (t = e.title) !== null && t !== void 0 ? t : e.type),
-					(this.inputs = {}),
-					(this.outputs = {}),
-					(this.calculate = e.calculate ? (o, s) => e.calculate.call(this, o, s) : void 0),
-					this.executeFactory("input", e.inputs),
-					this.executeFactory("output", e.outputs),
-					(n = e.onCreate) === null || n === void 0 || n.call(this)
+				(this.type = e.type),
+				(this.title = (t = e.title) !== null && t !== void 0 ? t : e.type),
+				(this.inputs = {}),
+				(this.outputs = {}),
+				(this.calculate = e.calculate ? (o, s) => e.calculate.call(this, o, s) : void 0),
+				this.executeFactory("input", e.inputs),
+				this.executeFactory("output", e.outputs),
+				(n = e.onCreate) === null || n === void 0 || n.call(this)
 			}
 			onPlaced() {
 				var t
@@ -340,7 +340,7 @@ Please check that you don't accidentally use the same token twice to register tw
 			}
 			executeFactory(t, n) {
 				Object.keys(n || {}).forEach((o) => {
-					let s = n[o]()
+					const s = n[o]()
 					t === "input" ? this.addInput(o, s) : this.addOutput(o, s)
 				})
 			}
@@ -348,31 +348,31 @@ Please check that you don't accidentally use the same token twice to register tw
 	}
 	var qe = class {
 		constructor(t, n) {
-			;(this.id = Se()),
-				(this.inputs = []),
-				(this.outputs = []),
-				(this._nodes = []),
-				(this._connections = []),
-				(this._loading = !1),
-				(this._destroying = !1),
-				(this.events = {
-					beforeAddNode: new he(this),
-					addNode: new J(this),
-					beforeRemoveNode: new he(this),
-					removeNode: new J(this),
-					beforeAddConnection: new he(this),
-					addConnection: new J(this),
-					checkConnection: new he(this),
-					beforeRemoveConnection: new he(this),
-					removeConnection: new J(this)
-				}),
-				(this.hooks = { save: new me(this), load: new me(this), checkConnection: new fo(this) }),
-				(this.nodeEvents = ze()),
-				(this.nodeHooks = ze()),
-				(this.connectionEvents = ze()),
-				(this.editor = t),
-				(this.template = n),
-				t.registerGraph(this)
+			(this.id = Se()),
+			(this.inputs = []),
+			(this.outputs = []),
+			(this._nodes = []),
+			(this._connections = []),
+			(this._loading = !1),
+			(this._destroying = !1),
+			(this.events = {
+				beforeAddNode: new he(this),
+				addNode: new J(this),
+				beforeRemoveNode: new he(this),
+				removeNode: new J(this),
+				beforeAddConnection: new he(this),
+				addConnection: new J(this),
+				checkConnection: new he(this),
+				beforeRemoveConnection: new he(this),
+				removeConnection: new J(this)
+			}),
+			(this.hooks = { save: new me(this), load: new me(this), checkConnection: new fo(this) }),
+			(this.nodeEvents = ze()),
+			(this.nodeHooks = ze()),
+			(this.connectionEvents = ze()),
+			(this.editor = t),
+			(this.template = n),
+			t.registerGraph(this)
 		}
 		get nodes() {
 			return this._nodes
@@ -402,23 +402,23 @@ Please check that you don't accidentally use the same token twice to register tw
 		removeNode(t) {
 			if (this.nodes.includes(t)) {
 				if (this.events.beforeRemoveNode.emit(t).prevented) return
-				let n = [...Object.values(t.inputs), ...Object.values(t.outputs)]
+				const n = [...Object.values(t.inputs), ...Object.values(t.outputs)]
 				this.connections.filter((o) => n.includes(o.from) || n.includes(o.to)).forEach((o) => this.removeConnection(o)),
-					this._nodes.splice(this.nodes.indexOf(t), 1),
-					this.events.removeNode.emit(t),
-					t.onDestroy(),
-					this.nodeEvents.removeTarget(t.events),
-					this.nodeHooks.removeTarget(t.hooks)
+				this._nodes.splice(this.nodes.indexOf(t), 1),
+				this.events.removeNode.emit(t),
+				t.onDestroy(),
+				this.nodeEvents.removeTarget(t.events),
+				this.nodeHooks.removeTarget(t.hooks)
 			}
 		}
 		addConnection(t, n) {
-			let o = this.checkConnection(t, n)
+			const o = this.checkConnection(t, n)
 			if (!o.connectionAllowed || this.events.beforeAddConnection.emit({ from: t, to: n }).prevented) return
-			for (let r of o.connectionsInDanger) {
-				let i = this.connections.find((a) => a.id === r.id)
+			for (const r of o.connectionsInDanger) {
+				const i = this.connections.find((a) => a.id === r.id)
 				i && this.removeConnection(i)
 			}
-			let s = new nn(o.dummyConnection.from, o.dummyConnection.to)
+			const s = new nn(o.dummyConnection.from, o.dummyConnection.to)
 			return this.internalAddConnection(s), s
 		}
 		removeConnection(t) {
@@ -429,29 +429,29 @@ Please check that you don't accidentally use the same token twice to register tw
 		}
 		checkConnection(t, n) {
 			if (!t || !n) return { connectionAllowed: !1 }
-			let o = this.findNodeById(t.nodeId),
+			const o = this.findNodeById(t.nodeId),
 				s = this.findNodeById(n.nodeId)
 			if (o && s && o === s) return { connectionAllowed: !1 }
 			if (t.isInput && !n.isInput) {
-				let a = t
+				const a = t
 				;(t = n), (n = a)
 			}
 			if (t.isInput || !n.isInput) return { connectionAllowed: !1 }
 			if (this.connections.some((a) => a.from === t && a.to === n)) return { connectionAllowed: !1 }
 			if (this.events.checkConnection.emit({ from: t, to: n }).prevented) return { connectionAllowed: !1 }
-			let r = this.hooks.checkConnection.execute({ from: t, to: n })
+			const r = this.hooks.checkConnection.execute({ from: t, to: n })
 			if (r.some((a) => !a.connectionAllowed)) return { connectionAllowed: !1 }
-			let i = Array.from(new Set(r.flatMap((a) => a.connectionsInDanger)))
+			const i = Array.from(new Set(r.flatMap((a) => a.connectionsInDanger)))
 			return { connectionAllowed: !0, dummyConnection: new Rt(t, n), connectionsInDanger: i }
 		}
 		findNodeInterface(t) {
-			for (let n of this.nodes) {
-				for (let o in n.inputs) {
-					let s = n.inputs[o]
+			for (const n of this.nodes) {
+				for (const o in n.inputs) {
+					const s = n.inputs[o]
 					if (s.id === t) return s
 				}
-				for (let o in n.outputs) {
-					let s = n.outputs[o]
+				for (const o in n.outputs) {
+					const s = n.outputs[o]
 					if (s.id === t) return s
 				}
 			}
@@ -462,25 +462,25 @@ Please check that you don't accidentally use the same token twice to register tw
 		load(t) {
 			try {
 				this._loading = !0
-				let n = []
+				const n = []
 				for (let o = this.connections.length - 1; o >= 0; o--) this.removeConnection(this.connections[o])
 				for (let o = this.nodes.length - 1; o >= 0; o--) this.removeNode(this.nodes[o])
 				;(this.id = t.id), (this.inputs = t.inputs), (this.outputs = t.outputs)
-				for (let o of t.nodes) {
-					let s = this.editor.nodeTypes.get(o.type)
+				for (const o of t.nodes) {
+					const s = this.editor.nodeTypes.get(o.type)
 					if (!s) {
 						n.push(`Node type ${o.type} is not registered`)
 						continue
 					}
-					let r = new s.type()
+					const r = new s.type()
 					this.addNode(r), r.load(o)
 				}
-				for (let o of t.connections) {
-					let s = this.findNodeInterface(o.from),
+				for (const o of t.connections) {
+					const s = this.findNodeInterface(o.from),
 						r = this.findNodeInterface(o.to)
 					if (s)
 						if (r) {
-							let i = new nn(s, r)
+							const i = new nn(s, r)
 							;(i.id = o.id), this.internalAddConnection(i)
 						} else {
 							n.push(`Could not find interface with id ${o.to}`)
@@ -497,7 +497,7 @@ Please check that you don't accidentally use the same token twice to register tw
 			}
 		}
 		save() {
-			let t = {
+			const t = {
 				id: this.id,
 				nodes: this.nodes.map((n) => n.save()),
 				connections: this.connections.map((n) => ({ id: n.id, from: n.from.id, to: n.to.id })),
@@ -508,7 +508,7 @@ Please check that you don't accidentally use the same token twice to register tw
 		}
 		destroy() {
 			this._destroying = !0
-			for (let t of this.nodes) this.removeNode(t)
+			for (const t of this.nodes) this.removeNode(t)
 			this.editor.unregisterGraph(this)
 		}
 		internalAddConnection(t) {
@@ -517,18 +517,18 @@ Please check that you don't accidentally use the same token twice to register tw
 	}
 	var xe = class {
 		constructor(t, n) {
-			;(this.id = Se()),
-				(this.nodeId = ""),
-				(this.port = !0),
-				(this.hidden = !1),
-				(this.events = { setConnectionCount: new J(this), beforeSetValue: new he(this), setValue: new J(this), updated: new J(this) }),
-				(this.hooks = { load: new me(this), save: new me(this) }),
-				(this._connectionCount = 0),
-				(this.name = t),
-				(this._value = n)
+			(this.id = Se()),
+			(this.nodeId = ""),
+			(this.port = !0),
+			(this.hidden = !1),
+			(this.events = { setConnectionCount: new J(this), beforeSetValue: new he(this), setValue: new J(this), updated: new J(this) }),
+			(this.hooks = { load: new me(this), save: new me(this) }),
+			(this._connectionCount = 0),
+			(this.name = t),
+			(this._value = n)
 		}
 		set connectionCount(t) {
-			;(this._connectionCount = t), this.events.setConnectionCount.emit(t)
+			(this._connectionCount = t), this.events.setConnectionCount.emit(t)
 		}
 		get connectionCount() {
 			return this._connectionCount
@@ -540,10 +540,10 @@ Please check that you don't accidentally use the same token twice to register tw
 			return this._value
 		}
 		load(t) {
-			;(this.id = t.id), (this.templateId = t.templateId), (this.value = t.value), this.hooks.load.execute(t)
+			(this.id = t.id), (this.templateId = t.templateId), (this.value = t.value), this.hooks.load.execute(t)
 		}
 		save() {
-			let t = { id: this.id, templateId: this.templateId, value: this.value }
+			const t = { id: this.id, templateId: this.templateId, value: this.value }
 			return this.hooks.save.execute(t)
 		}
 		setComponent(t) {
@@ -567,41 +567,41 @@ Please check that you don't accidentally use the same token twice to register tw
 		return class extends on {
 			constructor() {
 				super(...arguments),
-					(this.type = ot(e)),
-					(this._title = "GraphNode"),
-					(this.inputs = {}),
-					(this.outputs = {}),
-					(this.template = e),
-					(this.calculate = async (n, o) => {
-						if (!this.subgraph) throw new Error(`GraphNode ${this.id}: calculate called without subgraph being initialized`)
-						if (typeof o.engine == "object" && !!o.engine && typeof o.engine.runGraph == "function") {
-							let s = new Map()
-							for (let l of this.subgraph.nodes)
-								Object.values(l.inputs).forEach((c) => {
-									c.connectionCount === 0 && s.set(c.id, c.value)
-								})
-							Object.entries(n).forEach(([l, c]) => {
-								let u = this.subgraph.inputs.find((d) => d.id === l)
-								s.set(u.nodeInterfaceId, c)
+				(this.type = ot(e)),
+				(this._title = "GraphNode"),
+				(this.inputs = {}),
+				(this.outputs = {}),
+				(this.template = e),
+				(this.calculate = async (n, o) => {
+					if (!this.subgraph) throw new Error(`GraphNode ${this.id}: calculate called without subgraph being initialized`)
+					if (typeof o.engine == "object" && !!o.engine && typeof o.engine.runGraph == "function") {
+						const s = new Map()
+						for (const l of this.subgraph.nodes)
+							Object.values(l.inputs).forEach((c) => {
+								c.connectionCount === 0 && s.set(c.id, c.value)
 							})
-							let r = await o.engine.runGraph(this.subgraph, s, o.globalValues),
-								i = new Map()
-							r.forEach((l, c) => {
-								let u = this.subgraph.nodes.find((d) => d.id === c)
-								l.forEach((d, p) => {
-									i.set(u.outputs[p].id, d)
-								})
+						Object.entries(n).forEach(([l, c]) => {
+							const u = this.subgraph.inputs.find((d) => d.id === l)
+							s.set(u.nodeInterfaceId, c)
+						})
+						const r = await o.engine.runGraph(this.subgraph, s, o.globalValues),
+							i = new Map()
+						r.forEach((l, c) => {
+							const u = this.subgraph.nodes.find((d) => d.id === c)
+							l.forEach((d, p) => {
+								i.set(u.outputs[p].id, d)
 							})
-							let a = {}
-							return (
-								this.subgraph.outputs.forEach((l) => {
-									a[l.id] = i.get(l.nodeInterfaceId)
-								}),
-								(a._calculationResults = r),
-								a
-							)
-						}
-					})
+						})
+						const a = {}
+						return (
+							this.subgraph.outputs.forEach((l) => {
+								a[l.id] = i.get(l.nodeInterfaceId)
+							}),
+							(a._calculationResults = r),
+							a
+						)
+					}
+				})
 			}
 			get title() {
 				return this._title
@@ -620,10 +620,10 @@ Please check that you don't accidentally use the same token twice to register tw
 			}
 			onPlaced() {
 				this.template.events.updated.subscribe(this, () => this.initialize()),
-					this.template.events.nameChanged.subscribe(this, (n) => {
-						this._title = n
-					}),
-					this.initialize()
+				this.template.events.nameChanged.subscribe(this, (n) => {
+					this._title = n
+				}),
+				this.initialize()
 			}
 			onDestroy() {
 				var n
@@ -634,24 +634,24 @@ Please check that you don't accidentally use the same token twice to register tw
 			}
 			updateInterfaces() {
 				if (!this.subgraph) throw new Error("Trying to update interfaces without graph instance")
-				for (let n of this.subgraph.inputs) n.id in this.inputs ? (this.inputs[n.id].name = n.name) : this.addInput(n.id, new xe(n.name, void 0))
-				for (let n of Object.keys(this.inputs)) this.subgraph.inputs.some((o) => o.id === n) || this.removeInput(n)
-				for (let n of this.subgraph.outputs) n.id in this.outputs ? (this.outputs[n.id].name = n.name) : this.addOutput(n.id, new xe(n.name, void 0))
-				for (let n of Object.keys(this.outputs)) this.subgraph.outputs.some((o) => o.id === n) || this.removeOutput(n)
+				for (const n of this.subgraph.inputs) n.id in this.inputs ? (this.inputs[n.id].name = n.name) : this.addInput(n.id, new xe(n.name, void 0))
+				for (const n of Object.keys(this.inputs)) this.subgraph.inputs.some((o) => o.id === n) || this.removeInput(n)
+				for (const n of this.subgraph.outputs) n.id in this.outputs ? (this.outputs[n.id].name = n.name) : this.addOutput(n.id, new xe(n.name, void 0))
+				for (const n of Object.keys(this.outputs)) this.subgraph.outputs.some((o) => o.id === n) || this.removeOutput(n)
 				this.addOutput("_calculationResults", new xe("_calculationResults", void 0).setHidden(!0))
 			}
 		}
 	}
 	var ft = class {
 		constructor(t, n) {
-			;(this.id = Se()),
-				(this._name = "Subgraph"),
-				(this.events = { nameChanged: new J(this), updated: new J(this) }),
-				(this.hooks = { beforeLoad: new me(this), afterSave: new me(this) }),
-				(this.editor = n),
-				t.id && (this.id = t.id),
-				t.name && (this._name = t.name),
-				this.update(t)
+			(this.id = Se()),
+			(this._name = "Subgraph"),
+			(this.events = { nameChanged: new J(this), updated: new J(this) }),
+			(this.hooks = { beforeLoad: new me(this), afterSave: new me(this) }),
+			(this.editor = n),
+			t.id && (this.id = t.id),
+			t.name && (this._name = t.name),
+			this.update(t)
 		}
 		static fromGraph(t, n) {
 			return new ft(t.save(), n)
@@ -660,24 +660,24 @@ Please check that you don't accidentally use the same token twice to register tw
 			return this._name
 		}
 		set name(t) {
-			;(this._name = t), this.events.nameChanged.emit(t)
-			let n = this.editor.nodeTypes.get(ot(this))
+			(this._name = t), this.events.nameChanged.emit(t)
+			const n = this.editor.nodeTypes.get(ot(this))
 			n && (n.title = t)
 		}
 		update(t) {
-			;(this.nodes = t.nodes), (this.connections = t.connections), (this.inputs = t.inputs), (this.outputs = t.outputs), this.events.updated.emit()
+			(this.nodes = t.nodes), (this.connections = t.connections), (this.inputs = t.inputs), (this.outputs = t.outputs), this.events.updated.emit()
 		}
 		save() {
 			return { id: this.id, name: this.name, nodes: this.nodes, connections: this.connections, inputs: this.inputs, outputs: this.outputs }
 		}
 		createGraph(t) {
-			let n = new Map(),
+			const n = new Map(),
 				o = (d) => {
-					let p = Se()
+					const p = Se()
 					return n.set(d, p), p
 				},
 				s = (d) => {
-					let p = n.get(d)
+					const p = n.get(d)
 					if (!p) throw new Error(`Unable to create graph from template: Could not map old id ${d} to new id`)
 					return p
 				},
@@ -692,7 +692,7 @@ Please check that you don't accidentally use the same token twice to register tw
 	}
 	var $n = class {
 		constructor() {
-			;(this.events = {
+			(this.events = {
 				loaded: new J(this),
 				beforeRegisterNodeType: new he(this),
 				registerNodeType: new J(this),
@@ -705,19 +705,19 @@ Please check that you don't accidentally use the same token twice to register tw
 				registerGraph: new J(this),
 				unregisterGraph: new J(this)
 			}),
-				(this.hooks = { save: new me(this), load: new me(this) }),
-				(this.graphTemplateEvents = ze()),
-				(this.graphTemplateHooks = ze()),
-				(this.graphEvents = ze()),
-				(this.graphHooks = ze()),
-				(this.nodeEvents = ze()),
-				(this.nodeHooks = ze()),
-				(this.connectionEvents = ze()),
-				(this._graphs = new Set()),
-				(this._nodeTypes = new Map()),
-				(this._graph = new qe(this)),
-				(this._graphTemplates = []),
-				(this._loading = !1)
+			(this.hooks = { save: new me(this), load: new me(this) }),
+			(this.graphTemplateEvents = ze()),
+			(this.graphTemplateHooks = ze()),
+			(this.graphEvents = ze()),
+			(this.graphHooks = ze()),
+			(this.nodeEvents = ze()),
+			(this.nodeHooks = ze()),
+			(this.connectionEvents = ze()),
+			(this._graphs = new Set()),
+			(this._nodeTypes = new Map()),
+			(this._graph = new qe(this)),
+			(this._graphTemplates = []),
+			(this._loading = !1)
 		}
 		get nodeTypes() {
 			return this._nodeTypes
@@ -737,16 +737,16 @@ Please check that you don't accidentally use the same token twice to register tw
 		registerNodeType(t, n) {
 			var o, s
 			if (this.events.beforeRegisterNodeType.emit({ type: t, options: n }).prevented) return
-			let r = new t()
+			const r = new t()
 			this._nodeTypes.set(r.type, {
 				type: t,
 				category: (o = n == null ? void 0 : n.category) !== null && o !== void 0 ? o : "default",
 				title: (s = n == null ? void 0 : n.title) !== null && s !== void 0 ? s : r.title
 			}),
-				this.events.registerNodeType.emit({ type: t, options: n })
+			this.events.registerNodeType.emit({ type: t, options: n })
 		}
 		unregisterNodeType(t) {
-			let n = typeof t == "string" ? t : new t().type
+			const n = typeof t == "string" ? t : new t().type
 			if (this.nodeTypes.has(n)) {
 				if (this.events.beforeUnregisterNodeType.emit(n).prevented) return
 				this._nodeTypes.delete(n), this.events.unregisterNodeType.emit(n)
@@ -755,58 +755,58 @@ Please check that you don't accidentally use the same token twice to register tw
 		addGraphTemplate(t) {
 			if (this.events.beforeAddGraphTemplate.emit(t).prevented) return
 			this._graphTemplates.push(t), this.graphTemplateEvents.addTarget(t.events), this.graphTemplateHooks.addTarget(t.hooks)
-			let n = ps(t)
+			const n = ps(t)
 			this.registerNodeType(n, { category: "Subgraphs", title: t.name }), this.events.addGraphTemplate.emit(t)
 		}
 		removeGraphTemplate(t) {
 			if (this.graphTemplates.includes(t)) {
 				if (this.events.beforeRemoveGraphTemplate.emit(t).prevented) return
-				let n = ot(t)
-				for (let o of [this.graph, ...this.graphs.values()]) {
-					let s = o.nodes.filter((r) => r.type === n)
-					for (let r of s) o.removeNode(r)
+				const n = ot(t)
+				for (const o of [this.graph, ...this.graphs.values()]) {
+					const s = o.nodes.filter((r) => r.type === n)
+					for (const r of s) o.removeNode(r)
 				}
 				this.unregisterNodeType(n),
-					this._graphTemplates.splice(this._graphTemplates.indexOf(t), 1),
-					this.graphTemplateEvents.removeTarget(t.events),
-					this.graphTemplateHooks.removeTarget(t.hooks),
-					this.events.removeGraphTemplate.emit(t)
+				this._graphTemplates.splice(this._graphTemplates.indexOf(t), 1),
+				this.graphTemplateEvents.removeTarget(t.events),
+				this.graphTemplateHooks.removeTarget(t.hooks),
+				this.events.removeGraphTemplate.emit(t)
 			}
 		}
 		registerGraph(t) {
 			this.graphEvents.addTarget(t.events),
-				this.graphHooks.addTarget(t.hooks),
-				this.nodeEvents.addTarget(t.nodeEvents),
-				this.nodeHooks.addTarget(t.nodeHooks),
-				this.connectionEvents.addTarget(t.connectionEvents),
-				this.events.registerGraph.emit(t),
-				this._graphs.add(t)
+			this.graphHooks.addTarget(t.hooks),
+			this.nodeEvents.addTarget(t.nodeEvents),
+			this.nodeHooks.addTarget(t.nodeHooks),
+			this.connectionEvents.addTarget(t.connectionEvents),
+			this.events.registerGraph.emit(t),
+			this._graphs.add(t)
 		}
 		unregisterGraph(t) {
 			this.graphEvents.removeTarget(t.events),
-				this.graphHooks.removeTarget(t.hooks),
-				this.nodeEvents.removeTarget(t.nodeEvents),
-				this.nodeHooks.removeTarget(t.nodeHooks),
-				this.connectionEvents.removeTarget(t.connectionEvents),
-				this.events.unregisterGraph.emit(t),
-				this._graphs.delete(t)
+			this.graphHooks.removeTarget(t.hooks),
+			this.nodeEvents.removeTarget(t.nodeEvents),
+			this.nodeHooks.removeTarget(t.nodeHooks),
+			this.connectionEvents.removeTarget(t.connectionEvents),
+			this.events.unregisterGraph.emit(t),
+			this._graphs.delete(t)
 		}
 		load(t) {
 			try {
-				;(this._loading = !0),
-					(t = this.hooks.load.execute(t)),
-					t.graphTemplates.forEach((o) => {
-						let s = new ft(o, this)
-						this.addGraphTemplate(s)
-					})
-				let n = this._graph.load(t.graph)
+				(this._loading = !0),
+				(t = this.hooks.load.execute(t)),
+				t.graphTemplates.forEach((o) => {
+					const s = new ft(o, this)
+					this.addGraphTemplate(s)
+				})
+				const n = this._graph.load(t.graph)
 				return this.events.loaded.emit(), n.forEach((o) => console.warn(o)), n
 			} finally {
 				this._loading = !1
 			}
 		}
 		save() {
-			let t = { graph: this.graph.save(), graphTemplates: this.graphTemplates.map((n) => n.save()) }
+			const t = { graph: this.graph.save(), graphTemplates: this.graphTemplates.map((n) => n.save()) }
 			return this.hooks.save.execute(t)
 		}
 	}
@@ -822,18 +822,18 @@ Please check that you don't accidentally use the same token twice to register tw
 		sortTopologically: () => ho
 	})
 	function Sl(e, t) {
-		let n = new Map()
+		const n = new Map()
 		t.graphs.forEach((o) => {
 			o.nodes.forEach((s) => n.set(s.id, s))
 		}),
-			e.forEach((o, s) => {
-				let r = n.get(s)
-				!r ||
+		e.forEach((o, s) => {
+			const r = n.get(s)
+			!r ||
 					o.forEach((i, a) => {
-						let l = r.outputs[a]
+						const l = r.outputs[a]
 						!l || (l.value = i)
 					})
-			})
+		})
 	}
 	var Sn = class extends Error {
 		constructor() {
@@ -857,25 +857,25 @@ Please check that you don't accidentally use the same token twice to register tw
 		r.forEach((c) => {
 			Object.values(c.inputs).forEach((u) => n.set(u.id, c.id)), Object.values(c.outputs).forEach((u) => n.set(u.id, c.id))
 		}),
-			r.forEach((c) => {
-				let u = i.filter((p) => p.from && n.get(p.from.id) === c.id),
-					d = new Set(u.map((p) => n.get(p.to.id)).filter(Il))
-				o.set(c.id, d), s.set(c, u)
-			})
-		let a = r.slice()
+		r.forEach((c) => {
+			const u = i.filter((p) => p.from && n.get(p.from.id) === c.id),
+				d = new Set(u.map((p) => n.get(p.to.id)).filter(Il))
+			o.set(c.id, d), s.set(c, u)
+		})
+		const a = r.slice()
 		i.forEach((c) => {
-			let u = a.findIndex((d) => n.get(c.to.id) === d.id)
+			const u = a.findIndex((d) => n.get(c.to.id) === d.id)
 			u >= 0 && a.splice(u, 1)
 		})
-		let l = []
+		const l = []
 		for (; a.length > 0; ) {
-			let c = a.pop()
+			const c = a.pop()
 			l.push(c)
-			let u = o.get(c.id)
+			const u = o.get(c.id)
 			for (; u.size > 0; ) {
-				let d = u.values().next().value
+				const d = u.values().next().value
 				if ((u.delete(d), Array.from(o.values()).every((p) => !p.has(d)))) {
-					let p = r.find((m) => m.id === d)
+					const p = r.find((m) => m.id === d)
 					a.push(p)
 				}
 			}
@@ -893,32 +893,32 @@ Please check that you don't accidentally use the same token twice to register tw
 	}
 	var Te
 	;(function (e) {
-		;(e.Running = "Running"), (e.Idle = "Idle"), (e.Paused = "Paused"), (e.Stopped = "Stopped")
+		(e.Running = "Running"), (e.Idle = "Idle"), (e.Paused = "Paused"), (e.Stopped = "Stopped")
 	})(Te || (Te = {}))
 	var In = class {
 		constructor(t) {
-			;(this.editor = t),
-				(this.events = { beforeRun: new he(this), afterRun: new J(this), statusChange: new J(this) }),
-				(this.hooks = { gatherCalculationData: new me(this), transferData: new kn() }),
-				(this.recalculateOrder = !0),
-				(this.internalStatus = Te.Stopped),
-				(this.isRunning = !1),
-				this.editor.nodeEvents.update.subscribe(this, (n, o) => {
-					o.graph && !o.graph.loading && this.internalOnChange(o, n != null ? n : void 0)
-				}),
-				this.editor.graphEvents.addNode.subscribe(this, (n, o) => {
-					;(this.recalculateOrder = !0), o.loading || this.internalOnChange()
-				}),
-				this.editor.graphEvents.removeNode.subscribe(this, (n, o) => {
-					;(this.recalculateOrder = !0), o.loading || this.internalOnChange()
-				}),
-				this.editor.graphEvents.addConnection.subscribe(this, (n, o) => {
-					;(this.recalculateOrder = !0), o.loading || this.internalOnChange()
-				}),
-				this.editor.graphEvents.removeConnection.subscribe(this, (n, o) => {
-					;(this.recalculateOrder = !0), o.loading || this.internalOnChange()
-				}),
-				this.editor.graphHooks.checkConnection.subscribe(this, (n) => this.checkConnection(n.from, n.to))
+			(this.editor = t),
+			(this.events = { beforeRun: new he(this), afterRun: new J(this), statusChange: new J(this) }),
+			(this.hooks = { gatherCalculationData: new me(this), transferData: new kn() }),
+			(this.recalculateOrder = !0),
+			(this.internalStatus = Te.Stopped),
+			(this.isRunning = !1),
+			this.editor.nodeEvents.update.subscribe(this, (n, o) => {
+				o.graph && !o.graph.loading && this.internalOnChange(o, n != null ? n : void 0)
+			}),
+			this.editor.graphEvents.addNode.subscribe(this, (n, o) => {
+				(this.recalculateOrder = !0), o.loading || this.internalOnChange()
+			}),
+			this.editor.graphEvents.removeNode.subscribe(this, (n, o) => {
+				(this.recalculateOrder = !0), o.loading || this.internalOnChange()
+			}),
+			this.editor.graphEvents.addConnection.subscribe(this, (n, o) => {
+				(this.recalculateOrder = !0), o.loading || this.internalOnChange()
+			}),
+			this.editor.graphEvents.removeConnection.subscribe(this, (n, o) => {
+				(this.recalculateOrder = !0), o.loading || this.internalOnChange()
+			}),
+			this.editor.graphHooks.checkConnection.subscribe(this, (n) => this.checkConnection(n.from, n.to))
 		}
 		get status() {
 			return this.isRunning ? Te.Running : this.internalStatus
@@ -933,26 +933,26 @@ Please check that you don't accidentally use the same token twice to register tw
 			this.internalStatus === Te.Paused && ((this.internalStatus = Te.Idle), this.events.statusChange.emit(this.status))
 		}
 		stop() {
-			;(this.internalStatus === Te.Idle || this.internalStatus === Te.Paused) && ((this.internalStatus = Te.Stopped), this.events.statusChange.emit(this.status))
+			(this.internalStatus === Te.Idle || this.internalStatus === Te.Paused) && ((this.internalStatus = Te.Stopped), this.events.statusChange.emit(this.status))
 		}
 		async runOnce(t, ...n) {
 			if (this.events.beforeRun.emit(t).prevented) return null
 			try {
-				;(this.isRunning = !0), this.events.statusChange.emit(this.status), this.recalculateOrder && this.calculateOrder()
-				let o = await this.execute(t, ...n)
+				(this.isRunning = !0), this.events.statusChange.emit(this.status), this.recalculateOrder && this.calculateOrder()
+				const o = await this.execute(t, ...n)
 				return this.events.afterRun.emit(o), o
 			} finally {
-				;(this.isRunning = !1), this.events.statusChange.emit(this.status)
+				(this.isRunning = !1), this.events.statusChange.emit(this.status)
 			}
 		}
 		checkConnection(t, n) {
 			if (t.templateId) {
-				let r = this.findInterfaceByTemplateId(this.editor.graph.nodes, t.templateId)
+				const r = this.findInterfaceByTemplateId(this.editor.graph.nodes, t.templateId)
 				if (!r) return { connectionAllowed: !0, connectionsInDanger: [] }
 				t = r
 			}
 			if (n.templateId) {
-				let r = this.findInterfaceByTemplateId(this.editor.graph.nodes, n.templateId)
+				const r = this.findInterfaceByTemplateId(this.editor.graph.nodes, n.templateId)
 				if (!r) return { connectionAllowed: !0, connectionsInDanger: [] }
 				n = r
 			}
@@ -970,7 +970,7 @@ Please check that you don't accidentally use the same token twice to register tw
 			this.recalculateOrder = !0
 		}
 		async calculateWithoutData(...t) {
-			let n = this.hooks.gatherCalculationData.execute(void 0)
+			const n = this.hooks.gatherCalculationData.execute(void 0)
 			return await this.runOnce(n, ...t)
 		}
 		validateNodeCalculationOutput(t, n) {
@@ -983,7 +983,7 @@ Please check that you don't accidentally use the same token twice to register tw
 			this.internalStatus === Te.Idle && this.onChange(this.recalculateOrder, t, n)
 		}
 		findInterfaceByTemplateId(t, n) {
-			for (let o of t) for (let s of [...Object.values(o.inputs), ...Object.values(o.outputs)]) if (s.templateId === n) return s
+			for (const o of t) for (const s of [...Object.values(o.inputs), ...Object.values(o.outputs)]) if (s.templateId === n) return s
 			return null
 		}
 	}
@@ -999,28 +999,28 @@ Please check that you don't accidentally use the same token twice to register tw
 			}
 			async runGraph(t, n, o) {
 				this.order.has(t.id) || this.order.set(t.id, ho(t))
-				let { calculationOrder: s, connectionsFromNode: r } = this.order.get(t.id),
+				const { calculationOrder: s, connectionsFromNode: r } = this.order.get(t.id),
 					i = new Map()
-				for (let a of s) {
+				for (const a of s) {
 					if (!a.calculate) continue
-					let l = {}
+					const l = {}
 					Object.entries(a.inputs).forEach(([u, d]) => {
 						if (!n.has(d.id))
 							throw new Error(`Could not find value for interface ${d.id}
 This is likely a Baklava internal issue. Please report it on GitHub.`)
 						l[u] = n.get(d.id)
 					})
-					let c = await a.calculate(l, { globalValues: o, engine: this })
+					const c = await a.calculate(l, { globalValues: o, engine: this })
 					this.validateNodeCalculationOutput(a, c),
-						i.set(a.id, new Map(Object.entries(c))),
-						r.has(a) &&
+					i.set(a.id, new Map(Object.entries(c))),
+					r.has(a) &&
 							r.get(a).forEach((u) => {
 								var d
-								let p = (d = Object.entries(a.outputs).find(([, g]) => g.id === u.from.id)) === null || d === void 0 ? void 0 : d[0]
+								const p = (d = Object.entries(a.outputs).find(([, g]) => g.id === u.from.id)) === null || d === void 0 ? void 0 : d[0]
 								if (!p)
 									throw new Error(`Could not find key for interface ${u.from.id}
 This is likely a Baklava internal issue. Please report it on GitHub.`)
-								let m = this.hooks.transferData.execute(c[p], u)
+								const m = this.hooks.transferData.execute(c[p], u)
 								u.to.allowMultipleConnections ? (n.has(u.to.id) ? n.get(u.to.id).push(m) : n.set(u.to.id, [m])) : n.set(u.to.id, m)
 							})
 				}
@@ -1028,22 +1028,22 @@ This is likely a Baklava internal issue. Please report it on GitHub.`)
 			}
 			async execute(t) {
 				this.recalculateOrder && (this.order.clear(), (this.recalculateOrder = !1))
-				let n = new Map()
-				for (let o of this.editor.graph.nodes)
+				const n = new Map()
+				for (const o of this.editor.graph.nodes)
 					Object.values(o.inputs).forEach((s) => {
 						s.connectionCount === 0 && n.set(s.id, s.value)
 					})
 				return await this.runGraph(this.editor.graph, n, t)
 			}
 			onChange(t) {
-				;(this.recalculateOrder = t || this.recalculateOrder), this.calculateWithoutData()
+				(this.recalculateOrder = t || this.recalculateOrder), this.calculateWithoutData()
 			}
 		}
 	var bs = {}
 	xn(bs, { BaklavaInterfaceTypes: () => _s, NodeInterfaceType: () => ys, setType: () => Vl })
 	var ys = class {
 			constructor(t) {
-				;(this.name = t), (this.conversions = [])
+				(this.name = t), (this.conversions = [])
 			}
 			addConversion(t, n = (o) => o) {
 				return this.conversions.push({ targetType: t.name, transformationFunction: n }), this
@@ -1054,20 +1054,20 @@ This is likely a Baklava internal issue. Please report it on GitHub.`)
 		},
 		_s = class {
 			constructor(t, n) {
-				;(this.types = new Map()),
-					(this.editor = t),
-					this.editor.graphEvents.checkConnection.subscribe(this, ({ from: o, to: s }, r) => {
-						let i = o.type,
-							a = s.type
-						if (!(!i || !a) && !this.canConvert(i, a)) return r()
-					}),
-					n?.engine &&
+				(this.types = new Map()),
+				(this.editor = t),
+				this.editor.graphEvents.checkConnection.subscribe(this, ({ from: o, to: s }, r) => {
+					const i = o.type,
+						a = s.type
+					if (!(!i || !a) && !this.canConvert(i, a)) return r()
+				}),
+				n?.engine &&
 						n.engine.hooks.transferData.subscribe(this, (o, s) => {
-							let r = s.from.type,
+							const r = s.from.type,
 								i = s.to.type
 							return !r || !i ? o : this.convert(r, i, o)
 						}),
-					n?.viewPlugin && n.viewPlugin.hooks.renderInterface.subscribe(this, ({ intf: o, el: s }) => (o.type && s.setAttribute("data-interface-type", o.type), { intf: o, el: s }))
+				n?.viewPlugin && n.viewPlugin.hooks.renderInterface.subscribe(this, ({ intf: o, el: s }) => (o.type && s.setAttribute("data-interface-type", o.type), { intf: o, el: s }))
 			}
 			addTypes(...t) {
 				return (
@@ -1087,7 +1087,7 @@ This is likely a Baklava internal issue. Please report it on GitHub.`)
 			convert(t, n, o) {
 				if (t === n) return o
 				{
-					let s = this.getConversion(t, n)
+					const s = this.getConversion(t, n)
 					if (s) return s.transformationFunction(o)
 					throw Error(`Can not convert from "${t}" to "${n}"`)
 				}
@@ -1122,7 +1122,7 @@ This is likely a Baklava internal issue. Please report it on GitHub.`)
 		useViewModel: () => tt
 	})
 	function sn(e, t) {
-		let n = Object.create(null),
+		const n = Object.create(null),
 			o = e.split(",")
 		for (let s = 0; s < o.length; s++) n[o[s]] = !0
 		return t ? (s) => !!n[s.toLowerCase()] : (s) => !!n[s]
@@ -1135,11 +1135,11 @@ This is likely a Baklava internal issue. Please report it on GitHub.`)
 	}
 	function He(e) {
 		if (L(e)) {
-			let t = {}
+			const t = {}
 			for (let n = 0; n < e.length; n++) {
-				let o = e[n],
+				const o = e[n],
 					s = ge(o) ? Al(o) : He(o)
-				if (s) for (let r in s) t[r] = s[r]
+				if (s) for (const r in s) t[r] = s[r]
 			}
 			return t
 		} else {
@@ -1150,11 +1150,11 @@ This is likely a Baklava internal issue. Please report it on GitHub.`)
 	var Pl = /;(?![^(]*\))/g,
 		Rl = /:(.+)/
 	function Al(e) {
-		let t = {}
+		const t = {}
 		return (
 			e.split(Pl).forEach((n) => {
 				if (n) {
-					let o = n.split(Rl)
+					const o = n.split(Rl)
 					o.length > 1 && (t[o[0].trim()] = o[1].trim())
 				}
 			}),
@@ -1166,10 +1166,10 @@ This is likely a Baklava internal issue. Please report it on GitHub.`)
 		if (ge(e)) t = e
 		else if (L(e))
 			for (let n = 0; n < e.length; n++) {
-				let o = Ee(e[n])
+				const o = Ee(e[n])
 				o && (t += o + " ")
 			}
-		else if (fe(e)) for (let n in e) e[n] && (t += n + " ")
+		else if (fe(e)) for (const n in e) e[n] && (t += n + " ")
 		return t.trim()
 	}
 	var be = (e) => (ge(e) ? e : e == null ? "" : L(e) || (fe(e) && (e.toString === ni || !B(e.toString))) ? JSON.stringify(e, ei, 2) : String(e)),
@@ -1177,12 +1177,12 @@ This is likely a Baklava internal issue. Please report it on GitHub.`)
 			t && t.__v_isRef
 				? ei(e, t.value)
 				: Et(t)
-				? { [`Map(${t.size})`]: [...t.entries()].reduce((n, [o, s]) => ((n[`${o} =>`] = s), n), {}) }
-				: go(t)
-				? { [`Set(${t.size})`]: [...t.values()] }
-				: fe(t) && !L(t) && !Os(t)
-				? String(t)
-				: t,
+					? { [`Map(${t.size})`]: [...t.entries()].reduce((n, [o, s]) => ((n[`${o} =>`] = s), n), {}) }
+					: go(t)
+						? { [`Set(${t.size})`]: [...t.values()] }
+						: fe(t) && !L(t) && !Os(t)
+							? String(t)
+							: t,
 		se = {},
 		Ft = [],
 		Ie = () => {},
@@ -1192,7 +1192,7 @@ This is likely a Baklava internal issue. Please report it on GitHub.`)
 		Mn = (e) => e.startsWith("onUpdate:"),
 		ve = Object.assign,
 		mo = (e, t) => {
-			let n = e.indexOf(t)
+			const n = e.indexOf(t)
 			n > -1 && e.splice(n, 1)
 		},
 		Hl = Object.prototype.hasOwnProperty,
@@ -1212,7 +1212,7 @@ This is likely a Baklava internal issue. Please report it on GitHub.`)
 		_o = (e) => ge(e) && e !== "NaN" && e[0] !== "-" && "" + parseInt(e, 10) === e,
 		Vn = sn(",key,ref,ref_for,ref_key,onVnodeBeforeMount,onVnodeMounted,onVnodeBeforeUpdate,onVnodeUpdated,onVnodeBeforeUnmount,onVnodeUnmounted")
 	var bo = (e) => {
-			let t = Object.create(null)
+			const t = Object.create(null)
 			return (n) => t[n] || (t[n] = e(n))
 		},
 		jl = /-(\w)/g,
@@ -1229,7 +1229,7 @@ This is likely a Baklava internal issue. Please report it on GitHub.`)
 			Object.defineProperty(e, t, { configurable: !0, enumerable: !1, value: n })
 		},
 		cn = (e) => {
-			let t = parseFloat(e)
+			const t = parseFloat(e)
 			return isNaN(t) ? e : t
 		},
 		Jr,
@@ -1237,11 +1237,11 @@ This is likely a Baklava internal issue. Please report it on GitHub.`)
 	var je,
 		An = class {
 			constructor(t = !1) {
-				;(this.active = !0), (this.effects = []), (this.cleanups = []), !t && je && ((this.parent = je), (this.index = (je.scopes || (je.scopes = [])).push(this) - 1))
+				(this.active = !0), (this.effects = []), (this.cleanups = []), !t && je && ((this.parent = je), (this.index = (je.scopes || (je.scopes = [])).push(this) - 1))
 			}
 			run(t) {
 				if (this.active) {
-					let n = je
+					const n = je
 					try {
 						return (je = this), t()
 					} finally {
@@ -1262,7 +1262,7 @@ This is likely a Baklava internal issue. Please report it on GitHub.`)
 					for (n = 0, o = this.cleanups.length; n < o; n++) this.cleanups[n]()
 					if (this.scopes) for (n = 0, o = this.scopes.length; n < o; n++) this.scopes[n].stop(!0)
 					if (this.parent && !t) {
-						let s = this.parent.scopes.pop()
+						const s = this.parent.scopes.pop()
 						s && s !== this && ((this.parent.scopes[this.index] = s), (s.index = this.index))
 					}
 					this.active = !1
@@ -1279,7 +1279,7 @@ This is likely a Baklava internal issue. Please report it on GitHub.`)
 		je && je.cleanups.push(e)
 	}
 	var Ps = (e) => {
-			let t = new Set(e)
+			const t = new Set(e)
 			return (t.w = 0), (t.n = 0), t
 		},
 		ui = (e) => (e.w & Ot) > 0,
@@ -1288,11 +1288,11 @@ This is likely a Baklava internal issue. Please report it on GitHub.`)
 			if (e.length) for (let t = 0; t < e.length; t++) e[t].w |= Ot
 		},
 		Wl = (e) => {
-			let { deps: t } = e
+			const { deps: t } = e
 			if (t.length) {
 				let n = 0
 				for (let o = 0; o < t.length; o++) {
-					let s = t[o]
+					const s = t[o]
 					ui(s) && !di(s) ? s.delete(e) : (t[n++] = s), (s.w &= ~Ot), (s.n &= ~Ot)
 				}
 				t.length = n
@@ -1307,7 +1307,7 @@ This is likely a Baklava internal issue. Please report it on GitHub.`)
 		ks = Symbol(""),
 		Ut = class {
 			constructor(t, n = null, o) {
-				;(this.fn = t), (this.scheduler = n), (this.active = !0), (this.deps = []), (this.parent = void 0), Ul(this, o)
+				(this.fn = t), (this.scheduler = n), (this.active = !0), (this.deps = []), (this.parent = void 0), Ul(this, o)
 			}
 			run() {
 				if (!this.active) return this.fn()
@@ -1328,7 +1328,7 @@ This is likely a Baklava internal issue. Please report it on GitHub.`)
 			}
 		}
 	function oi(e) {
-		let { deps: t } = e
+		const { deps: t } = e
 		if (t.length) {
 			for (let n = 0; n < t.length; n++) t[n].delete(e)
 			t.length = 0
@@ -1340,7 +1340,7 @@ This is likely a Baklava internal issue. Please report it on GitHub.`)
 		fi.push(Nt), (Nt = !1)
 	}
 	function xt() {
-		let e = fi.pop()
+		const e = fi.pop()
 		Nt = e === void 0 ? !0 : e
 	}
 	function Ve(e, t, n) {
@@ -1356,13 +1356,13 @@ This is likely a Baklava internal issue. Please report it on GitHub.`)
 		Rn <= xs ? di(e) || ((e.n |= Ot), (n = !ui(e))) : (n = !e.has(Qe)), n && (e.add(Qe), Qe.deps.push(e))
 	}
 	function st(e, t, n, o, s, r) {
-		let i = Cs.get(e)
+		const i = Cs.get(e)
 		if (!i) return
 		let a = []
 		if (t === "clear") a = [...i.values()]
 		else if (n === "length" && L(e))
 			i.forEach((c, u) => {
-				;(u === "length" || u >= o) && a.push(c)
+				(u === "length" || u >= o) && a.push(c)
 			})
 		else
 			switch ((n !== void 0 && a.push(i.get(n)), t)) {
@@ -1376,21 +1376,21 @@ This is likely a Baklava internal issue. Please report it on GitHub.`)
 					Et(e) && a.push(i.get(Lt))
 					break
 			}
-		let l = void 0
+		const l = void 0
 		if (a.length === 1) a[0] && Ts(a[0])
 		else {
-			let c = []
-			for (let u of a) u && c.push(...u)
+			const c = []
+			for (const u of a) u && c.push(...u)
 			Ts(Ps(c))
 		}
 	}
 	function Ts(e, t) {
-		let n = L(e) ? e : [...e]
-		for (let o of n) o.computed && si(o, t)
-		for (let o of n) o.computed || si(o, t)
+		const n = L(e) ? e : [...e]
+		for (const o of n) o.computed && si(o, t)
+		for (const o of n) o.computed || si(o, t)
 	}
 	function si(e, t) {
-		;(e !== Qe || e.allowRecurse) && (e.scheduler ? e.scheduler() : e.run())
+		(e !== Qe || e.allowRecurse) && (e.scheduler ? e.scheduler() : e.run())
 	}
 	var Kl = sn("__proto__,__v_isRef,__isVue"),
 		hi = new Set(
@@ -1405,20 +1405,20 @@ This is likely a Baklava internal issue. Please report it on GitHub.`)
 		Yl = ko(!0, !0),
 		ri = Xl()
 	function Xl() {
-		let e = {}
+		const e = {}
 		return (
 			["includes", "indexOf", "lastIndexOf"].forEach((t) => {
 				e[t] = function (...n) {
-					let o = G(this)
+					const o = G(this)
 					for (let r = 0, i = this.length; r < i; r++) Ve(o, "get", r + "")
-					let s = o[t](...n)
+					const s = o[t](...n)
 					return s === -1 || s === !1 ? o[t](...n.map(G)) : s
 				}
 			}),
 			["push", "pop", "shift", "unshift", "splice"].forEach((t) => {
 				e[t] = function (...n) {
 					Ct()
-					let o = G(this)[t].apply(this, n)
+					const o = G(this)[t].apply(this, n)
 					return xt(), o
 				}
 			}),
@@ -1431,9 +1431,9 @@ This is likely a Baklava internal issue. Please report it on GitHub.`)
 			if (s === "__v_isReadonly") return e
 			if (s === "__v_isShallow") return t
 			if (s === "__v_raw" && r === (e ? (t ? Ei : bi) : t ? _i : yi).get(o)) return o
-			let i = L(o)
+			const i = L(o)
 			if (!e && i && Y(ri, s)) return Reflect.get(ri, s, r)
-			let a = Reflect.get(o, s, r)
+			const a = Reflect.get(o, s, r)
 			return (vo(s) ? hi.has(s) : Kl(s)) || (e || Ve(o, "get", s), t) ? a : ye(a) ? (i && _o(s) ? a : a.value) : fe(a) ? (e ? Fs(a) : Pe(a)) : a
 		}
 	}
@@ -1444,19 +1444,19 @@ This is likely a Baklava internal issue. Please report it on GitHub.`)
 			let i = n[o]
 			if (Bt(i) && ye(i) && !ye(s)) return !1
 			if (!e && !Bt(s) && (Hn(s) || ((s = G(s)), (i = G(i))), !L(n) && ye(i) && !ye(s))) return (i.value = s), !0
-			let a = L(n) && _o(o) ? Number(o) < n.length : Y(n, o),
+			const a = L(n) && _o(o) ? Number(o) < n.length : Y(n, o),
 				l = Reflect.set(n, o, s, r)
 			return n === G(r) && (a ? jt(s, i) && st(n, "set", o, s, i) : st(n, "add", o, s)), l
 		}
 	}
 	function Ql(e, t) {
-		let n = Y(e, t),
+		const n = Y(e, t),
 			o = e[t],
 			s = Reflect.deleteProperty(e, t)
 		return s && n && st(e, "delete", t, void 0, o), s
 	}
 	function ec(e, t) {
-		let n = Reflect.has(e, t)
+		const n = Reflect.has(e, t)
 		return (!vo(t) || !hi.has(t)) && Ve(e, "has", t), n
 	}
 	function tc(e) {
@@ -1478,17 +1478,17 @@ This is likely a Baklava internal issue. Please report it on GitHub.`)
 		To = (e) => Reflect.getPrototypeOf(e)
 	function wo(e, t, n = !1, o = !1) {
 		e = e.__v_raw
-		let s = G(e),
+		const s = G(e),
 			r = G(t)
 		n || (t !== r && Ve(s, "get", t), Ve(s, "get", r))
-		let { has: i } = To(s),
+		const { has: i } = To(s),
 			a = o ? Rs : n ? js : Fn
 		if (i.call(s, t)) return a(e.get(t))
 		if (i.call(s, r)) return a(e.get(r))
 		e !== s && e.get(t)
 	}
 	function No(e, t = !1) {
-		let n = this.__v_raw,
+		const n = this.__v_raw,
 			o = G(n),
 			s = G(e)
 		return t || (e !== s && Ve(o, "has", e), Ve(o, "has", s)), e === s ? n.has(e) : n.has(e) || n.has(s)
@@ -1498,7 +1498,7 @@ This is likely a Baklava internal issue. Please report it on GitHub.`)
 	}
 	function ii(e) {
 		e = G(e)
-		let t = G(this)
+		const t = G(this)
 		return To(t).has.call(t, e) || (t.add(e), st(t, "add", e, e)), this
 	}
 	function ai(e, t) {
@@ -1507,7 +1507,7 @@ This is likely a Baklava internal issue. Please report it on GitHub.`)
 			{ has: o, get: s } = To(n),
 			r = o.call(n, e)
 		r || ((e = G(e)), (r = o.call(n, e)))
-		let i = s.call(n, e)
+		const i = s.call(n, e)
 		return n.set(e, t), r ? jt(t, i) && st(n, "set", e, t, i) : st(n, "add", e, t), this
 	}
 	function li(e) {
@@ -1515,12 +1515,12 @@ This is likely a Baklava internal issue. Please report it on GitHub.`)
 			{ has: n, get: o } = To(t),
 			s = n.call(t, e)
 		s || ((e = G(e)), (s = n.call(t, e)))
-		let r = o ? o.call(t, e) : void 0,
+		const r = o ? o.call(t, e) : void 0,
 			i = t.delete(e)
 		return s && st(t, "delete", e, void 0, r), i
 	}
 	function ci() {
-		let e = G(this),
+		const e = G(this),
 			t = e.size !== 0,
 			n = void 0,
 			o = e.clear()
@@ -1528,7 +1528,7 @@ This is likely a Baklava internal issue. Please report it on GitHub.`)
 	}
 	function Co(e, t) {
 		return function (o, s) {
-			let r = this,
+			const r = this,
 				i = r.__v_raw,
 				a = G(i),
 				l = t ? Rs : e ? js : Fn
@@ -1537,7 +1537,7 @@ This is likely a Baklava internal issue. Please report it on GitHub.`)
 	}
 	function xo(e, t, n) {
 		return function (...o) {
-			let s = this.__v_raw,
+			const s = this.__v_raw,
 				r = G(s),
 				i = Et(r),
 				a = e === "entries" || (e === Symbol.iterator && i),
@@ -1548,7 +1548,7 @@ This is likely a Baklava internal issue. Please report it on GitHub.`)
 				!t && Ve(r, "iterate", l ? ks : Lt),
 				{
 					next() {
-						let { value: d, done: p } = c.next()
+						const { value: d, done: p } = c.next()
 						return p ? { value: d, done: p } : { value: a ? [u(d[0]), u(d[1])] : u(d), done: p }
 					},
 					[Symbol.iterator]() {
@@ -1564,7 +1564,7 @@ This is likely a Baklava internal issue. Please report it on GitHub.`)
 		}
 	}
 	function sc() {
-		let e = {
+		const e = {
 				get(r) {
 					return wo(this, r)
 				},
@@ -1626,14 +1626,14 @@ This is likely a Baklava internal issue. Please report it on GitHub.`)
 			}
 		return (
 			["keys", "values", "entries", Symbol.iterator].forEach((r) => {
-				;(e[r] = xo(r, !1, !1)), (n[r] = xo(r, !0, !1)), (t[r] = xo(r, !1, !0)), (o[r] = xo(r, !0, !0))
+				(e[r] = xo(r, !1, !1)), (n[r] = xo(r, !0, !1)), (t[r] = xo(r, !1, !0)), (o[r] = xo(r, !0, !0))
 			}),
 			[e, n, t, o]
 		)
 	}
 	var [rc, ic, ac, lc] = sc()
 	function Do(e, t) {
-		let n = t ? (e ? lc : ac) : e ? ic : rc
+		const n = t ? (e ? lc : ac) : e ? ic : rc
 		return (o, s, r) => (s === "__v_isReactive" ? !e : s === "__v_isReadonly" ? e : s === "__v_raw" ? o : Reflect.get(Y(n, s) && s in o ? n : o, s, r))
 	}
 	var cc = { get: Do(!1, !1) },
@@ -1675,11 +1675,11 @@ This is likely a Baklava internal issue. Please report it on GitHub.`)
 	}
 	function $o(e, t, n, o, s) {
 		if (!fe(e) || (e.__v_raw && !(t && e.__v_isReactive))) return e
-		let r = s.get(e)
+		const r = s.get(e)
 		if (r) return r
-		let i = hc(e)
+		const i = hc(e)
 		if (i === 0) return e
-		let a = new Proxy(e, i === 2 ? o : n)
+		const a = new Proxy(e, i === 2 ? o : n)
 		return s.set(e, a), a
 	}
 	function kt(e) {
@@ -1695,7 +1695,7 @@ This is likely a Baklava internal issue. Please report it on GitHub.`)
 		return kt(e) || Bt(e)
 	}
 	function G(e) {
-		let t = e && e.__v_raw
+		const t = e && e.__v_raw
 		return t ? G(t) : e
 	}
 	function Le(e) {
@@ -1707,7 +1707,7 @@ This is likely a Baklava internal issue. Please report it on GitHub.`)
 		Nt && Qe && ((e = G(e)), pi(e.dep || (e.dep = Ps())))
 	}
 	function Us(e, t) {
-		;(e = G(e)), e.dep && Ts(e.dep)
+		(e = G(e)), e.dep && Ts(e.dep)
 	}
 	function ye(e) {
 		return !!(e && e.__v_isRef === !0)
@@ -1720,13 +1720,13 @@ This is likely a Baklava internal issue. Please report it on GitHub.`)
 	}
 	var Ds = class {
 		constructor(t, n) {
-			;(this.__v_isShallow = n), (this.dep = void 0), (this.__v_isRef = !0), (this._rawValue = n ? t : G(t)), (this._value = n ? t : Fn(t))
+			(this.__v_isShallow = n), (this.dep = void 0), (this.__v_isRef = !0), (this._rawValue = n ? t : G(t)), (this._value = n ? t : Fn(t))
 		}
 		get value() {
 			return Ls(this), this._value
 		}
 		set value(t) {
-			;(t = this.__v_isShallow ? t : G(t)), jt(t, this._rawValue) && ((this._rawValue = t), (this._value = this.__v_isShallow ? t : Fn(t)), Us(this, t))
+			(t = this.__v_isShallow ? t : G(t)), jt(t, this._rawValue) && ((this._rawValue = t), (this._value = this.__v_isShallow ? t : Fn(t)), Us(this, t))
 		}
 	}
 	function Io(e) {
@@ -1735,7 +1735,7 @@ This is likely a Baklava internal issue. Please report it on GitHub.`)
 	var gc = {
 		get: (e, t, n) => Io(Reflect.get(e, t, n)),
 		set: (e, t, n, o) => {
-			let s = e[t]
+			const s = e[t]
 			return ye(s) && !ye(n) ? ((s.value = n), !0) : Reflect.set(e, t, n, o)
 		}
 	}
@@ -1744,8 +1744,8 @@ This is likely a Baklava internal issue. Please report it on GitHub.`)
 	}
 	var $s = class {
 		constructor(t) {
-			;(this.dep = void 0), (this.__v_isRef = !0)
-			let { get: n, set: o } = t(
+			(this.dep = void 0), (this.__v_isRef = !0)
+			const { get: n, set: o } = t(
 				() => Ls(this),
 				() => Us(this)
 			)
@@ -1762,16 +1762,16 @@ This is likely a Baklava internal issue. Please report it on GitHub.`)
 		return new $s(e)
 	}
 	function Ws(e) {
-		let t = L(e) ? new Array(e.length) : {}
-		for (let n in e) t[n] = ht(e, n)
+		const t = L(e) ? new Array(e.length) : {}
+		for (const n in e) t[n] = ht(e, n)
 		return t
 	}
 	var Ss = class {
 		constructor(t, n, o) {
-			;(this._object = t), (this._key = n), (this._defaultValue = o), (this.__v_isRef = !0)
+			(this._object = t), (this._key = n), (this._defaultValue = o), (this.__v_isRef = !0)
 		}
 		get value() {
-			let t = this._object[this._key]
+			const t = this._object[this._key]
 			return t === void 0 ? this._defaultValue : t
 		}
 		set value(t) {
@@ -1779,24 +1779,24 @@ This is likely a Baklava internal issue. Please report it on GitHub.`)
 		}
 	}
 	function ht(e, t, n) {
-		let o = e[t]
+		const o = e[t]
 		return ye(o) ? o : new Ss(e, t, n)
 	}
 	var Is = class {
 		constructor(t, n, o, s) {
-			;(this._setter = n),
-				(this.dep = void 0),
-				(this.__v_isRef = !0),
-				(this._dirty = !0),
-				(this.effect = new Ut(t, () => {
-					this._dirty || ((this._dirty = !0), Us(this))
-				})),
-				(this.effect.computed = this),
-				(this.effect.active = this._cacheable = !s),
-				(this.__v_isReadonly = o)
+			(this._setter = n),
+			(this.dep = void 0),
+			(this.__v_isRef = !0),
+			(this._dirty = !0),
+			(this.effect = new Ut(t, () => {
+				this._dirty || ((this._dirty = !0), Us(this))
+			})),
+			(this.effect.computed = this),
+			(this.effect.active = this._cacheable = !s),
+			(this.__v_isReadonly = o)
 		}
 		get value() {
-			let t = G(this)
+			const t = G(this)
 			return Ls(t), (t._dirty || !t._cacheable) && ((t._dirty = !1), (t._value = t.effect.run())), t._value
 		}
 		set value(t) {
@@ -1814,7 +1814,7 @@ This is likely a Baklava internal issue. Please report it on GitHub.`)
 	var Un = []
 	function Fi(e, ...t) {
 		Ct()
-		let n = Un.length ? Un[Un.length - 1].component : null,
+		const n = Un.length ? Un[Un.length - 1].component : null,
 			o = n && n.appContext.config.warnHandler,
 			s = yc()
 		if (o)
@@ -1826,38 +1826,38 @@ This is likely a Baklava internal issue. Please report it on GitHub.`)
 				s
 			])
 		else {
-			let r = [`[Vue warn]: ${e}`, ...t]
+			const r = [`[Vue warn]: ${e}`, ...t]
 			s.length &&
 				r.push(
 					`
 `,
 					..._c(s)
 				),
-				console.warn(...r)
+			console.warn(...r)
 		}
 		xt()
 	}
 	function yc() {
 		let e = Un[Un.length - 1]
 		if (!e) return []
-		let t = []
+		const t = []
 		for (; e; ) {
-			let n = t[0]
+			const n = t[0]
 			n && n.vnode === e ? n.recurseCount++ : t.push({ vnode: e, recurseCount: 0 })
-			let o = e.component && e.component.parent
+			const o = e.component && e.component.parent
 			e = o && o.vnode
 		}
 		return t
 	}
 	function _c(e) {
-		let t = []
+		const t = []
 		return (
 			e.forEach((n, o) => {
 				t.push(
 					...(o === 0
 						? []
 						: [
-								`
+							`
 `
 						  ]),
 					...bc(n)
@@ -1867,14 +1867,14 @@ This is likely a Baklava internal issue. Please report it on GitHub.`)
 		)
 	}
 	function bc({ vnode: e, recurseCount: t }) {
-		let n = t > 0 ? `... (${t} recursive calls)` : "",
+		const n = t > 0 ? `... (${t} recursive calls)` : "",
 			o = e.component ? e.component.parent == null : !1,
 			s = ` at <${_a(e.component, e.type, o)}`,
 			r = ">" + n
 		return e.props ? [s, ...Ec(e.props), r] : [s + r]
 	}
 	function Ec(e) {
-		let t = [],
+		const t = [],
 			n = Object.keys(e)
 		return (
 			n.slice(0, 3).forEach((o) => {
@@ -1888,14 +1888,14 @@ This is likely a Baklava internal issue. Please report it on GitHub.`)
 		return ge(t)
 			? ((t = JSON.stringify(t)), n ? t : [`${e}=${t}`])
 			: typeof t == "number" || typeof t == "boolean" || t == null
-			? n
-				? t
-				: [`${e}=${t}`]
-			: ye(t)
-			? ((t = Hi(e, G(t.value), !0)), n ? t : [`${e}=Ref<`, t, ">"])
-			: B(t)
-			? [`${e}=fn${t.name ? `<${t.name}>` : ""}`]
-			: ((t = G(t)), n ? t : [`${e}=`, t])
+				? n
+					? t
+					: [`${e}=${t}`]
+				: ye(t)
+					? ((t = Hi(e, G(t.value), !0)), n ? t : [`${e}=Ref<`, t, ">"])
+					: B(t)
+						? [`${e}=fn${t.name ? `<${t.name}>` : ""}`]
+						: ((t = G(t)), n ? t : [`${e}=`, t])
 	}
 	function gt(e, t, n, o) {
 		let s
@@ -1908,7 +1908,7 @@ This is likely a Baklava internal issue. Please report it on GitHub.`)
 	}
 	function Be(e, t, n, o) {
 		if (B(e)) {
-			let r = gt(e, t, n, o)
+			const r = gt(e, t, n, o)
 			return (
 				r &&
 					ws(r) &&
@@ -1918,24 +1918,24 @@ This is likely a Baklava internal issue. Please report it on GitHub.`)
 				r
 			)
 		}
-		let s = []
+		const s = []
 		for (let r = 0; r < e.length; r++) s.push(Be(e[r], t, n, o))
 		return s
 	}
 	function jo(e, t, n, o = !0) {
-		let s = t ? t.vnode : null
+		const s = t ? t.vnode : null
 		if (t) {
 			let r = t.parent,
 				i = t.proxy,
 				a = n
 			for (; r; ) {
-				let c = r.ec
+				const c = r.ec
 				if (c) {
 					for (let u = 0; u < c.length; u++) if (c[u](e, i, a) === !1) return
 				}
 				r = r.parent
 			}
-			let l = t.appContext.config.errorHandler
+			const l = t.appContext.config.errorHandler
 			if (l) {
 				gt(l, null, 10, [e, i, a])
 				return
@@ -1960,26 +1960,26 @@ This is likely a Baklava internal issue. Please report it on GitHub.`)
 		tr = null,
 		Gs = null
 	function vn(e) {
-		let t = tr || ji
+		const t = tr || ji
 		return e ? t.then(this ? e.bind(this) : e) : t
 	}
 	function Nc(e) {
 		let t = mt + 1,
 			n = Ue.length
 		for (; t < n; ) {
-			let o = (t + n) >>> 1
+			const o = (t + n) >>> 1
 			qn(Ue[o]) < e ? (t = o + 1) : (n = o)
 		}
 		return t
 	}
 	function Li(e) {
-		;(!Ue.length || !Ue.includes(e, Po && e.allowRecurse ? mt + 1 : mt)) && e !== Gs && (e.id == null ? Ue.push(e) : Ue.splice(Nc(e.id), 0, e), Ui())
+		(!Ue.length || !Ue.includes(e, Po && e.allowRecurse ? mt + 1 : mt)) && e !== Gs && (e.id == null ? Ue.push(e) : Ue.splice(Nc(e.id), 0, e), Ui())
 	}
 	function Ui() {
 		!Po && !qs && ((qs = !0), (tr = ji.then(Ki)))
 	}
 	function Oc(e) {
-		let t = Ue.indexOf(e)
+		const t = Ue.indexOf(e)
 		t > mt && Ue.splice(t, 1)
 	}
 	function Bi(e, t, n, o) {
@@ -1999,7 +1999,7 @@ This is likely a Baklava internal issue. Please report it on GitHub.`)
 	}
 	function Wi(e) {
 		if ((Lo(), Wn.length)) {
-			let t = [...new Set(Wn)]
+			const t = [...new Set(Wn)]
 			if (((Wn.length = 0), Tt)) {
 				Tt.push(...t)
 				return
@@ -2010,15 +2010,15 @@ This is likely a Baklava internal issue. Please report it on GitHub.`)
 	}
 	var qn = (e) => (e.id == null ? 1 / 0 : e.id)
 	function Ki(e) {
-		;(qs = !1), (Po = !0), Lo(e), Ue.sort((n, o) => qn(n) - qn(o))
-		let t = Ie
+		(qs = !1), (Po = !0), Lo(e), Ue.sort((n, o) => qn(n) - qn(o))
+		const t = Ie
 		try {
 			for (mt = 0; mt < Ue.length; mt++) {
-				let n = Ue[mt]
+				const n = Ue[mt]
 				n && n.active !== !1 && gt(n, null, 14)
 			}
 		} finally {
-			;(mt = 0), (Ue.length = 0), Wi(e), (Po = !1), (tr = null), (Ue.length || Bn.length || Wn.length) && Ki(e)
+			(mt = 0), (Ue.length = 0), Wi(e), (Po = !1), (tr = null), (Ue.length || Bn.length || Wn.length) && Ki(e)
 		}
 	}
 	var qt,
@@ -2030,14 +2030,14 @@ This is likely a Baklava internal issue. Please report it on GitHub.`)
 	function zi(e, t) {
 		var n, o
 		;(qt = e),
-			qt
-				? ((qt.enabled = !0), Ln.forEach(({ event: s, args: r }) => qt.emit(s, ...r)), (Ln = []))
-				: typeof window < "u" && window.HTMLElement && !(!((o = (n = window.navigator) === null || n === void 0 ? void 0 : n.userAgent) === null || o === void 0) && o.includes("jsdom"))
+		qt
+			? ((qt.enabled = !0), Ln.forEach(({ event: s, args: r }) => qt.emit(s, ...r)), (Ln = []))
+			: typeof window < "u" && window.HTMLElement && !(!((o = (n = window.navigator) === null || n === void 0 ? void 0 : n.userAgent) === null || o === void 0) && o.includes("jsdom"))
 				? ((t.__VUE_DEVTOOLS_HOOK_REPLAY__ = t.__VUE_DEVTOOLS_HOOK_REPLAY__ || []).push((r) => {
-						zi(r, t)
+					zi(r, t)
 				  }),
 				  setTimeout(() => {
-						qt || ((t.__VUE_DEVTOOLS_HOOK_REPLAY__ = null), (Ys = !0), (Ln = []))
+					qt || ((t.__VUE_DEVTOOLS_HOOK_REPLAY__ = null), (Ys = !0), (Ln = []))
 				  }, 3e3))
 				: ((Ys = !0), (Ln = []))
 	}
@@ -2065,7 +2065,7 @@ This is likely a Baklava internal issue. Please report it on GitHub.`)
 			r = t.startsWith("update:"),
 			i = r && t.slice(7)
 		if (i && i in o) {
-			let u = `${i === "modelValue" ? "model" : i}Modifiers`,
+			const u = `${i === "modelValue" ? "model" : i}Modifiers`,
 				{ number: d, trim: p } = o[u] || se
 			p && (s = n.map((m) => m.trim())), d && (s = n.map(cn))
 		}
@@ -2073,7 +2073,7 @@ This is likely a Baklava internal issue. Please report it on GitHub.`)
 		let a,
 			l = o[(a = Pn(t))] || o[(a = Pn(Me(t)))]
 		!l && r && (l = o[(a = Pn(pt(t)))]), l && Be(l, e, 6, s)
-		let c = o[a + "Once"]
+		const c = o[a + "Once"]
 		if (c) {
 			if (!e.emitted) e.emitted = {}
 			else if (e.emitted[a]) return
@@ -2081,15 +2081,15 @@ This is likely a Baklava internal issue. Please report it on GitHub.`)
 		}
 	}
 	function Gi(e, t, n = !1) {
-		let o = t.emitsCache,
+		const o = t.emitsCache,
 			s = o.get(e)
 		if (s !== void 0) return s
 		let r = e.emits,
 			i = {},
 			a = !1
 		if (__VUE_OPTIONS_API__ && !B(e)) {
-			let l = (c) => {
-				let u = Gi(c, t, !0)
+			const l = (c) => {
+				const u = Gi(c, t, !0)
 				u && ((a = !0), ve(i, u))
 			}
 			!n && t.mixins.length && t.mixins.forEach(l), e.extends && l(e.extends), e.mixins && e.mixins.forEach(l)
@@ -2102,14 +2102,14 @@ This is likely a Baklava internal issue. Please report it on GitHub.`)
 	var ke = null,
 		Yi = null
 	function Ro(e) {
-		let t = ke
+		const t = ke
 		return (ke = e), (Yi = (e && e.type.__scopeId) || null), t
 	}
 	function yn(e, t = ke, n) {
 		if (!t || e._n) return e
-		let o = (...s) => {
+		const o = (...s) => {
 			o._d && Mi(-1)
-			let r = Ro(t),
+			const r = Ro(t),
 				i = e(...s)
 			return Ro(r), o._d && Mi(1), __VUE_PROD_DEVTOOLS__ && qi(t), i
 		}
@@ -2138,19 +2138,19 @@ This is likely a Baklava internal issue. Please report it on GitHub.`)
 			y = Ro(e)
 		try {
 			if (n.shapeFlag & 4) {
-				let H = s || o
+				const H = s || o
 				;(w = it(u.call(H, H, d, r, m, p, g))), (S = l)
 			} else {
-				let H = t
+				const H = t
 				;(w = it(H.length > 1 ? H(r, { attrs: l, slots: a, emit: c }) : H(r, null))), (S = t.props ? l : Mc(l))
 			}
 		} catch (H) {
-			;(zn.length = 0), jo(H, e, 1), (w = X(We))
+			(zn.length = 0), jo(H, e, 1), (w = X(We))
 		}
 		let M = w,
 			z
 		if (S && O !== !1) {
-			let H = Object.keys(S),
+			const H = Object.keys(S),
 				{ shapeFlag: re } = M
 			H.length && re & 7 && (i && H.some(Mn) && (S = Vc(S, i)), (M = $t(M, S)))
 		}
@@ -2158,12 +2158,12 @@ This is likely a Baklava internal issue. Please report it on GitHub.`)
 	}
 	var Mc = (e) => {
 			let t
-			for (let n in e) (n === "class" || n === "style" || rn(n)) && ((t || (t = {}))[n] = e[n])
+			for (const n in e) (n === "class" || n === "style" || rn(n)) && ((t || (t = {}))[n] = e[n])
 			return t
 		},
 		Vc = (e, t) => {
-			let n = {}
-			for (let o in e) (!Mn(o) || !(o.slice(9) in t)) && (n[o] = e[o])
+			const n = {}
+			for (const o in e) (!Mn(o) || !(o.slice(9) in t)) && (n[o] = e[o])
 			return n
 		}
 	function Pc(e, t, n) {
@@ -2175,9 +2175,9 @@ This is likely a Baklava internal issue. Please report it on GitHub.`)
 			if (l & 1024) return !0
 			if (l & 16) return o ? Ni(o, i, c) : !!i
 			if (l & 8) {
-				let u = t.dynamicProps
+				const u = t.dynamicProps
 				for (let d = 0; d < u.length; d++) {
-					let p = u[d]
+					const p = u[d]
 					if (i[p] !== o[p] && !Bo(c, p)) return !0
 				}
 			}
@@ -2185,10 +2185,10 @@ This is likely a Baklava internal issue. Please report it on GitHub.`)
 		return !1
 	}
 	function Ni(e, t, n) {
-		let o = Object.keys(t)
+		const o = Object.keys(t)
 		if (o.length !== Object.keys(e).length) return !0
 		for (let s = 0; s < o.length; s++) {
-			let r = o[s]
+			const r = o[s]
 			if (t[r] !== e[r] && !Bo(n, r)) return !0
 		}
 		return !1
@@ -2208,9 +2208,9 @@ This is likely a Baklava internal issue. Please report it on GitHub.`)
 		}
 	}
 	function fn(e, t, n = !1) {
-		let o = we || ke
+		const o = we || ke
 		if (o) {
-			let s = o.parent == null ? o.vnode.appContext && o.vnode.appContext.provides : o.parent.provides
+			const s = o.parent == null ? o.vnode.appContext && o.vnode.appContext.provides : o.parent.provides
 			if (s && e in s) return s[e]
 			if (arguments.length > 1) return n && B(t) ? t.call(o.proxy) : t
 		}
@@ -2231,26 +2231,26 @@ This is likely a Baklava internal issue. Please report it on GitHub.`)
 			(ye(e)
 				? ((c = () => e.value), (u = Hn(e)))
 				: kt(e)
-				? ((c = () => e), (o = !0))
-				: L(e)
-				? ((d = !0),
+					? ((c = () => e), (o = !0))
+					: L(e)
+						? ((d = !0),
 				  (u = e.some((y) => kt(y) || Hn(y))),
 				  (c = () =>
-						e.map((y) => {
-							if (ye(y)) return y.value
-							if (kt(y)) return Yt(y)
-							if (B(y)) return gt(y, l, 2)
-						})))
-				: B(e)
-				? t
-					? (c = () => gt(e, l, 2))
-					: (c = () => {
-							if (!(l && l.isUnmounted)) return p && p(), Be(e, l, 3, [m])
+							e.map((y) => {
+								if (ye(y)) return y.value
+								if (kt(y)) return Yt(y)
+								if (B(y)) return gt(y, l, 2)
+							})))
+						: B(e)
+							? t
+								? (c = () => gt(e, l, 2))
+								: (c = () => {
+									if (!(l && l.isUnmounted)) return p && p(), Be(e, l, 3, [m])
 					  })
-				: (c = Ie),
+							: (c = Ie),
 			t && o)
 		) {
-			let y = c
+			const y = c
 			c = () => Yt(y())
 		}
 		let p,
@@ -2262,16 +2262,16 @@ This is likely a Baklava internal issue. Please report it on GitHub.`)
 		if (Yn) return (m = Ie), t ? n && Be(t, l, 3, [c(), d ? [] : void 0, m]) : c(), Ie
 		let g = d ? [] : Oi,
 			O = () => {
-				if (!!S.active)
+				if (S.active)
 					if (t) {
-						let y = S.run()
+						const y = S.run()
 						;(o || u || (d ? y.some((M, z) => jt(M, g[z])) : jt(y, g))) && (p && p(), Be(t, l, 3, [y, g === Oi ? void 0 : g, m]), (g = y))
 					} else S.run()
 			}
 		O.allowRecurse = !!t
 		let w
 		s === "sync" ? (w = O) : s === "post" ? (w = () => Re(O, l && l.suspense)) : (w = () => Cc(O))
-		let S = new Ut(c, w)
+		const S = new Ut(c, w)
 		return (
 			t ? (n ? O() : (g = S.run())) : s === "post" ? Re(S.run.bind(S), l && l.suspense) : S.run(),
 			() => {
@@ -2284,13 +2284,13 @@ This is likely a Baklava internal issue. Please report it on GitHub.`)
 			s = ge(e) ? (e.includes(".") ? Ji(o, e) : () => o[e]) : e.bind(o, o),
 			r
 		B(t) ? (r = t) : ((r = t.handler), (n = t))
-		let i = we
+		const i = we
 		gn(this)
-		let a = Xi(s, r.bind(o), n)
+		const a = Xi(s, r.bind(o), n)
 		return i ? gn(i) : Xt(), a
 	}
 	function Ji(e, t) {
-		let n = t.split(".")
+		const n = t.split(".")
 		return () => {
 			let o = e
 			for (let s = 0; s < n.length && o; s++) o = o[n[s]]
@@ -2305,11 +2305,11 @@ This is likely a Baklava internal issue. Please report it on GitHub.`)
 			e.forEach((n) => {
 				Yt(n, t)
 			})
-		else if (Os(e)) for (let n in e) Yt(e[n], t)
+		else if (Os(e)) for (const n in e) Yt(e[n], t)
 		return e
 	}
 	function or() {
-		let e = { isMounted: !1, isLeaving: !1, isUnmounting: !1, leavingVNodes: new Map() }
+		const e = { isMounted: !1, isLeaving: !1, isUnmounting: !1, leavingVNodes: new Map() }
 		return (
 			St(() => {
 				e.isMounted = !0
@@ -2345,51 +2345,51 @@ This is likely a Baklava internal issue. Please report it on GitHub.`)
 					o = or(),
 					s
 				return () => {
-					let r = t.default && Ko(t.default(), !0)
+					const r = t.default && Ko(t.default(), !0)
 					if (!r || !r.length) return
 					let i = r[0]
 					if (r.length > 1) {
 						let O = !1
-						for (let w of r)
+						for (const w of r)
 							if (w.type !== We) {
-								;(i = w), (O = !0)
+								(i = w), (O = !0)
 								break
 							}
 					}
-					let a = G(e),
+					const a = G(e),
 						{ mode: l } = a
 					if (o.isLeaving) return zs(i)
-					let c = Ci(i)
+					const c = Ci(i)
 					if (!c) return zs(i)
-					let u = hn(c, a, o, n)
+					const u = hn(c, a, o, n)
 					mn(c, u)
 					let d = n.subTree,
 						p = d && Ci(d),
 						m = !1,
 						{ getTransitionKey: g } = c.type
 					if (g) {
-						let O = g()
+						const O = g()
 						s === void 0 ? (s = O) : O !== s && ((s = O), (m = !0))
 					}
 					if (p && p.type !== We && (!Gt(c, p) || m)) {
-						let O = hn(p, a, o, n)
+						const O = hn(p, a, o, n)
 						if ((mn(p, O), l === "out-in"))
 							return (
 								(o.isLeaving = !0),
 								(O.afterLeave = () => {
-									;(o.isLeaving = !1), n.update()
+									(o.isLeaving = !1), n.update()
 								}),
 								zs(i)
 							)
 						l === "in-out" &&
 							c.type !== We &&
 							(O.delayLeave = (w, S, y) => {
-								let M = Zi(o, p)
+								const M = Zi(o, p)
 								;(M[String(p.key)] = p),
-									(w._leaveCb = () => {
-										S(), (w._leaveCb = void 0), delete u.delayedLeave
-									}),
-									(u.delayedLeave = y)
+								(w._leaveCb = () => {
+									S(), (w._leaveCb = void 0), delete u.delayedLeave
+								}),
+								(u.delayedLeave = y)
 							})
 					}
 					return i
@@ -2426,7 +2426,7 @@ This is likely a Baklava internal issue. Please report it on GitHub.`)
 				R && Be(R, o, 9, Z)
 			},
 			re = (R, Z) => {
-				let U = Z[1]
+				const U = Z[1]
 				H(R, Z), L(R) ? R.every((ue) => ue.length <= 1) && U() : R.length <= 1 && U()
 			},
 			N = {
@@ -2438,7 +2438,7 @@ This is likely a Baklava internal issue. Please report it on GitHub.`)
 						if (s) Z = O || a
 						else return
 					R._leaveCb && R._leaveCb(!0)
-					let U = z[M]
+					const U = z[M]
 					U && Gt(e, U) && U.el._leaveCb && U.el._leaveCb(), H(Z, [R])
 				},
 				enter(R) {
@@ -2455,7 +2455,7 @@ This is likely a Baklava internal issue. Please report it on GitHub.`)
 					Z ? re(Z, [R, q]) : q()
 				},
 				leave(R, Z) {
-					let U = String(e.key)
+					const U = String(e.key)
 					if ((R._enterCb && R._enterCb(!0), n.isUnmounting)) return Z()
 					H(d, [R])
 					let ue = !1,
@@ -2480,14 +2480,14 @@ This is likely a Baklava internal issue. Please report it on GitHub.`)
 		e.shapeFlag & 6 && e.component
 			? mn(e.component.subTree, t)
 			: e.shapeFlag & 128
-			? ((e.ssContent.transition = t.clone(e.ssContent)), (e.ssFallback.transition = t.clone(e.ssFallback)))
-			: (e.transition = t)
+				? ((e.ssContent.transition = t.clone(e.ssContent)), (e.ssFallback.transition = t.clone(e.ssFallback)))
+				: (e.transition = t)
 	}
 	function Ko(e, t = !1, n) {
 		let o = [],
 			s = 0
 		for (let r = 0; r < e.length; r++) {
-			let i = e[r],
+			const i = e[r],
 				a = n == null ? i.key : String(n) + String(i.key != null ? i.key : r)
 			i.type === te ? (i.patchFlag & 128 && s++, (o = o.concat(Ko(i.children, t, a)))) : (t || i.type !== We) && o.push(a != null ? $t(i, { key: a }) : i)
 		}
@@ -2506,7 +2506,7 @@ This is likely a Baklava internal issue. Please report it on GitHub.`)
 		Qi(e, "da", t)
 	}
 	function Qi(e, t, n = we) {
-		let o =
+		const o =
 			e.__wdc ||
 			(e.__wdc = () => {
 				let s = n
@@ -2522,20 +2522,20 @@ This is likely a Baklava internal issue. Please report it on GitHub.`)
 		}
 	}
 	function Bc(e, t, n, o) {
-		let s = qo(t, e, o, !0)
+		const s = qo(t, e, o, !0)
 		rr(() => {
 			mo(o[t], s)
 		}, n)
 	}
 	function qo(e, t, n = we, o = !1) {
 		if (n) {
-			let s = n[e] || (n[e] = []),
+			const s = n[e] || (n[e] = []),
 				r =
 					t.__weh ||
 					(t.__weh = (...i) => {
 						if (n.isUnmounted) return
 						Ct(), gn(n)
-						let a = Be(t, n, e, i)
+						const a = Be(t, n, e, i)
 						return Xt(), xt(), a
 					})
 			return o ? s.unshift(r) : s.push(r), r
@@ -2543,8 +2543,8 @@ This is likely a Baklava internal issue. Please report it on GitHub.`)
 	}
 	var vt =
 			(e) =>
-			(t, n = we) =>
-				(!Yn || e === "sp") && qo(e, t, n),
+				(t, n = we) =>
+					(!Yn || e === "sp") && qo(e, t, n),
 		Wc = vt("bm"),
 		St = vt("m"),
 		Kc = vt("bu"),
@@ -2558,9 +2558,9 @@ This is likely a Baklava internal issue. Please report it on GitHub.`)
 		qo("ec", e, t)
 	}
 	function It(e, t) {
-		let n = ke
+		const n = ke
 		if (n === null) return e
-		let o = Zo(n) || n.proxy,
+		const o = Zo(n) || n.proxy,
 			s = e.dirs || (e.dirs = [])
 		for (let r = 0; r < t.length; r++) {
 			let [i, a, l, c = se] = t[r]
@@ -2569,12 +2569,12 @@ This is likely a Baklava internal issue. Please report it on GitHub.`)
 		return e
 	}
 	function Wt(e, t, n, o) {
-		let s = e.dirs,
+		const s = e.dirs,
 			r = t && t.dirs
 		for (let i = 0; i < s.length; i++) {
-			let a = s[i]
+			const a = s[i]
 			r && (a.oldValue = r[i].value)
-			let l = a.dir[o]
+			const l = a.dir[o]
 			l && (Ct(), Be(l, n, 8, [e.el, a, e, t]), xt())
 		}
 	}
@@ -2587,14 +2587,14 @@ This is likely a Baklava internal issue. Please report it on GitHub.`)
 		return ge(e) ? ta(ir, e, !1) || e : e || ea
 	}
 	function ta(e, t, n = !0, o = !1) {
-		let s = ke || we
+		const s = ke || we
 		if (s) {
-			let r = s.type
+			const r = s.type
 			if (e === ir) {
-				let a = ya(r, !1)
+				const a = ya(r, !1)
 				if (a && (a === t || a === Me(t) || a === Ht(Me(t)))) return r
 			}
-			let i = xi(s[e] || r[e], t) || xi(s.appContext[e], t)
+			const i = xi(s[e] || r[e], t) || xi(s.appContext[e], t)
 			return !i && o ? r : i
 		}
 	}
@@ -2613,10 +2613,10 @@ This is likely a Baklava internal issue. Please report it on GitHub.`)
 		} else if (fe(e))
 			if (e[Symbol.iterator]) s = Array.from(e, (i, a) => t(i, a, void 0, r && r[a]))
 			else {
-				let i = Object.keys(e)
+				const i = Object.keys(e)
 				s = new Array(i.length)
 				for (let a = 0, l = i.length; a < l; a++) {
-					let c = i[a]
+					const c = i[a]
 					s[a] = t(e[c], c, a, r && r[a])
 				}
 			}
@@ -2625,9 +2625,9 @@ This is likely a Baklava internal issue. Please report it on GitHub.`)
 	}
 	function yt(e, t, n = {}, o, s) {
 		if (ke.isCE || (ke.parent && Kn(ke.parent) && ke.parent.isCE)) return X("slot", t === "default" ? null : { name: t }, o && o())
-		let r = e[t]
+		const r = e[t]
 		r && r._c && (r._d = !1), D()
-		let i = r && na(r(n)),
+		const i = r && na(r(n)),
 			a = Ne(te, { key: n.key || `_${t}` }, i || (o ? o() : []), i && e._ === 1 ? 64 : -2)
 		return !s && a.scopeId && (a.slotScopeIds = [a.scopeId + "-s"]), r && r._c && (r._d = !0), a
 	}
@@ -2656,7 +2656,7 @@ This is likely a Baklava internal issue. Please report it on GitHub.`)
 			let { ctx: n, setupState: o, data: s, props: r, accessCache: i, type: a, appContext: l } = e,
 				c
 			if (t[0] !== "$") {
-				let m = i[t]
+				const m = i[t]
 				if (m !== void 0)
 					switch (m) {
 						case 1:
@@ -2685,7 +2685,7 @@ This is likely a Baklava internal issue. Please report it on GitHub.`)
 			if (((p = l.config.globalProperties), Y(p, t))) return p[t]
 		},
 		set({ _: e }, t, n) {
-			let { data: o, setupState: s, ctx: r } = e
+			const { data: o, setupState: s, ctx: r } = e
 			return s !== se && Y(s, t) ? ((s[t] = n), !0) : o !== se && Y(o, t) ? ((o[t] = n), !0) : Y(e.props, t) || (t[0] === "$" && t.slice(1) in e) ? !1 : ((r[t] = n), !0)
 		},
 		has({ _: { data: e, setupState: t, accessCache: n, ctx: o, appContext: s, propsOptions: r } }, i) {
@@ -2698,11 +2698,11 @@ This is likely a Baklava internal issue. Please report it on GitHub.`)
 	}
 	var Js = !0
 	function Jc(e) {
-		let t = sa(e),
+		const t = sa(e),
 			n = e.proxy,
 			o = e.ctx
 		;(Js = !1), t.beforeCreate && ki(t.beforeCreate, e, "bc")
-		let {
+		const {
 			data: s,
 			computed: r,
 			methods: i,
@@ -2732,25 +2732,25 @@ This is likely a Baklava internal issue. Please report it on GitHub.`)
 			filters: pe
 		} = t
 		if ((c && Zc(c, o, null, e.appContext.config.unwrapInjectedRef), i))
-			for (let ee in i) {
-				let oe = i[ee]
+			for (const ee in i) {
+				const oe = i[ee]
 				B(oe) && (o[ee] = oe.bind(n))
 			}
 		if (s) {
-			let ee = s.call(n, n)
+			const ee = s.call(n, n)
 			fe(ee) && (e.data = Pe(ee))
 		}
 		if (((Js = !0), r))
-			for (let ee in r) {
-				let oe = r[ee],
+			for (const ee in r) {
+				const oe = r[ee],
 					Ae = B(oe) ? oe.bind(n, n) : B(oe.get) ? oe.get.bind(n, n) : Ie,
 					ut = !B(oe) && B(oe.set) ? oe.set.bind(n) : Ie,
 					Pt = K({ get: Ae, set: ut })
 				Object.defineProperty(o, ee, { enumerable: !0, configurable: !0, get: () => Pt.value, set: (io) => (Pt.value = io) })
 			}
-		if (a) for (let ee in a) oa(a[ee], o, n, ee)
+		if (a) for (const ee in a) oa(a[ee], o, n, ee)
 		if (l) {
-			let ee = B(l) ? l.call(n) : l
+			const ee = B(l) ? l.call(n) : l
 			Reflect.ownKeys(ee).forEach((oe) => {
 				Wo(oe, ee[oe])
 			})
@@ -2761,7 +2761,7 @@ This is likely a Baklava internal issue. Please report it on GitHub.`)
 		}
 		if ((ie(Wc, d), ie(St, p), ie(Kc, m), ie(_n, g), ie(Lc, O), ie(Uc, w), ie(Yc, R), ie(Gc, re), ie(qc, N), ie(Go, y), ie(rr, z), ie(zc, Z), L(U)))
 			if (U.length) {
-				let ee = e.exposed || (e.exposed = {})
+				const ee = e.exposed || (e.exposed = {})
 				U.forEach((oe) => {
 					Object.defineProperty(ee, oe, { get: () => n[oe], set: (Ae) => (n[oe] = Ae) })
 				})
@@ -2770,26 +2770,26 @@ This is likely a Baklava internal issue. Please report it on GitHub.`)
 	}
 	function Zc(e, t, n = Ie, o = !1) {
 		L(e) && (e = Zs(e))
-		for (let s in e) {
+		for (const s in e) {
 			let r = e[s],
 				i
 			fe(r) ? ("default" in r ? (i = fn(r.from || s, r.default, !0)) : (i = fn(r.from || s))) : (i = fn(r)),
-				ye(i) && o ? Object.defineProperty(t, s, { enumerable: !0, configurable: !0, get: () => i.value, set: (a) => (i.value = a) }) : (t[s] = i)
+			ye(i) && o ? Object.defineProperty(t, s, { enumerable: !0, configurable: !0, get: () => i.value, set: (a) => (i.value = a) }) : (t[s] = i)
 		}
 	}
 	function ki(e, t, n) {
 		Be(L(e) ? e.map((o) => o.bind(t.proxy)) : e.bind(t.proxy), t, n)
 	}
 	function oa(e, t, n, o) {
-		let s = o.includes(".") ? Ji(n, o) : () => n[o]
+		const s = o.includes(".") ? Ji(n, o) : () => n[o]
 		if (ge(e)) {
-			let r = t[e]
+			const r = t[e]
 			B(r) && at(s, r)
 		} else if (B(e)) at(s, e.bind(n))
 		else if (fe(e))
 			if (L(e)) e.forEach((r) => oa(r, t, n, o))
 			else {
-				let r = B(e.handler) ? e.handler.bind(n) : t[e.handler]
+				const r = B(e.handler) ? e.handler.bind(n) : t[e.handler]
 				B(r) && at(s, r, e)
 			}
 	}
@@ -2806,11 +2806,11 @@ This is likely a Baklava internal issue. Please report it on GitHub.`)
 		return a ? (l = a) : !s.length && !n && !o ? (l = t) : ((l = {}), s.length && s.forEach((c) => Fo(l, c, i, !0)), Fo(l, t, i)), r.set(t, l), l
 	}
 	function Fo(e, t, n, o = !1) {
-		let { mixins: s, extends: r } = t
+		const { mixins: s, extends: r } = t
 		r && Fo(e, r, n, !0), s && s.forEach((i) => Fo(e, i, n, !0))
-		for (let i in t)
+		for (const i in t)
 			if (!(o && i === "expose")) {
-				let a = Qc[i] || (n && n[i])
+				const a = Qc[i] || (n && n[i])
 				e[i] = a ? a(e[i], t[i]) : t[i]
 			}
 		return e
@@ -2845,7 +2845,7 @@ This is likely a Baklava internal issue. Please report it on GitHub.`)
 		return t
 			? e
 				? function () {
-						return ve(B(e) ? e.call(this, this) : e, B(t) ? t.call(this, this) : t)
+					return ve(B(e) ? e.call(this, this) : e, B(t) ? t.call(this, this) : t)
 				  }
 				: t
 			: e
@@ -2855,7 +2855,7 @@ This is likely a Baklava internal issue. Please report it on GitHub.`)
 	}
 	function Zs(e) {
 		if (L(e)) {
-			let t = {}
+			const t = {}
 			for (let n = 0; n < e.length; n++) t[e[n]] = e[n]
 			return t
 		}
@@ -2870,15 +2870,15 @@ This is likely a Baklava internal issue. Please report it on GitHub.`)
 	function tu(e, t) {
 		if (!e) return t
 		if (!t) return e
-		let n = ve(Object.create(null), e)
-		for (let o in t) n[o] = De(e[o], t[o])
+		const n = ve(Object.create(null), e)
+		for (const o in t) n[o] = De(e[o], t[o])
 		return n
 	}
 	function nu(e, t, n, o = !1) {
-		let s = {},
+		const s = {},
 			r = {}
 		ln(r, Jo, 1), (e.propsDefaults = Object.create(null)), ra(e, t, s, r)
-		for (let i in e.propsOptions[0]) i in s || (s[i] = void 0)
+		for (const i in e.propsOptions[0]) i in s || (s[i] = void 0)
 		n ? (e.props = o ? s : As(s)) : e.type.props ? (e.props = s) : (e.props = r), (e.attrs = r)
 	}
 	function ou(e, t, n, o) {
@@ -2892,15 +2892,15 @@ This is likely a Baklava internal issue. Please report it on GitHub.`)
 			c = !1
 		if ((o || i > 0) && !(i & 16)) {
 			if (i & 8) {
-				let u = e.vnode.dynamicProps
+				const u = e.vnode.dynamicProps
 				for (let d = 0; d < u.length; d++) {
-					let p = u[d]
+					const p = u[d]
 					if (Bo(e.emitsOptions, p)) continue
-					let m = t[p]
+					const m = t[p]
 					if (l)
 						if (Y(r, p)) m !== r[p] && ((r[p] = m), (c = !0))
 						else {
-							let g = Me(p)
+							const g = Me(p)
 							s[g] = Qs(l, a, g, m, e, !1)
 						}
 					else m !== r[p] && ((r[p] = m), (c = !0))
@@ -2909,8 +2909,8 @@ This is likely a Baklava internal issue. Please report it on GitHub.`)
 		} else {
 			ra(e, t, s, r) && (c = !0)
 			let u
-			for (let d in a) (!t || (!Y(t, d) && ((u = pt(d)) === d || !Y(t, u)))) && (l ? n && (n[d] !== void 0 || n[u] !== void 0) && (s[d] = Qs(l, a, d, void 0, e, !0)) : delete s[d])
-			if (r !== a) for (let d in r) (!t || (!Y(t, d) && !0)) && (delete r[d], (c = !0))
+			for (const d in a) (!t || (!Y(t, d) && ((u = pt(d)) === d || !Y(t, u)))) && (l ? n && (n[d] !== void 0 || n[u] !== void 0) && (s[d] = Qs(l, a, d, void 0, e, !0)) : delete s[d])
+			if (r !== a) for (const d in r) (!t || (!Y(t, d) && !0)) && (delete r[d], (c = !0))
 		}
 		c && st(e, "set", "$attrs")
 	}
@@ -2919,30 +2919,30 @@ This is likely a Baklava internal issue. Please report it on GitHub.`)
 			i = !1,
 			a
 		if (t)
-			for (let l in t) {
+			for (const l in t) {
 				if (Vn(l)) continue
 				let c = t[l],
 					u
 				s && Y(s, (u = Me(l))) ? (!r || !r.includes(u) ? (n[u] = c) : ((a || (a = {}))[u] = c)) : Bo(e.emitsOptions, l) || ((!(l in o) || c !== o[l]) && ((o[l] = c), (i = !0)))
 			}
 		if (r) {
-			let l = G(n),
+			const l = G(n),
 				c = a || se
 			for (let u = 0; u < r.length; u++) {
-				let d = r[u]
+				const d = r[u]
 				n[d] = Qs(s, l, d, c[d], e, !Y(c, d))
 			}
 		}
 		return i
 	}
 	function Qs(e, t, n, o, s, r) {
-		let i = e[n]
+		const i = e[n]
 		if (i != null) {
-			let a = Y(i, "default")
+			const a = Y(i, "default")
 			if (a && o === void 0) {
-				let l = i.default
+				const l = i.default
 				if (i.type !== Function && B(l)) {
-					let { propsDefaults: c } = s
+					const { propsDefaults: c } = s
 					n in c ? (o = c[n]) : (gn(s), (o = c[n] = l.call(null, t)), Xt())
 				} else o = l
 			}
@@ -2951,7 +2951,7 @@ This is likely a Baklava internal issue. Please report it on GitHub.`)
 		return o
 	}
 	function ia(e, t, n = !1) {
-		let o = t.propsCache,
+		const o = t.propsCache,
 			s = o.get(e)
 		if (s) return s
 		let r = e.props,
@@ -2959,9 +2959,9 @@ This is likely a Baklava internal issue. Please report it on GitHub.`)
 			a = [],
 			l = !1
 		if (__VUE_OPTIONS_API__ && !B(e)) {
-			let u = (d) => {
+			const u = (d) => {
 				l = !0
-				let [p, m] = ia(d, t, !0)
+				const [p, m] = ia(d, t, !0)
 				ve(i, p), m && a.push(...m)
 			}
 			!n && t.mixins.length && t.mixins.forEach(u), e.extends && u(e.extends), e.mixins && e.mixins.forEach(u)
@@ -2969,30 +2969,30 @@ This is likely a Baklava internal issue. Please report it on GitHub.`)
 		if (!r && !l) return o.set(e, Ft), Ft
 		if (L(r))
 			for (let u = 0; u < r.length; u++) {
-				let d = Me(r[u])
+				const d = Me(r[u])
 				Di(d) && (i[d] = se)
 			}
 		else if (r)
-			for (let u in r) {
-				let d = Me(u)
+			for (const u in r) {
+				const d = Me(u)
 				if (Di(d)) {
-					let p = r[u],
+					const p = r[u],
 						m = (i[d] = L(p) || B(p) ? { type: p } : p)
 					if (m) {
-						let g = Ii(Boolean, m.type),
+						const g = Ii(Boolean, m.type),
 							O = Ii(String, m.type)
 						;(m[0] = g > -1), (m[1] = O < 0 || g < O), (g > -1 || Y(m, "default")) && a.push(d)
 					}
 				}
 			}
-		let c = [i, a]
+		const c = [i, a]
 		return o.set(e, c), c
 	}
 	function Di(e) {
 		return e[0] !== "$"
 	}
 	function $i(e) {
-		let t = e && e.toString().match(/^\s*function (\w+)/)
+		const t = e && e.toString().match(/^\s*function (\w+)/)
 		return t ? t[1] : e === null ? "null" : ""
 	}
 	function Si(e, t) {
@@ -3005,28 +3005,28 @@ This is likely a Baklava internal issue. Please report it on GitHub.`)
 		ar = (e) => (L(e) ? e.map(it) : [it(e)]),
 		su = (e, t, n) => {
 			if (t._n) return t
-			let o = yn((...s) => ar(t(...s)), n)
+			const o = yn((...s) => ar(t(...s)), n)
 			return (o._c = !1), o
 		},
 		la = (e, t, n) => {
-			let o = e._ctx
-			for (let s in e) {
+			const o = e._ctx
+			for (const s in e) {
 				if (aa(s)) continue
-				let r = e[s]
+				const r = e[s]
 				if (B(r)) t[s] = su(s, r, o)
 				else if (r != null) {
-					let i = ar(r)
+					const i = ar(r)
 					t[s] = () => i
 				}
 			}
 		},
 		ca = (e, t) => {
-			let n = ar(t)
+			const n = ar(t)
 			e.slots.default = () => n
 		},
 		ru = (e, t) => {
 			if (e.vnode.shapeFlag & 32) {
-				let n = t._
+				const n = t._
 				n ? ((e.slots = G(t)), ln(t, "_", n)) : la(t, (e.slots = {}))
 			} else (e.slots = {}), t && ca(e, t)
 			ln(e.slots, Jo, 1)
@@ -3036,10 +3036,10 @@ This is likely a Baklava internal issue. Please report it on GitHub.`)
 				r = !0,
 				i = se
 			if (o.shapeFlag & 32) {
-				let a = t._
+				const a = t._
 				a ? (n && a === 1 ? (r = !1) : (ve(s, t), !n && a === 1 && delete s._)) : ((r = !t.$stable), la(t, s)), (i = t)
 			} else t && (ca(e, t), (i = { default: 1 }))
-			if (r) for (let a in s) !aa(a) && !(a in i) && delete s[a]
+			if (r) for (const a in s) !aa(a) && !(a in i) && delete s[a]
 		}
 	function ua() {
 		return {
@@ -3087,7 +3087,7 @@ This is likely a Baklava internal issue. Please report it on GitHub.`)
 					},
 					mount(c, u, d) {
 						if (!a) {
-							let p = X(o, s)
+							const p = X(o, s)
 							return (
 								(p.appContext = r),
 								u && t ? t(p, c) : e(p, c, d),
@@ -3115,7 +3115,7 @@ This is likely a Baklava internal issue. Please report it on GitHub.`)
 			return
 		}
 		if (Kn(o) && !s) return
-		let r = o.shapeFlag & 4 ? Zo(o.component) || o.component.proxy : o.el,
+		const r = o.shapeFlag & 4 ? Zo(o.component) || o.component.proxy : o.el,
 			i = s ? null : r,
 			{ i: a, r: l } = e,
 			c = t && t.r,
@@ -3123,12 +3123,12 @@ This is likely a Baklava internal issue. Please report it on GitHub.`)
 			d = a.setupState
 		if ((c != null && c !== l && (ge(c) ? ((u[c] = null), Y(d, c) && (d[c] = null)) : ye(c) && (c.value = null)), B(l))) gt(l, a, 12, [i, u])
 		else {
-			let p = ge(l),
+			const p = ge(l),
 				m = ye(l)
 			if (p || m) {
-				let g = () => {
+				const g = () => {
 					if (e.f) {
-						let O = p ? u[l] : l.value
+						const O = p ? u[l] : l.value
 						s ? L(O) && mo(O, r) : L(O) ? O.includes(r) || O.push(r) : p ? ((u[l] = [r]), Y(d, l) && (d[l] = u[l])) : ((l.value = [r]), e.k && (u[e.k] = l.value))
 					} else p ? ((u[l] = i), Y(d, l) && (d[l] = i)) : m && ((l.value = i), e.k && (u[e.k] = i))
 				}
@@ -3137,7 +3137,7 @@ This is likely a Baklava internal issue. Please report it on GitHub.`)
 		}
 	}
 	function cu() {
-		let e = []
+		const e = []
 		typeof __VUE_OPTIONS_API__ != "boolean" && (Eo().__VUE_OPTIONS_API__ = !0), typeof __VUE_PROD_DEVTOOLS__ != "boolean" && (Eo().__VUE_PROD_DEVTOOLS__ = !1)
 	}
 	var Re = Fc
@@ -3146,7 +3146,7 @@ This is likely a Baklava internal issue. Please report it on GitHub.`)
 	}
 	function uu(e, t) {
 		cu()
-		let n = Eo()
+		const n = Eo()
 		;(n.__VUE__ = !0), __VUE_PROD_DEVTOOLS__ && zi(n.__VUE_DEVTOOLS_GLOBAL_HOOK__, n)
 		let {
 				insert: o,
@@ -3166,7 +3166,7 @@ This is likely a Baklava internal issue. Please report it on GitHub.`)
 			w = (f, h, v, _ = null, b = null, k = null, $ = !1, C = null, T = !!h.dynamicChildren) => {
 				if (f === h) return
 				f && !Gt(f, h) && ((_ = lo(f)), bt(f, b, k, !0), (f = null)), h.patchFlag === -2 && ((T = !1), (h.dynamicChildren = null))
-				let { type: E, ref: A, shapeFlag: P } = h
+				const { type: E, ref: A, shapeFlag: P } = h
 				switch (E) {
 					case Xo:
 						S(f, h, v, _)
@@ -3188,7 +3188,7 @@ This is likely a Baklava internal issue. Please report it on GitHub.`)
 			S = (f, h, v, _) => {
 				if (f == null) o((h.el = a(h.children)), v, _)
 				else {
-					let b = (h.el = f.el)
+					const b = (h.el = f.el)
 					h.children !== f.children && c(b, h.children)
 				}
 			},
@@ -3196,11 +3196,11 @@ This is likely a Baklava internal issue. Please report it on GitHub.`)
 				f == null ? o((h.el = l(h.children || "")), v, _) : (h.el = f.el)
 			},
 			M = (f, h, v, _) => {
-				;[f.el, f.anchor] = O(f.children, h, v, _, f.el, f.anchor)
+				[f.el, f.anchor] = O(f.children, h, v, _, f.el, f.anchor)
 			},
 			z = (f, h, v, _) => {
 				if (h.children !== f.children) {
-					let b = p(f.anchor)
+					const b = p(f.anchor)
 					re(f), ([h.el, h.anchor] = O(h.children, v, b, _))
 				} else (h.el = f.el), (h.anchor = f.anchor)
 			},
@@ -3215,7 +3215,7 @@ This is likely a Baklava internal issue. Please report it on GitHub.`)
 				s(h)
 			},
 			N = (f, h, v, _, b, k, $, C, T) => {
-				;($ = $ || h.type === "svg"), f == null ? R(h, v, _, b, k, $, C, T) : ue(f, h, b, k, $, C, T)
+				($ = $ || h.type === "svg"), f == null ? R(h, v, _, b, k, $, C, T) : ue(f, h, b, k, $, C, T)
 			},
 			R = (f, h, v, _, b, k, $, C) => {
 				let T,
@@ -3229,17 +3229,17 @@ This is likely a Baklava internal issue. Please report it on GitHub.`)
 						ae && Wt(f, null, _, "created"),
 						P)
 					) {
-						for (let ce in P) ce !== "value" && !Vn(ce) && r(T, ce, null, P[ce], k, f.children, _, b, dt)
+						for (const ce in P) ce !== "value" && !Vn(ce) && r(T, ce, null, P[ce], k, f.children, _, b, dt)
 						"value" in P && r(T, "value", null, P.value), (E = P.onVnodeBeforeMount) && rt(E, _, f)
 					}
 					Z(T, f, f.scopeId, $, _)
 				}
 				__VUE_PROD_DEVTOOLS__ && (Object.defineProperty(T, "__vnode", { value: f, enumerable: !1 }), Object.defineProperty(T, "__vueParentComponent", { value: _, enumerable: !1 })),
-					ae && Wt(f, null, _, "beforeMount")
-				let le = (!b || (b && !b.pendingBranch)) && W && !W.persisted
+				ae && Wt(f, null, _, "beforeMount")
+				const le = (!b || (b && !b.pendingBranch)) && W && !W.persisted
 				le && W.beforeEnter(T),
-					o(T, h, v),
-					((E = P && P.onVnodeMounted) || le || ae) &&
+				o(T, h, v),
+				((E = P && P.onVnodeMounted) || le || ae) &&
 						Re(() => {
 							E && rt(E, _, f), le && W.enter(T), ae && Wt(f, null, _, "mounted")
 						}, b)
@@ -3247,16 +3247,16 @@ This is likely a Baklava internal issue. Please report it on GitHub.`)
 			Z = (f, h, v, _, b) => {
 				if ((v && m(f, v), _)) for (let k = 0; k < _.length; k++) m(f, _[k])
 				if (b) {
-					let k = b.subTree
+					const k = b.subTree
 					if (h === k) {
-						let $ = b.vnode
+						const $ = b.vnode
 						Z(f, $, $.scopeId, $.slotScopeIds, b.parent)
 					}
 				}
 			},
 			U = (f, h, v, _, b, k, $, C, T = 0) => {
 				for (let E = T; E < f.length; E++) {
-					let A = (f[E] = C ? Dt(f[E]) : it(f[E]))
+					const A = (f[E] = C ? Dt(f[E]) : it(f[E]))
 					w(null, A, h, v, _, b, k, $, C)
 				}
 			},
@@ -3268,13 +3268,13 @@ This is likely a Baklava internal issue. Please report it on GitHub.`)
 					F = h.props || se,
 					W
 				v && Kt(v, !1), (W = F.onVnodeBeforeUpdate) && rt(W, v, h, f), A && Wt(h, f, v, "beforeUpdate"), v && Kt(v, !0)
-				let Q = b && h.type !== "foreignObject"
+				const Q = b && h.type !== "foreignObject"
 				if ((E ? x(f.dynamicChildren, E, C, v, _, Q, k) : $ || ut(f, h, C, null, v, _, Q, k, !1), T > 0)) {
 					if (T & 16) q(C, h, P, F, v, _, b)
 					else if ((T & 2 && P.class !== F.class && r(C, "class", null, F.class, b), T & 4 && r(C, "style", P.style, F.style, b), T & 8)) {
-						let ae = h.dynamicProps
+						const ae = h.dynamicProps
 						for (let le = 0; le < ae.length; le++) {
-							let ce = ae[le],
+							const ce = ae[le],
 								Ze = P[ce],
 								tn = F[ce]
 							;(tn !== Ze || ce === "value") && r(C, ce, Ze, tn, b, f.children, v, _, dt)
@@ -3289,7 +3289,7 @@ This is likely a Baklava internal issue. Please report it on GitHub.`)
 			},
 			x = (f, h, v, _, b, k, $) => {
 				for (let C = 0; C < h.length; C++) {
-					let T = f[C],
+					const T = f[C],
 						E = h[C],
 						A = T.el && (T.type === te || !Gt(T, E) || T.shapeFlag & 70) ? d(T.el) : v
 					w(T, E, A, null, _, b, k, $, !0)
@@ -3297,35 +3297,35 @@ This is likely a Baklava internal issue. Please report it on GitHub.`)
 			},
 			q = (f, h, v, _, b, k, $) => {
 				if (v !== _) {
-					for (let C in _) {
+					for (const C in _) {
 						if (Vn(C)) continue
-						let T = _[C],
+						const T = _[C],
 							E = v[C]
 						T !== E && C !== "value" && r(f, C, E, T, $, h.children, b, k, dt)
 					}
-					if (v !== se) for (let C in v) !Vn(C) && !(C in _) && r(f, C, v[C], null, $, h.children, b, k, dt)
+					if (v !== se) for (const C in v) !Vn(C) && !(C in _) && r(f, C, v[C], null, $, h.children, b, k, dt)
 					"value" in _ && r(f, "value", v.value, _.value)
 				}
 			},
 			pe = (f, h, v, _, b, k, $, C, T) => {
-				let E = (h.el = f ? f.el : a("")),
+				const E = (h.el = f ? f.el : a("")),
 					A = (h.anchor = f ? f.anchor : a("")),
 					{ patchFlag: P, dynamicChildren: F, slotScopeIds: W } = h
 				W && (C = C ? C.concat(W) : W),
-					f == null
-						? (o(E, v, _), o(A, v, _), U(h.children, v, A, b, k, $, C, T))
-						: P > 0 && P & 64 && F && f.dynamicChildren
+				f == null
+					? (o(E, v, _), o(A, v, _), U(h.children, v, A, b, k, $, C, T))
+					: P > 0 && P & 64 && F && f.dynamicChildren
 						? (x(f.dynamicChildren, F, v, b, k, $, C), (h.key != null || (b && h === b.subTree)) && fa(f, h, !0))
 						: ut(f, h, v, A, b, k, $, C, T)
 			},
 			$e = (f, h, v, _, b, k, $, C, T) => {
-				;(h.slotScopeIds = C), f == null ? (h.shapeFlag & 512 ? b.ctx.activate(h, v, _, $, T) : ie(h, v, _, b, k, $, T)) : ee(f, h, T)
+				(h.slotScopeIds = C), f == null ? (h.shapeFlag & 512 ? b.ctx.activate(h, v, _, $, T) : ie(h, v, _, b, k, $, T)) : ee(f, h, T)
 			},
 			ie = (f, h, v, _, b, k, $) => {
-				let C = (f.component = _u(f, _, b))
+				const C = (f.component = _u(f, _, b))
 				if ((zo(f) && (C.ctx.renderer = en), bu(C), C.asyncDep)) {
 					if ((b && b.registerDep(C, oe), !f.el)) {
-						let T = (C.subTree = X(We))
+						const T = (C.subTree = X(We))
 						y(null, T, h, v)
 					}
 					return
@@ -3333,7 +3333,7 @@ This is likely a Baklava internal issue. Please report it on GitHub.`)
 				oe(C, f, h, v, b, k, $)
 			},
 			ee = (f, h, v) => {
-				let _ = (h.component = f.component)
+				const _ = (h.component = f.component)
 				if (Pc(f, h, v))
 					if (_.asyncDep && !_.asyncResolved) {
 						Ae(_, h, v)
@@ -3342,40 +3342,40 @@ This is likely a Baklava internal issue. Please report it on GitHub.`)
 				else (h.el = f.el), (_.vnode = h)
 			},
 			oe = (f, h, v, _, b, k, $) => {
-				let C = () => {
+				const C = () => {
 						if (f.isMounted) {
 							let { next: A, bu: P, u: F, parent: W, vnode: Q } = f,
 								ae = A,
 								le
 							Kt(f, !1), A ? ((A.el = Q.el), Ae(f, A, $)) : (A = Q), P && an(P), (le = A.props && A.props.onVnodeBeforeUpdate) && rt(le, W, A, Q), Kt(f, !0)
-							let ce = Ks(f),
+							const ce = Ks(f),
 								Ze = f.subTree
 							;(f.subTree = ce),
-								w(Ze, ce, d(Ze.el), lo(Ze), f, b, k),
-								(A.el = ce.el),
-								ae === null && Rc(f, ce.el),
-								F && Re(F, b),
-								(le = A.props && A.props.onVnodeUpdated) && Re(() => rt(le, W, A, Q), b),
-								__VUE_PROD_DEVTOOLS__ && qi(f)
+							w(Ze, ce, d(Ze.el), lo(Ze), f, b, k),
+							(A.el = ce.el),
+							ae === null && Rc(f, ce.el),
+							F && Re(F, b),
+							(le = A.props && A.props.onVnodeUpdated) && Re(() => rt(le, W, A, Q), b),
+							__VUE_PROD_DEVTOOLS__ && qi(f)
 						} else {
 							let A,
 								{ el: P, props: F } = h,
 								{ bm: W, m: Q, parent: ae } = f,
 								le = Kn(h)
 							if ((Kt(f, !1), W && an(W), !le && (A = F && F.onVnodeBeforeMount) && rt(A, ae, h), Kt(f, !0), P && us)) {
-								let ce = () => {
-									;(f.subTree = Ks(f)), us(P, f.subTree, f, b, null)
+								const ce = () => {
+									(f.subTree = Ks(f)), us(P, f.subTree, f, b, null)
 								}
 								le ? h.type.__asyncLoader().then(() => !f.isUnmounted && ce()) : ce()
 							} else {
-								let ce = (f.subTree = Ks(f))
+								const ce = (f.subTree = Ks(f))
 								w(null, ce, v, _, f, b, k), (h.el = ce.el)
 							}
 							if ((Q && Re(Q, b), !le && (A = F && F.onVnodeMounted))) {
-								let ce = h
+								const ce = h
 								Re(() => rt(A, ae, ce), b)
 							}
-							;(h.shapeFlag & 256 || (ae && Kn(ae.vnode) && ae.vnode.shapeFlag & 256)) && f.a && Re(f.a, b), (f.isMounted = !0), __VUE_PROD_DEVTOOLS__ && Dc(f), (h = v = _ = null)
+							(h.shapeFlag & 256 || (ae && Kn(ae.vnode) && ae.vnode.shapeFlag & 256)) && f.a && Re(f.a, b), (f.isMounted = !0), __VUE_PROD_DEVTOOLS__ && Dc(f), (h = v = _ = null)
 						}
 					},
 					T = (f.effect = new Ut(C, () => Li(E), f.scope)),
@@ -3384,11 +3384,11 @@ This is likely a Baklava internal issue. Please report it on GitHub.`)
 			},
 			Ae = (f, h, v) => {
 				h.component = f
-				let _ = f.vnode.props
+				const _ = f.vnode.props
 				;(f.vnode = h), (f.next = null), ou(f, h.props, _, v), iu(f, h.children, v), Ct(), Lo(void 0, f.update), xt()
 			},
 			ut = (f, h, v, _, b, k, $, C, T = !1) => {
-				let E = f && f.children,
+				const E = f && f.children,
 					A = f ? f.shapeFlag : 0,
 					P = h.children,
 					{ patchFlag: F, shapeFlag: W } = h
@@ -3404,13 +3404,13 @@ This is likely a Baklava internal issue. Please report it on GitHub.`)
 				W & 8 ? (A & 16 && dt(E, b, k), P !== E && u(v, P)) : A & 16 ? (W & 16 ? io(E, P, v, _, b, k, $, C, T) : dt(E, b, k, !0)) : (A & 8 && u(v, ""), W & 16 && U(P, v, _, b, k, $, C, T))
 			},
 			Pt = (f, h, v, _, b, k, $, C, T) => {
-				;(f = f || Ft), (h = h || Ft)
+				(f = f || Ft), (h = h || Ft)
 				let E = f.length,
 					A = h.length,
 					P = Math.min(E, A),
 					F
 				for (F = 0; F < P; F++) {
-					let W = (h[F] = T ? Dt(h[F]) : it(h[F]))
+					const W = (h[F] = T ? Dt(h[F]) : it(h[F]))
 					w(f[F], W, v, null, b, k, $, C, T)
 				}
 				E > A ? dt(f, b, k, !0, !1, P) : U(h, v, _, b, k, $, C, T, P)
@@ -3421,14 +3421,14 @@ This is likely a Baklava internal issue. Please report it on GitHub.`)
 					P = f.length - 1,
 					F = A - 1
 				for (; E <= P && E <= F; ) {
-					let W = f[E],
+					const W = f[E],
 						Q = (h[E] = T ? Dt(h[E]) : it(h[E]))
 					if (Gt(W, Q)) w(W, Q, v, null, b, k, $, C, T)
 					else break
 					E++
 				}
 				for (; E <= P && E <= F; ) {
-					let W = f[P],
+					const W = f[P],
 						Q = (h[F] = T ? Dt(h[F]) : it(h[F]))
 					if (Gt(W, Q)) w(W, Q, v, null, b, k, $, C, T)
 					else break
@@ -3436,17 +3436,17 @@ This is likely a Baklava internal issue. Please report it on GitHub.`)
 				}
 				if (E > P) {
 					if (E <= F) {
-						let W = F + 1,
+						const W = F + 1,
 							Q = W < A ? h[W].el : _
 						for (; E <= F; ) w(null, (h[E] = T ? Dt(h[E]) : it(h[E])), v, Q, b, k, $, C, T), E++
 					}
 				} else if (E > F) for (; E <= P; ) bt(f[E], b, k, !0), E++
 				else {
-					let W = E,
+					const W = E,
 						Q = E,
 						ae = new Map()
 					for (E = Q; E <= F; E++) {
-						let Fe = (h[E] = T ? Dt(h[E]) : it(h[E]))
+						const Fe = (h[E] = T ? Dt(h[E]) : it(h[E]))
 						Fe.key != null && ae.set(Fe.key, E)
 					}
 					let le,
@@ -3457,7 +3457,7 @@ This is likely a Baklava internal issue. Please report it on GitHub.`)
 						Cn = new Array(Ze)
 					for (E = 0; E < Ze; E++) Cn[E] = 0
 					for (E = W; E <= P; E++) {
-						let Fe = f[E]
+						const Fe = f[E]
 						if (ce >= Ze) {
 							bt(Fe, b, k, !0)
 							continue
@@ -3472,9 +3472,9 @@ This is likely a Baklava internal issue. Please report it on GitHub.`)
 								}
 						nt === void 0 ? bt(Fe, b, k, !0) : ((Cn[nt - Q] = E + 1), nt >= Kr ? (Kr = nt) : (tn = !0), w(Fe, h[nt], v, null, b, k, $, C, T), ce++)
 					}
-					let zr = tn ? du(Cn) : Ft
+					const zr = tn ? du(Cn) : Ft
 					for (le = zr.length - 1, E = Ze - 1; E >= 0; E--) {
-						let Fe = Q + E,
+						const Fe = Q + E,
 							nt = h[Fe],
 							qr = Fe + 1 < A ? h[Fe + 1].el : _
 						Cn[E] === 0 ? w(null, nt, v, qr, b, k, $, C, T) : tn && (le < 0 || E !== zr[le] ? ao(nt, v, qr, 2) : le--)
@@ -3482,7 +3482,7 @@ This is likely a Baklava internal issue. Please report it on GitHub.`)
 				}
 			},
 			ao = (f, h, v, _, b = null) => {
-				let { el: k, type: $, transition: C, children: T, shapeFlag: E } = f
+				const { el: k, type: $, transition: C, children: T, shapeFlag: E } = f
 				if (E & 6) {
 					ao(f.component.subTree, h, v, _)
 					return
@@ -3520,7 +3520,7 @@ This is likely a Baklava internal issue. Please report it on GitHub.`)
 				else o(k, h, v)
 			},
 			bt = (f, h, v, _ = !1, b = !1) => {
-				let { type: k, props: $, ref: C, children: T, dynamicChildren: E, shapeFlag: A, patchFlag: P, dirs: F } = f
+				const { type: k, props: $, ref: C, children: T, dynamicChildren: E, shapeFlag: A, patchFlag: P, dirs: F } = f
 				if ((C != null && er(C, null, v, f, !0), A & 256)) {
 					h.ctx.deactivate(f)
 					return
@@ -3535,16 +3535,16 @@ This is likely a Baklava internal issue. Please report it on GitHub.`)
 						return
 					}
 					W && Wt(f, null, h, "beforeUnmount"),
-						A & 64 ? f.type.remove(f, h, v, b, en, _) : E && (k !== te || (P > 0 && P & 64)) ? dt(E, h, v, !1, !0) : ((k === te && P & 384) || (!b && A & 16)) && dt(T, h, v),
-						_ && Br(f)
+					A & 64 ? f.type.remove(f, h, v, b, en, _) : E && (k !== te || (P > 0 && P & 64)) ? dt(E, h, v, !1, !0) : ((k === te && P & 384) || (!b && A & 16)) && dt(T, h, v),
+					_ && Br(f)
 				}
-				;((Q && (ae = $ && $.onVnodeUnmounted)) || W) &&
+				((Q && (ae = $ && $.onVnodeUnmounted)) || W) &&
 					Re(() => {
 						ae && rt(ae, h, f), W && Wt(f, null, h, "unmounted")
 					}, v)
 			},
 			Br = (f) => {
-				let { type: h, el: v, anchor: _, transition: b } = f
+				const { type: h, el: v, anchor: _, transition: b } = f
 				if (h === te) {
 					bl(v, _)
 					return
@@ -3553,7 +3553,7 @@ This is likely a Baklava internal issue. Please report it on GitHub.`)
 					re(f)
 					return
 				}
-				let k = () => {
+				const k = () => {
 					s(v), b && !b.persisted && b.afterLeave && b.afterLeave()
 				}
 				if (f.shapeFlag & 1 && b && !b.persisted) {
@@ -3568,16 +3568,16 @@ This is likely a Baklava internal issue. Please report it on GitHub.`)
 				s(h)
 			},
 			El = (f, h, v) => {
-				let { bum: _, scope: b, update: k, subTree: $, um: C } = f
+				const { bum: _, scope: b, update: k, subTree: $, um: C } = f
 				_ && an(_),
-					b.stop(),
-					k && ((k.active = !1), bt($, f, h, v)),
-					C && Re(C, h),
-					Re(() => {
-						f.isUnmounted = !0
-					}, h),
-					h && h.pendingBranch && !h.isUnmounted && f.asyncDep && !f.asyncResolved && f.suspenseId === h.pendingId && (h.deps--, h.deps === 0 && h.resolve()),
-					__VUE_PROD_DEVTOOLS__ && $c(f)
+				b.stop(),
+				k && ((k.active = !1), bt($, f, h, v)),
+				C && Re(C, h),
+				Re(() => {
+					f.isUnmounted = !0
+				}, h),
+				h && h.pendingBranch && !h.isUnmounted && f.asyncDep && !f.asyncResolved && f.suspenseId === h.pendingId && (h.deps--, h.deps === 0 && h.resolve()),
+				__VUE_PROD_DEVTOOLS__ && $c(f)
 			},
 			dt = (f, h, v, _ = !1, b = !1, k = 0) => {
 				for (let $ = k; $ < f.length; $++) bt(f[$], h, v, _, b)
@@ -3595,7 +3595,7 @@ This is likely a Baklava internal issue. Please report it on GitHub.`)
 		e.allowRecurse = t.allowRecurse = n
 	}
 	function fa(e, t, n = !1) {
-		let o = e.children,
+		const o = e.children,
 			s = t.children
 		if (L(o) && L(s))
 			for (let r = 0; r < o.length; r++) {
@@ -3614,10 +3614,10 @@ This is likely a Baklava internal issue. Please report it on GitHub.`)
 			a,
 			l = e.length
 		for (o = 0; o < l; o++) {
-			let c = e[o]
+			const c = e[o]
 			if (c !== 0) {
 				if (((s = n[n.length - 1]), e[s] < c)) {
-					;(t[o] = s), n.push(o)
+					(t[o] = s), n.push(o)
 					continue
 				}
 				for (r = 0, i = n.length - 1; r < i; ) (a = (r + i) >> 1), e[n[a]] < c ? (r = a + 1) : (i = a)
@@ -3663,7 +3663,7 @@ This is likely a Baklava internal issue. Please report it on GitHub.`)
 		ha = ({ key: e }) => e ?? null,
 		Vo = ({ ref: e, ref_key: t, ref_for: n }) => (e != null ? (ge(e) || ye(e) || B(e) ? { i: ke, r: e, k: t, f: !!n } : e) : null)
 	function I(e, t = null, n = null, o = 0, s = null, r = e === te ? 0 : 1, i = !1, a = !1) {
-		let l = {
+		const l = {
 			__v_isVNode: !0,
 			__v_skip: !0,
 			type: e,
@@ -3695,7 +3695,7 @@ This is likely a Baklava internal issue. Please report it on GitHub.`)
 	var X = hu
 	function hu(e, t = null, n = null, o = 0, s = null, r = !1) {
 		if (((!e || e === ea) && (e = We), Ho(e))) {
-			let a = $t(e, t, !0)
+			const a = $t(e, t, !0)
 			return n && cr(a, n), Gn > 0 && !r && et && (a.shapeFlag & 6 ? (et[et.indexOf(e)] = a) : et.push(a)), (a.patchFlag |= -2), a
 		}
 		if ((xu(e) && (e = e.__vccOpts), t)) {
@@ -3703,7 +3703,7 @@ This is likely a Baklava internal issue. Please report it on GitHub.`)
 			let { class: a, style: l } = t
 			a && !ge(a) && (t.class = Ee(a)), fe(l) && (So(l) && !L(l) && (l = ve({}, l)), (t.style = He(l)))
 		}
-		let i = ge(e) ? 1 : Ac(e) ? 128 : fu(e) ? 64 : fe(e) ? 4 : B(e) ? 2 : 0
+		const i = ge(e) ? 1 : Ac(e) ? 128 : fu(e) ? 64 : fe(e) ? 4 : B(e) ? 2 : 0
 		return I(e, t, n, o, s, i, r, !0)
 	}
 	function mu(e) {
@@ -3744,7 +3744,7 @@ This is likely a Baklava internal issue. Please report it on GitHub.`)
 		return X(Xo, null, e, t)
 	}
 	function ma(e, t) {
-		let n = X(pn, null, e)
+		const n = X(pn, null, e)
 		return (n.staticCount = t), n
 	}
 	function lt(e = "", t = !1) {
@@ -3763,26 +3763,26 @@ This is likely a Baklava internal issue. Please report it on GitHub.`)
 		else if (L(t)) n = 16
 		else if (typeof t == "object")
 			if (o & 65) {
-				let s = t.default
+				const s = t.default
 				s && (s._c && (s._d = !1), cr(e, s()), s._c && (s._d = !0))
 				return
 			} else {
 				n = 32
-				let s = t._
+				const s = t._
 				!s && !(Jo in t) ? (t._ctx = ke) : s === 3 && ke && (ke.slots._ === 1 ? (t._ = 1) : ((t._ = 2), (e.patchFlag |= 1024)))
 			}
 		else B(t) ? ((t = { default: t, _ctx: ke }), (n = 32)) : ((t = String(t)), o & 64 ? ((n = 16), (t = [lr(t)])) : (n = 8))
 		;(e.children = t), (e.shapeFlag |= n)
 	}
 	function gu(...e) {
-		let t = {}
+		const t = {}
 		for (let n = 0; n < e.length; n++) {
-			let o = e[n]
-			for (let s in o)
+			const o = e[n]
+			for (const s in o)
 				if (s === "class") t.class !== o.class && (t.class = Ee([t.class, o.class]))
 				else if (s === "style") t.style = He([t.style, o.style])
 				else if (rn(s)) {
-					let r = t[s],
+					const r = t[s],
 						i = o[s]
 					i && r !== i && !(L(r) && r.includes(i)) && (t[s] = r ? [].concat(r, i) : i)
 				} else s !== "" && (t[s] = o[s])
@@ -3795,7 +3795,7 @@ This is likely a Baklava internal issue. Please report it on GitHub.`)
 	var vu = ua(),
 		yu = 0
 	function _u(e, t, n) {
-		let o = e.type,
+		const o = e.type,
 			s = (t ? t.appContext : e.appContext) || vu,
 			r = {
 				uid: yu++,
@@ -3860,7 +3860,7 @@ This is likely a Baklava internal issue. Please report it on GitHub.`)
 	var we = null,
 		ur = () => we || ke,
 		gn = (e) => {
-			;(we = e), e.scope.on()
+			(we = e), e.scope.on()
 		},
 		Xt = () => {
 			we && we.scope.off(), (we = null)
@@ -3871,21 +3871,21 @@ This is likely a Baklava internal issue. Please report it on GitHub.`)
 	var Yn = !1
 	function bu(e, t = !1) {
 		Yn = t
-		let { props: n, children: o } = e.vnode,
+		const { props: n, children: o } = e.vnode,
 			s = ga(e)
 		nu(e, n, s, t), ru(e, o)
-		let r = s ? Eu(e, t) : void 0
+		const r = s ? Eu(e, t) : void 0
 		return (Yn = !1), r
 	}
 	function Eu(e, t) {
 		var n
-		let o = e.type
+		const o = e.type
 		;(e.accessCache = Object.create(null)), (e.proxy = Le(new Proxy(e.ctx, Xc)))
-		let { setup: s } = o
+		const { setup: s } = o
 		if (s) {
-			let r = (e.setupContext = s.length > 1 ? Nu(e) : null)
+			const r = (e.setupContext = s.length > 1 ? Nu(e) : null)
 			gn(e), Ct()
-			let i = gt(s, e, 0, [e.props, r])
+			const i = gt(s, e, 0, [e.props, r])
 			if ((xt(), Xt(), ws(i))) {
 				if ((i.then(Xt, Xt), t))
 					return i
@@ -3904,18 +3904,18 @@ This is likely a Baklava internal issue. Please report it on GitHub.`)
 	}
 	var Pi, Ri
 	function va(e, t, n) {
-		let o = e.type
+		const o = e.type
 		if (!e.render) {
 			if (!t && Pi && !o.render) {
-				let s = o.template
+				const s = o.template
 				if (s) {
-					let { isCustomElement: r, compilerOptions: i } = e.appContext.config,
+					const { isCustomElement: r, compilerOptions: i } = e.appContext.config,
 						{ delimiters: a, compilerOptions: l } = o,
 						c = ve(ve({ isCustomElement: r, delimiters: a }, i), l)
 					o.render = Pi(s, c)
 				}
 			}
-			;(e.render = o.render || Ie), Ri && Ri(e)
+			(e.render = o.render || Ie), Ri && Ri(e)
 		}
 		__VUE_OPTIONS_API__ && (gn(e), Ct(), Jc(e), xt(), Xt())
 	}
@@ -3960,12 +3960,12 @@ This is likely a Baklava internal issue. Please report it on GitHub.`)
 	function _a(e, t, n = !1) {
 		let o = ya(t)
 		if (!o && t.__file) {
-			let s = t.__file.match(/([^/\\]+)\.\w+$/)
+			const s = t.__file.match(/([^/\\]+)\.\w+$/)
 			s && (o = s[1])
 		}
 		if (!o && e && e.parent) {
-			let s = (r) => {
-				for (let i in r) if (r[i] === t) return i
+			const s = (r) => {
+				for (const i in r) if (r[i] === t) return i
 			}
 			o = s(e.components || e.parent.type.components) || s(e.appContext.components)
 		}
@@ -3976,7 +3976,7 @@ This is likely a Baklava internal issue. Please report it on GitHub.`)
 	}
 	var K = (e, t) => wi(e, t, Yn)
 	function Qo(e, t, n) {
-		let o = arguments.length
+		const o = arguments.length
 		return o === 2 ? (fe(t) && !L(t) ? (Ho(t) ? X(e, null, [t]) : X(e, t)) : X(e, null, t)) : (o > 3 ? (n = Array.prototype.slice.call(arguments, 2)) : o === 3 && Ho(n) && (n = [n]), X(e, t, n))
 	}
 	var qg = Symbol("")
@@ -3989,11 +3989,11 @@ This is likely a Baklava internal issue. Please report it on GitHub.`)
 				t.insertBefore(e, n || null)
 			},
 			remove: (e) => {
-				let t = e.parentNode
+				const t = e.parentNode
 				t && t.removeChild(e)
 			},
 			createElement: (e, t, n, o) => {
-				let s = t ? Zt.createElementNS(ku, e) : Zt.createElement(e, n ? { is: n } : void 0)
+				const s = t ? Zt.createElementNS(ku, e) : Zt.createElement(e, n ? { is: n } : void 0)
 				return e === "select" && o && o.multiple != null && s.setAttribute("multiple", o.multiple), s
 			},
 			createText: (e) => Zt.createTextNode(e),
@@ -4011,17 +4011,17 @@ This is likely a Baklava internal issue. Please report it on GitHub.`)
 				e.setAttribute(t, "")
 			},
 			cloneNode(e) {
-				let t = e.cloneNode(!0)
+				const t = e.cloneNode(!0)
 				return "_value" in e && (t._value = e._value), t
 			},
 			insertStaticContent(e, t, n, o, s, r) {
-				let i = n ? n.previousSibling : t.lastChild
+				const i = n ? n.previousSibling : t.lastChild
 				if (s && (s === r || s.nextSibling)) for (; t.insertBefore(s.cloneNode(!0), n), !(s === r || !(s = s.nextSibling)); );
 				else {
 					ba.innerHTML = o ? `<svg>${e}</svg>` : e
-					let a = ba.content
+					const a = ba.content
 					if (o) {
-						let l = a.firstChild
+						const l = a.firstChild
 						for (; l.firstChild; ) a.appendChild(l.firstChild)
 						a.removeChild(l)
 					}
@@ -4031,17 +4031,17 @@ This is likely a Baklava internal issue. Please report it on GitHub.`)
 			}
 		}
 	function Du(e, t, n) {
-		let o = e._vtc
+		const o = e._vtc
 		o && (t = (t ? [t, ...o] : [...o]).join(" ")), t == null ? e.removeAttribute("class") : n ? e.setAttribute("class", t) : (e.className = t)
 	}
 	function $u(e, t, n) {
-		let o = e.style,
+		const o = e.style,
 			s = ge(n)
 		if (n && !s) {
-			for (let r in n) pr(o, r, n[r])
-			if (t && !ge(t)) for (let r in t) n[r] == null && pr(o, r, "")
+			for (const r in n) pr(o, r, n[r])
+			if (t && !ge(t)) for (const r in t) n[r] == null && pr(o, r, "")
 		} else {
-			let r = o.display
+			const r = o.display
 			s ? t !== n && (o.cssText = n) : t && e.removeAttribute("style"), "_vod" in e && (o.display = r)
 		}
 	}
@@ -4050,20 +4050,20 @@ This is likely a Baklava internal issue. Please report it on GitHub.`)
 		if (L(n)) n.forEach((o) => pr(e, t, o))
 		else if ((n == null && (n = ""), t.startsWith("--"))) e.setProperty(t, n)
 		else {
-			let o = Su(e, t)
+			const o = Su(e, t)
 			Ea.test(n) ? e.setProperty(pt(o), n.replace(Ea, ""), "important") : (e[o] = n)
 		}
 	}
 	var wa = ["Webkit", "Moz", "ms"],
 		dr = {}
 	function Su(e, t) {
-		let n = dr[t]
+		const n = dr[t]
 		if (n) return n
 		let o = Me(t)
 		if (o !== "filter" && o in e) return (dr[t] = o)
 		o = Ht(o)
 		for (let s = 0; s < wa.length; s++) {
-			let r = wa[s] + o
+			const r = wa[s] + o
 			if (r in e) return (dr[t] = r)
 		}
 		return t
@@ -4072,7 +4072,7 @@ This is likely a Baklava internal issue. Please report it on GitHub.`)
 	function Iu(e, t, n, o, s) {
 		if (o && t.startsWith("xlink:")) n == null ? e.removeAttributeNS(Na, t.slice(6, t.length)) : e.setAttributeNS(Na, t, n)
 		else {
-			let r = Qr(t)
+			const r = Qr(t)
 			n == null || (r && !Es(n)) ? e.removeAttribute(t) : e.setAttribute(t, r ? "" : n)
 		}
 	}
@@ -4083,13 +4083,13 @@ This is likely a Baklava internal issue. Please report it on GitHub.`)
 		}
 		if (t === "value" && e.tagName !== "PROGRESS" && !e.tagName.includes("-")) {
 			e._value = n
-			let l = n ?? ""
+			const l = n ?? ""
 			;(e.value !== l || e.tagName === "OPTION") && (e.value = l), n == null && e.removeAttribute(t)
 			return
 		}
 		let a = !1
 		if (n === "" || n == null) {
-			let l = typeof e[t]
+			const l = typeof e[t]
 			l === "boolean" ? (n = Es(n)) : n == null && l === "string" ? ((n = ""), (a = !0)) : l === "number" && ((n = 0), (a = !0))
 		}
 		try {
@@ -4102,7 +4102,7 @@ This is likely a Baklava internal issue. Please report it on GitHub.`)
 				t = !1
 			if (typeof window < "u") {
 				Date.now() > document.createEvent("Event").timeStamp && (e = performance.now.bind(performance))
-				let n = navigator.userAgent.match(/firefox\/(\d+)/i)
+				const n = navigator.userAgent.match(/firefox\/(\d+)/i)
 				t = !!(n && Number(n[1]) <= 53)
 			}
 			return [e, t]
@@ -4120,13 +4120,13 @@ This is likely a Baklava internal issue. Please report it on GitHub.`)
 		e.removeEventListener(t, n, o)
 	}
 	function Hu(e, t, n, o, s = null) {
-		let r = e._vei || (e._vei = {}),
+		const r = e._vei || (e._vei = {}),
 			i = r[t]
 		if (o && i) i.value = o
 		else {
-			let [a, l] = ju(t)
+			const [a, l] = ju(t)
 			if (o) {
-				let c = (r[t] = Lu(o, s))
+				const c = (r[t] = Lu(o, s))
 				bn(e, a, c, l)
 			} else i && (Fu(e, a, i, l), (r[t] = void 0))
 		}
@@ -4142,15 +4142,15 @@ This is likely a Baklava internal issue. Please report it on GitHub.`)
 		return [pt(e.slice(2)), t]
 	}
 	function Lu(e, t) {
-		let n = (o) => {
-			let s = o.timeStamp || Va()
+		const n = (o) => {
+			const s = o.timeStamp || Va()
 			;(Vu || s >= n.attached - 1) && Be(Uu(o, n.value), t, 5, [o])
 		}
 		return (n.value = e), (n.attached = Au()), n
 	}
 	function Uu(e, t) {
 		if (L(t)) {
-			let n = e.stopImmediatePropagation
+			const n = e.stopImmediatePropagation
 			return (
 				(e.stopImmediatePropagation = () => {
 					n.call(e), (e._stopped = !0)
@@ -4164,12 +4164,12 @@ This is likely a Baklava internal issue. Please report it on GitHub.`)
 			t === "class"
 				? Du(e, o, s)
 				: t === "style"
-				? $u(e, n, o)
-				: rn(t)
-				? Mn(t) || Hu(e, t, n, o, i)
-				: (t[0] === "." ? ((t = t.slice(1)), !0) : t[0] === "^" ? ((t = t.slice(1)), !1) : Wu(e, t, o, s))
-				? Mu(e, t, o, r, i, a, l)
-				: (t === "true-value" ? (e._trueValue = o) : t === "false-value" && (e._falseValue = o), Iu(e, t, o, s))
+					? $u(e, n, o)
+					: rn(t)
+						? Mn(t) || Hu(e, t, n, o, i)
+						: (t[0] === "." ? ((t = t.slice(1)), !0) : t[0] === "^" ? ((t = t.slice(1)), !1) : Wu(e, t, o, s))
+							? Mu(e, t, o, r, i, a, l)
+							: (t === "true-value" ? (e._trueValue = o) : t === "false-value" && (e._falseValue = o), Iu(e, t, o, s))
 		}
 	function Wu(e, t, n, o) {
 		return o
@@ -4181,8 +4181,8 @@ This is likely a Baklava internal issue. Please report it on GitHub.`)
 			  (t === "list" && e.tagName === "INPUT") ||
 			  (t === "type" && e.tagName === "TEXTAREA") ||
 			  (Ca.test(t) && ge(n))
-			? !1
-			: t in e
+				? !1
+				: t in e
 	}
 	var Mt = "transition",
 		Xn = "animation",
@@ -4209,8 +4209,8 @@ This is likely a Baklava internal issue. Please report it on GitHub.`)
 		},
 		xa = (e) => (e ? (L(e) ? e.some((t) => t.length > 1) : e.length > 1) : !1)
 	function Ra(e) {
-		let t = {}
-		for (let x in e) x in Pa || (t[x] = e[x])
+		const t = {}
+		for (const x in e) x in Pa || (t[x] = e[x])
 		if (e.css === !1) return t
 		let {
 				name: n = "v",
@@ -4234,15 +4234,15 @@ This is likely a Baklava internal issue. Please report it on GitHub.`)
 				Vt(x, q ? u : a), Vt(x, q ? c : i), pe && pe()
 			},
 			U = (x, q) => {
-				;(x._isLeaving = !1), Vt(x, d), Vt(x, m), Vt(x, p), q && q()
+				(x._isLeaving = !1), Vt(x, d), Vt(x, m), Vt(x, p), q && q()
 			},
 			ue = (x) => (q, pe) => {
-				let $e = x ? N : y,
+				const $e = x ? N : y,
 					ie = () => Z(q, x, pe)
 				Jt($e, [q, ie]),
-					ka(() => {
-						Vt(q, x ? l : r), _t(q, x ? u : a), xa($e) || Ta(q, o, O, ie)
-					})
+				ka(() => {
+					Vt(q, x ? l : r), _t(q, x ? u : a), xa($e) || Ta(q, o, O, ie)
+				})
 			}
 		return ve(t, {
 			onBeforeEnter(x) {
@@ -4255,14 +4255,14 @@ This is likely a Baklava internal issue. Please report it on GitHub.`)
 			onAppear: ue(!0),
 			onLeave(x, q) {
 				x._isLeaving = !0
-				let pe = () => U(x, q)
+				const pe = () => U(x, q)
 				_t(x, d),
-					Fa(),
-					_t(x, p),
-					ka(() => {
-						!x._isLeaving || (Vt(x, d), _t(x, m), xa(z) || Ta(x, o, w, pe))
-					}),
-					Jt(z, [x, pe])
+				Fa(),
+				_t(x, p),
+				ka(() => {
+					!x._isLeaving || (Vt(x, d), _t(x, m), xa(z) || Ta(x, o, w, pe))
+				}),
+				Jt(z, [x, pe])
 			},
 			onEnterCancelled(x) {
 				Z(x, !1), Jt(M, [x])
@@ -4279,7 +4279,7 @@ This is likely a Baklava internal issue. Please report it on GitHub.`)
 		if (e == null) return null
 		if (fe(e)) return [fr(e.enter), fr(e.leave)]
 		{
-			let t = fr(e)
+			const t = fr(e)
 			return [t, t]
 		}
 	}
@@ -4291,7 +4291,7 @@ This is likely a Baklava internal issue. Please report it on GitHub.`)
 	}
 	function Vt(e, t) {
 		t.split(/\s+/).forEach((o) => o && e.classList.remove(o))
-		let { _vtc: n } = e
+		const { _vtc: n } = e
 		n && (n.delete(t), n.size || (e._vtc = void 0))
 	}
 	function ka(e) {
@@ -4301,12 +4301,12 @@ This is likely a Baklava internal issue. Please report it on GitHub.`)
 	}
 	var qu = 0
 	function Ta(e, t, n, o) {
-		let s = (e._endId = ++qu),
+		const s = (e._endId = ++qu),
 			r = () => {
 				s === e._endId && o()
 			}
 		if (n) return setTimeout(r, n)
-		let { type: i, timeout: a, propCount: l } = Aa(e, t)
+		const { type: i, timeout: a, propCount: l } = Aa(e, t)
 		if (!i) return o()
 		let c = i + "end",
 			u = 0,
@@ -4319,7 +4319,7 @@ This is likely a Baklava internal issue. Please report it on GitHub.`)
 		setTimeout(() => {
 			u < l && d()
 		}, a + 1),
-			e.addEventListener(c, p)
+		e.addEventListener(c, p)
 	}
 	function Aa(e, t) {
 		let n = window.getComputedStyle(e),
@@ -4336,9 +4336,9 @@ This is likely a Baklava internal issue. Please report it on GitHub.`)
 		t === Mt
 			? i > 0 && ((u = Mt), (d = i), (p = r.length))
 			: t === Xn
-			? c > 0 && ((u = Xn), (d = c), (p = l.length))
-			: ((d = Math.max(i, c)), (u = d > 0 ? (i > c ? Mt : Xn) : null), (p = u ? (u === Mt ? r.length : l.length) : 0))
-		let m = u === Mt && /\b(transform|all)(,|$)/.test(n[Mt + "Property"])
+				? c > 0 && ((u = Xn), (d = c), (p = l.length))
+				: ((d = Math.max(i, c)), (u = d > 0 ? (i > c ? Mt : Xn) : null), (p = u ? (u === Mt ? r.length : l.length) : 0))
+		const m = u === Mt && /\b(transform|all)(,|$)/.test(n[Mt + "Property"])
 		return { type: u, timeout: d, propCount: p, hasTransform: m }
 	}
 	function Da(e, t) {
@@ -4364,33 +4364,33 @@ This is likely a Baklava internal issue. Please report it on GitHub.`)
 				return (
 					_n(() => {
 						if (!s.length) return
-						let i = e.moveClass || `${e.name || "v"}-move`
+						const i = e.moveClass || `${e.name || "v"}-move`
 						if (!Zu(s[0].el, n.vnode.el, i)) return
 						s.forEach(Yu), s.forEach(Xu)
-						let a = s.filter(Ju)
+						const a = s.filter(Ju)
 						Fa(),
-							a.forEach((l) => {
-								let c = l.el,
-									u = c.style
-								_t(c, i), (u.transform = u.webkitTransform = u.transitionDuration = "")
-								let d = (c._moveCb = (p) => {
-									;(p && p.target !== c) || ((!p || /transform$/.test(p.propertyName)) && (c.removeEventListener("transitionend", d), (c._moveCb = null), Vt(c, i)))
-								})
-								c.addEventListener("transitionend", d)
+						a.forEach((l) => {
+							const c = l.el,
+								u = c.style
+							_t(c, i), (u.transform = u.webkitTransform = u.transitionDuration = "")
+							const d = (c._moveCb = (p) => {
+								(p && p.target !== c) || ((!p || /transform$/.test(p.propertyName)) && (c.removeEventListener("transitionend", d), (c._moveCb = null), Vt(c, i)))
 							})
+							c.addEventListener("transitionend", d)
+						})
 					}),
 					() => {
-						let i = G(e),
+						const i = G(e),
 							a = Ra(i),
 							l = i.tag || te
 						;(s = r), (r = t.default ? Ko(t.default()) : [])
 						for (let c = 0; c < r.length; c++) {
-							let u = r[c]
+							const u = r[c]
 							u.key != null && mn(u, hn(u, a, o, n))
 						}
 						if (s)
 							for (let c = 0; c < s.length; c++) {
-								let u = s[c]
+								const u = s[c]
 								mn(u, hn(u, a, o, n)), Ha.set(u, u.el.getBoundingClientRect())
 							}
 						return X(l, null, r)
@@ -4400,60 +4400,60 @@ This is likely a Baklava internal issue. Please report it on GitHub.`)
 		},
 		La = Gu
 	function Yu(e) {
-		let t = e.el
+		const t = e.el
 		t._moveCb && t._moveCb(), t._enterCb && t._enterCb()
 	}
 	function Xu(e) {
 		ja.set(e, e.el.getBoundingClientRect())
 	}
 	function Ju(e) {
-		let t = Ha.get(e),
+		const t = Ha.get(e),
 			n = ja.get(e),
 			o = t.left - n.left,
 			s = t.top - n.top
 		if (o || s) {
-			let r = e.el.style
+			const r = e.el.style
 			return (r.transform = r.webkitTransform = `translate(${o}px,${s}px)`), (r.transitionDuration = "0s"), e
 		}
 	}
 	function Zu(e, t, n) {
-		let o = e.cloneNode()
+		const o = e.cloneNode()
 		e._vtc &&
 			e._vtc.forEach((i) => {
 				i.split(/\s+/).forEach((a) => a && o.classList.remove(a))
 			}),
-			n.split(/\s+/).forEach((i) => i && o.classList.add(i)),
-			(o.style.display = "none")
-		let s = t.nodeType === 1 ? t : t.parentNode
+		n.split(/\s+/).forEach((i) => i && o.classList.add(i)),
+		(o.style.display = "none")
+		const s = t.nodeType === 1 ? t : t.parentNode
 		s.appendChild(o)
-		let { hasTransform: r } = Aa(o)
+		const { hasTransform: r } = Aa(o)
 		return s.removeChild(o), r
 	}
 	var Sa = (e) => {
-		let t = e.props["onUpdate:modelValue"] || !1
+		const t = e.props["onUpdate:modelValue"] || !1
 		return L(t) ? (n) => an(t, n) : t
 	}
 	function Qu(e) {
 		e.target.composing = !0
 	}
 	function Ia(e) {
-		let t = e.target
+		const t = e.target
 		t.composing && ((t.composing = !1), t.dispatchEvent(new Event("input")))
 	}
 	var wn = {
 		created(e, { modifiers: { lazy: t, trim: n, number: o } }, s) {
 			e._assign = Sa(s)
-			let r = o || (s.props && s.props.type === "number")
+			const r = o || (s.props && s.props.type === "number")
 			bn(e, t ? "change" : "input", (i) => {
 				if (i.target.composing) return
 				let a = e.value
 				n && (a = a.trim()), r && (a = cn(a)), e._assign(a)
 			}),
-				n &&
+			n &&
 					bn(e, "change", () => {
 						e.value = e.value.trim()
 					}),
-				t || (bn(e, "compositionstart", Qu), bn(e, "compositionend", Ia), bn(e, "change", Ia))
+			t || (bn(e, "compositionstart", Qu), bn(e, "compositionend", Ia), bn(e, "change", Ia))
 		},
 		mounted(e, { value: t }) {
 			e.value = t ?? ""
@@ -4461,7 +4461,7 @@ This is likely a Baklava internal issue. Please report it on GitHub.`)
 		beforeUpdate(e, { value: t, modifiers: { lazy: n, trim: o, number: s } }, r) {
 			if (((e._assign = Sa(r)), e.composing || (document.activeElement === e && e.type !== "range" && (n || (o && e.value.trim() === t) || ((s || e.type === "number") && cn(e.value) === t)))))
 				return
-			let i = t ?? ""
+			const i = t ?? ""
 			e.value !== i && (e.value = i)
 		}
 	}
@@ -4481,22 +4481,22 @@ This is likely a Baklava internal issue. Please report it on GitHub.`)
 		},
 		ct =
 			(e, t) =>
-			(n, ...o) => {
-				for (let s = 0; s < t.length; s++) {
-					let r = td[t[s]]
-					if (r && r(n, t)) return
-				}
-				return e(n, ...o)
-			},
+				(n, ...o) => {
+					for (let s = 0; s < t.length; s++) {
+						const r = td[t[s]]
+						if (r && r(n, t)) return
+					}
+					return e(n, ...o)
+				},
 		nd = { esc: "escape", space: " ", up: "arrow-up", left: "arrow-left", right: "arrow-right", down: "arrow-down", delete: "backspace" },
 		Zn = (e, t) => (n) => {
 			if (!("key" in n)) return
-			let o = pt(n.key)
+			const o = pt(n.key)
 			if (t.some((s) => s === o || nd[s] === o)) return e(n)
 		},
 		mr = {
 			beforeMount(e, { value: t }, { transition: n }) {
-				;(e._vod = e.style.display === "none" ? "" : e.style.display), n && t ? n.beforeEnter(e) : Jn(e, t)
+				(e._vod = e.style.display === "none" ? "" : e.style.display), n && t ? n.beforeEnter(e) : Jn(e, t)
 			},
 			mounted(e, { value: t }, { transition: n }) {
 				n && t && n.enter(e)
@@ -4507,7 +4507,7 @@ This is likely a Baklava internal issue. Please report it on GitHub.`)
 						? t
 							? (o.beforeEnter(e), Jn(e, !0), o.enter(e))
 							: o.leave(e, () => {
-									Jn(e, !1)
+								Jn(e, !1)
 							  })
 						: Jn(e, t))
 			},
@@ -4524,15 +4524,15 @@ This is likely a Baklava internal issue. Please report it on GitHub.`)
 		return Ma || (Ma = da(od))
 	}
 	var Ua = (...e) => {
-		let t = sd().createApp(...e),
+		const t = sd().createApp(...e),
 			{ mount: n } = t
 		return (
 			(t.mount = (o) => {
-				let s = rd(o)
+				const s = rd(o)
 				if (!s) return
-				let r = t._component
+				const r = t._component
 				!B(r) && !r.render && !r.template && (r.template = s.innerHTML), (s.innerHTML = "")
-				let i = n(s, !1, s instanceof SVGElement)
+				const i = n(s, !1, s instanceof SVGElement)
 				return s instanceof Element && (s.removeAttribute("v-cloak"), s.setAttribute("data-v-app", "")), i
 			}),
 			t
@@ -4550,35 +4550,35 @@ This is likely a Baklava internal issue. Please report it on GitHub.`)
 		return { viewModel: vr }
 	}
 	function Je() {
-		let { viewModel: e } = tt()
+		const { viewModel: e } = tt()
 		return { graph: ht(e.value, "displayedGraph"), switchGraph: e.value.switchGraph }
 	}
 	function $r(e) {
-		let { graph: t } = Je(),
+		const { graph: t } = Je(),
 			n = j(null),
 			o = j(null)
 		return {
 			dragging: K(() => !!n.value),
 			onPointerDown: (l) => {
-				;(n.value = { x: l.pageX, y: l.pageY }), (o.value = { x: e.value.x, y: e.value.y })
+				(n.value = { x: l.pageX, y: l.pageY }), (o.value = { x: e.value.x, y: e.value.y })
 			},
 			onPointerMove: (l) => {
 				if (n.value) {
-					let c = l.pageX - n.value.x,
+					const c = l.pageX - n.value.x,
 						u = l.pageY - n.value.y
 					;(e.value.x = o.value.x + c / t.value.scaling), (e.value.y = o.value.y + u / t.value.scaling)
 				}
 			},
 			onPointerUp: () => {
-				;(n.value = null), (o.value = null)
+				(n.value = null), (o.value = null)
 			}
 		}
 	}
 	function Za() {
-		let { graph: e } = Je()
+		const { graph: e } = Je()
 		return {
 			transform: (n, o) => {
-				let s = n / e.value.scaling - e.value.panning.x,
+				const s = n / e.value.scaling - e.value.panning.x,
 					r = o / e.value.scaling - e.value.panning.y
 				return [s, r]
 			}
@@ -4593,7 +4593,7 @@ This is likely a Baklava internal issue. Please report it on GitHub.`)
 			r = $r(s),
 			i = K(() => ({ "transform-origin": "0 0", transform: `scale(${e.value.scaling}) translate(${e.value.panning.x}px, ${e.value.panning.y}px)` })),
 			a = (m, g, O) => {
-				let w = [m / e.value.scaling - e.value.panning.x, g / e.value.scaling - e.value.panning.y],
+				const w = [m / e.value.scaling - e.value.panning.x, g / e.value.scaling - e.value.panning.y],
 					S = [m / O - e.value.panning.x, g / O - e.value.panning.y],
 					y = [S[0] - w[0], S[1] - w[1]]
 				;(e.value.panning.x += y[0]), (e.value.panning.y += y[1]), (e.value.scaling = O)
@@ -4602,7 +4602,7 @@ This is likely a Baklava internal issue. Please report it on GitHub.`)
 				m.preventDefault()
 				let g = m.deltaY
 				m.deltaMode === 1 && (g *= 32)
-				let O = e.value.scaling * (1 - g / 3e3)
+				const O = e.value.scaling * (1 - g / 3e3)
 				a(m.offsetX, m.offsetY, O)
 			},
 			c = () => ({ ax: t[0].clientX, ay: t[0].clientY, bx: t[1].clientX, by: t[1].clientY })
@@ -4611,7 +4611,7 @@ This is likely a Baklava internal issue. Please report it on GitHub.`)
 			...r,
 			onPointerDown: (m) => {
 				if ((t.push(m), r.onPointerDown(m), t.length === 2)) {
-					let { ax: g, ay: O, bx: w, by: S } = c()
+					const { ax: g, ay: O, bx: w, by: S } = c()
 					o = { x: g + (w - g) / 2, y: O + (S - O) / 2 }
 				}
 			},
@@ -4622,26 +4622,26 @@ This is likely a Baklava internal issue. Please report it on GitHub.`)
 						break
 					}
 				if (t.length == 2) {
-					let { ax: g, ay: O, bx: w, by: S } = c(),
+					const { ax: g, ay: O, bx: w, by: S } = c(),
 						y = g - w,
 						M = O - S,
 						z = Math.sqrt(y * y + M * M)
 					if (n > 0) {
-						let H = e.value.scaling * (1 + (z - n) / 500)
+						const H = e.value.scaling * (1 + (z - n) / 500)
 						a(o.x, o.y, H)
 					}
 					n = z
 				} else r.onPointerMove(m)
 			},
 			onPointerUp: (m) => {
-				;(t = t.filter((g) => g.pointerId !== m.pointerId)), (n = -1), r.onPointerUp()
+				(t = t.filter((g) => g.pointerId !== m.pointerId)), (n = -1), r.onPointerUp()
 			},
 			onMouseWheel: l
 		}
 	}
 	var Xe = ((e) => ((e[(e.NONE = 0)] = "NONE"), (e[(e.ALLOWED = 1)] = "ALLOWED"), (e[(e.FORBIDDEN = 2)] = "FORBIDDEN"), e))(Xe || {})
 	function ad() {
-		let { graph: e } = Je(),
+		const { graph: e } = Je(),
 			t = j(null),
 			n = j(null),
 			o = (a) => {
@@ -4649,10 +4649,10 @@ This is likely a Baklava internal issue. Please report it on GitHub.`)
 			},
 			s = () => {
 				if (n.value) {
-					let a = e.value.connections.find((l) => l.to === n.value)
+					const a = e.value.connections.find((l) => l.to === n.value)
 					n.value.isInput && a ? ((t.value = { status: Xe.NONE, from: a.from }), e.value.removeConnection(a)) : (t.value = { status: Xe.NONE, from: n.value }),
-						(t.value.mx = void 0),
-						(t.value.my = void 0)
+					(t.value.mx = void 0),
+					(t.value.my = void 0)
 				}
 			},
 			r = () => {
@@ -4662,9 +4662,9 @@ This is likely a Baklava internal issue. Please report it on GitHub.`)
 			Wo("hoveredOver", (a) => {
 				if (((n.value = a ?? null), a && t.value)) {
 					t.value.to = a
-					let l = e.value.checkConnection(t.value.from, t.value.to)
+					const l = e.value.checkConnection(t.value.from, t.value.to)
 					if (((t.value.status = l.connectionAllowed ? Xe.ALLOWED : Xe.FORBIDDEN), l.connectionAllowed)) {
-						let c = l.connectionsInDanger.map((u) => u.id)
+						const c = l.connectionsInDanger.map((u) => u.id)
 						e.value.connections.forEach((u) => {
 							c.includes(u.id) && (u.isInDanger = !0)
 						})
@@ -4683,11 +4683,11 @@ This is likely a Baklava internal issue. Please report it on GitHub.`)
 	}
 	var ld = de({
 			setup() {
-				let { viewModel: e } = tt(),
+				const { viewModel: e } = tt(),
 					{ graph: t } = Je()
 				return {
 					styles: K(() => {
-						let o = e.value.settings.background,
+						const o = e.value.settings.background,
 							s = t.value.panning.x * t.value.scaling,
 							r = t.value.panning.y * t.value.scaling,
 							i = t.value.scaling * o.gridSize,
@@ -4700,8 +4700,8 @@ This is likely a Baklava internal issue. Please report it on GitHub.`)
 			}
 		}),
 		ne = (e, t) => {
-			let n = e.__vccOpts || e
-			for (let [o, s] of t) n[o] = s
+			const n = e.__vccOpts || e
+			for (const [o, s] of t) n[o] = s
 			return n
 		}
 	function cd(e, t, n, o, s, r) {
@@ -4737,18 +4737,18 @@ This is likely a Baklava internal issue. Please report it on GitHub.`)
 		Ed = (e, t) => gd(e, vd(t))
 	function wd(e) {
 		if (!ye(e)) return Ws(e)
-		let t = Array.isArray(e.value) ? new Array(e.value.length) : {}
-		for (let n in e.value)
+		const t = Array.isArray(e.value) ? new Array(e.value.length) : {}
+		for (const n in e.value)
 			t[n] = Bs(() => ({
 				get() {
 					return e.value[n]
 				},
 				set(o) {
 					if (Array.isArray(e.value)) {
-						let s = [...e.value]
+						const s = [...e.value]
 						;(s[n] = o), (e.value = s)
 					} else {
-						let s = Ed(bd({}, e.value), { [n]: o })
+						const s = Ed(bd({}, e.value), { [n]: o })
 						Object.setPrototypeOf(s, e.value), (e.value = s)
 					}
 				}
@@ -4757,7 +4757,7 @@ This is likely a Baklava internal issue. Please report it on GitHub.`)
 	}
 	function Qn(e) {
 		var t
-		let n = fd(e)
+		const n = fd(e)
 		return (t = n?.$el) != null ? t : n
 	}
 	var Sr = ro ? window : void 0
@@ -4772,7 +4772,7 @@ This is likely a Baklava internal issue. Please report it on GitHub.`)
 				() => Qn(t),
 				(l) => {
 					r(),
-						l &&
+					l &&
 							(l.addEventListener(n, o, s),
 							(r = () => {
 								l.removeEventListener(n, o, s), (r = gr)
@@ -4786,13 +4786,13 @@ This is likely a Baklava internal issue. Please report it on GitHub.`)
 		return hd(a), a
 	}
 	function yr(e, t, n = {}) {
-		let { window: o = Sr, ignore: s, capture: r = !0, detectIframe: i = !1 } = n
+		const { window: o = Sr, ignore: s, capture: r = !0, detectIframe: i = !1 } = n
 		if (!o) return
 		let a = j(!0),
 			l,
 			c = (p) => {
 				o.clearTimeout(l)
-				let m = Qn(e),
+				const m = Qn(e),
 					g = p.composedPath()
 				!m ||
 					m === p.target ||
@@ -4801,7 +4801,7 @@ This is likely a Baklava internal issue. Please report it on GitHub.`)
 					(s &&
 						s.length > 0 &&
 						s.some((O) => {
-							let w = Qn(O)
+							const w = Qn(O)
 							return w && (p.target === w || g.includes(w))
 						})) ||
 					t(p)
@@ -4812,7 +4812,7 @@ This is likely a Baklava internal issue. Please report it on GitHub.`)
 					o,
 					"pointerdown",
 					(p) => {
-						let m = Qn(e)
+						const m = Qn(e)
 						a.value = !!m && !p.composedPath().includes(m)
 					},
 					{ passive: !0 }
@@ -4822,7 +4822,7 @@ This is likely a Baklava internal issue. Please report it on GitHub.`)
 					"pointerup",
 					(p) => {
 						if (p.button === 0) {
-							let m = p.composedPath()
+							const m = p.composedPath()
 							;(p.composedPath = () => m), (l = o.setTimeout(() => c(p), 50))
 						}
 					},
@@ -4831,7 +4831,7 @@ This is likely a Baklava internal issue. Please report it on GitHub.`)
 				i &&
 					Qt(o, "blur", (p) => {
 						var m
-						let g = Qn(e)
+						const g = Qn(e)
 						;((m = document.activeElement) == null ? void 0 : m.tagName) === "IFRAME" && !g?.contains(document.activeElement) && t(p)
 					})
 			].filter(Boolean)
@@ -4861,8 +4861,8 @@ This is likely a Baklava internal issue. Please report it on GitHub.`)
 			n = j(!1),
 			o = j(e.initialValue || {})
 		Object.assign(o.value, Qa, o.value)
-		let s = (r) => {
-			;(n.value = !0), !(e.pointerTypes && !e.pointerTypes.includes(r.pointerType)) && (o.value = pd(r, $d, !1))
+		const s = (r) => {
+			(n.value = !0), !(e.pointerTypes && !e.pointerTypes.includes(r.pointerType)) && (o.value = pd(r, $d, !1))
 		}
 		return (
 			t && (Qt(t, "pointerdown", s, { passive: !0 }), Qt(t, "pointermove", s, { passive: !0 }), Qt(t, "pointerleave", () => (n.value = !1), { passive: !0 })), Dd(Td({}, wd(o)), { isInside: n })
@@ -4870,7 +4870,7 @@ This is likely a Baklava internal issue. Please report it on GitHub.`)
 	}
 	var Ga
 	;(function (e) {
-		;(e.UP = "UP"), (e.RIGHT = "RIGHT"), (e.DOWN = "DOWN"), (e.LEFT = "LEFT"), (e.NONE = "NONE")
+		(e.UP = "UP"), (e.RIGHT = "RIGHT"), (e.DOWN = "DOWN"), (e.LEFT = "LEFT"), (e.NONE = "NONE")
 	})(Ga || (Ga = {}))
 	var Id = de({
 			props: {
@@ -4892,7 +4892,7 @@ This is likely a Baklava internal issue. Please report it on GitHub.`)
 					a = K(() => e.flippable && (i.value.x || e.isFlipped.x)),
 					l = K(() => e.flippable && (i.value.y || e.isFlipped.y)),
 					c = K(() => {
-						let w = {}
+						const w = {}
 						return e.isNested || ((w.top = (l.value ? e.y - r.value : e.y) + "px"), (w.left = e.x + "px")), w
 					}),
 					u = K(() => ({ "--flipped-x": a.value, "--flipped-y": l.value, "--nested": e.isNested })),
@@ -4901,7 +4901,7 @@ This is likely a Baklava internal issue. Please report it on GitHub.`)
 					at([() => e.y, () => e.items], () => {
 						var w, S, y, M, z, H
 						r.value = e.items.length * 30
-						let re = (y = (S = (w = o.value) == null ? void 0 : w.parentElement) == null ? void 0 : S.offsetWidth) != null ? y : 0,
+						const re = (y = (S = (w = o.value) == null ? void 0 : w.parentElement) == null ? void 0 : S.offsetWidth) != null ? y : 0,
 							N = (H = (z = (M = o.value) == null ? void 0 : M.parentElement) == null ? void 0 : z.offsetHeight) != null ? H : 0
 						;(i.value.x = !e.isNested && e.x > re * 0.75), (i.value.y = !e.isNested && e.y + r.value > N - 20)
 					}),
@@ -4929,7 +4929,7 @@ This is likely a Baklava internal issue. Please report it on GitHub.`)
 						onMouseLeave: (w, S) => {
 							e.items[S].submenu &&
 								(n = window.setTimeout(() => {
-									;(s.value = -1), (n = null)
+									(s.value = -1), (n = null)
 								}, 200))
 						}
 					}
@@ -4947,7 +4947,7 @@ This is likely a Baklava internal issue. Please report it on GitHub.`)
 		),
 		Ad = [Rd]
 	function Fd(e, t, n, o, s, r) {
-		let i = _e("context-menu", !0)
+		const i = _e("context-menu", !0)
 		return (
 			D(),
 			Ne(
@@ -4976,38 +4976,38 @@ This is likely a Baklava internal issue. Please report it on GitHub.`)
 															? (D(), V("div", { key: `d-${l}`, class: "divider" }))
 															: (D(),
 															  V(
-																	"div",
-																	{
-																		key: `i-${l}`,
-																		class: Ee(["item", { submenu: !!a.submenu, "--disabled": !!a.disabled }]),
-																		onMouseenter: (c) => e.onMouseEnter(c, l),
-																		onMouseleave: (c) => e.onMouseLeave(c, l),
-																		onClick: ct((c) => e.onClick(a), ["stop", "prevent"])
-																	},
-																	[
-																		I("div", Vd, be(a.label), 1),
-																		a.submenu ? (D(), V("div", Pd, Ad)) : lt("", !0),
-																		a.submenu
-																			? (D(),
+																"div",
+																{
+																	key: `i-${l}`,
+																	class: Ee(["item", { submenu: !!a.submenu, "--disabled": !!a.disabled }]),
+																	onMouseenter: (c) => e.onMouseEnter(c, l),
+																	onMouseleave: (c) => e.onMouseLeave(c, l),
+																	onClick: ct((c) => e.onClick(a), ["stop", "prevent"])
+																},
+																[
+																	I("div", Vd, be(a.label), 1),
+																	a.submenu ? (D(), V("div", Pd, Ad)) : lt("", !0),
+																	a.submenu
+																		? (D(),
 																			  Ne(
-																					i,
-																					{
-																						key: 1,
-																						value: e.activeMenu === l,
-																						items: a.submenu,
-																						"is-nested": !0,
-																						"is-flipped": { x: e.flippedX, y: e.flippedY },
-																						flippable: e.flippable,
-																						onClick: e.onChildClick
-																					},
-																					null,
-																					8,
-																					["value", "items", "is-flipped", "flippable", "onClick"]
+																			i,
+																			{
+																				key: 1,
+																				value: e.activeMenu === l,
+																				items: a.submenu,
+																				"is-nested": !0,
+																				"is-flipped": { x: e.flippedX, y: e.flippedY },
+																				flippable: e.flippable,
+																				onClick: e.onChildClick
+																			},
+																			null,
+																			8,
+																			["value", "items", "is-flipped", "flippable", "onClick"]
 																			  ))
-																			: lt("", !0)
-																	],
-																	42,
-																	Md
+																		: lt("", !0)
+																],
+																42,
+																Md
 															  ))
 													],
 													64
@@ -5053,7 +5053,7 @@ This is likely a Baklava internal issue. Please report it on GitHub.`)
 		qd = de({
 			props: { node: { type: Object, required: !0 }, intf: { type: Object, required: !0 } },
 			setup(e) {
-				let { viewModel: t } = tt(),
+				const { viewModel: t } = tt(),
 					n = fn("hoveredOver"),
 					o = j(null),
 					s = K(() => e.intf.connectionCount > 0),
@@ -5069,7 +5069,7 @@ This is likely a Baklava internal issue. Please report it on GitHub.`)
 						o.value && t.value.hooks.renderInterface.execute({ intf: e.intf, el: o.value })
 					},
 					u = () => {
-						let d = t.value.displayedGraph.sidebar
+						const d = t.value.displayedGraph.sidebar
 						;(d.nodeId = e.node.id), (d.optionName = e.intf.name), (d.visible = !0)
 					}
 				return St(c), _n(c), { el: o, isConnected: s, classes: r, showComponent: i, startHover: a, endHover: l, openSidebar: u }
@@ -5087,25 +5087,25 @@ This is likely a Baklava internal issue. Please report it on GitHub.`)
 					e.intf.port
 						? (D(),
 						  V(
-								"div",
-								{
-									key: 0,
-									class: "__port",
-									onPointerover: t[0] || (t[0] = (...i) => e.startHover && e.startHover(...i)),
-									onPointerout: t[1] || (t[1] = (...i) => e.endHover && e.endHover(...i))
-								},
-								null,
-								32
+							"div",
+							{
+								key: 0,
+								class: "__port",
+								onPointerover: t[0] || (t[0] = (...i) => e.startHover && e.startHover(...i)),
+								onPointerout: t[1] || (t[1] = (...i) => e.endHover && e.endHover(...i))
+							},
+							null,
+							32
 						  ))
 						: lt("", !0),
 					e.showComponent
 						? (D(),
 						  Ne(
-								Yo(e.intf.component),
-								{ key: 1, modelValue: e.intf.value, "onUpdate:modelValue": t[2] || (t[2] = (i) => (e.intf.value = i)), node: e.node, intf: e.intf, onOpenSidebar: e.openSidebar },
-								null,
-								40,
-								["modelValue", "node", "intf", "onOpenSidebar"]
+							Yo(e.intf.component),
+							{ key: 1, modelValue: e.intf.value, "onUpdate:modelValue": t[2] || (t[2] = (i) => (e.intf.value = i)), node: e.node, intf: e.intf, onOpenSidebar: e.openSidebar },
+							null,
+							40,
+							["modelValue", "node", "intf", "onOpenSidebar"]
 						  ))
 						: (D(), V("span", Yd, be(e.intf.name), 1))
 				],
@@ -5120,7 +5120,7 @@ This is likely a Baklava internal issue. Please report it on GitHub.`)
 			props: { node: { type: Object, required: !0 }, selected: { type: Boolean, default: !1 } },
 			emits: ["select"],
 			setup(e, { emit: t }) {
-				let { viewModel: n } = tt(),
+				const { viewModel: n } = tt(),
 					{ graph: o, switchGraph: s } = Je(),
 					r = $r(ht(e.node, "position")),
 					i = j(null),
@@ -5129,7 +5129,7 @@ This is likely a Baklava internal issue. Please report it on GitHub.`)
 					c = j(null),
 					u = j(!1),
 					d = K(() => {
-						let N = [
+						const N = [
 							{ value: "rename", label: "Rename" },
 							{ value: "delete", label: "Delete" }
 						]
@@ -5165,7 +5165,7 @@ This is likely a Baklava internal issue. Please report it on GitHub.`)
 								o.value.removeNode(e.node)
 								break
 							case "rename":
-								;(l.value = e.node.title), (a.value = !0), await vn(), (R = c.value) == null || R.focus()
+								(l.value = e.node.title), (a.value = !0), await vn(), (R = c.value) == null || R.focus()
 								break
 							case "editSubgraph":
 								s(e.node.template)
@@ -5173,7 +5173,7 @@ This is likely a Baklava internal issue. Please report it on GitHub.`)
 						}
 					},
 					H = () => {
-						;(e.node.title = l.value), (a.value = !1)
+						(e.node.title = l.value), (a.value = !1)
 					},
 					re = () => {
 						i.value && n.value.hooks.renderNode.execute({ node: e.node, el: i.value })
@@ -5208,7 +5208,7 @@ This is likely a Baklava internal issue. Please report it on GitHub.`)
 		nf = { class: "__outputs" },
 		of = { class: "__inputs" }
 	function sf(e, t, n, o, s, r) {
-		let i = _e("vertical-dots"),
+		const i = _e("vertical-dots"),
 			a = _e("context-menu"),
 			l = _e("NodeInterface")
 		return (
@@ -5230,49 +5230,49 @@ This is likely a Baklava internal issue. Please report it on GitHub.`)
 						[
 							e.renaming
 								? It(
-										(D(),
-										V(
-											"input",
-											{
-												key: 1,
-												ref: "renameInputEl",
-												"onUpdate:modelValue": t[1] || (t[1] = (c) => (e.tempName = c)),
-												type: "text",
-												class: "baklava-input",
-												placeholder: "Node Name",
-												onBlur: t[2] || (t[2] = (...c) => e.doneRenaming && e.doneRenaming(...c)),
-												onKeydown: t[3] || (t[3] = Zn((...c) => e.doneRenaming && e.doneRenaming(...c), ["enter"]))
-											},
-											null,
-											544
-										)),
-										[[wn, e.tempName]]
+									(D(),
+									V(
+										"input",
+										{
+											key: 1,
+											ref: "renameInputEl",
+											"onUpdate:modelValue": t[1] || (t[1] = (c) => (e.tempName = c)),
+											type: "text",
+											class: "baklava-input",
+											placeholder: "Node Name",
+											onBlur: t[2] || (t[2] = (...c) => e.doneRenaming && e.doneRenaming(...c)),
+											onKeydown: t[3] || (t[3] = Zn((...c) => e.doneRenaming && e.doneRenaming(...c), ["enter"]))
+										},
+										null,
+										544
+									)),
+									[[wn, e.tempName]]
 								  )
 								: (D(),
 								  V(
-										te,
-										{ key: 0 },
-										[
-											I("div", Qd, be(e.node.title), 1),
-											I("div", ef, [
-												X(i, { class: "--clickable", onClick: e.openContextMenu }, null, 8, ["onClick"]),
-												X(
-													a,
-													{
-														modelValue: e.showContextMenu,
-														"onUpdate:modelValue": t[0] || (t[0] = (c) => (e.showContextMenu = c)),
-														x: 0,
-														y: 0,
-														items: e.contextMenuItems,
-														onClick: e.onContextMenuClick
-													},
-													null,
-													8,
-													["modelValue", "items", "onClick"]
-												)
-											])
-										],
-										64
+									te,
+									{ key: 0 },
+									[
+										I("div", Qd, be(e.node.title), 1),
+										I("div", ef, [
+											X(i, { class: "--clickable", onClick: e.openContextMenu }, null, 8, ["onClick"]),
+											X(
+												a,
+												{
+													modelValue: e.showContextMenu,
+													"onUpdate:modelValue": t[0] || (t[0] = (c) => (e.showContextMenu = c)),
+													x: 0,
+													y: 0,
+													items: e.contextMenuItems,
+													onClick: e.onContextMenuClick
+												},
+												null,
+												8,
+												["modelValue", "items", "onClick"]
+											)
+										])
+									],
+									64
 								  ))
 						],
 						32
@@ -5314,19 +5314,19 @@ This is likely a Baklava internal issue. Please report it on GitHub.`)
 				isTemporary: { type: Boolean, default: !1 }
 			},
 			setup(e) {
-				let { viewModel: t } = tt(),
+				const { viewModel: t } = tt(),
 					{ graph: n } = Je(),
 					o = (i, a) => {
-						let l = (i + n.value.panning.x) * n.value.scaling,
+						const l = (i + n.value.panning.x) * n.value.scaling,
 							c = (a + n.value.panning.y) * n.value.scaling
 						return [l, c]
 					},
 					s = K(() => {
-						let [i, a] = o(e.x1, e.y1),
+						const [i, a] = o(e.x1, e.y1),
 							[l, c] = o(e.x2, e.y2)
 						if (t.value.settings.useStraightConnections) return `M ${i} ${a} L ${l} ${c}`
 						{
-							let u = 0.3 * Math.abs(i - l)
+							const u = 0.3 * Math.abs(i - l)
 							return `M ${i} ${a} C ${i + u} ${a}, ${l - u} ${c}, ${l} ${c}`
 						}
 					}),
@@ -5344,7 +5344,7 @@ This is likely a Baklava internal issue. Please report it on GitHub.`)
 	}
 	function Nn(e) {
 		var t
-		let n = document.getElementById(e.id),
+		const n = document.getElementById(e.id),
 			o = n?.getElementsByClassName("__port")
 		return { node: (t = n?.closest(".baklava-node")) != null ? t : null, interface: n, port: o && o.length > 0 ? o[0] : null }
 	}
@@ -5367,12 +5367,12 @@ This is likely a Baklava internal issue. Please report it on GitHub.`)
 				a = (c) =>
 					c.node && c.interface && c.port
 						? [
-								c.node.offsetLeft + c.interface.offsetLeft + c.port.offsetLeft + c.port.clientWidth / 2,
-								c.node.offsetTop + c.interface.offsetTop + c.port.offsetTop + c.port.clientHeight / 2
+							c.node.offsetLeft + c.interface.offsetLeft + c.port.offsetLeft + c.port.clientWidth / 2,
+							c.node.offsetTop + c.interface.offsetTop + c.port.offsetTop + c.port.clientHeight / 2
 						  ]
 						: [0, 0],
 				l = () => {
-					let c = Nn(e.connection.from),
+					const c = Nn(e.connection.from),
 						u = Nn(e.connection.to)
 					c.node &&
 						u.node &&
@@ -5382,7 +5382,7 @@ This is likely a Baklava internal issue. Please report it on GitHub.`)
 							})),
 							n.observe(c.node),
 							n.observe(u.node)))
-					let [d, p] = a(c),
+					const [d, p] = a(c),
 						[m, g] = a(u)
 					o.value = { x1: d, y1: p, x2: m, y2: g }
 				}
@@ -5399,7 +5399,7 @@ This is likely a Baklava internal issue. Please report it on GitHub.`)
 		}
 	})
 	function df(e, t, n, o, s, r) {
-		let i = _e("connection-view")
+		const i = _e("connection-view")
 		return D(), Ne(i, { x1: e.d.x1, y1: e.d.y1, x2: e.d.x2, y2: e.d.y2, state: e.state }, null, 8, ["x1", "y1", "x2", "y2", "state"])
 	}
 	var ol = ne(uf, [["render", df]])
@@ -5412,11 +5412,11 @@ This is likely a Baklava internal issue. Please report it on GitHub.`)
 		components: { "connection-view": Mr },
 		props: { connection: { type: Object, required: !0 } },
 		setup(e) {
-			let t = K(() => (e.connection ? e.connection.status : Xe.NONE))
+			const t = K(() => (e.connection ? e.connection.status : Xe.NONE))
 			return {
 				d: K(() => {
 					if (!e.connection) return { input: [0, 0], output: [0, 0] }
-					let o = ns(Nn(e.connection.from)),
+					const o = ns(Nn(e.connection.from)),
 						s = e.connection.to ? ns(Nn(e.connection.to)) : [e.connection.mx || o[0], e.connection.my || o[1]]
 					return e.connection.from.isInput ? { input: s, output: o } : { input: o, output: s }
 				}),
@@ -5425,17 +5425,17 @@ This is likely a Baklava internal issue. Please report it on GitHub.`)
 		}
 	})
 	function pf(e, t, n, o, s, r) {
-		let i = _e("connection-view")
+		const i = _e("connection-view")
 		return D(), Ne(i, { x1: e.d.input[0], y1: e.d.input[1], x2: e.d.output[0], y2: e.d.output[1], state: e.status, "is-temporary": "" }, null, 8, ["x1", "y1", "x2", "y2", "state"])
 	}
 	var sl = ne(ff, [["render", pf]]),
 		hf = de({
 			setup() {
-				let { graph: e } = Je(),
+				const { graph: e } = Je(),
 					t = j(null),
 					n = j(300),
 					o = K(() => {
-						let c = e.value.sidebar.nodeId
+						const c = e.value.sidebar.nodeId
 						return e.value.nodes.find((u) => u.id === c)
 					}),
 					s = K(() => ({ width: `${n.value}px` })),
@@ -5445,17 +5445,17 @@ This is likely a Baklava internal issue. Please report it on GitHub.`)
 					},
 					a = () => {
 						window.addEventListener("mousemove", l),
-							window.addEventListener(
-								"mouseup",
-								() => {
-									window.removeEventListener("mousemove", l)
-								},
-								{ once: !0 }
-							)
+						window.addEventListener(
+							"mouseup",
+							() => {
+								window.removeEventListener("mousemove", l)
+							},
+							{ once: !0 }
+						)
 					},
 					l = (c) => {
 						var u, d, p
-						let m = (p = (d = (u = t.value) == null ? void 0 : u.parentElement) == null ? void 0 : d.getBoundingClientRect().width) != null ? p : 500
+						const m = (p = (d = (u = t.value) == null ? void 0 : u.parentElement) == null ? void 0 : d.getBoundingClientRect().width) != null ? p : 500
 						;(n.value -= c.movementX), n.value < 300 ? (n.value = 300) : n.value > 0.9 * m && (n.value = 0.9 * m)
 					}
 				return { el: t, graph: e, node: o, styles: s, displayedInterfaces: r, startResize: a, close: i }
@@ -5514,40 +5514,40 @@ This is likely a Baklava internal issue. Please report it on GitHub.`)
 					a = () => {
 						var y, M, z, H, re, N
 						if (!s) return
-						let R = new Map(),
+						const R = new Map(),
 							Z = new Map()
-						for (let x of t.value.nodes) {
-							let q = cf(x),
+						for (const x of t.value.nodes) {
+							const q = cf(x),
 								pe = (y = q?.clientWidth) != null ? y : 0,
 								$e = (M = q?.clientHeight) != null ? M : 0,
 								ie = (H = (z = x.position) == null ? void 0 : z.x) != null ? H : 0,
 								ee = (N = (re = x.position) == null ? void 0 : re.y) != null ? N : 0
 							R.set(x, { x1: ie, y1: ee, x2: ie + pe, y2: ee + $e }), Z.set(x, q)
 						}
-						let U = { x1: Number.MAX_SAFE_INTEGER, y1: Number.MAX_SAFE_INTEGER, x2: Number.MIN_SAFE_INTEGER, y2: Number.MIN_SAFE_INTEGER }
-						for (let x of R.values()) x.x1 < U.x1 && (U.x1 = x.x1), x.y1 < U.y1 && (U.y1 = x.y1), x.x2 > U.x2 && (U.x2 = x.x2), x.y2 > U.y2 && (U.y2 = x.y2)
-						let ue = 50
+						const U = { x1: Number.MAX_SAFE_INTEGER, y1: Number.MAX_SAFE_INTEGER, x2: Number.MIN_SAFE_INTEGER, y2: Number.MIN_SAFE_INTEGER }
+						for (const x of R.values()) x.x1 < U.x1 && (U.x1 = x.x1), x.y1 < U.y1 && (U.y1 = x.y1), x.x2 > U.x2 && (U.x2 = x.x2), x.y2 > U.y2 && (U.y2 = x.y2)
+						const ue = 50
 						;(U.x1 -= ue), (U.y1 -= ue), (U.x2 += ue), (U.y2 += ue), (i = U), s.clearRect(0, 0, s.canvas.width, s.canvas.height), (s.strokeStyle = "white")
-						for (let x of t.value.connections) {
-							let [q, pe] = ns(Nn(x.from)),
+						for (const x of t.value.connections) {
+							const [q, pe] = ns(Nn(x.from)),
 								[$e, ie] = ns(Nn(x.to)),
 								[ee, oe] = l(q, pe),
 								[Ae, ut] = l($e, ie)
 							if ((s.beginPath(), s.moveTo(ee, oe), e.value.settings.useStraightConnections)) s.lineTo(Ae, ut)
 							else {
-								let Pt = 0.3 * Math.abs(ee - Ae)
+								const Pt = 0.3 * Math.abs(ee - Ae)
 								s.bezierCurveTo(ee + Pt, oe, Ae - Pt, ut, Ae, ut)
 							}
 							s.stroke()
 						}
 						s.strokeStyle = "lightgray"
-						for (let [x, q] of R.entries()) {
-							let [pe, $e] = l(q.x1, q.y1),
+						for (const [x, q] of R.entries()) {
+							const [pe, $e] = l(q.x1, q.y1),
 								[ie, ee] = l(q.x2, q.y2)
 							;(s.fillStyle = u(Z.get(x))), s.beginPath(), s.rect(pe, $e, ie - pe, ee - $e), s.fill(), s.stroke()
 						}
 						if (o.value) {
-							let x = p(),
+							const x = p(),
 								[q, pe] = l(x.x1, x.y1),
 								[$e, ie] = l(x.x2, x.y2)
 							;(s.fillStyle = "rgba(255, 255, 255, 0.2)"), s.fillRect(q, pe, $e - q, ie - pe)
@@ -5557,22 +5557,22 @@ This is likely a Baklava internal issue. Please report it on GitHub.`)
 					c = (y, M) => [(y * (i.x2 - i.x1)) / s.canvas.clientWidth + i.x1, (M * (i.y2 - i.y1)) / s.canvas.clientHeight + i.y1],
 					u = (y) => {
 						if (y) {
-							let M = y.querySelector(".__content")
+							const M = y.querySelector(".__content")
 							if (M) {
-								let H = d(M)
+								const H = d(M)
 								if (H) return H
 							}
-							let z = d(y)
+							const z = d(y)
 							if (z) return z
 						}
 						return "gray"
 					},
 					d = (y) => {
-						let M = getComputedStyle(y).backgroundColor
+						const M = getComputedStyle(y).backgroundColor
 						if (M && M !== "rgba(0, 0, 0, 0)") return M
 					},
 					p = () => {
-						let y = n.value.parentElement.offsetWidth,
+						const y = n.value.parentElement.offsetWidth,
 							M = n.value.parentElement.offsetHeight,
 							z = y / t.value.scaling - t.value.panning.x,
 							H = M / t.value.scaling - t.value.panning.y
@@ -5583,7 +5583,7 @@ This is likely a Baklava internal issue. Please report it on GitHub.`)
 					},
 					g = (y) => {
 						if (r) {
-							let [M, z] = c(y.offsetX, y.offsetY),
+							const [M, z] = c(y.offsetX, y.offsetY),
 								H = p(),
 								re = (H.x1 - H.x2) / 2,
 								N = (H.y1 - H.y2) / 2
@@ -5597,11 +5597,11 @@ This is likely a Baklava internal issue. Please report it on GitHub.`)
 						o.value = !0
 					},
 					S = () => {
-						;(o.value = !1), O()
+						(o.value = !1), O()
 					}
 				return (
 					St(() => {
-						;(s = n.value.getContext("2d")), (s.imageSmoothingQuality = "high"), a()
+						(s = n.value.getContext("2d")), (s.imageSmoothingQuality = "high"), a()
 					}),
 					{ canvas: n, showViewBounds: o, mousedown: m, mousemove: g, mouseup: O, mouseenter: w, mouseleave: S }
 				)
@@ -5631,7 +5631,7 @@ This is likely a Baklava internal issue. Please report it on GitHub.`)
 			components: { ContextMenu: Ir, VerticalDots: el },
 			props: { type: { type: String, required: !0 }, title: { type: String, required: !0 } },
 			setup(e) {
-				let { viewModel: t } = tt(),
+				const { viewModel: t } = tt(),
 					{ switchGraph: n } = Je(),
 					o = j(!1),
 					s = K(() => e.type.startsWith(At))
@@ -5646,9 +5646,9 @@ This is likely a Baklava internal issue. Please report it on GitHub.`)
 						o.value = !0
 					},
 					onContextMenuClick: (l) => {
-						let c = e.type.substring(At.length),
+						const c = e.type.substring(At.length),
 							u = t.value.editor.graphTemplates.find((d) => d.id === c)
-						if (!!u)
+						if (u)
 							switch (l) {
 								case "editSubgraph":
 									n(u)
@@ -5666,7 +5666,7 @@ This is likely a Baklava internal issue. Please report it on GitHub.`)
 		Nf = { class: "__title-label" },
 		Of = { key: 0, class: "__menu" }
 	function Cf(e, t, n, o, s, r) {
-		let i = _e("vertical-dots"),
+		const i = _e("vertical-dots"),
 			a = _e("context-menu")
 		return (
 			D(),
@@ -5679,24 +5679,24 @@ This is likely a Baklava internal issue. Please report it on GitHub.`)
 						e.hasContextMenu
 							? (D(),
 							  V("div", Of, [
-									X(i, { class: "--clickable", onPointerdown: t[0] || (t[0] = ct(() => {}, ["stop", "prevent"])), onClick: ct(e.openContextMenu, ["stop", "prevent"]) }, null, 8, [
-										"onClick"
-									]),
-									X(
-										a,
-										{
-											modelValue: e.showContextMenu,
-											"onUpdate:modelValue": t[1] || (t[1] = (l) => (e.showContextMenu = l)),
-											x: -100,
-											y: 0,
-											items: e.contextMenuItems,
-											onClick: e.onContextMenuClick,
-											onPointerdown: t[2] || (t[2] = ct(() => {}, ["stop", "prevent"]))
-										},
-										null,
-										8,
-										["modelValue", "items", "onClick"]
-									)
+								X(i, { class: "--clickable", onPointerdown: t[0] || (t[0] = ct(() => {}, ["stop", "prevent"])), onClick: ct(e.openContextMenu, ["stop", "prevent"]) }, null, 8, [
+									"onClick"
+								]),
+								X(
+									a,
+									{
+										modelValue: e.showContextMenu,
+										"onUpdate:modelValue": t[1] || (t[1] = (l) => (e.showContextMenu = l)),
+										x: -100,
+										y: 0,
+										items: e.contextMenuItems,
+										onClick: e.onContextMenuClick,
+										onPointerdown: t[2] || (t[2] = ct(() => {}, ["stop", "prevent"]))
+									},
+									null,
+									8,
+									["modelValue", "items", "onClick"]
+								)
 							  ]))
 							: lt("", !0)
 					])
@@ -5828,12 +5828,12 @@ This is likely a Baklava internal issue. Please report it on GitHub.`)
 			}
 		},
 		Vr = (e, t = 3) => {
-			let n = j(null),
+			const n = j(null),
 				o = j(!1),
 				s = j(!1),
 				r = j("0"),
 				i = K(() => {
-					let d = e.value.value.toFixed(t)
+					const d = e.value.value.toFixed(t)
 					return d.length > Ya ? e.value.value.toExponential(Ya - 5) : d
 				}),
 				a = (d) => (Number.isNaN(d) ? !1 : jf(e.value) ? e.value.validate(d) : !0),
@@ -5853,10 +5853,10 @@ This is likely a Baklava internal issue. Please report it on GitHub.`)
 					validate: a,
 					setValue: l,
 					enterEditMode: async () => {
-						;(r.value = e.value.value.toFixed(t)), (o.value = !0), await vn(), n.value && n.value.focus()
+						(r.value = e.value.value.toFixed(t)), (o.value = !0), await vn(), n.value && n.value.focus()
 					},
 					leaveEditMode: () => {
-						let d = parseFloat(r.value)
+						const d = parseFloat(r.value)
 						a(d) ? (l(d), (o.value = !1)) : (s.value = !0)
 					}
 				}
@@ -5885,7 +5885,7 @@ This is likely a Baklava internal issue. Please report it on GitHub.`)
 			components: { "i-arrow": Pr },
 			props: { intf: { type: Object, required: !0 } },
 			setup(e) {
-				let t = Vr(ht(e, "intf"), 0)
+				const t = Vr(ht(e, "intf"), 0)
 				return {
 					...t,
 					increment: () => {
@@ -5902,7 +5902,7 @@ This is likely a Baklava internal issue. Please report it on GitHub.`)
 		Yf = { class: "__value" },
 		Xf = { key: 1, class: "__content" }
 	function Jf(e, t, n, o, s, r) {
-		let i = _e("i-arrow")
+		const i = _e("i-arrow")
 		return (
 			D(),
 			V("div", qf, [
@@ -5910,28 +5910,28 @@ This is likely a Baklava internal issue. Please report it on GitHub.`)
 				e.editMode
 					? (D(),
 					  V("div", Xf, [
-							It(
-								I(
-									"input",
-									{
-										ref: "inputEl",
-										"onUpdate:modelValue": t[2] || (t[2] = (a) => (e.tempValue = a)),
-										type: "number",
-										class: Ee(["baklava-input", { "--invalid": e.invalid }]),
-										style: { "text-align": "right" },
-										onBlur: t[3] || (t[3] = (...a) => e.leaveEditMode && e.leaveEditMode(...a)),
-										onKeydown: t[4] || (t[4] = Zn((...a) => e.leaveEditMode && e.leaveEditMode(...a), ["enter"]))
-									},
-									null,
-									34
-								),
-								[[wn, e.tempValue]]
-							)
+						It(
+							I(
+								"input",
+								{
+									ref: "inputEl",
+									"onUpdate:modelValue": t[2] || (t[2] = (a) => (e.tempValue = a)),
+									type: "number",
+									class: Ee(["baklava-input", { "--invalid": e.invalid }]),
+									style: { "text-align": "right" },
+									onBlur: t[3] || (t[3] = (...a) => e.leaveEditMode && e.leaveEditMode(...a)),
+									onKeydown: t[4] || (t[4] = Zn((...a) => e.leaveEditMode && e.leaveEditMode(...a), ["enter"]))
+								},
+								null,
+								34
+							),
+							[[wn, e.tempValue]]
+						)
 					  ]))
 					: (D(),
 					  V("div", { key: 0, class: "__content", onClick: t[1] || (t[1] = (...a) => e.enterEditMode && e.enterEditMode(...a)) }, [
-							I("div", { class: "__label", title: e.intf.name }, be(e.intf.name), 9, Gf),
-							I("div", Yf, be(e.stringRepresentation), 1)
+						I("div", { class: "__label", title: e.intf.name }, be(e.intf.name), 9, Gf),
+						I("div", Yf, be(e.stringRepresentation), 1)
 					  ])),
 				I("div", { class: "__button --inc", onClick: t[5] || (t[5] = (...a) => e.increment && e.increment(...a)) }, [X(i)])
 			])
@@ -5950,7 +5950,7 @@ This is likely a Baklava internal issue. Please report it on GitHub.`)
 			components: { "i-arrow": Pr },
 			props: { intf: { type: Object, required: !0 } },
 			setup(e) {
-				let t = Vr(ht(e, "intf"))
+				const t = Vr(ht(e, "intf"))
 				return {
 					...t,
 					increment: () => {
@@ -5967,7 +5967,7 @@ This is likely a Baklava internal issue. Please report it on GitHub.`)
 		tp = { class: "__value" },
 		np = { key: 1, class: "__content" }
 	function op(e, t, n, o, s, r) {
-		let i = _e("i-arrow")
+		const i = _e("i-arrow")
 		return (
 			D(),
 			V("div", Qf, [
@@ -5975,28 +5975,28 @@ This is likely a Baklava internal issue. Please report it on GitHub.`)
 				e.editMode
 					? (D(),
 					  V("div", np, [
-							It(
-								I(
-									"input",
-									{
-										ref: "inputEl",
-										"onUpdate:modelValue": t[2] || (t[2] = (a) => (e.tempValue = a)),
-										type: "number",
-										class: Ee(["baklava-input", { "--invalid": e.invalid }]),
-										style: { "text-align": "right" },
-										onBlur: t[3] || (t[3] = (...a) => e.leaveEditMode && e.leaveEditMode(...a)),
-										onKeydown: t[4] || (t[4] = Zn((...a) => e.leaveEditMode && e.leaveEditMode(...a), ["enter"]))
-									},
-									null,
-									34
-								),
-								[[wn, e.tempValue]]
-							)
+						It(
+							I(
+								"input",
+								{
+									ref: "inputEl",
+									"onUpdate:modelValue": t[2] || (t[2] = (a) => (e.tempValue = a)),
+									type: "number",
+									class: Ee(["baklava-input", { "--invalid": e.invalid }]),
+									style: { "text-align": "right" },
+									onBlur: t[3] || (t[3] = (...a) => e.leaveEditMode && e.leaveEditMode(...a)),
+									onKeydown: t[4] || (t[4] = Zn((...a) => e.leaveEditMode && e.leaveEditMode(...a), ["enter"]))
+								},
+								null,
+								34
+							),
+							[[wn, e.tempValue]]
+						)
 					  ]))
 					: (D(),
 					  V("div", { key: 0, class: "__content", onClick: t[1] || (t[1] = (...a) => e.enterEditMode && e.enterEditMode(...a)) }, [
-							I("div", { class: "__label", title: e.intf.name }, be(e.intf.name), 9, ep),
-							I("div", tp, be(e.stringRepresentation), 1)
+						I("div", { class: "__label", title: e.intf.name }, be(e.intf.name), 9, ep),
+						I("div", tp, be(e.stringRepresentation), 1)
 					  ])),
 				I("div", { class: "__button --inc", onClick: t[5] || (t[5] = (...a) => e.increment && e.increment(...a)) }, [X(i)])
 			])
@@ -6012,7 +6012,7 @@ This is likely a Baklava internal issue. Please report it on GitHub.`)
 			components: { "i-arrow": Pr },
 			props: { intf: { type: Object, required: !0 } },
 			setup(e) {
-				let t = j(null),
+				const t = j(null),
 					n = j(!1),
 					o = K(() => e.intf.items.find((i) => (typeof i == "string" ? i === e.intf.value : i.value === e.intf.value))),
 					s = K(() => (o.value ? (typeof o.value == "string" ? o.value : o.value.text) : "")),
@@ -6035,7 +6035,7 @@ This is likely a Baklava internal issue. Please report it on GitHub.`)
 		up = { class: "item --header" },
 		dp = ["onClick"]
 	function fp(e, t, n, o, s, r) {
-		let i = _e("i-arrow")
+		const i = _e("i-arrow")
 		return (
 			D(),
 			V(
@@ -6097,7 +6097,7 @@ This is likely a Baklava internal issue. Please report it on GitHub.`)
 		pp = de({
 			props: { intf: { type: Object, required: !0 } },
 			setup(e) {
-				let t = j(null),
+				const t = j(null),
 					n = Vr(ht(e, "intf")),
 					o = j(!1),
 					s = j(!1),
@@ -6114,7 +6114,7 @@ This is likely a Baklava internal issue. Please report it on GitHub.`)
 					},
 					mousemove: (u) => {
 						if (n.editMode.value) return
-						let d = Math.max(e.intf.min, Math.min(e.intf.max, (e.intf.max - e.intf.min) * (u.offsetX / t.value.clientWidth) + e.intf.min))
+						const d = Math.max(e.intf.min, Math.min(e.intf.max, (e.intf.max - e.intf.min) * (u.offsetX / t.value.clientWidth) + e.intf.min))
 						s.value && (n.setValue(d), (o.value = !0))
 					},
 					mouseleave: (u) => {
@@ -6145,23 +6145,23 @@ This is likely a Baklava internal issue. Please report it on GitHub.`)
 					e.editMode
 						? (D(),
 						  V("div", vp, [
-								It(
-									I(
-										"input",
-										{
-											ref: "inputEl",
-											"onUpdate:modelValue": t[0] || (t[0] = (i) => (e.tempValue = i)),
-											type: "number",
-											class: Ee(["baklava-input", { "--invalid": e.invalid }]),
-											style: { "text-align": "right" },
-											onBlur: t[1] || (t[1] = (...i) => e.leaveEditMode && e.leaveEditMode(...i)),
-											onKeydown: t[2] || (t[2] = Zn((...i) => e.leaveEditMode && e.leaveEditMode(...i), ["enter"]))
-										},
-										null,
-										34
-									),
-									[[wn, e.tempValue]]
-								)
+							It(
+								I(
+									"input",
+									{
+										ref: "inputEl",
+										"onUpdate:modelValue": t[0] || (t[0] = (i) => (e.tempValue = i)),
+										type: "number",
+										class: Ee(["baklava-input", { "--invalid": e.invalid }]),
+										style: { "text-align": "right" },
+										onBlur: t[1] || (t[1] = (...i) => e.leaveEditMode && e.leaveEditMode(...i)),
+										onKeydown: t[2] || (t[2] = Zn((...i) => e.leaveEditMode && e.leaveEditMode(...i), ["enter"]))
+									},
+									null,
+									34
+								),
+								[[wn, e.tempValue]]
+							)
 						  ]))
 						: (D(), V("div", hp, [I("div", mp, be(e.intf.name), 1), I("div", gp, be(e.stringRepresentation), 1)]))
 				],
@@ -6238,31 +6238,31 @@ This is likely a Baklava internal issue. Please report it on GitHub.`)
 	function gl(e, t, n) {
 		if (!t.template) return !1
 		if (ot(t.template) === n) return !0
-		let o = e.graphTemplates.find((r) => ot(r) === n)
+		const o = e.graphTemplates.find((r) => ot(r) === n)
 		return o ? o.nodes.filter((r) => r.type.startsWith(At)).some((r) => gl(e, t, r.type)) : !1
 	}
 	var Cp = de({
 			components: { PaletteEntry: xf },
 			setup() {
-				let { viewModel: e } = tt(),
+				const { viewModel: e } = tt(),
 					{ x: t, y: n } = Sd(),
 					{ transform: o } = Za(),
 					s = fn("editorEl"),
 					r = j(null),
 					i = K(() => {
-						let c = Array.from(e.value.editor.nodeTypes.entries()),
+						const c = Array.from(e.value.editor.nodeTypes.entries()),
 							u = new Set(c.map(([, p]) => p.category)),
 							d = []
-						for (let p of u.values()) {
+						for (const p of u.values()) {
 							let m = c.filter(([, g]) => g.category === p)
 							e.value.displayedGraph.template ? (m = m.filter(([g]) => !gl(e.value.editor, e.value.displayedGraph, g))) : (m = m.filter(([g]) => ![oo, so].includes(g))),
-								m.length > 0 && d.push({ name: p, nodeTypes: Object.fromEntries(m) })
+							m.length > 0 && d.push({ name: p, nodeTypes: Object.fromEntries(m) })
 						}
 						return d.sort((p, m) => (p.name === "default" ? -1 : m.name === "default" || p.name > m.name ? 1 : -1)), d
 					}),
 					a = K(() => {
 						if (!r.value || !s?.value) return {}
-						let { left: c, top: u } = s.value.getBoundingClientRect()
+						const { left: c, top: u } = s.value.getBoundingClientRect()
 						return { top: `${n.value - u}px`, left: `${t.value - c}px` }
 					})
 				return {
@@ -6271,10 +6271,10 @@ This is likely a Baklava internal issue. Please report it on GitHub.`)
 					draggedNodeStyles: a,
 					onDragStart: (c, u) => {
 						r.value = { type: c, nodeInformation: u }
-						let d = () => {
-							let p = Pe(new u.type())
+						const d = () => {
+							const p = Pe(new u.type())
 							e.value.displayedGraph.addNode(p)
-							let m = s.value.getBoundingClientRect(),
+							const m = s.value.getBoundingClientRect(),
 								[g, O] = o(t.value - m.left, n.value - m.top)
 							;(p.position.x = g), (p.position.y = O), (r.value = null), document.removeEventListener("pointerup", d)
 						}
@@ -6288,7 +6288,7 @@ This is likely a Baklava internal issue. Please report it on GitHub.`)
 		xp = { class: "baklava-node-palette" },
 		kp = { key: 0 }
 	function Tp(e, t, n, o, s, r) {
-		let i = _e("PaletteEntry")
+		const i = _e("PaletteEntry")
 		return (
 			D(),
 			V(
@@ -6330,10 +6330,10 @@ This is likely a Baklava internal issue. Please report it on GitHub.`)
 								e.draggedNode
 									? (D(),
 									  V(
-											"div",
-											{ key: 0, class: "baklava-dragged-node", style: He(e.draggedNodeStyles) },
-											[X(i, { type: e.draggedNode.type, title: e.draggedNode.nodeInformation.title }, null, 8, ["type", "title"])],
-											4
+										"div",
+										{ key: 0, class: "baklava-dragged-node", style: He(e.draggedNodeStyles) },
+										[X(i, { type: e.draggedNode.type, title: e.draggedNode.nodeInformation.title }, null, 8, ["type", "title"])],
+										4
 									  ))
 									: lt("", !0)
 							]),
@@ -6348,33 +6348,33 @@ This is likely a Baklava internal issue. Please report it on GitHub.`)
 	var Dp = ne(Cp, [["render", Tp]]),
 		On = "SAVE_SUBGRAPH"
 	function $p(e, t) {
-		let n = () => {
-			let o = e.value
+		const n = () => {
+			const o = e.value
 			if (!o.template) throw new Error("Graph template property not set")
-			let s = [],
+			const s = [],
 				r = [],
 				i = o.nodes.filter((d) => d.type === oo)
-			for (let d of i) {
-				let p = o.connections.filter((m) => m.from === d.outputs.placeholder)
+			for (const d of i) {
+				const p = o.connections.filter((m) => m.from === d.outputs.placeholder)
 				p.forEach((m) => {
 					r.push({ id: d.graphInterfaceId, name: d.inputs.name.value, nodeInterfaceId: m.to.id })
 				}),
-					s.push(...p)
+				s.push(...p)
 			}
-			let a = [],
+			const a = [],
 				l = o.nodes.filter((d) => d.type === so)
-			for (let d of l) {
-				let p = o.connections.filter((m) => m.to === d.inputs.placeholder)
+			for (const d of l) {
+				const p = o.connections.filter((m) => m.to === d.inputs.placeholder)
 				p.forEach((m) => {
 					a.push({ id: d.graphInterfaceId, name: d.inputs.name.value, nodeInterfaceId: m.from.id })
 				}),
-					s.push(...p)
+				s.push(...p)
 			}
-			let c = o.connections.filter((d) => !s.includes(d)),
+			const c = o.connections.filter((d) => !s.includes(d)),
 				u = o.nodes.filter((d) => d.type !== oo && d.type !== so)
 			o.template.update({ inputs: r, outputs: a, connections: c.map((d) => ({ id: d.id, from: d.from.id, to: d.to.id })), nodes: u.map((d) => d.save()) }),
-				(o.template.panning = o.panning),
-				(o.template.scaling = o.scaling)
+			(o.template.panning = o.panning),
+			(o.template.scaling = o.scaling)
 		}
 		t.registerCommand(On, {
 			canExecute: () => {
@@ -6387,12 +6387,12 @@ This is likely a Baklava internal issue. Please report it on GitHub.`)
 	var Rr = "CREATE_SUBGRAPH",
 		Xa = [oo, so]
 	function Sp(e, t, n) {
-		let o = () => e.value.selectedNodes.filter((r) => !Xa.includes(r.type)).length > 0,
+		const o = () => e.value.selectedNodes.filter((r) => !Xa.includes(r.type)).length > 0,
 			s = () => {
-				let r = e.value,
+				const r = e.value,
 					i = e.value.editor
 				if (r.selectedNodes.length === 0) return
-				let a = r.selectedNodes.filter((N) => !Xa.includes(N.type)),
+				const a = r.selectedNodes.filter((N) => !Xa.includes(N.type)),
 					l = a.flatMap((N) => Object.values(N.inputs)),
 					c = a.flatMap((N) => Object.values(N.outputs)),
 					u = r.connections.filter((N) => !c.includes(N.from) && l.includes(N.to)),
@@ -6402,36 +6402,36 @@ This is likely a Baklava internal issue. Please report it on GitHub.`)
 					g = d.map((N) => N.from),
 					O = new Map(),
 					w = []
-				for (let N of m) {
-					let R = eo()
+				for (const N of m) {
+					const R = eo()
 					O.set(N.id, R), w.push({ id: R, nodeInterfaceId: N.id, name: N.name })
 				}
-				let S = []
-				for (let N of g) {
-					let R = eo()
+				const S = []
+				for (const N of g) {
+					const R = eo()
 					O.set(N.id, R), S.push({ id: R, nodeInterfaceId: N.id, name: N.name })
 				}
-				let y = Pe(new ft({ connections: p.map((N) => ({ id: N.id, from: N.from.id, to: N.to.id })), inputs: w, outputs: S, nodes: a.map((N) => N.save()) }, i))
+				const y = Pe(new ft({ connections: p.map((N) => ({ id: N.id, from: N.from.id, to: N.to.id })), inputs: w, outputs: S, nodes: a.map((N) => N.save()) }, i))
 				i.addGraphTemplate(y)
-				let M = i.nodeTypes.get(ot(y))
+				const M = i.nodeTypes.get(ot(y))
 				if (!M) throw new Error("Unable to create subgraph: Could not find corresponding graph node type")
-				let z = Pe(new M.type())
+				const z = Pe(new M.type())
 				r.addNode(z)
-				let H = Math.round(a.map((N) => N.position.x).reduce((N, R) => N + R, 0) / a.length),
+				const H = Math.round(a.map((N) => N.position.x).reduce((N, R) => N + R, 0) / a.length),
 					re = Math.round(a.map((N) => N.position.y).reduce((N, R) => N + R, 0) / a.length)
 				;(z.position.x = H),
-					(z.position.y = re),
-					u.forEach((N) => {
-						r.removeConnection(N), r.addConnection(N.from, z.inputs[O.get(N.to.id)])
-					}),
-					d.forEach((N) => {
-						r.removeConnection(N), r.addConnection(z.outputs[O.get(N.from.id)], N.to)
-					}),
-					a.forEach((N) => r.removeNode(N)),
-					t.canExecuteCommand(On) && t.executeCommand(On),
-					n(y),
-					(e.value.panning = { ...r.panning }),
-					(e.value.scaling = r.scaling)
+				(z.position.y = re),
+				u.forEach((N) => {
+					r.removeConnection(N), r.addConnection(N.from, z.inputs[O.get(N.to.id)])
+				}),
+				d.forEach((N) => {
+					r.removeConnection(N), r.addConnection(z.outputs[O.get(N.from.id)], N.to)
+				}),
+				a.forEach((N) => r.removeNode(N)),
+				t.canExecuteCommand(On) && t.executeCommand(On),
+				n(y),
+				(e.value.panning = { ...r.panning }),
+				(e.value.scaling = r.scaling)
 			}
 		t.registerCommand(Rr, { canExecute: o, execute: s })
 	}
@@ -6443,7 +6443,7 @@ This is likely a Baklava internal issue. Please report it on GitHub.`)
 				e.value.selectedNodes.forEach((n) => e.value.removeNode(n))
 			}
 		}),
-			t.registerHotkey(["Delete"], Tr)
+		t.registerHotkey(["Delete"], Tr)
 	}
 	var Ar = "SWITCH_TO_MAIN_GRAPH"
 	function Mp(e, t, n) {
@@ -6459,7 +6459,7 @@ This is likely a Baklava internal issue. Please report it on GitHub.`)
 	}
 	var os = class {
 			constructor(t, n) {
-				;(this.type = t), t === "addNode" ? (this.nodeId = n) : (this.nodeState = n)
+				(this.type = t), t === "addNode" ? (this.nodeId = n) : (this.nodeState = n)
 			}
 			undo(t) {
 				this.type === "addNode" ? this.removeNode(t) : this.addNode(t)
@@ -6468,13 +6468,13 @@ This is likely a Baklava internal issue. Please report it on GitHub.`)
 				this.type === "addNode" && this.nodeState ? this.addNode(t) : this.type === "removeNode" && this.nodeId && this.removeNode(t)
 			}
 			addNode(t) {
-				let n = t.editor.nodeTypes.get(this.nodeState.type)
+				const n = t.editor.nodeTypes.get(this.nodeState.type)
 				if (!n) return
-				let o = new n.type()
+				const o = new n.type()
 				t.addNode(o), o.load(this.nodeState), (this.nodeId = o.id)
 			}
 			removeNode(t) {
-				let n = t.nodes.find((o) => o.id === this.nodeId)
+				const n = t.nodes.find((o) => o.id === this.nodeId)
 				!n || ((this.nodeState = n.save()), t.removeNode(n))
 			}
 		},
@@ -6482,7 +6482,7 @@ This is likely a Baklava internal issue. Please report it on GitHub.`)
 			constructor(t, n) {
 				if (((this.type = t), t === "addConnection")) this.connectionId = n
 				else {
-					let o = n
+					const o = n
 					this.connectionState = { id: o.id, from: o.from.id, to: o.to.id }
 				}
 			}
@@ -6493,12 +6493,12 @@ This is likely a Baklava internal issue. Please report it on GitHub.`)
 				this.type === "addConnection" && this.connectionState ? this.addConnection(t) : this.type === "removeConnection" && this.connectionId && this.removeConnection(t)
 			}
 			addConnection(t) {
-				let n = t.findNodeInterface(this.connectionState.from),
+				const n = t.findNodeInterface(this.connectionState.from),
 					o = t.findNodeInterface(this.connectionState.to)
 				!n || !o || t.addConnection(n, o)
 			}
 			removeConnection(t) {
-				let n = t.connections.find((o) => o.id === this.connectionId)
+				const n = t.connections.find((o) => o.id === this.connectionId)
 				!n || ((this.connectionState = { id: n.id, from: n.from.id, to: n.to.id }), t.removeConnection(n))
 			}
 		},
@@ -6519,7 +6519,7 @@ This is likely a Baklava internal issue. Please report it on GitHub.`)
 		Fr = "START_TRANSACTION",
 		Hr = "COMMIT_TRANSACTION"
 	function Pp(e, t) {
-		let n = Symbol("HistoryToken"),
+		const n = Symbol("HistoryToken"),
 			o = j(200),
 			s = j([]),
 			r = j(!1),
@@ -6535,7 +6535,7 @@ This is likely a Baklava internal issue. Please report it on GitHub.`)
 				a.value = !0
 			},
 			d = () => {
-				;(a.value = !1), l.value.length > 0 && (c(new Dr(l.value)), (l.value = []))
+				(a.value = !1), l.value.length > 0 && (c(new Dr(l.value)), (l.value = []))
 			},
 			p = () => s.value.length !== 0 && i.value !== -1,
 			m = () => {
@@ -6550,7 +6550,7 @@ This is likely a Baklava internal issue. Please report it on GitHub.`)
 				e,
 				(w, S) => {
 					S && (S.events.addNode.unsubscribe(n), S.events.removeNode.unsubscribe(n), S.events.addConnection.unsubscribe(n), S.events.removeConnection.unsubscribe(n)),
-						w &&
+					w &&
 							(w.events.addNode.subscribe(n, (y) => {
 								c(new os("addNode", y.id))
 							}),
@@ -6579,20 +6579,20 @@ This is likely a Baklava internal issue. Please report it on GitHub.`)
 		ls = "PASTE",
 		vl = "CLEAR_CLIPBOARD"
 	function Rp(e, t, n) {
-		let o = Symbol("ClipboardToken"),
+		const o = Symbol("ClipboardToken"),
 			s = j(""),
 			r = j(""),
 			i = K(() => !s.value),
 			a = () => {
-				;(s.value = ""), (r.value = "")
+				(s.value = ""), (r.value = "")
 			},
 			l = () => {
-				let d = e.value.selectedNodes.flatMap((m) => [...Object.values(m.inputs), ...Object.values(m.outputs)]),
+				const d = e.value.selectedNodes.flatMap((m) => [...Object.values(m.inputs), ...Object.values(m.outputs)]),
 					p = e.value.connections.filter((m) => d.includes(m.from) || d.includes(m.to)).map((m) => ({ from: m.from.id, to: m.to.id }))
 				;(r.value = JSON.stringify(p)), (s.value = JSON.stringify(e.value.selectedNodes.map((m) => m.save())))
 			},
 			c = (d, p, m) => {
-				for (let g of d) {
+				for (const g of d) {
 					let O
 					if (((!m || m === "input") && (O = Object.values(g.inputs).find((w) => w.id === p)), !O && (!m || m === "output") && (O = Object.values(g.outputs).find((w) => w.id === p)), O))
 						return O
@@ -6600,46 +6600,46 @@ This is likely a Baklava internal issue. Please report it on GitHub.`)
 			},
 			u = () => {
 				if (i.value) return
-				let d = new Map(),
+				const d = new Map(),
 					p = JSON.parse(s.value),
 					m = JSON.parse(r.value),
 					g = [],
 					O = [],
 					w = e.value
 				n.executeCommand(Fr)
-				for (let S of p) {
-					let y = t.value.nodeTypes.get(S.type)
+				for (const S of p) {
+					const y = t.value.nodeTypes.get(S.type)
 					if (!y) {
 						console.warn(`Node type ${S.type} not registered`)
 						return
 					}
-					let M = new y.type(),
+					const M = new y.type(),
 						z = M.id
 					g.push(M)
-					let H = (re) => {
+					const H = (re) => {
 						Object.values(re).forEach((N) => {
 							N.hooks.load.subscribe(o, (R) => {
-								let Z = eo()
+								const Z = eo()
 								return d.set(R.id, Z), (N.id = Z), N.hooks.load.unsubscribe(o), R
 							})
 						})
 					}
 					H(M.inputs),
-						H(M.outputs),
-						M.hooks.beforeLoad.subscribe(o, (re) => {
-							let N = re
-							return N.position && ((N.position.x += 10), (N.position.y += 10)), M.hooks.beforeLoad.unsubscribe(o), N
-						}),
-						w.addNode(M),
-						M.load(S),
-						(M.id = z),
-						d.set(S.id, z)
+					H(M.outputs),
+					M.hooks.beforeLoad.subscribe(o, (re) => {
+						const N = re
+						return N.position && ((N.position.x += 10), (N.position.y += 10)), M.hooks.beforeLoad.unsubscribe(o), N
+					}),
+					w.addNode(M),
+					M.load(S),
+					(M.id = z),
+					d.set(S.id, z)
 				}
-				for (let S of m) {
-					let y = c(g, d.get(S.from), "output"),
+				for (const S of m) {
+					const y = c(g, d.get(S.from), "output"),
 						M = c(g, d.get(S.to), "input")
 					if (!y || !M) continue
-					let z = w.addConnection(y, M)
+					const z = w.addConnection(y, M)
 					z && O.push(z)
 				}
 				return n.executeCommand(Hr), { newNodes: g, newConnections: O }
@@ -6657,7 +6657,7 @@ This is likely a Baklava internal issue. Please report it on GitHub.`)
 	function Ap(e, t) {
 		t.registerCommand(yl, {
 			execute: (n) => {
-				;(e.value.sidebar.nodeId = n), (e.value.sidebar.visible = !0)
+				(e.value.sidebar.nodeId = n), (e.value.sidebar.visible = !0)
 			},
 			canExecute: () => !0
 		})
@@ -6826,7 +6826,7 @@ This is likely a Baklava internal issue. Please report it on GitHub.`)
 			"stroke-linejoin": "round"
 		},
 		Rh = ma(
-			'<path stroke="none" d="M0 0h24v24H0z" fill="none"></path><path d="M10 3h4v4h-4z"></path><path d="M3 17h4v4h-4z"></path><path d="M17 17h4v4h-4z"></path><path d="M7 17l5 -4l5 4"></path><line x1="12" y1="7" x2="12" y2="13"></line>',
+			"<path stroke=\"none\" d=\"M0 0h24v24H0z\" fill=\"none\"></path><path d=\"M10 3h4v4h-4z\"></path><path d=\"M3 17h4v4h-4z\"></path><path d=\"M17 17h4v4h-4z\"></path><path d=\"M7 17l5 -4l5 4\"></path><line x1=\"12\" y1=\"7\" x2=\"12\" y2=\"13\"></line>",
 			6
 		),
 		Ah = [Rh]
@@ -6837,7 +6837,7 @@ This is likely a Baklava internal issue. Please report it on GitHub.`)
 		jh = de({
 			props: { command: { type: String, required: !0 }, title: { type: String, required: !0 }, icon: { type: Object, required: !1, default: void 0 } },
 			setup() {
-				let { viewModel: e } = tt()
+				const { viewModel: e } = tt()
 				return { viewModel: e }
 			}
 		}),
@@ -6863,7 +6863,7 @@ This is likely a Baklava internal issue. Please report it on GitHub.`)
 		Wh = de({
 			components: { ToolbarButton: Bh },
 			setup() {
-				let { viewModel: e } = tt()
+				const { viewModel: e } = tt()
 				return {
 					isSubgraph: K(() => e.value.displayedGraph !== e.value.editor.graph),
 					commands: [
@@ -6882,7 +6882,7 @@ This is likely a Baklava internal issue. Please report it on GitHub.`)
 		}),
 		Kh = { class: "baklava-toolbar" }
 	function zh(e, t, n, o, s, r) {
-		let i = _e("toolbar-button")
+		const i = _e("toolbar-button")
 		return (
 			D(),
 			V("div", Kh, [
@@ -6896,10 +6896,10 @@ This is likely a Baklava internal issue. Please report it on GitHub.`)
 				e.isSubgraph
 					? (D(!0),
 					  V(
-							te,
-							{ key: 0 },
-							Ye(e.subgraphCommands, (a) => (D(), Ne(i, { key: a.command, command: a.command, title: a.title, icon: a.icon }, null, 8, ["command", "title", "icon"]))),
-							128
+						te,
+						{ key: 0 },
+						Ye(e.subgraphCommands, (a) => (D(), Ne(i, { key: a.command, command: a.command, title: a.title, icon: a.icon }, null, 8, ["command", "title", "icon"]))),
+						128
 					  ))
 					: lt("", !0)
 			])
@@ -6910,12 +6910,12 @@ This is likely a Baklava internal issue. Please report it on GitHub.`)
 			components: { Background: ud, Node: nl, ConnectionWrapper: ol, TemporaryConnection: sl, Sidebar: rl, Minimap: il, NodePalette: Dp, Toolbar: qh },
 			props: { viewModel: { type: Object, required: !0 } },
 			setup(e) {
-				let t = Symbol("EditorToken"),
+				const t = Symbol("EditorToken"),
 					n = ht(e, "viewModel")
 				Ja(n)
-				let o = j(null)
+				const o = j(null)
 				Wo("editorEl", o)
-				let s = K(() => e.viewModel.displayedGraph.nodes),
+				const s = K(() => e.viewModel.displayedGraph.nodes),
 					r = K(() => e.viewModel.displayedGraph.connections),
 					i = K(() => e.viewModel.displayedGraph.selectedNodes),
 					a = id(),
@@ -6923,7 +6923,7 @@ This is likely a Baklava internal issue. Please report it on GitHub.`)
 					c = K(() => ({ ...a.styles.value })),
 					u = j(0)
 				e.viewModel.editor.hooks.load.subscribe(t, (y) => (u.value++, y))
-				let d = (y) => {
+				const d = (y) => {
 						a.onPointerMove(y), l.onMouseMove(y)
 					},
 					p = (y) => {
@@ -6965,7 +6965,7 @@ This is likely a Baklava internal issue. Please report it on GitHub.`)
 		}),
 		Yh = { class: "connections-container" }
 	function Xh(e, t, n, o, s, r) {
-		let i = _e("background"),
+		const i = _e("background"),
 			a = _e("toolbar"),
 			l = _e("node-palette"),
 			c = _e("connection-wrapper"),
@@ -7049,18 +7049,18 @@ This is likely a Baklava internal issue. Please report it on GitHub.`)
 	}
 	var jr = ne(Gh, [["render", Xh]])
 	function Jh(e) {
-		let t = j([]),
+		const t = j([]),
 			n = j([])
 		return {
 			pressedKeys: t,
 			handleKeyDown: (i) => {
 				t.value.includes(i.key) || t.value.push(i.key),
-					n.value.forEach((a) => {
-						a.keys.every((l) => t.value.includes(l)) && e(a.commandName)
-					})
+				n.value.forEach((a) => {
+					a.keys.every((l) => t.value.includes(l)) && e(a.commandName)
+				})
 			},
 			handleKeyUp: (i) => {
-				let a = t.value.indexOf(i.key)
+				const a = t.value.indexOf(i.key)
 				a >= 0 && t.value.splice(a, 1)
 			},
 			registerHotkey: (i, a) => {
@@ -7069,7 +7069,7 @@ This is likely a Baklava internal issue. Please report it on GitHub.`)
 		}
 	}
 	var _l = () => {
-			let e = j(new Map()),
+			const e = j(new Map()),
 				t = (r, i) => {
 					if (e.value.has(r)) throw new Error(`Command "${r}" already exists`)
 					e.value.set(r, i)
@@ -7099,37 +7099,37 @@ This is likely a Baklava internal issue. Please report it on GitHub.`)
 				let u
 				if (Zh(o))
 					(u = new qe(e.value)),
-						o.createGraph(u),
-						u.inputs.forEach((d) => {
-							let p = new hl()
+					o.createGraph(u),
+					u.inputs.forEach((d) => {
+						const p = new hl()
 							;(p.inputs.name.value = d.name), (p.graphInterfaceId = d.id), u.addNode(p)
-							let m = u.findNodeInterface(d.nodeInterfaceId)
-							if (!m) {
-								console.warn(`Could not find target interface ${d.nodeInterfaceId} for subgraph input node`)
-								return
-							}
-							u.addConnection(p.outputs.placeholder, m)
-						}),
-						u.outputs.forEach((d) => {
-							let p = new ml()
+						const m = u.findNodeInterface(d.nodeInterfaceId)
+						if (!m) {
+							console.warn(`Could not find target interface ${d.nodeInterfaceId} for subgraph input node`)
+							return
+						}
+						u.addConnection(p.outputs.placeholder, m)
+					}),
+					u.outputs.forEach((d) => {
+						const p = new ml()
 							;(p.inputs.name.value = d.name), (p.graphInterfaceId = d.id), u.addNode(p)
-							let m = u.findNodeInterface(d.nodeInterfaceId)
-							if (!m) {
-								console.warn(`Could not find target interface ${d.nodeInterfaceId} for subgraph input node`)
-								return
-							}
-							u.addConnection(m, p.inputs.placeholder)
-						})
+						const m = u.findNodeInterface(d.nodeInterfaceId)
+						if (!m) {
+							console.warn(`Could not find target interface ${d.nodeInterfaceId} for subgraph input node`)
+							return
+						}
+						u.addConnection(m, p.inputs.placeholder)
+					})
 				else {
 					if (o !== e.value.graph) throw new Error("Can only switch using 'Graph' instance when it is the root graph. Otherwise a 'GraphTemplate' must be used.")
 					u = o
 				}
 				t.value && t.value !== e.value.graph && t.value.destroy(),
-					(u.panning = (r = (s = u.panning) != null ? s : o.panning) != null ? r : { x: 0, y: 0 }),
-					(u.scaling = (a = (i = u.scaling) != null ? i : o.scaling) != null ? a : 1),
-					(u.selectedNodes = (l = u.selectedNodes) != null ? l : []),
-					(u.sidebar = (c = u.sidebar) != null ? c : { visible: !1, nodeId: "", optionName: "" }),
-					(t.value = u)
+				(u.panning = (r = (s = u.panning) != null ? s : o.panning) != null ? r : { x: 0, y: 0 }),
+				(u.scaling = (a = (i = u.scaling) != null ? i : o.scaling) != null ? a : 1),
+				(u.selectedNodes = (l = u.selectedNodes) != null ? l : []),
+				(u.sidebar = (c = u.sidebar) != null ? c : { visible: !1, nodeId: "", optionName: "" }),
+				(t.value = u)
 			}
 		}
 	}
@@ -7138,7 +7138,7 @@ This is likely a Baklava internal issue. Please report it on GitHub.`)
 		;(e.position = (t = e.position) != null ? t : { x: 0, y: 0 }), (e.disablePointerEvents = !1), (e.twoColumn = (n = e.twoColumn) != null ? n : !1), (e.width = (o = e.width) != null ? o : 200)
 	}
 	function Lr(e) {
-		let t = j(e ?? new $n()),
+		const t = j(e ?? new $n()),
 			n = Symbol("ViewModelToken"),
 			o = j(null),
 			s = Hs(o),
@@ -7162,7 +7162,7 @@ This is likely a Baklava internal issue. Please report it on GitHub.`)
 						p.nodeHooks.afterSave.unsubscribe(n),
 						p.graphTemplateHooks.beforeLoad.unsubscribe(n),
 						p.graphTemplateHooks.afterSave.unsubscribe(n)),
-						p &&
+					p &&
 							(p.nodeHooks.beforeLoad.subscribe(n, (g, O) => {
 								var w, S, y
 								return (O.position = (w = g.position) != null ? w : { x: 0, y: 0 }), (O.width = (S = g.width) != null ? S : 200), (O.twoColumn = (y = g.twoColumn) != null ? y : !1), g
@@ -7192,7 +7192,7 @@ This is likely a Baklava internal issue. Please report it on GitHub.`)
 		return (
 			Ua({
 				setup() {
-					let n = Lr()
+					const n = Lr()
 					return (t = n), { viewModel: n }
 				},
 				render() {
