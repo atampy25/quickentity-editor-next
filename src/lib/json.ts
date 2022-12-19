@@ -18,7 +18,8 @@ function replacer(key: string, value: any) {
 	}
 }
 
-export const parse = (val: string) => JSON.parse(val.replace(/:\s*([-+Ee0-9.]+)/g, ": \"~|$1\""), reviver)
+// eslint-disable-next-line no-control-regex
+export const parse = (val: string) => JSON.parse(val.replace(/(\\(?:["\\bfnrt]|u[0-9a-fA-F])|[^\u0000-\u001F\\])":([-+Ee0-9.]+)/g, "$1\": \"~|$2\""), reviver)
 export const stringify = (val: Record<string, any>, sp: string | undefined = undefined) => LosslessJSON.stringify(val, replacer, sp)
 
 export default {

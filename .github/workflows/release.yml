@@ -151,7 +151,6 @@ jobs:
         with:
           name: svelte-build
           path: build
-          retention-days: 1
       
       - name: Read update signature
         id: updateSignature
