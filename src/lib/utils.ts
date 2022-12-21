@@ -503,22 +503,30 @@ export function getReferencedExternalEntities(
 	return refs
 }
 
-/** Check the validity of an entity's references as well as matching it against the schema. */
-export function checkValidityOfEntity(entity: Entity, target: SubEntity): boolean {
+/** Check the validity of an entity's references as well as matching it against the schema. Returns null if the entity is valid and a message if not. */
+export function checkValidityOfEntity(entity: Entity, target: SubEntity): null | string {
 	// Check that all referenced entities exist
 	for (const ref of getReferencedEntities(target)) {
-		if (!entity.entities[ref.entity] || ref.entity == "") {
-			return false
+		if (ref.entity == "") {
+			return "Empty string used as reference"
+		}
+
+		if (!entity.entities[ref.entity]) {
+			return `Referenced entity ${ref.entity} doesn't exist`
 		}
 	}
 
 	// Check that schema is met
-	if (!ajv(target)) {
-		console.log("Entity invalid by schema", ajv.errors)
-		return false
+	try {
+		if (!ajv(target)) {
+			console.log("Entity invalid by schema", ajv.errors)
+			return "Entity doesn't meet specifications"
+		}
+	} catch {
+		return "Entity doesn't meet specifications"
 	}
 
-	return true
+	return null
 }
 
 export function normaliseToHash(path: string): string {
