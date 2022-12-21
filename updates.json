@@ -1,11 +1,11 @@
 {
-	"version": "1.24.7",
-	"notes": "Improve number parsing regex",
+	"version": "1.24.8",
+	"notes": "Graph sanitisation improvements",
 	"pub_date": "2022-12-15T00:34:01Z",
 	"platforms": {
 		"windows-x86_64": {
-			"signature": "dW50cnVzdGVkIGNvbW1lbnQ6IHNpZ25hdHVyZSBmcm9tIHRhdXJpIHNlY3JldCBrZXkKUlVScWpVZGd2b0lOTlZTOFcwcFNvYVJBT0wzWU1NU1dnaFVrQlhFLzRxb1FHZzROSEQrcUV5YmtvZEQzZXN6K0JORm8rOERrK3NoNlZydFc3SG15a3ZDTnZmcDAwYndob3cwPQp0cnVzdGVkIGNvbW1lbnQ6IHRpbWVzdGFtcDoxNjcxNDQ5OTMxCWZpbGU6UXVpY2tFbnRpdHkgRWRpdG9yXzEuMjQuN194NjRfZW4tVVMubXNpLnppcAoyR2NuNnJiZ0IzZituWnBlVjE2cUhBZlBGVzdEcGttdWxneUlFcGpUaVpmN0xVa253bzF3QUNOd3RzeUc0RmdYa2JOY2crQUJGRmlaZTFBTncxaUpBQT09Cg==",
-			"url": "https://github.com/atampy25/quickentity-editor-next/releases/download/1.24.7/QuickEntity.Editor_1.24.7_x64_en-US.msi.zip"
+			"signature": "dW50cnVzdGVkIGNvbW1lbnQ6IHNpZ25hdHVyZSBmcm9tIHRhdXJpIHNlY3JldCBrZXkKUlVScWpVZGd2b0lOTmJIMzlVU0lkSTViaVEwbVArSUlSY3JZSU1SeVJEZDhzUVpnbzhsb2l2U3JMTi9qQ1crdGpxRkovYlkxVW1wam0wWHgxOTJTb0JzNGhrWWs2b0JRV0FBPQp0cnVzdGVkIGNvbW1lbnQ6IHRpbWVzdGFtcDoxNjcxNjIwMDI3CWZpbGU6UXVpY2tFbnRpdHkgRWRpdG9yXzEuMjQuOF94NjRfZW4tVVMubXNpLnppcApHU1prOVU1MnpLWFFWTjJMOFJlTHJCTVFmU0U0MnVkaEwyengyNHZFQmp0Qk5tamRQalB6YVZ4ejFraDRrSTRmTUFacnBaWE5Ga1pTL3kyQWR2amtEZz09Cg==",
+			"url": "https://github.com/atampy25/quickentity-editor-next/releases/download/1.24.8/QuickEntity.Editor_1.24.8_x64_en-US.msi.zip"
 		}
 	}
 }
