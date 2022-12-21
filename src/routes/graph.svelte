@@ -174,18 +174,30 @@
 				if (pins.input.length || pins.output.length) {
 					placeNode = true
 
+					const typeSanitiser = new DOMParser().parseFromString(`<div></div>`, "text/html")
+					typeSanitiser.querySelector("div")!.innerText = normaliseToHash(childEntity.factory)
+
+					const titleSanitiser = new DOMParser().parseFromString(`<div></div>`, "text/html")
+					titleSanitiser.querySelector("div")!.innerText = readableNodeTypeNames[normaliseToHash(childEntity.factory)]
+
 					graphView.editor.registerNodeType(
 						baklava.Core.defineNode({
-							type: normaliseToHash(childEntity.factory),
-							title: readableNodeTypeNames[normaliseToHash(childEntity.factory)],
+							type: typeSanitiser.querySelector("div")!.innerHTML,
+							title: titleSanitiser.querySelector("div")!.innerHTML,
 							inputs: Object.fromEntries(
 								pins.input.map((a) => {
-									return ["in_" + btoa(a), () => new baklava.Core.NodeInterface(a, 0)]
+									const sanitiser = new DOMParser().parseFromString(`<div></div>`, "text/html")
+									sanitiser.querySelector("div")!.innerText = a
+
+									return ["in_" + btoa(a), () => new baklava.Core.NodeInterface(sanitiser.querySelector("div")!.innerHTML, 0)]
 								})
 							),
 							outputs: Object.fromEntries(
 								pins.output.map((a) => {
-									return ["out_" + btoa(a), () => new baklava.Core.NodeInterface(a, 0)]
+									const sanitiser = new DOMParser().parseFromString(`<div></div>`, "text/html")
+									sanitiser.querySelector("div")!.innerText = a
+
+									return ["out_" + btoa(a), () => new baklava.Core.NodeInterface(sanitiser.querySelector("div")!.innerHTML, 0)]
 								})
 							)
 						})
@@ -214,10 +226,13 @@
 				const elem = new DOMParser().parseFromString(`<div><span class="mt-1 text-gray-200 text-xs"></span></div>`, "text/html")
 				elem.querySelector("span")!.innerText = readableNodeTypeNames[normaliseToHash(childEntity.factory)]
 
+				const elem2 = new DOMParser().parseFromString(`<div></div>`, "text/html")
+				elem2.querySelector("div")!.innerText = childEntity.name
+
 				graph.graph.nodes.push(
 					merge(new foundNodeType(), {
 						id: childEntityID,
-						title: childEntity.name + `<br>` + elem.querySelector("div")!.innerHTML,
+						title: elem2.querySelector("div")!.innerHTML + `<br>` + elem.querySelector("div")!.innerHTML,
 						width: 250,
 						twoColumn: false,
 						position: { x: 0, y: 0 }
