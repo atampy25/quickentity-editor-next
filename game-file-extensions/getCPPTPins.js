@@ -154,4 +154,7 @@ for (const c of fs.readJSONSync("./classes").classes) {
 	}
 }
 
+data["0031B66C16E8815D"].output = new Set()
+data["00A0A2026E9090BC"].output = new Set()
+
 fs.writeJSONSync("./pins.json", Object.fromEntries(Object.entries(data).map((a) => [a[0], { input: [...a[1].input], output: [...a[1].output] }])))
