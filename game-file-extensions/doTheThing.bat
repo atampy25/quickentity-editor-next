@@ -9,20 +9,20 @@ echo Ensure you have edited extractAllOfFiletypes.js to use your Runtime path.
 pause
 
 call npm install
-node extractAllOfFiletypes
-node convertAllASETMetas
-node convertAllCPPTs
-node convertAllCPPTMetas
-node convertAllTBLUs
-node convertAllTBLUMetas
-node convertAllTEMPs
-node convertAllTEMPMetas
-node convertAllUICBs
-node convertAllUICTMetas
-node convertAllQNs
-node findUICBPropTypes
-node getCPPTInfo
-node getCPPTPins
+powershell "node extractAllOfFiletypes | tee log-extraction.txt"
+powershell "node convertAllASETMetas | tee log-aset-meta-conversion.txt"
+powershell "node convertAllCPPTs | tee log-cppt-conversion.txt"
+powershell "node convertAllCPPTMetas | tee log-cppt-meta-conversion.txt"
+powershell "node convertAllTBLUs | tee log-tblu-conversion.txt"
+powershell "node convertAllTBLUMetas | tee log-tblu-meta-conversion.txt"
+powershell "node convertAllTEMPs | tee log-temp-conversion.txt"
+powershell "node convertAllTEMPMetas | tee log-temp-meta-conversion.txt"
+powershell "node convertAllUICBs | tee log-uicb-conversion.txt"
+powershell "node convertAllUICTMetas | tee log-uict-meta-conversion.txt"
+powershell "node convertAllQNs | tee log-qn-conversion.txt"
+powershell "node findUICBPropTypes | tee log-uicb-proptype-finding.txt"
+powershell "node getCPPTInfo | tee log-cppt-property-calculation.txt"
+powershell "node getCPPTPins | tee log-cppt-pin-crawling.txt"
 
 echo Done! Enable game file extensions and input this folder's path in QuickEntity Editor to unlock the extra features.
 pause
