@@ -1,11 +1,11 @@
 {
-	"version": "1.24.8",
-	"notes": "Graph sanitisation improvements",
+	"version": "1.25.0",
+	"notes": "Enable devtools",
 	"pub_date": "2022-12-15T00:34:01Z",
 	"platforms": {
 		"windows-x86_64": {
-			"signature": "dW50cnVzdGVkIGNvbW1lbnQ6IHNpZ25hdHVyZSBmcm9tIHRhdXJpIHNlY3JldCBrZXkKUlVScWpVZGd2b0lOTmJIMzlVU0lkSTViaVEwbVArSUlSY3JZSU1SeVJEZDhzUVpnbzhsb2l2U3JMTi9qQ1crdGpxRkovYlkxVW1wam0wWHgxOTJTb0JzNGhrWWs2b0JRV0FBPQp0cnVzdGVkIGNvbW1lbnQ6IHRpbWVzdGFtcDoxNjcxNjIwMDI3CWZpbGU6UXVpY2tFbnRpdHkgRWRpdG9yXzEuMjQuOF94NjRfZW4tVVMubXNpLnppcApHU1prOVU1MnpLWFFWTjJMOFJlTHJCTVFmU0U0MnVkaEwyengyNHZFQmp0Qk5tamRQalB6YVZ4ejFraDRrSTRmTUFacnBaWE5Ga1pTL3kyQWR2amtEZz09Cg==",
-			"url": "https://github.com/atampy25/quickentity-editor-next/releases/download/1.24.8/QuickEntity.Editor_1.24.8_x64_en-US.msi.zip"
+			"signature": "dW50cnVzdGVkIGNvbW1lbnQ6IHNpZ25hdHVyZSBmcm9tIHRhdXJpIHNlY3JldCBrZXkKUlVScWpVZGd2b0lOTlhyUVlvZjJTSTZDMlhDV1l2NE9oNDJZNlRRa3FpZEw5cU1YQ0NVRWRLR0ErNndJUWJFbVpWWUtYdkpUTk1NUHR2UE00U2JrWlNQQmhoYUl3WlNxdFFNPQp0cnVzdGVkIGNvbW1lbnQ6IHRpbWVzdGFtcDoxNjczMjM5MDk0CWZpbGU6UXVpY2tFbnRpdHkgRWRpdG9yXzEuMjUuMF94NjRfZW4tVVMubXNpLnppcAowd0ppTkxwREVWOUFWRTh3Ym16eWRsQW1CY3BOamFJemlwSmVIb1BaVk1YZzd2WG95SVI0MWJhWUJ2d2NFQk5kK0g4VWJCYUFrU3NpV1ZESWpTc0JBdz09Cg==",
+			"url": "https://github.com/atampy25/quickentity-editor-next/releases/download/1.25.0/QuickEntity.Editor_1.25.0_x64_en-US.msi.zip"
 		}
 	}
 }
