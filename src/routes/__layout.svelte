@@ -565,7 +565,8 @@
 								"--input2",
 								await join(await appDir(), "entity.json"),
 								"--output",
-								x
+								x,
+								"--format-fix"
 							]).execute()
 
 							$forceSaveSubEntity = { value: false }
@@ -606,7 +607,8 @@
 									"--input2",
 									await join(await appDir(), "entity.json"),
 									"--output",
-									String($sessionMetadata.saveAsPatchPath)
+									String($sessionMetadata.saveAsPatchPath),
+									"--format-fix"
 								]).execute()
 
 								$forceSaveSubEntity = { value: false }
@@ -1186,7 +1188,8 @@
 															"--input2",
 															await join(await appDir(), "entity.json"),
 															"--output",
-															String($sessionMetadata.saveAsPatchPath)
+															String($sessionMetadata.saveAsPatchPath),
+															"--format-fix"
 														]).execute()
 
 														$sessionMetadata.loadedFromGameFiles = false
