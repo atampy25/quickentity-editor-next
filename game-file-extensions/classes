@@ -77,12 +77,12 @@
 			"properties": [],
 			"inputPins": [
 				{
-					"type": "",
+					"type": "ZVariant",
 					"name": "InA",
 					"description": ""
 				},
 				{
-					"type": "",
+					"type": "ZVariant",
 					"name": "InB",
 					"description": ""
 				}
@@ -1935,6 +1935,48 @@
 			]
 		},
 		{
+			"name": "ZRepository_String_Poll",
+			"classTypes": [
+				"Class"
+			],
+			"interfaces": [
+				"ZRepository_String_Poll",
+				"IEntity"
+			],
+			"baseClasses": [
+				"ZEntityImpl"
+			],
+			"properties": [
+				{
+					"type": {
+						"name": "ZRepositoryID",
+						"genericName": "ZRepositoryID",
+						"classTypes": [
+							"Class"
+						]
+					},
+					"name": "m_repositoryID",
+					"description": ""
+				},
+				{
+					"type": {
+						"name": "ZString",
+						"genericName": "ZString",
+						"classTypes": []
+					},
+					"name": "m_path",
+					"description": ""
+				}
+			],
+			"inputPins": [
+				{
+					"type": "ZString",
+					"name": "SetRepositoryID",
+					"description": ""
+				}
+			]
+		},
+		{
 			"name": "ICrowdAIActor",
 			"classTypes": [
 				"Class"
@@ -1954,13 +1996,57 @@
 			"interfaces": [
 				"ZContractProgressionDataValue_int32",
 				"ZContractProgressionDataBase",
-				"IEntity"
+				"IEntity",
+				"IValueIntGet",
+				"IValueIntSet"
 			],
 			"baseClasses": [
-				"ZContractProgressionDataBase"
+				"ZContractProgressionDataBase",
+				"IValueIntGet",
+				"IValueIntSet"
 			],
-			"properties": [],
-			"inputPins": []
+			"properties": [
+				{
+					"type": {
+						"name": "int32",
+						"genericName": "int32",
+						"classTypes": [
+							"Primitive"
+						]
+					},
+					"name": "m_Value",
+					"description": ""
+				},
+				{
+					"type": {
+						"name": "int32",
+						"genericName": "int32",
+						"classTypes": [
+							"Primitive"
+						]
+					},
+					"name": "m_ResetValue",
+					"description": ""
+				},
+				{
+					"type": {
+						"name": "bool",
+						"genericName": "bool",
+						"classTypes": [
+							"Primitive"
+						]
+					},
+					"name": "m_bSetValueAlwaysTriggerChangedEvent",
+					"description": ""
+				}
+			],
+			"inputPins": [
+				{
+					"type": "void",
+					"name": "Reset",
+					"description": ""
+				}
+			]
 		},
 		{
 			"name": "ZFloatRangeComparatorEntity",
@@ -2002,7 +2088,7 @@
 			],
 			"inputPins": [
 				{
-					"type": "",
+					"type": "ZString",
 					"name": "Value",
 					"description": ""
 				},
@@ -2230,7 +2316,7 @@
 			"properties": [],
 			"inputPins": [
 				{
-					"type": "",
+					"type": "ZVariant",
 					"name": "Variant",
 					"description": ""
 				}
@@ -2808,17 +2894,17 @@
 			],
 			"inputPins": [
 				{
-					"type": "",
+					"type": "ZEntityReference",
 					"name": "SetTarget",
 					"description": ""
 				},
 				{
-					"type": "",
+					"type": "ZActor",
 					"name": "AddActor",
 					"description": ""
 				},
 				{
-					"type": "",
+					"type": "ZActor",
 					"name": "RemoveActor",
 					"description": ""
 				},
@@ -3163,59 +3249,23 @@
 				},
 				{
 					"type": {
-						"name": "ZEvergreenCampaignText",
-						"genericName": "TArray<TEntityRef<ZEvergreenCampaignText>>",
+						"name": "ZEvergreenCrimeSectorDefinition",
+						"genericName": "TArray<TEntityRef<ZEvergreenCrimeSectorDefinition>>",
 						"classTypes": [
 							"Array",
 							"Container"
 						]
 					},
-					"name": "m_CampaignNameTextLines",
+					"name": "m_CrimeSectors",
 					"description": ""
 				},
 				{
 					"type": {
-						"name": "ZEvergreenCampaignText",
-						"genericName": "TArray<TEntityRef<ZEvergreenCampaignText>>",
+						"name": "TEntityRef",
+						"genericName": "TEntityRef",
 						"classTypes": [
-							"Array",
-							"Container"
-						]
-					},
-					"name": "m_FactionLieutenantCodenameTextLines",
-					"description": ""
-				},
-				{
-					"type": {
-						"name": "ZEvergreenCampaignText",
-						"genericName": "TArray<TEntityRef<ZEvergreenCampaignText>>",
-						"classTypes": [
-							"Array",
-							"Container"
-						]
-					},
-					"name": "m_BiographyTextLines",
-					"description": ""
-				},
-				{
-					"type": {
-						"name": "ZEvergreenCampaignIcon",
-						"genericName": "TArray<TEntityRef<ZEvergreenCampaignIcon>>",
-						"classTypes": [
-							"Array",
-							"Container"
-						]
-					},
-					"name": "m_CampaignIcons",
-					"description": ""
-				},
-				{
-					"type": {
-						"name": "TArray",
-						"genericName": "TArray",
-						"classTypes": [
-							"Array",
-							"Container"
+							"Class",
+							"Entity"
 						]
 					},
 					"name": "m_BonusRequirements",
@@ -3223,38 +3273,170 @@
 				},
 				{
 					"type": {
-						"name": "ZEvergreenBonusRequirementExclusionGroupConfig",
-						"genericName": "TArray<TEntityRef<ZEvergreenBonusRequirementExclusionGroupConfig>>",
+						"name": "ZRandomSelector",
+						"genericName": "TArray<TEntityRef<ZRandomSelector>>",
 						"classTypes": [
 							"Array",
 							"Container"
 						]
 					},
-					"name": "m_BonusRequirementExclusionGroups",
+					"name": "m_rNumRequirements",
+					"description": ""
+				},
+				{
+					"type": {
+						"name": "ZRandomSelector",
+						"genericName": "TArray<TEntityRef<ZRandomSelector>>",
+						"classTypes": [
+							"Array",
+							"Container"
+						]
+					},
+					"name": "m_rNumAlerted",
+					"description": ""
+				},
+				{
+					"type": {
+						"name": "ZRandomSelector",
+						"genericName": "TArray<TEntityRef<ZRandomSelector>>",
+						"classTypes": [
+							"Array",
+							"Container"
+						]
+					},
+					"name": "m_rNumTerritories",
+					"description": ""
+				},
+				{
+					"type": {
+						"name": "ZRandomSelector",
+						"genericName": "TArray<TEntityRef<ZRandomSelector>>",
+						"classTypes": [
+							"Array",
+							"Container"
+						]
+					},
+					"name": "m_rNumTargets",
+					"description": ""
+				},
+				{
+					"type": {
+						"name": "ZEvergreenDestination",
+						"genericName": "TArray<TEntityRef<ZEvergreenDestination>>",
+						"classTypes": [
+							"Array",
+							"Container"
+						]
+					},
+					"name": "m_rIncludedDestinations",
+					"description": ""
+				},
+				{
+					"type": {
+						"name": "ZEvergreenDestination",
+						"genericName": "TArray<TEntityRef<ZEvergreenDestination>>",
+						"classTypes": [
+							"Array",
+							"Container"
+						]
+					},
+					"name": "m_rLegacyDestinations",
 					"description": ""
 				},
 				{
 					"type": {
 						"name": "IValueIntGet",
-						"genericName": "TArray<TEntityRef<IValueIntGet>>",
+						"genericName": "TEntityRef<IValueIntGet>",
 						"classTypes": [
-							"Array",
-							"Container"
+							"Class",
+							"Entity"
 						]
 					},
-					"name": "m_rMinRequirements",
+					"name": "m_rMinSafes",
 					"description": ""
 				},
 				{
 					"type": {
 						"name": "IValueIntGet",
-						"genericName": "TArray<TEntityRef<IValueIntGet>>",
+						"genericName": "TEntityRef<IValueIntGet>",
 						"classTypes": [
-							"Array",
-							"Container"
+							"Class",
+							"Entity"
 						]
 					},
-					"name": "m_rMaxRequirements",
+					"name": "m_rMaxSafes",
+					"description": ""
+				},
+				{
+					"type": {
+						"name": "IValueIntGet",
+						"genericName": "TEntityRef<IValueIntGet>",
+						"classTypes": [
+							"Class",
+							"Entity"
+						]
+					},
+					"name": "m_rMinStashes",
+					"description": ""
+				},
+				{
+					"type": {
+						"name": "IValueIntGet",
+						"genericName": "TEntityRef<IValueIntGet>",
+						"classTypes": [
+							"Class",
+							"Entity"
+						]
+					},
+					"name": "m_rMaxStashes",
+					"description": ""
+				},
+				{
+					"type": {
+						"name": "IValueIntGet",
+						"genericName": "TEntityRef<IValueIntGet>",
+						"classTypes": [
+							"Class",
+							"Entity"
+						]
+					},
+					"name": "m_rMinSuppliers",
+					"description": ""
+				},
+				{
+					"type": {
+						"name": "IValueIntGet",
+						"genericName": "TEntityRef<IValueIntGet>",
+						"classTypes": [
+							"Class",
+							"Entity"
+						]
+					},
+					"name": "m_rMaxSuppliers",
+					"description": ""
+				},
+				{
+					"type": {
+						"name": "IValueIntGet",
+						"genericName": "TEntityRef<IValueIntGet>",
+						"classTypes": [
+							"Class",
+							"Entity"
+						]
+					},
+					"name": "m_rGameFlowIndex",
+					"description": ""
+				},
+				{
+					"type": {
+						"name": "IValueIntGet",
+						"genericName": "TEntityRef<IValueIntGet>",
+						"classTypes": [
+							"Class",
+							"Entity"
+						]
+					},
+					"name": "m_rPlayerRank",
 					"description": ""
 				},
 				{
@@ -3289,6 +3471,40 @@
 						]
 					},
 					"name": "m_MaxCampaigns",
+					"description": ""
+				},
+				{
+					"type": {
+						"name": "IValueIntGet",
+						"genericName": "TEntityRef<IValueIntGet>",
+						"classTypes": [
+							"Class",
+							"Entity"
+						]
+					},
+					"name": "m_rBasePay",
+					"description": ""
+				},
+				{
+					"type": {
+						"name": "int32",
+						"genericName": "int32",
+						"classTypes": [
+							"Primitive"
+						]
+					},
+					"name": "m_nBasePay",
+					"description": ""
+				},
+				{
+					"type": {
+						"name": "int32",
+						"genericName": "int32",
+						"classTypes": [
+							"Primitive"
+						]
+					},
+					"name": "m_nMinIncludedCampaigns",
 					"description": ""
 				}
 			],
@@ -3356,12 +3572,12 @@
 			],
 			"inputPins": [
 				{
-					"type": "",
+					"type": "ZString",
 					"name": "Shot",
 					"description": ""
 				},
 				{
-					"type": "",
+					"type": "ZString",
 					"name": "Collision",
 					"description": ""
 				},
@@ -3955,6 +4171,48 @@
 			"inputPins": []
 		},
 		{
+			"name": "String_Comperator_Poll",
+			"classTypes": [
+				"Class"
+			],
+			"interfaces": [
+				"String_Comperator_Poll",
+				"IEntity"
+			],
+			"baseClasses": [
+				"ZEntityImpl"
+			],
+			"properties": [
+				{
+					"type": {
+						"name": "String_Comperator_Poll.EEvaluationType",
+						"genericName": "String_Comperator_Poll.EEvaluationType",
+						"classTypes": [
+							"Enum"
+						]
+					},
+					"name": "m_eEvaluation",
+					"description": ""
+				},
+				{
+					"type": {
+						"name": "ZString",
+						"genericName": "ZString",
+						"classTypes": []
+					},
+					"name": "m_compareTo",
+					"description": ""
+				}
+			],
+			"inputPins": [
+				{
+					"type": "ZString",
+					"name": "Get",
+					"description": ""
+				}
+			]
+		},
+		{
 			"name": "ZCameraTargetZoomEntity",
 			"classTypes": [
 				"Class"
@@ -4312,7 +4570,7 @@
 					"description": ""
 				},
 				{
-					"type": "",
+					"type": "ZString",
 					"name": "Set",
 					"description": ""
 				}
@@ -4746,7 +5004,7 @@
 			],
 			"inputPins": [
 				{
-					"type": "",
+					"type": "ZActor",
 					"name": "SetIActor",
 					"description": ""
 				},
@@ -4982,6 +5240,11 @@
 				{
 					"type": "int32",
 					"name": "SetVariation",
+					"description": ""
+				},
+				{
+					"type": "",
+					"name": "1032324463",
 					"description": ""
 				}
 			]
@@ -6954,12 +7217,12 @@
 					"description": ""
 				},
 				{
-					"type": "",
+					"type": "ZString",
 					"name": "AddActor",
 					"description": ""
 				},
 				{
-					"type": "",
+					"type": "ZString",
 					"name": "RemoveActor",
 					"description": ""
 				}
@@ -7263,11 +7526,22 @@
 					},
 					"name": "m_value",
 					"description": ""
+				},
+				{
+					"type": {
+						"name": "bool",
+						"genericName": "bool",
+						"classTypes": [
+							"Primitive"
+						]
+					},
+					"name": "m_signalOnSet",
+					"description": ""
 				}
 			],
 			"inputPins": [
 				{
-					"type": "",
+					"type": "ZString",
 					"name": "SetValue",
 					"description": ""
 				},
@@ -7407,6 +7681,74 @@
 						]
 					},
 					"name": "m_PatternSequenceData",
+					"description": ""
+				}
+			],
+			"inputPins": []
+		},
+		{
+			"name": "ZEvergreenPrestigeObjectiveInfoDataProvider.SPrestigeInfo",
+			"classTypes": [
+				"Class"
+			],
+			"interfaces": [],
+			"baseClasses": [],
+			"properties": [
+				{
+					"type": {
+						"name": "ZString",
+						"genericName": "ZString",
+						"classTypes": []
+					},
+					"name": "title",
+					"description": ""
+				},
+				{
+					"type": {
+						"name": "ZString",
+						"genericName": "ZString",
+						"classTypes": []
+					},
+					"name": "description",
+					"description": ""
+				},
+				{
+					"type": {
+						"name": "ZString",
+						"genericName": "ZString",
+						"classTypes": []
+					},
+					"name": "image",
+					"description": ""
+				}
+			],
+			"inputPins": []
+		},
+		{
+			"name": "ZEvergreenPrestigeObjectiveInfoDataProvider",
+			"classTypes": [
+				"Class"
+			],
+			"interfaces": [
+				"ZEvergreenPrestigeObjectiveInfoDataProvider",
+				"IEntity",
+				"ZUIDataProvider"
+			],
+			"baseClasses": [
+				"ZEntityImpl",
+				"ZUIDataProvider"
+			],
+			"properties": [
+				{
+					"type": {
+						"name": "IValueIntGet",
+						"genericName": "TEntityRef<IValueIntGet>",
+						"classTypes": [
+							"Class",
+							"Entity"
+						]
+					},
+					"name": "m_prestigeID",
 					"description": ""
 				}
 			],
@@ -7656,35 +7998,6 @@
 						]
 					},
 					"name": "m_eDirection",
-					"description": ""
-				}
-			],
-			"inputPins": []
-		},
-		{
-			"name": "ZEvergreenWorldMapTerritoryDataProvider.SBonusRequirement",
-			"classTypes": [
-				"Class"
-			],
-			"interfaces": [],
-			"baseClasses": [],
-			"properties": [
-				{
-					"type": {
-						"name": "ZString",
-						"genericName": "ZString",
-						"classTypes": []
-					},
-					"name": "lstrTitle",
-					"description": ""
-				},
-				{
-					"type": {
-						"name": "ZString",
-						"genericName": "ZString",
-						"classTypes": []
-					},
-					"name": "icon",
 					"description": ""
 				}
 			],
@@ -9096,7 +9409,7 @@
 			"properties": [],
 			"inputPins": [
 				{
-					"type": "",
+					"type": "ZString",
 					"name": "SetItem",
 					"description": ""
 				},
@@ -9319,12 +9632,12 @@
 			],
 			"inputPins": [
 				{
-					"type": "",
+					"type": "ZString",
 					"name": "HideBone",
 					"description": ""
 				},
 				{
-					"type": "",
+					"type": "ZString",
 					"name": "ShowBone",
 					"description": ""
 				}
@@ -9497,6 +9810,69 @@
 						]
 					},
 					"name": "m_bIsRunning",
+					"description": ""
+				}
+			],
+			"inputPins": []
+		},
+		{
+			"name": "ZConditionalFormattedTextLineEntity",
+			"classTypes": [
+				"Class"
+			],
+			"interfaces": [
+				"ZConditionalFormattedTextLineEntity",
+				"IEntity",
+				"IConditionalTextLine"
+			],
+			"baseClasses": [
+				"ZEntityImpl",
+				"IConditionalTextLine"
+			],
+			"properties": [
+				{
+					"type": {
+						"name": "IBoolCondition",
+						"genericName": "TEntityRef<IBoolCondition>",
+						"classTypes": [
+							"Class",
+							"Entity"
+						]
+					},
+					"name": "m_isEnabled",
+					"description": ""
+				},
+				{
+					"type": {
+						"name": "ZString",
+						"genericName": "ZString",
+						"classTypes": []
+					},
+					"name": "m_rawText",
+					"description": ""
+				},
+				{
+					"type": {
+						"name": "TResourcePtr",
+						"genericName": "TResourcePtr",
+						"classTypes": [
+							"Class",
+							"Resource"
+						]
+					},
+					"name": "m_sweetText",
+					"description": ""
+				},
+				{
+					"type": {
+						"name": "TArray",
+						"genericName": "TArray",
+						"classTypes": [
+							"Array",
+							"Container"
+						]
+					},
+					"name": "m_argsText",
 					"description": ""
 				}
 			],
@@ -10092,6 +10468,17 @@
 							"Primitive"
 						]
 					},
+					"name": "m_nMaxEmeticAmmo",
+					"description": ""
+				},
+				{
+					"type": {
+						"name": "uint32",
+						"genericName": "uint32",
+						"classTypes": [
+							"Primitive"
+						]
+					},
 					"name": "m_nMaxPistolLightAmmo",
 					"description": ""
 				},
@@ -10307,6 +10694,18 @@
 						]
 					},
 					"name": "m_rPromptTextResource",
+					"description": ""
+				},
+				{
+					"type": {
+						"name": "IConditionalTextLine",
+						"genericName": "TArray<TEntityRef<IConditionalTextLine>>",
+						"classTypes": [
+							"Array",
+							"Container"
+						]
+					},
+					"name": "m_aPromptText",
 					"description": ""
 				},
 				{
@@ -11088,6 +11487,34 @@
 			"inputPins": []
 		},
 		{
+			"name": "ZRandomSelectorEntityChoice",
+			"classTypes": [
+				"Class"
+			],
+			"interfaces": [
+				"ZRandomSelectorEntityChoice",
+				"ZRandomSelectorChoice",
+				"IEntity"
+			],
+			"baseClasses": [
+				"ZRandomSelectorChoice"
+			],
+			"properties": [
+				{
+					"type": {
+						"name": "ZEntityRef",
+						"genericName": "ZEntityRef",
+						"classTypes": [
+							"Class"
+						]
+					},
+					"name": "m_rEntity",
+					"description": ""
+				}
+			],
+			"inputPins": []
+		},
+		{
 			"name": "ZValueFloat_Basic",
 			"classTypes": [
 				"Class"
@@ -11138,7 +11565,7 @@
 			],
 			"inputPins": [
 				{
-					"type": "",
+					"type": "ZString",
 					"name": "SetValue",
 					"description": ""
 				}
@@ -11461,6 +11888,17 @@
 					},
 					"name": "m_pMessage",
 					"description": ""
+				},
+				{
+					"type": {
+						"name": "ETraceMessageType",
+						"genericName": "ETraceMessageType",
+						"classTypes": [
+							"Enum"
+						]
+					},
+					"name": "m_messageType",
+					"description": ""
 				}
 			],
 			"inputPins": [
@@ -11470,11 +11908,38 @@
 					"description": ""
 				},
 				{
-					"type": "",
+					"type": "ZString",
 					"name": "SetValueSignal",
 					"description": ""
 				}
 			]
+		},
+		{
+			"name": "ZVIPServiceConfigEntity",
+			"classTypes": [
+				"Class"
+			],
+			"interfaces": [
+				"ZVIPServiceConfigEntity",
+				"IEntity"
+			],
+			"baseClasses": [
+				"ZEntityImpl"
+			],
+			"properties": [
+				{
+					"type": {
+						"name": "float32",
+						"genericName": "float32",
+						"classTypes": [
+							"Primitive"
+						]
+					},
+					"name": "EvacuationMaxDistance",
+					"description": ""
+				}
+			],
+			"inputPins": []
 		},
 		{
 			"name": "SKnownEntitySaveData",
@@ -12675,7 +13140,7 @@
 			],
 			"inputPins": [
 				{
-					"type": "",
+					"type": "ZString",
 					"name": "Compare",
 					"description": ""
 				}
@@ -12731,7 +13196,7 @@
 			],
 			"inputPins": [
 				{
-					"type": "",
+					"type": "ZActor",
 					"name": "SetState",
 					"description": ""
 				}
@@ -12747,6 +13212,31 @@
 				"IComponentInterface"
 			],
 			"properties": [],
+			"inputPins": []
+		},
+		{
+			"name": "ZOnlineInventoryOutfitEntity",
+			"classTypes": [
+				"Class"
+			],
+			"interfaces": [
+				"ZOnlineInventoryOutfitEntity",
+				"IEntity"
+			],
+			"baseClasses": [
+				"ZEntityImpl"
+			],
+			"properties": [
+				{
+					"type": {
+						"name": "ZString",
+						"genericName": "ZString",
+						"classTypes": []
+					},
+					"name": "m_Name",
+					"description": ""
+				}
+			],
 			"inputPins": []
 		},
 		{
@@ -12889,12 +13379,12 @@
 			"properties": [],
 			"inputPins": [
 				{
-					"type": "",
+					"type": "ZString",
 					"name": "Title",
 					"description": ""
 				},
 				{
-					"type": "",
+					"type": "ZString",
 					"name": "Description",
 					"description": ""
 				},
@@ -12946,6 +13436,39 @@
 			],
 			"properties": [],
 			"inputPins": []
+		},
+		{
+			"name": "ZEntitlementConditionEntity",
+			"classTypes": [
+				"Class"
+			],
+			"interfaces": [
+				"ZEntitlementConditionEntity",
+				"IEntity",
+				"IBoolCondition"
+			],
+			"baseClasses": [
+				"ZEntityImpl",
+				"IBoolCondition"
+			],
+			"properties": [
+				{
+					"type": {
+						"name": "ZString",
+						"genericName": "ZString",
+						"classTypes": []
+					},
+					"name": "m_sEntitlementId",
+					"description": ""
+				}
+			],
+			"inputPins": [
+				{
+					"type": "void",
+					"name": "GetValue",
+					"description": ""
+				}
+			]
 		},
 		{
 			"name": "ZParticleEmitterPointEntity",
@@ -13562,7 +14085,7 @@
 			],
 			"inputPins": [
 				{
-					"type": "",
+					"type": "ZString",
 					"name": "SetValue",
 					"description": ""
 				}
@@ -14150,17 +14673,17 @@
 					"description": ""
 				},
 				{
-					"type": "",
+					"type": "ZString",
 					"name": "SetTargetActor",
 					"description": ""
 				},
 				{
-					"type": "",
+					"type": "ZString",
 					"name": "AddActor",
 					"description": ""
 				},
 				{
-					"type": "",
+					"type": "ZString",
 					"name": "RemoveActor",
 					"description": ""
 				},
@@ -14308,23 +14831,6 @@
 			"inputPins": []
 		},
 		{
-			"name": "ZActorPickerEffectReference",
-			"classTypes": [
-				"Class"
-			],
-			"interfaces": [
-				"ZActorPickerEffectReference",
-				"IEntity",
-				"IActorPickerEffect"
-			],
-			"baseClasses": [
-				"ZEntityImpl",
-				"IActorPickerEffect"
-			],
-			"properties": [],
-			"inputPins": []
-		},
-		{
 			"name": "ZFollowHitmanBehaviorEntity",
 			"classTypes": [
 				"Class"
@@ -14432,6 +14938,23 @@
 			"inputPins": []
 		},
 		{
+			"name": "ZActorPickerEffectReference",
+			"classTypes": [
+				"Class"
+			],
+			"interfaces": [
+				"ZActorPickerEffectReference",
+				"IEntity",
+				"IActorPickerEffect"
+			],
+			"baseClasses": [
+				"ZEntityImpl",
+				"IActorPickerEffect"
+			],
+			"properties": [],
+			"inputPins": []
+		},
+		{
 			"name": "ZFullyAmbientControlledActorHear",
 			"classTypes": [
 				"Class"
@@ -14474,40 +14997,38 @@
 			"properties": [
 				{
 					"type": {
-						"name": "ZString",
-						"genericName": "ZString",
-						"classTypes": []
-					},
-					"name": "m_CampaignName",
-					"description": ""
-				},
-				{
-					"type": {
-						"name": "ZString",
-						"genericName": "ZString",
-						"classTypes": []
-					},
-					"name": "m_FactionLieutenantCodename",
-					"description": ""
-				},
-				{
-					"type": {
-						"name": "ZString",
-						"genericName": "ZString",
-						"classTypes": []
-					},
-					"name": "m_Biography",
-					"description": ""
-				},
-				{
-					"type": {
-						"name": "ZRuntimeResourceID",
-						"genericName": "ZRuntimeResourceID",
+						"name": "ZEvergreenCrimeSectorDefinition",
+						"genericName": "TArray<TEntityRef<ZEvergreenCrimeSectorDefinition>>",
 						"classTypes": [
-							"Class"
+							"Array",
+							"Container"
 						]
 					},
-					"name": "m_CampaignIcon",
+					"name": "m_CrimeSectors",
+					"description": ""
+				},
+				{
+					"type": {
+						"name": "IValueIntGet",
+						"genericName": "TEntityRef<IValueIntGet>",
+						"classTypes": [
+							"Class",
+							"Entity"
+						]
+					},
+					"name": "m_CrimeSectorIndex",
+					"description": ""
+				},
+				{
+					"type": {
+						"name": "IValueIntGet",
+						"genericName": "TEntityRef<IValueIntGet>",
+						"classTypes": [
+							"Class",
+							"Entity"
+						]
+					},
+					"name": "m_LeaderCodenameIndex",
 					"description": ""
 				},
 				{
@@ -14583,28 +15104,7 @@
 					"description": ""
 				}
 			],
-			"inputPins": [
-				{
-					"type": "",
-					"name": "3603975150",
-					"description": ""
-				},
-				{
-					"type": "",
-					"name": "1671449440",
-					"description": ""
-				},
-				{
-					"type": "",
-					"name": "1767547226",
-					"description": ""
-				},
-				{
-					"type": "int64",
-					"name": "3982957619",
-					"description": ""
-				}
-			]
+			"inputPins": []
 		},
 		{
 			"name": "SCondition_IsSharedOlder",
@@ -14727,12 +15227,12 @@
 			],
 			"inputPins": [
 				{
-					"type": "",
+					"type": "ZActor",
 					"name": "AddActor",
 					"description": ""
 				},
 				{
-					"type": "",
+					"type": "ZActor",
 					"name": "RemoveActor",
 					"description": ""
 				},
@@ -14818,7 +15318,7 @@
 			],
 			"inputPins": [
 				{
-					"type": "",
+					"type": "ZString",
 					"name": "Color",
 					"description": ""
 				},
@@ -15217,6 +15717,37 @@
 			]
 		},
 		{
+			"name": "ZActorFlagPFObstacleEntity",
+			"classTypes": [
+				"Class"
+			],
+			"interfaces": [
+				"ZActorFlagPFObstacleEntity",
+				"ZPFObstacleEntity",
+				"ZBoundedEntity",
+				"ZSpatialEntity",
+				"IEntity",
+				"ISavableEntity"
+			],
+			"baseClasses": [
+				"ZPFObstacleEntity"
+			],
+			"properties": [
+				{
+					"type": {
+						"name": "EActorObstacleBlockage",
+						"genericName": "EActorObstacleBlockage",
+						"classTypes": [
+							"Enum"
+						]
+					},
+					"name": "m_eActorObstacleBlockage",
+					"description": ""
+				}
+			],
+			"inputPins": []
+		},
+		{
 			"name": "ZActorDynamicTemplateHolder",
 			"classTypes": [
 				"Class"
@@ -15272,6 +15803,15 @@
 			"interfaces": [],
 			"baseClasses": [],
 			"properties": [
+				{
+					"type": {
+						"name": "ZString",
+						"genericName": "ZString",
+						"classTypes": []
+					},
+					"name": "destination",
+					"description": ""
+				},
 				{
 					"type": {
 						"name": "ZString",
@@ -15352,6 +15892,17 @@
 						]
 					},
 					"name": "isAlerted",
+					"description": ""
+				},
+				{
+					"type": {
+						"name": "bool",
+						"genericName": "bool",
+						"classTypes": [
+							"Primitive"
+						]
+					},
+					"name": "isEntitlementAvailable",
 					"description": ""
 				}
 			],
@@ -15457,10 +16008,12 @@
 				"ZClothSheetEntity",
 				"ZClothEnvironmentBaseEntity",
 				"ZClothSimulationEntity",
-				"IEntity"
+				"IEntity",
+				"ISavableEntity"
 			],
 			"baseClasses": [
-				"ZClothEnvironmentBaseEntity"
+				"ZClothEnvironmentBaseEntity",
+				"ISavableEntity"
 			],
 			"properties": [
 				{
@@ -15847,47 +16400,47 @@
 			],
 			"inputPins": [
 				{
-					"type": "",
+					"type": "ZString",
 					"name": "SetX",
 					"description": ""
 				},
 				{
-					"type": "",
+					"type": "ZString",
 					"name": "SetY",
 					"description": ""
 				},
 				{
-					"type": "",
+					"type": "ZString",
 					"name": "SetZ",
 					"description": ""
 				},
 				{
-					"type": "",
+					"type": "ZString",
 					"name": "SetAlpha",
 					"description": ""
 				},
 				{
-					"type": "",
+					"type": "ZString",
 					"name": "SetScaleX",
 					"description": ""
 				},
 				{
-					"type": "",
+					"type": "ZString",
 					"name": "SetScaleY",
 					"description": ""
 				},
 				{
-					"type": "",
+					"type": "ZString",
 					"name": "SetRotation",
 					"description": ""
 				},
 				{
-					"type": "",
+					"type": "ZString",
 					"name": "SetRotationX",
 					"description": ""
 				},
 				{
-					"type": "",
+					"type": "ZString",
 					"name": "SetRotationY",
 					"description": ""
 				}
@@ -16796,7 +17349,7 @@
 			],
 			"inputPins": [
 				{
-					"type": "",
+					"type": "ZString",
 					"name": "Get",
 					"description": ""
 				}
@@ -17527,12 +18080,12 @@
 			"properties": [],
 			"inputPins": [
 				{
-					"type": "",
+					"type": "ZActor",
 					"name": "IActor",
 					"description": ""
 				},
 				{
-					"type": "",
+					"type": "ZActor",
 					"name": "Actor",
 					"description": ""
 				}
@@ -17790,7 +18343,7 @@
 			"properties": [],
 			"inputPins": [
 				{
-					"type": "",
+					"type": "ZString",
 					"name": "RepositoryId",
 					"description": ""
 				}
@@ -19407,7 +19960,7 @@
 			],
 			"inputPins": [
 				{
-					"type": "",
+					"type": "ZString",
 					"name": "SetIActor",
 					"description": ""
 				},
@@ -19643,6 +20196,32 @@
 				}
 			],
 			"inputPins": []
+		},
+		{
+			"name": "ZAIVisionBlocker",
+			"classTypes": [
+				"Class"
+			],
+			"interfaces": [
+				"ZAIVisionBlocker",
+				"IEntity"
+			],
+			"baseClasses": [
+				"ZEntityImpl"
+			],
+			"properties": [],
+			"inputPins": [
+				{
+					"type": "void",
+					"name": "Enable",
+					"description": ""
+				},
+				{
+					"type": "void",
+					"name": "Disable",
+					"description": ""
+				}
+			]
 		},
 		{
 			"name": "SCondition_IsOrderInvalid",
@@ -20783,12 +21362,12 @@
 			"properties": [],
 			"inputPins": [
 				{
-					"type": "",
+					"type": "ZActor",
 					"name": "IActor",
 					"description": ""
 				},
 				{
-					"type": "",
+					"type": "ZActor",
 					"name": "Actor",
 					"description": ""
 				}
@@ -21122,6 +21701,98 @@
 						]
 					},
 					"name": "m_rRemoveKeywords",
+					"description": ""
+				}
+			],
+			"inputPins": []
+		},
+		{
+			"name": "ZEvergreenCampaignProgressDataProvider",
+			"classTypes": [
+				"Class"
+			],
+			"interfaces": [
+				"ZEvergreenCampaignProgressDataProvider",
+				"IEntity",
+				"ZUIDataProvider",
+				"IBoolConditionListener"
+			],
+			"baseClasses": [
+				"ZEntityImpl",
+				"ZUIDataProvider",
+				"IBoolConditionListener"
+			],
+			"properties": [
+				{
+					"type": {
+						"name": "int32",
+						"genericName": "TArray<int32>",
+						"classTypes": [
+							"Array",
+							"Container"
+						]
+					},
+					"name": "Campaign",
+					"description": ""
+				},
+				{
+					"type": {
+						"name": "IBoolCondition",
+						"genericName": "TEntityRef<IBoolCondition>",
+						"classTypes": [
+							"Class",
+							"Entity"
+						]
+					},
+					"name": "m_Hardcore",
+					"description": ""
+				},
+				{
+					"type": {
+						"name": "IBoolCondition",
+						"genericName": "TEntityRef<IBoolCondition>",
+						"classTypes": [
+							"Class",
+							"Entity"
+						]
+					},
+					"name": "m_ObjectivesDone",
+					"description": ""
+				},
+				{
+					"type": {
+						"name": "IBoolCondition",
+						"genericName": "TEntityRef<IBoolCondition>",
+						"classTypes": [
+							"Class",
+							"Entity"
+						]
+					},
+					"name": "m_ObjectivesFail",
+					"description": ""
+				},
+				{
+					"type": {
+						"name": "ZEvergreenCampaignProgressHelperEntity",
+						"genericName": "TEntityRef<ZEvergreenCampaignProgressHelperEntity>",
+						"classTypes": [
+							"Class",
+							"Entity"
+						]
+					},
+					"name": "m_CampaignProgressHelper",
+					"description": ""
+				},
+				{
+					"type": {
+						"name": "IBoolCondition",
+						"genericName": "TEntityRef<IBoolCondition>",
+						"classTypes": [
+							"Class",
+							"Entity"
+						]
+					},
+					"name": "m_CampaignActivatorInUse",
 					"description": ""
 				}
 			],
@@ -21752,7 +22423,13 @@
 					"description": ""
 				}
 			],
-			"inputPins": []
+			"inputPins": [
+				{
+					"type": "bool",
+					"name": "4200118478",
+					"description": ""
+				}
+			]
 		},
 		{
 			"name": "ZRendObjListEntity",
@@ -21981,17 +22658,6 @@
 			]
 		},
 		{
-			"name": "TEntityRef<ZStringToSignalForwarderEntity>",
-			"classTypes": [
-				"Class",
-				"Entity"
-			],
-			"interfaces": [],
-			"baseClasses": [],
-			"properties": [],
-			"inputPins": []
-		},
-		{
 			"name": "ZControlledBehaviorEntity",
 			"classTypes": [
 				"Class"
@@ -22006,6 +22672,17 @@
 			"baseClasses": [
 				"ZBehaviorEntityBase"
 			],
+			"properties": [],
+			"inputPins": []
+		},
+		{
+			"name": "TEntityRef<ZStringToSignalForwarderEntity>",
+			"classTypes": [
+				"Class",
+				"Entity"
+			],
+			"interfaces": [],
+			"baseClasses": [],
 			"properties": [],
 			"inputPins": []
 		},
@@ -22245,7 +22922,7 @@
 			],
 			"inputPins": [
 				{
-					"type": "",
+					"type": "ZString",
 					"name": "In",
 					"description": ""
 				}
@@ -22324,7 +23001,7 @@
 					"description": ""
 				},
 				{
-					"type": "",
+					"type": "ZString",
 					"name": "SetTriggerName",
 					"description": ""
 				}
@@ -22393,6 +23070,36 @@
 			"inputPins": []
 		},
 		{
+			"name": "ZDummyBehaviorEntity",
+			"classTypes": [
+				"Class"
+			],
+			"interfaces": [
+				"ZDummyBehaviorEntity",
+				"ZBehaviorEntityBase",
+				"IEntity",
+				"IRoleEventSource",
+				"IRoleListener"
+			],
+			"baseClasses": [
+				"ZBehaviorEntityBase"
+			],
+			"properties": [
+				{
+					"type": {
+						"name": "float32",
+						"genericName": "float32",
+						"classTypes": [
+							"Primitive"
+						]
+					},
+					"name": "m_fDelay",
+					"description": ""
+				}
+			],
+			"inputPins": []
+		},
+		{
 			"name": "IContractObjective.SCounterData",
 			"classTypes": [
 				"Class"
@@ -22451,36 +23158,6 @@
 						]
 					},
 					"name": "m_eType",
-					"description": ""
-				}
-			],
-			"inputPins": []
-		},
-		{
-			"name": "ZDummyBehaviorEntity",
-			"classTypes": [
-				"Class"
-			],
-			"interfaces": [
-				"ZDummyBehaviorEntity",
-				"ZBehaviorEntityBase",
-				"IEntity",
-				"IRoleEventSource",
-				"IRoleListener"
-			],
-			"baseClasses": [
-				"ZBehaviorEntityBase"
-			],
-			"properties": [
-				{
-					"type": {
-						"name": "float32",
-						"genericName": "float32",
-						"classTypes": [
-							"Primitive"
-						]
-					},
-					"name": "m_fDelay",
 					"description": ""
 				}
 			],
@@ -22764,12 +23441,12 @@
 			],
 			"inputPins": [
 				{
-					"type": "",
+					"type": "ZString",
 					"name": "3007500910",
 					"description": ""
 				},
 				{
-					"type": "",
+					"type": "ZString",
 					"name": "3493224431",
 					"description": ""
 				},
@@ -22779,12 +23456,12 @@
 					"description": ""
 				},
 				{
-					"type": "",
+					"type": "ZString",
 					"name": "2114483542",
 					"description": ""
 				},
 				{
-					"type": "",
+					"type": "ZString",
 					"name": "3839144557",
 					"description": ""
 				},
@@ -22804,6 +23481,34 @@
 					"description": ""
 				}
 			]
+		},
+		{
+			"name": "ZEvergreenGearUnlockMasteryInfo",
+			"classTypes": [
+				"Class"
+			],
+			"interfaces": [
+				"ZEvergreenGearUnlockMasteryInfo",
+				"IEntity"
+			],
+			"baseClasses": [
+				"ZEntityImpl"
+			],
+			"properties": [
+				{
+					"type": {
+						"name": "ZItemRepositoryKeyEntity",
+						"genericName": "TEntityRef<ZItemRepositoryKeyEntity>",
+						"classTypes": [
+							"Class",
+							"Entity"
+						]
+					},
+					"name": "m_itemRepositoryKey",
+					"description": ""
+				}
+			],
+			"inputPins": []
 		},
 		{
 			"name": "ZItemAction",
@@ -22881,7 +23586,7 @@
 			],
 			"inputPins": [
 				{
-					"type": "",
+					"type": "ZString",
 					"name": "SetItem",
 					"description": ""
 				},
@@ -23109,6 +23814,114 @@
 			"inputPins": []
 		},
 		{
+			"name": "ZEvergreenMenuCounterScrollEntity",
+			"classTypes": [
+				"Class"
+			],
+			"interfaces": [
+				"ZEvergreenMenuCounterScrollEntity",
+				"IEntity",
+				"IValueFloat"
+			],
+			"baseClasses": [
+				"ZEntityImpl",
+				"IValueFloat"
+			],
+			"properties": [
+				{
+					"type": {
+						"name": "TEntityRef",
+						"genericName": "TEntityRef",
+						"classTypes": [
+							"Class",
+							"Entity"
+						]
+					},
+					"name": "m_menu",
+					"description": ""
+				},
+				{
+					"type": {
+						"name": "ZEvergreenMenuCounterScrollEntity.EAxis2DMouse",
+						"genericName": "ZEvergreenMenuCounterScrollEntity.EAxis2DMouse",
+						"classTypes": [
+							"Enum"
+						]
+					},
+					"name": "m_axis2DMouse",
+					"description": ""
+				},
+				{
+					"type": {
+						"name": "ZEvergreenMenuCounterScrollEntity.EAxis3DSpace",
+						"genericName": "ZEvergreenMenuCounterScrollEntity.EAxis3DSpace",
+						"classTypes": [
+							"Enum"
+						]
+					},
+					"name": "m_axis3DSpace",
+					"description": ""
+				},
+				{
+					"type": {
+						"name": "ZSpatialEntity",
+						"genericName": "TEntityRef<ZSpatialEntity>",
+						"classTypes": [
+							"Class",
+							"Entity"
+						]
+					},
+					"name": "m_reference",
+					"description": ""
+				},
+				{
+					"type": {
+						"name": "ZCurve",
+						"genericName": "ZCurve",
+						"classTypes": [
+							"Class"
+						]
+					},
+					"name": "m_curve",
+					"description": ""
+				},
+				{
+					"type": {
+						"name": "SVector2",
+						"genericName": "SVector2",
+						"classTypes": [
+							"Class"
+						]
+					},
+					"name": "m_fMouseRange",
+					"description": ""
+				},
+				{
+					"type": {
+						"name": "float32",
+						"genericName": "float32",
+						"classTypes": [
+							"Primitive"
+						]
+					},
+					"name": "m_dtTransition",
+					"description": ""
+				},
+				{
+					"type": {
+						"name": "float32",
+						"genericName": "float32",
+						"classTypes": [
+							"Primitive"
+						]
+					},
+					"name": "m_fDefaultHeight",
+					"description": ""
+				}
+			],
+			"inputPins": []
+		},
+		{
 			"name": "SBehavior_CopyKnownLocation",
 			"classTypes": [
 				"Class"
@@ -23271,7 +24084,7 @@
 			],
 			"inputPins": [
 				{
-					"type": "",
+					"type": "ZEntityReference",
 					"name": "StashItem",
 					"description": ""
 				}
@@ -23452,6 +24265,83 @@
 					"description": ""
 				}
 			]
+		},
+		{
+			"name": "ZEvergreenVitalInfoBarDataProvider.SVitalInfoData",
+			"classTypes": [
+				"Class"
+			],
+			"interfaces": [],
+			"baseClasses": [],
+			"properties": [
+				{
+					"type": {
+						"name": "bool",
+						"genericName": "bool",
+						"classTypes": [
+							"Primitive"
+						]
+					},
+					"name": "isAssassinNearby",
+					"description": ""
+				},
+				{
+					"type": {
+						"name": "bool",
+						"genericName": "bool",
+						"classTypes": [
+							"Primitive"
+						]
+					},
+					"name": "isAssassinAlerted",
+					"description": ""
+				},
+				{
+					"type": {
+						"name": "bool",
+						"genericName": "bool",
+						"classTypes": [
+							"Primitive"
+						]
+					},
+					"name": "isLookoutNearby",
+					"description": ""
+				},
+				{
+					"type": {
+						"name": "bool",
+						"genericName": "bool",
+						"classTypes": [
+							"Primitive"
+						]
+					},
+					"name": "isLookoutAlerted",
+					"description": ""
+				},
+				{
+					"type": {
+						"name": "bool",
+						"genericName": "bool",
+						"classTypes": [
+							"Primitive"
+						]
+					},
+					"name": "isAllertedTerritory",
+					"description": ""
+				},
+				{
+					"type": {
+						"name": "bool",
+						"genericName": "bool",
+						"classTypes": [
+							"Primitive"
+						]
+					},
+					"name": "isPrestigeObjectiveActive",
+					"description": ""
+				}
+			],
+			"inputPins": []
 		},
 		{
 			"name": "ZAvoidDangerousAreaSituation",
@@ -24743,11 +25633,71 @@
 			"baseClasses": [
 				"ZContractProgressionDataBase"
 			],
-			"properties": [],
+			"properties": [
+				{
+					"type": {
+						"name": "bool",
+						"genericName": "bool",
+						"classTypes": [
+							"Primitive"
+						]
+					},
+					"name": "m_RemoveFirstOnly",
+					"description": ""
+				},
+				{
+					"type": {
+						"name": "bool",
+						"genericName": "bool",
+						"classTypes": [
+							"Primitive"
+						]
+					},
+					"name": "m_AllowDuplicates",
+					"description": ""
+				},
+				{
+					"type": {
+						"name": "ZGuid",
+						"genericName": "TArray<ZGuid>",
+						"classTypes": [
+							"Array",
+							"Container"
+						]
+					},
+					"name": "m_Value",
+					"description": ""
+				}
+			],
 			"inputPins": [
 				{
 					"type": "void",
 					"name": "3455200369",
+					"description": ""
+				},
+				{
+					"type": "ZString",
+					"name": "12136272",
+					"description": ""
+				},
+				{
+					"type": "ZString",
+					"name": "1480579839",
+					"description": ""
+				},
+				{
+					"type": "ZString",
+					"name": "298129268",
+					"description": ""
+				},
+				{
+					"type": "ZString",
+					"name": "2489615589",
+					"description": ""
+				},
+				{
+					"type": "void",
+					"name": "Clear",
 					"description": ""
 				}
 			]
@@ -25547,12 +26497,12 @@
 					"description": ""
 				},
 				{
-					"type": "",
+					"type": "ZString",
 					"name": "SetItemUsed",
 					"description": ""
 				},
 				{
-					"type": "",
+					"type": "ZString",
 					"name": "SetSetpieceUsed",
 					"description": ""
 				},
@@ -25614,6 +26564,46 @@
 						]
 					},
 					"name": "m_eAgilitySubstate",
+					"description": ""
+				}
+			],
+			"inputPins": []
+		},
+		{
+			"name": "ZEvergreenPrestigeObjectiveInfoEntity",
+			"classTypes": [
+				"Class"
+			],
+			"interfaces": [
+				"ZEvergreenPrestigeObjectiveInfoEntity",
+				"IEntity"
+			],
+			"baseClasses": [
+				"ZEntityImpl"
+			],
+			"properties": [
+				{
+					"type": {
+						"name": "ZValueInt",
+						"genericName": "TEntityRef<ZValueInt>",
+						"classTypes": [
+							"Class",
+							"Entity"
+						]
+					},
+					"name": "m_prestigeID",
+					"description": ""
+				},
+				{
+					"type": {
+						"name": "ZIntelEntity",
+						"genericName": "TEntityRef<ZIntelEntity>",
+						"classTypes": [
+							"Class",
+							"Entity"
+						]
+					},
+					"name": "m_intelData",
 					"description": ""
 				}
 			],
@@ -25801,6 +26791,62 @@
 						]
 					},
 					"name": "draw_box",
+					"description": ""
+				}
+			],
+			"inputPins": []
+		},
+		{
+			"name": "ZValueInt_Conditional",
+			"classTypes": [
+				"Class"
+			],
+			"interfaces": [
+				"ZValueInt_Conditional",
+				"IEntity",
+				"IValueIntGet",
+				"IBoolConditionListener"
+			],
+			"baseClasses": [
+				"ZEntityImpl",
+				"IValueIntGet",
+				"IBoolConditionListener"
+			],
+			"properties": [
+				{
+					"type": {
+						"name": "IBoolCondition",
+						"genericName": "TEntityRef<IBoolCondition>",
+						"classTypes": [
+							"Class",
+							"Entity"
+						]
+					},
+					"name": "m_condition",
+					"description": ""
+				},
+				{
+					"type": {
+						"name": "IValueIntGet",
+						"genericName": "TEntityRef<IValueIntGet>",
+						"classTypes": [
+							"Class",
+							"Entity"
+						]
+					},
+					"name": "m_valueWhenTrue",
+					"description": ""
+				},
+				{
+					"type": {
+						"name": "IValueIntGet",
+						"genericName": "TEntityRef<IValueIntGet>",
+						"classTypes": [
+							"Class",
+							"Entity"
+						]
+					},
+					"name": "m_valueWhenFalse",
 					"description": ""
 				}
 			],
@@ -26121,7 +27167,7 @@
 			],
 			"inputPins": [
 				{
-					"type": "",
+					"type": "ZEntityReference",
 					"name": "SetItem",
 					"description": ""
 				},
@@ -26145,8 +27191,42 @@
 			"baseClasses": [
 				"ZContractProgressionDataBase"
 			],
-			"properties": [],
-			"inputPins": []
+			"properties": [
+				{
+					"type": {
+						"name": "bool",
+						"genericName": "bool",
+						"classTypes": [
+							"Primitive"
+						]
+					},
+					"name": "m_Value",
+					"description": ""
+				},
+				{
+					"type": {
+						"name": "bool",
+						"genericName": "bool",
+						"classTypes": [
+							"Primitive"
+						]
+					},
+					"name": "m_ResetValue",
+					"description": ""
+				}
+			],
+			"inputPins": [
+				{
+					"type": "bool",
+					"name": "SetValue",
+					"description": ""
+				},
+				{
+					"type": "void",
+					"name": "Reset",
+					"description": ""
+				}
+			]
 		},
 		{
 			"name": "SBehavior_SentryWarning",
@@ -26447,6 +27527,17 @@
 			]
 		},
 		{
+			"name": "TEntityRef<ZEvergreenCampaignProgressHelperEntity>",
+			"classTypes": [
+				"Class",
+				"Entity"
+			],
+			"interfaces": [],
+			"baseClasses": [],
+			"properties": [],
+			"inputPins": []
+		},
+		{
 			"name": "TEntityRef<ZVRConfigCollectionByUpperBodyState>",
 			"classTypes": [
 				"Class",
@@ -26590,7 +27681,7 @@
 					"description": ""
 				},
 				{
-					"type": "",
+					"type": "ZString",
 					"name": "Set",
 					"description": ""
 				}
@@ -27013,7 +28104,7 @@
 			],
 			"inputPins": [
 				{
-					"type": "",
+					"type": "ZEntityReference",
 					"name": "SetItem",
 					"description": ""
 				},
@@ -27645,27 +28736,27 @@
 			],
 			"inputPins": [
 				{
-					"type": "",
+					"type": "ZString",
 					"name": "ApplyImpulse",
 					"description": ""
 				},
 				{
-					"type": "",
+					"type": "ZString",
 					"name": "ApplyTorque",
 					"description": ""
 				},
 				{
-					"type": "",
+					"type": "ZString",
 					"name": "SetInPhysicsWorld",
 					"description": ""
 				},
 				{
-					"type": "",
+					"type": "ZString",
 					"name": "KinematicBody",
 					"description": ""
 				},
 				{
-					"type": "",
+					"type": "ZString",
 					"name": "RemovePhysics",
 					"description": ""
 				}
@@ -27982,7 +29073,7 @@
 						"genericName": "ZString",
 						"classTypes": []
 					},
-					"name": "m_rawCampaignName",
+					"name": "m_rawCrimeSector",
 					"description": ""
 				},
 				{
@@ -27994,7 +29085,7 @@
 							"Resource"
 						]
 					},
-					"name": "m_sweetCampaignName",
+					"name": "m_sweetCrimeSector",
 					"description": ""
 				},
 				{
@@ -28003,7 +29094,7 @@
 						"genericName": "ZString",
 						"classTypes": []
 					},
-					"name": "m_rawFactionLieutenantCodename",
+					"name": "m_rawLeaderCodename",
 					"description": ""
 				},
 				{
@@ -28015,7 +29106,7 @@
 							"Resource"
 						]
 					},
-					"name": "m_sweetFactionLieutenantCodename",
+					"name": "m_sweetLeaderCodename",
 					"description": ""
 				},
 				{
@@ -28048,6 +29139,28 @@
 						]
 					},
 					"name": "m_CampaignIcon",
+					"description": ""
+				},
+				{
+					"type": {
+						"name": "int32",
+						"genericName": "int32",
+						"classTypes": [
+							"Primitive"
+						]
+					},
+					"name": "m_CrimeSectorIndex",
+					"description": ""
+				},
+				{
+					"type": {
+						"name": "int32",
+						"genericName": "int32",
+						"classTypes": [
+							"Primitive"
+						]
+					},
+					"name": "m_LeaderCodenameIndex",
 					"description": ""
 				},
 				{
@@ -28115,6 +29228,29 @@
 						]
 					},
 					"name": "m_Territories",
+					"description": ""
+				},
+				{
+					"type": {
+						"name": "ZEvergreenBonusRequirementDefinitionEntity",
+						"genericName": "TArray<TEntityRef<ZEvergreenBonusRequirementDefinitionEntity>>",
+						"classTypes": [
+							"Array",
+							"Container"
+						]
+					},
+					"name": "m_aBonusRequirements",
+					"description": ""
+				},
+				{
+					"type": {
+						"name": "bool",
+						"genericName": "bool",
+						"classTypes": [
+							"Primitive"
+						]
+					},
+					"name": "m_HasAllBonusRequirements",
 					"description": ""
 				}
 			],
@@ -29035,7 +30171,7 @@
 			],
 			"inputPins": [
 				{
-					"type": "",
+					"type": "ZString",
 					"name": "TransmitEvent",
 					"description": ""
 				}
@@ -29730,7 +30866,7 @@
 			"properties": [],
 			"inputPins": [
 				{
-					"type": "",
+					"type": "ZActor",
 					"name": "In",
 					"description": ""
 				}
@@ -29795,7 +30931,7 @@
 					"description": ""
 				},
 				{
-					"type": "",
+					"type": "ZString",
 					"name": "86648262",
 					"description": ""
 				}
@@ -31222,7 +32358,7 @@
 			],
 			"inputPins": [
 				{
-					"type": "",
+					"type": "ZString",
 					"name": "SetTarget",
 					"description": ""
 				}
@@ -31620,7 +32756,7 @@
 			"properties": [],
 			"inputPins": [
 				{
-					"type": "",
+					"type": "ZString",
 					"name": "Consume",
 					"description": ""
 				}
@@ -32283,6 +33419,50 @@
 				},
 				{
 					"type": {
+						"name": "bool",
+						"genericName": "bool",
+						"classTypes": [
+							"Primitive"
+						]
+					},
+					"name": "enableWorldSizeScaling",
+					"description": ""
+				},
+				{
+					"type": {
+						"name": "float32",
+						"genericName": "float32",
+						"classTypes": [
+							"Primitive"
+						]
+					},
+					"name": "fWorldSizeScalingBaseDistance",
+					"description": ""
+				},
+				{
+					"type": {
+						"name": "float32",
+						"genericName": "float32",
+						"classTypes": [
+							"Primitive"
+						]
+					},
+					"name": "fWorldSizeScalingFactorMax",
+					"description": ""
+				},
+				{
+					"type": {
+						"name": "float32",
+						"genericName": "float32",
+						"classTypes": [
+							"Primitive"
+						]
+					},
+					"name": "fWorldSizeScalingFactorMin",
+					"description": ""
+				},
+				{
+					"type": {
 						"name": "float32",
 						"genericName": "float32",
 						"classTypes": [
@@ -32854,6 +34034,36 @@
 			"inputPins": []
 		},
 		{
+			"name": "ZEvergreenLocationIntelDataProvider",
+			"classTypes": [
+				"Class"
+			],
+			"interfaces": [
+				"ZEvergreenLocationIntelDataProvider",
+				"IEntity",
+				"ZUIDataProvider"
+			],
+			"baseClasses": [
+				"ZEntityImpl",
+				"ZUIDataProvider"
+			],
+			"properties": [
+				{
+					"type": {
+						"name": "TEntityRef",
+						"genericName": "TEntityRef",
+						"classTypes": [
+							"Class",
+							"Entity"
+						]
+					},
+					"name": "m_campaignStatus",
+					"description": ""
+				}
+			],
+			"inputPins": []
+		},
+		{
 			"name": "SInventoryUISlot",
 			"classTypes": [
 				"Class"
@@ -33186,6 +34396,17 @@
 						]
 					},
 					"name": "evergreenRarity",
+					"description": ""
+				},
+				{
+					"type": {
+						"name": "bool",
+						"genericName": "bool",
+						"classTypes": [
+							"Primitive"
+						]
+					},
+					"name": "evergreenLoseOnWounded",
 					"description": ""
 				}
 			],
@@ -33736,6 +34957,11 @@
 			"inputPins": [
 				{
 					"type": "void",
+					"name": "1857835765",
+					"description": ""
+				},
+				{
+					"type": "void",
 					"name": "Pick",
 					"description": ""
 				}
@@ -34199,12 +35425,12 @@
 					"description": ""
 				},
 				{
-					"type": "",
+					"type": "ZString",
 					"name": "Forward_ZString",
 					"description": ""
 				},
 				{
-					"type": "",
+					"type": "ZVariant",
 					"name": "Forward_ZVariant",
 					"description": ""
 				}
@@ -35444,7 +36670,7 @@
 					"description": ""
 				},
 				{
-					"type": "",
+					"type": "ZString",
 					"name": "Set",
 					"description": ""
 				}
@@ -35807,7 +37033,7 @@
 					"description": ""
 				},
 				{
-					"type": "",
+					"type": "ZEntityReference",
 					"name": "PlaceItem",
 					"description": ""
 				},
@@ -36077,7 +37303,7 @@
 			],
 			"inputPins": [
 				{
-					"type": "",
+					"type": "ZString",
 					"name": "SetIActor",
 					"description": ""
 				},
@@ -36087,7 +37313,7 @@
 					"description": ""
 				},
 				{
-					"type": "",
+					"type": "SVector3",
 					"name": "TriggerAtPos",
 					"description": ""
 				},
@@ -36416,7 +37642,7 @@
 			],
 			"inputPins": [
 				{
-					"type": "",
+					"type": "ZString",
 					"name": "2512179975",
 					"description": ""
 				},
@@ -37300,7 +38526,7 @@
 			],
 			"inputPins": [
 				{
-					"type": "",
+					"type": "ZString",
 					"name": "SetHero",
 					"description": ""
 				},
@@ -37530,7 +38756,7 @@
 					"description": ""
 				},
 				{
-					"type": "",
+					"type": "ZEntityReference",
 					"name": "SetTrack",
 					"description": ""
 				}
@@ -37777,7 +39003,7 @@
 			"properties": [],
 			"inputPins": [
 				{
-					"type": "",
+					"type": "ZString",
 					"name": "In",
 					"description": ""
 				}
@@ -37833,12 +39059,12 @@
 			],
 			"inputPins": [
 				{
-					"type": "",
+					"type": "ZEntityReference",
 					"name": "AddTarget",
 					"description": ""
 				},
 				{
-					"type": "",
+					"type": "ZEntityReference",
 					"name": "RemoveTarget",
 					"description": ""
 				},
@@ -37929,7 +39155,7 @@
 					"description": ""
 				},
 				{
-					"type": "",
+					"type": "ZString",
 					"name": "Set",
 					"description": ""
 				}
@@ -38168,6 +39394,46 @@
 				"IComponentInterface"
 			],
 			"properties": [],
+			"inputPins": []
+		},
+		{
+			"name": "TEntityRef<ZEvergreenCrimeSectorDefinition>",
+			"classTypes": [
+				"Class",
+				"Entity"
+			],
+			"interfaces": [],
+			"baseClasses": [],
+			"properties": [],
+			"inputPins": []
+		},
+		{
+			"name": "ZEvergreenMenuGlobalCondition",
+			"classTypes": [
+				"Class"
+			],
+			"interfaces": [
+				"ZEvergreenMenuGlobalCondition",
+				"ZBoolConditionBase",
+				"IEntity",
+				"IBoolCondition"
+			],
+			"baseClasses": [
+				"ZBoolConditionBase"
+			],
+			"properties": [
+				{
+					"type": {
+						"name": "ZEvergreenMenuGlobalCondition.EQuery",
+						"genericName": "ZEvergreenMenuGlobalCondition.EQuery",
+						"classTypes": [
+							"Enum"
+						]
+					},
+					"name": "m_query",
+					"description": ""
+				}
+			],
 			"inputPins": []
 		},
 		{
@@ -39136,7 +40402,7 @@
 			],
 			"inputPins": [
 				{
-					"type": "",
+					"type": "ZString",
 					"name": "SetIActor",
 					"description": ""
 				},
@@ -39785,7 +41051,7 @@
 					"description": ""
 				},
 				{
-					"type": "",
+					"type": "ZString",
 					"name": "InColor",
 					"description": ""
 				}
@@ -41367,7 +42633,7 @@
 			"properties": [],
 			"inputPins": [
 				{
-					"type": "",
+					"type": "ZActor",
 					"name": "In",
 					"description": ""
 				}
@@ -41422,17 +42688,17 @@
 			],
 			"inputPins": [
 				{
-					"type": "",
+					"type": "ZString",
 					"name": "SetExemptFromAttentionHUD",
 					"description": ""
 				},
 				{
-					"type": "",
+					"type": "ZString",
 					"name": "SetExemptFromDamage",
 					"description": ""
 				},
 				{
-					"type": "",
+					"type": "ZString",
 					"name": "SetExemptFromTagging",
 					"description": ""
 				}
@@ -41470,44 +42736,6 @@
 				}
 			],
 			"inputPins": []
-		},
-		{
-			"name": "ZUIOptionManipulator",
-			"classTypes": [
-				"Class"
-			],
-			"interfaces": [
-				"ZUIOptionManipulator",
-				"IEntity"
-			],
-			"baseClasses": [
-				"ZEntityImpl"
-			],
-			"properties": [
-				{
-					"type": {
-						"name": "_EUIOptionKey",
-						"genericName": "_EUIOptionKey",
-						"classTypes": [
-							"Enum"
-						]
-					},
-					"name": "m_eOption",
-					"description": ""
-				}
-			],
-			"inputPins": [
-				{
-					"type": "bool",
-					"name": "265138690",
-					"description": ""
-				},
-				{
-					"type": "float32",
-					"name": "972063061",
-					"description": ""
-				}
-			]
 		},
 		{
 			"name": "ZConversationBehaviorEntity",
@@ -41552,6 +42780,44 @@
 			"inputPins": []
 		},
 		{
+			"name": "ZUIOptionManipulator",
+			"classTypes": [
+				"Class"
+			],
+			"interfaces": [
+				"ZUIOptionManipulator",
+				"IEntity"
+			],
+			"baseClasses": [
+				"ZEntityImpl"
+			],
+			"properties": [
+				{
+					"type": {
+						"name": "_EUIOptionKey",
+						"genericName": "_EUIOptionKey",
+						"classTypes": [
+							"Enum"
+						]
+					},
+					"name": "m_eOption",
+					"description": ""
+				}
+			],
+			"inputPins": [
+				{
+					"type": "bool",
+					"name": "265138690",
+					"description": ""
+				},
+				{
+					"type": "float32",
+					"name": "972063061",
+					"description": ""
+				}
+			]
+		},
+		{
 			"name": "ZValueInt_Repository",
 			"classTypes": [
 				"Class"
@@ -41589,7 +42855,7 @@
 			],
 			"inputPins": [
 				{
-					"type": "",
+					"type": "ZString",
 					"name": "SetRepositoryID",
 					"description": ""
 				}
@@ -41974,7 +43240,7 @@
 			],
 			"inputPins": [
 				{
-					"type": "",
+					"type": "ZActor",
 					"name": "722835860",
 					"description": ""
 				}
@@ -42140,7 +43406,7 @@
 			],
 			"inputPins": [
 				{
-					"type": "",
+					"type": "ZActor",
 					"name": "1888709615",
 					"description": ""
 				}
@@ -42745,12 +44011,12 @@
 			],
 			"inputPins": [
 				{
-					"type": "",
+					"type": "ZString",
 					"name": "Shot",
 					"description": ""
 				},
 				{
-					"type": "",
+					"type": "ZString",
 					"name": "Collision",
 					"description": ""
 				},
@@ -42888,7 +44154,7 @@
 			],
 			"inputPins": [
 				{
-					"type": "",
+					"type": "ZString",
 					"name": "4026297246",
 					"description": ""
 				}
@@ -43107,7 +44373,7 @@
 			],
 			"inputPins": [
 				{
-					"type": "",
+					"type": "ZString",
 					"name": "SetIActor",
 					"description": ""
 				}
@@ -44703,7 +45969,7 @@
 			],
 			"inputPins": [
 				{
-					"type": "",
+					"type": "ZActor",
 					"name": "SetIActor",
 					"description": ""
 				}
@@ -44897,7 +46163,7 @@
 					"description": ""
 				},
 				{
-					"type": "",
+					"type": "SVector3",
 					"name": "Angles",
 					"description": ""
 				}
@@ -45188,7 +46454,7 @@
 			"properties": [],
 			"inputPins": [
 				{
-					"type": "",
+					"type": "ZVariant",
 					"name": "Variant",
 					"description": ""
 				}
@@ -45443,12 +46709,12 @@
 			],
 			"inputPins": [
 				{
-					"type": "",
+					"type": "SVector3",
 					"name": "A",
 					"description": ""
 				},
 				{
-					"type": "",
+					"type": "SVector3",
 					"name": "B",
 					"description": ""
 				},
@@ -45478,6 +46744,58 @@
 			"interfaces": [],
 			"baseClasses": [],
 			"properties": [],
+			"inputPins": []
+		},
+		{
+			"name": "ZActBehaviorApproachDistanceStateCondition",
+			"classTypes": [
+				"Class"
+			],
+			"interfaces": [
+				"ZActBehaviorApproachDistanceStateCondition",
+				"IEntity",
+				"IBoolCondition"
+			],
+			"baseClasses": [
+				"ZEntityImpl",
+				"IBoolCondition"
+			],
+			"properties": [
+				{
+					"type": {
+						"name": "ZActBehaviorEntity",
+						"genericName": "TEntityRef<ZActBehaviorEntity>",
+						"classTypes": [
+							"Class",
+							"Entity"
+						]
+					},
+					"name": "m_rActBehavior",
+					"description": ""
+				},
+				{
+					"type": {
+						"name": "float32",
+						"genericName": "float32",
+						"classTypes": [
+							"Primitive"
+						]
+					},
+					"name": "m_fConditionValidDistance",
+					"description": ""
+				},
+				{
+					"type": {
+						"name": "bool",
+						"genericName": "bool",
+						"classTypes": [
+							"Primitive"
+						]
+					},
+					"name": "m_bValue",
+					"description": ""
+				}
+			],
 			"inputPins": []
 		},
 		{
@@ -45603,58 +46921,6 @@
 						]
 					},
 					"name": "m_bIsMicSend",
-					"description": ""
-				}
-			],
-			"inputPins": []
-		},
-		{
-			"name": "ZActBehaviorApproachDistanceStateCondition",
-			"classTypes": [
-				"Class"
-			],
-			"interfaces": [
-				"ZActBehaviorApproachDistanceStateCondition",
-				"IEntity",
-				"IBoolCondition"
-			],
-			"baseClasses": [
-				"ZEntityImpl",
-				"IBoolCondition"
-			],
-			"properties": [
-				{
-					"type": {
-						"name": "ZActBehaviorEntity",
-						"genericName": "TEntityRef<ZActBehaviorEntity>",
-						"classTypes": [
-							"Class",
-							"Entity"
-						]
-					},
-					"name": "m_rActBehavior",
-					"description": ""
-				},
-				{
-					"type": {
-						"name": "float32",
-						"genericName": "float32",
-						"classTypes": [
-							"Primitive"
-						]
-					},
-					"name": "m_fConditionValidDistance",
-					"description": ""
-				},
-				{
-					"type": {
-						"name": "bool",
-						"genericName": "bool",
-						"classTypes": [
-							"Primitive"
-						]
-					},
-					"name": "m_bValue",
 					"description": ""
 				}
 			],
@@ -46383,7 +47649,7 @@
 					"description": ""
 				},
 				{
-					"type": "",
+					"type": "ZString",
 					"name": "1441384330",
 					"description": ""
 				}
@@ -46498,7 +47764,7 @@
 						"genericName": "ZString",
 						"classTypes": []
 					},
-					"name": "lstrCampaignName",
+					"name": "lstrCrimeSector",
 					"description": ""
 				},
 				{
@@ -46573,6 +47839,29 @@
 						]
 					},
 					"name": "territories",
+					"description": ""
+				},
+				{
+					"type": {
+						"name": "SBonusRequirementData",
+						"genericName": "TArray<SBonusRequirementData>",
+						"classTypes": [
+							"Array",
+							"Container"
+						]
+					},
+					"name": "bonusRequirements",
+					"description": ""
+				},
+				{
+					"type": {
+						"name": "bool",
+						"genericName": "bool",
+						"classTypes": [
+							"Primitive"
+						]
+					},
+					"name": "hasAllBonusRequirements",
 					"description": ""
 				}
 			],
@@ -46703,6 +47992,17 @@
 				},
 				{
 					"type": {
+						"name": "ZEntityRef",
+						"genericName": "ZEntityRef",
+						"classTypes": [
+							"Class"
+						]
+					},
+					"name": "m_rSetpieceUsed",
+					"description": ""
+				},
+				{
+					"type": {
 						"name": "bool",
 						"genericName": "bool",
 						"classTypes": [
@@ -46732,17 +48032,6 @@
 						]
 					},
 					"name": "m_bSetAIPerceptible",
-					"description": ""
-				},
-				{
-					"type": {
-						"name": "ZEntityRef",
-						"genericName": "ZEntityRef",
-						"classTypes": [
-							"Class"
-						]
-					},
-					"name": "m_rSetpieceUsed",
 					"description": ""
 				}
 			],
@@ -49305,7 +50594,7 @@
 			"properties": [],
 			"inputPins": [
 				{
-					"type": "",
+					"type": "ZString",
 					"name": "In",
 					"description": ""
 				}
@@ -49909,6 +51198,27 @@
 					},
 					"name": "m_rDisguisePositions",
 					"description": ""
+				},
+				{
+					"type": {
+						"name": "ZKeywordEntity",
+						"genericName": "TArray<TEntityRef<ZKeywordEntity>>",
+						"classTypes": [
+							"Array",
+							"Container"
+						]
+					},
+					"name": "m_aBlockPacifiedKeywords",
+					"description": ""
+				},
+				{
+					"type": {
+						"name": "ZString",
+						"genericName": "ZString",
+						"classTypes": []
+					},
+					"name": "m_sBlockPacifiedDescriptionID",
+					"description": ""
 				}
 			],
 			"inputPins": [
@@ -50005,12 +51315,12 @@
 			],
 			"inputPins": [
 				{
-					"type": "",
+					"type": "ZString",
 					"name": "Mood",
 					"description": ""
 				},
 				{
-					"type": "",
+					"type": "ZString",
 					"name": "Reaction",
 					"description": ""
 				}
@@ -50080,7 +51390,7 @@
 			],
 			"inputPins": [
 				{
-					"type": "",
+					"type": "ZString",
 					"name": "Paths",
 					"description": ""
 				}
@@ -50586,17 +51896,17 @@
 			],
 			"inputPins": [
 				{
-					"type": "",
+					"type": "ZString",
 					"name": "Vector2",
 					"description": ""
 				},
 				{
-					"type": "",
+					"type": "ZString",
 					"name": "Vector3",
 					"description": ""
 				},
 				{
-					"type": "",
+					"type": "ZString",
 					"name": "ColorRGB",
 					"description": ""
 				}
@@ -50722,7 +52032,7 @@
 			"properties": [],
 			"inputPins": [
 				{
-					"type": "",
+					"type": "ZString",
 					"name": "In",
 					"description": ""
 				}
@@ -50858,7 +52168,7 @@
 					"description": ""
 				},
 				{
-					"type": "",
+					"type": "ZString",
 					"name": "Set",
 					"description": ""
 				}
@@ -51452,7 +52762,7 @@
 			],
 			"inputPins": [
 				{
-					"type": "",
+					"type": "ZString",
 					"name": "Get",
 					"description": ""
 				}
@@ -51522,7 +52832,7 @@
 			],
 			"inputPins": [
 				{
-					"type": "",
+					"type": "ZActor",
 					"name": "SetIActor",
 					"description": ""
 				},
@@ -52081,6 +53391,93 @@
 			"inputPins": []
 		},
 		{
+			"name": "ZEvergreenCrimeSectorDefinition",
+			"classTypes": [
+				"Class"
+			],
+			"interfaces": [
+				"ZEvergreenCrimeSectorDefinition",
+				"IEntity"
+			],
+			"baseClasses": [
+				"ZEntityImpl"
+			],
+			"properties": [
+				{
+					"type": {
+						"name": "ZEvergreenCampaignIcon",
+						"genericName": "TEntityRef<ZEvergreenCampaignIcon>",
+						"classTypes": [
+							"Class",
+							"Entity"
+						]
+					},
+					"name": "m_Icon",
+					"description": ""
+				},
+				{
+					"type": {
+						"name": "ZEvergreenCampaignText",
+						"genericName": "TEntityRef<ZEvergreenCampaignText>",
+						"classTypes": [
+							"Class",
+							"Entity"
+						]
+					},
+					"name": "m_CrimeType",
+					"description": ""
+				},
+				{
+					"type": {
+						"name": "ZEvergreenCampaignText",
+						"genericName": "TEntityRef<ZEvergreenCampaignText>",
+						"classTypes": [
+							"Class",
+							"Entity"
+						]
+					},
+					"name": "m_Biography",
+					"description": ""
+				},
+				{
+					"type": {
+						"name": "ZEvergreenCampaignText",
+						"genericName": "TArray<TEntityRef<ZEvergreenCampaignText>>",
+						"classTypes": [
+							"Array",
+							"Container"
+						]
+					},
+					"name": "m_Leaders",
+					"description": ""
+				},
+				{
+					"type": {
+						"name": "TEntityRef",
+						"genericName": "TEntityRef",
+						"classTypes": [
+							"Class",
+							"Entity"
+						]
+					},
+					"name": "m_BonusRequirements",
+					"description": ""
+				},
+				{
+					"type": {
+						"name": "bool",
+						"genericName": "bool",
+						"classTypes": [
+							"Primitive"
+						]
+					},
+					"name": "m_HasAllBonusRequirements",
+					"description": ""
+				}
+			],
+			"inputPins": []
+		},
+		{
 			"name": "ZDecalControllerEntity",
 			"classTypes": [
 				"Class"
@@ -52506,6 +53903,50 @@
 				}
 			],
 			"inputPins": []
+		},
+		{
+			"name": "ZValueFloat_Repository",
+			"classTypes": [
+				"Class"
+			],
+			"interfaces": [
+				"ZValueFloat_Repository",
+				"IEntity",
+				"IValueFloat"
+			],
+			"baseClasses": [
+				"ZEntityImpl",
+				"IValueFloat"
+			],
+			"properties": [
+				{
+					"type": {
+						"name": "ZRepositoryID",
+						"genericName": "ZRepositoryID",
+						"classTypes": [
+							"Class"
+						]
+					},
+					"name": "m_sRepositoryID",
+					"description": ""
+				},
+				{
+					"type": {
+						"name": "ZString",
+						"genericName": "ZString",
+						"classTypes": []
+					},
+					"name": "m_sPath",
+					"description": ""
+				}
+			],
+			"inputPins": [
+				{
+					"type": "ZString",
+					"name": "SetRepositoryID",
+					"description": ""
+				}
+			]
 		},
 		{
 			"name": "SDramaSituationSaveData",
@@ -54863,7 +56304,7 @@
 					"description": ""
 				},
 				{
-					"type": "",
+					"type": "ZActor",
 					"name": "ApplyOnIActor",
 					"description": ""
 				}
@@ -55795,7 +57236,7 @@
 			],
 			"inputPins": [
 				{
-					"type": "",
+					"type": "ZVariant",
 					"name": "Variant",
 					"description": ""
 				},
@@ -56006,7 +57447,7 @@
 			],
 			"inputPins": [
 				{
-					"type": "",
+					"type": "ZString",
 					"name": "Input",
 					"description": ""
 				}
@@ -56082,12 +57523,12 @@
 			],
 			"inputPins": [
 				{
-					"type": "int64",
+					"type": "",
 					"name": "A",
 					"description": ""
 				},
 				{
-					"type": "int64",
+					"type": "",
 					"name": "B",
 					"description": ""
 				},
@@ -56431,7 +57872,7 @@
 					"description": ""
 				},
 				{
-					"type": "",
+					"type": "SVector3",
 					"name": "SetClearColor",
 					"description": ""
 				},
@@ -56490,7 +57931,7 @@
 			"properties": [],
 			"inputPins": [
 				{
-					"type": "",
+					"type": "ZString",
 					"name": "Input",
 					"description": ""
 				}
@@ -56530,12 +57971,28 @@
 					},
 					"name": "m_TriggerOnStateChangeAndActivation",
 					"description": ""
+				},
+				{
+					"type": {
+						"name": "bool",
+						"genericName": "bool",
+						"classTypes": [
+							"Primitive"
+						]
+					},
+					"name": "m_QueryServerOnActivation",
+					"description": ""
 				}
 			],
 			"inputPins": [
 				{
-					"type": "",
+					"type": "ZString",
 					"name": "1310963990",
+					"description": ""
+				},
+				{
+					"type": "void",
+					"name": "GetState",
 					"description": ""
 				}
 			]
@@ -56550,6 +58007,34 @@
 			"baseClasses": [],
 			"properties": [],
 			"inputPins": []
+		},
+		{
+			"name": "ZEvergreenCampaignInfoDataProvider",
+			"classTypes": [
+				"Class"
+			],
+			"interfaces": [
+				"ZEvergreenCampaignInfoDataProvider",
+				"IEntity",
+				"ZUIDataProvider"
+			],
+			"baseClasses": [
+				"ZEntityImpl",
+				"ZUIDataProvider"
+			],
+			"properties": [],
+			"inputPins": [
+				{
+					"type": "int32",
+					"name": "4097207359",
+					"description": ""
+				},
+				{
+					"type": "bool",
+					"name": "3523896948",
+					"description": ""
+				}
+			]
 		},
 		{
 			"name": "ZRoomProxyEntity",
@@ -56864,7 +58349,7 @@
 					"description": ""
 				},
 				{
-					"type": "",
+					"type": "ZString",
 					"name": "OverridePromptText",
 					"description": ""
 				}
@@ -56897,7 +58382,7 @@
 			],
 			"inputPins": [
 				{
-					"type": "",
+					"type": "ZString",
 					"name": "In",
 					"description": ""
 				}
@@ -59377,12 +60862,12 @@
 			],
 			"inputPins": [
 				{
-					"type": "",
+					"type": "ZString",
 					"name": "Color",
 					"description": ""
 				},
 				{
-					"type": "int64",
+					"type": "",
 					"name": "1475513172",
 					"description": ""
 				}
@@ -59708,7 +61193,7 @@
 			],
 			"inputPins": [
 				{
-					"type": "",
+					"type": "ZVariant",
 					"name": "SetValue",
 					"description": ""
 				}
@@ -59766,7 +61251,7 @@
 			],
 			"inputPins": [
 				{
-					"type": "",
+					"type": "ZString",
 					"name": "SetValue",
 					"description": ""
 				}
@@ -59993,7 +61478,7 @@
 			],
 			"inputPins": [
 				{
-					"type": "",
+					"type": "ZString",
 					"name": "SetVisible",
 					"description": ""
 				},
@@ -60925,32 +62410,32 @@
 					"description": ""
 				},
 				{
-					"type": "",
+					"type": "ZString",
 					"name": "SetText",
 					"description": ""
 				},
 				{
-					"type": "",
+					"type": "ZVariant",
 					"name": "SetArg0",
 					"description": ""
 				},
 				{
-					"type": "",
+					"type": "ZVariant",
 					"name": "SetArg1",
 					"description": ""
 				},
 				{
-					"type": "",
+					"type": "ZVariant",
 					"name": "SetArg2",
 					"description": ""
 				},
 				{
-					"type": "",
+					"type": "ZVariant",
 					"name": "SetArg3",
 					"description": ""
 				},
 				{
-					"type": "",
+					"type": "ZVariant",
 					"name": "SetArg4",
 					"description": ""
 				}
@@ -61401,7 +62886,7 @@
 			],
 			"inputPins": [
 				{
-					"type": "",
+					"type": "ZString",
 					"name": "SetValue",
 					"description": ""
 				},
@@ -62343,12 +63828,12 @@
 			],
 			"inputPins": [
 				{
-					"type": "",
+					"type": "ZActor",
 					"name": "SetActor",
 					"description": ""
 				},
 				{
-					"type": "",
+					"type": "ZActor",
 					"name": "SetIActor",
 					"description": ""
 				}
@@ -62731,12 +64216,12 @@
 			],
 			"inputPins": [
 				{
-					"type": "",
+					"type": "ZVariant",
 					"name": "All",
 					"description": ""
 				},
 				{
-					"type": "",
+					"type": "ZVariant",
 					"name": "Route",
 					"description": ""
 				},
@@ -62989,6 +64474,28 @@
 						]
 					},
 					"name": "m_eGlowType",
+					"description": ""
+				},
+				{
+					"type": {
+						"name": "ERenderGlowTypes",
+						"genericName": "ERenderGlowTypes",
+						"classTypes": [
+							"Enum"
+						]
+					},
+					"name": "m_eOverriddenGlowType",
+					"description": ""
+				},
+				{
+					"type": {
+						"name": "bool",
+						"genericName": "bool",
+						"classTypes": [
+							"Primitive"
+						]
+					},
+					"name": "m_bGlowIsOverridden",
 					"description": ""
 				}
 			],
@@ -63333,7 +64840,7 @@
 					"description": ""
 				},
 				{
-					"type": "",
+					"type": "SVector3",
 					"name": "DirectionSpawn",
 					"description": ""
 				}
@@ -63433,7 +64940,7 @@
 			],
 			"inputPins": [
 				{
-					"type": "",
+					"type": "ZString",
 					"name": "StunActor",
 					"description": ""
 				}
@@ -63748,6 +65255,22 @@
 					"description": ""
 				}
 			]
+		},
+		{
+			"name": "ZHM5CrippleBoxCanPlaceState",
+			"classTypes": [
+				"Class"
+			],
+			"interfaces": [
+				"ZHM5CrippleBoxCanPlaceState",
+				"ZHeroReference",
+				"IEntity"
+			],
+			"baseClasses": [
+				"ZHeroReference"
+			],
+			"properties": [],
+			"inputPins": []
 		},
 		{
 			"name": "ZActorKnowledgeCondition",
@@ -64404,7 +65927,7 @@
 			],
 			"inputPins": [
 				{
-					"type": "",
+					"type": "ZString",
 					"name": "PreviewEvent",
 					"description": ""
 				},
@@ -65067,17 +66590,17 @@
 					"description": ""
 				},
 				{
-					"type": "",
+					"type": "ZString",
 					"name": "ChangeActor",
 					"description": ""
 				},
 				{
-					"type": "",
+					"type": "ZString",
 					"name": "SetIActor",
 					"description": ""
 				},
 				{
-					"type": "",
+					"type": "ZString",
 					"name": "SetIActor_Actor",
 					"description": ""
 				}
@@ -65316,7 +66839,7 @@
 			],
 			"inputPins": [
 				{
-					"type": "",
+					"type": "ZString",
 					"name": "SetValue",
 					"description": ""
 				}
@@ -65429,7 +66952,7 @@
 			],
 			"inputPins": [
 				{
-					"type": "",
+					"type": "ZString",
 					"name": "SetHero",
 					"description": ""
 				},
@@ -65970,7 +67493,7 @@
 			],
 			"inputPins": [
 				{
-					"type": "",
+					"type": "SVector3",
 					"name": "SetFixedColor",
 					"description": ""
 				},
@@ -66080,7 +67603,7 @@
 			"properties": [],
 			"inputPins": [
 				{
-					"type": "",
+					"type": "ZEntityReference",
 					"name": "ItemReady",
 					"description": ""
 				}
@@ -66153,17 +67676,17 @@
 			],
 			"inputPins": [
 				{
-					"type": "",
+					"type": "ZVariant",
 					"name": "Kill",
 					"description": ""
 				},
 				{
-					"type": "",
+					"type": "ZVariant",
 					"name": "Pacified",
 					"description": ""
 				},
 				{
-					"type": "",
+					"type": "ZString",
 					"name": "BodyFound",
 					"description": ""
 				}
@@ -67210,7 +68733,7 @@
 			],
 			"inputPins": [
 				{
-					"type": "",
+					"type": "SVector3",
 					"name": "SetVector0",
 					"description": ""
 				},
@@ -67220,7 +68743,7 @@
 					"description": ""
 				},
 				{
-					"type": "",
+					"type": "SVector3",
 					"name": "SetVector1",
 					"description": ""
 				},
@@ -67230,7 +68753,7 @@
 					"description": ""
 				},
 				{
-					"type": "",
+					"type": "SVector3",
 					"name": "SetVector2",
 					"description": ""
 				},
@@ -67240,7 +68763,7 @@
 					"description": ""
 				},
 				{
-					"type": "",
+					"type": "SVector3",
 					"name": "SetVector3",
 					"description": ""
 				},
@@ -67250,7 +68773,7 @@
 					"description": ""
 				},
 				{
-					"type": "",
+					"type": "SVector3",
 					"name": "SetVector4",
 					"description": ""
 				},
@@ -67260,7 +68783,7 @@
 					"description": ""
 				},
 				{
-					"type": "",
+					"type": "SVector3",
 					"name": "SetVector5",
 					"description": ""
 				},
@@ -68337,12 +69860,12 @@
 			],
 			"inputPins": [
 				{
-					"type": "",
+					"type": "ZString",
 					"name": "3007500910",
 					"description": ""
 				},
 				{
-					"type": "",
+					"type": "ZString",
 					"name": "3493224431",
 					"description": ""
 				},
@@ -68390,12 +69913,12 @@
 			"properties": [],
 			"inputPins": [
 				{
-					"type": "",
+					"type": "ZActor",
 					"name": "IActor",
 					"description": ""
 				},
 				{
-					"type": "",
+					"type": "ZActor",
 					"name": "Actor",
 					"description": ""
 				}
@@ -71032,6 +72555,17 @@
 			"inputPins": []
 		},
 		{
+			"name": "TEntityRef<ZEverGreenSuspectDescriptor>",
+			"classTypes": [
+				"Class",
+				"Entity"
+			],
+			"interfaces": [],
+			"baseClasses": [],
+			"properties": [],
+			"inputPins": []
+		},
+		{
 			"name": "ZKeywordSubscriberEntity",
 			"classTypes": [
 				"Class"
@@ -71254,7 +72788,7 @@
 					"description": ""
 				},
 				{
-					"type": "",
+					"type": "ZString",
 					"name": "SetItem",
 					"description": ""
 				}
@@ -71891,6 +73425,145 @@
 			"inputPins": []
 		},
 		{
+			"name": "ZEvergreenIntelWallDataProvider.SIntelWallData",
+			"classTypes": [
+				"Class"
+			],
+			"interfaces": [],
+			"baseClasses": [],
+			"properties": [
+				{
+					"type": {
+						"name": "int32",
+						"genericName": "int32",
+						"classTypes": [
+							"Primitive"
+						]
+					},
+					"name": "nDifficultyRank",
+					"description": ""
+				},
+				{
+					"type": {
+						"name": "int32",
+						"genericName": "int32",
+						"classTypes": [
+							"Primitive"
+						]
+					},
+					"name": "idCrimeSector",
+					"description": ""
+				},
+				{
+					"type": {
+						"name": "ZString",
+						"genericName": "ZString",
+						"classTypes": []
+					},
+					"name": "lstrCrimeSector",
+					"description": ""
+				},
+				{
+					"type": {
+						"name": "ZRuntimeResourceID",
+						"genericName": "ZRuntimeResourceID",
+						"classTypes": [
+							"Class"
+						]
+					},
+					"name": "ridCrimeSectorIcon",
+					"description": ""
+				},
+				{
+					"type": {
+						"name": "ZString",
+						"genericName": "ZString",
+						"classTypes": []
+					},
+					"name": "lstrLeaderCodename",
+					"description": ""
+				},
+				{
+					"type": {
+						"name": "ZEvergreenIntelWallDataProvider.EAgenda",
+						"genericName": "ZEvergreenIntelWallDataProvider.EAgenda",
+						"classTypes": [
+							"Enum"
+						]
+					},
+					"name": "agenda",
+					"description": ""
+				},
+				{
+					"type": {
+						"name": "ZEvergreenIntelWallDataProvider.ETell",
+						"genericName": "ZEvergreenIntelWallDataProvider.ETell",
+						"classTypes": [
+							"Enum"
+						]
+					},
+					"name": "tellA",
+					"description": ""
+				},
+				{
+					"type": {
+						"name": "ZEvergreenIntelWallDataProvider.ETell",
+						"genericName": "ZEvergreenIntelWallDataProvider.ETell",
+						"classTypes": [
+							"Enum"
+						]
+					},
+					"name": "tellB",
+					"description": ""
+				},
+				{
+					"type": {
+						"name": "ZEvergreenIntelWallDataProvider.ELook",
+						"genericName": "ZEvergreenIntelWallDataProvider.ELook",
+						"classTypes": [
+							"Enum"
+						]
+					},
+					"name": "lookA",
+					"description": ""
+				},
+				{
+					"type": {
+						"name": "ZEvergreenIntelWallDataProvider.ELook",
+						"genericName": "ZEvergreenIntelWallDataProvider.ELook",
+						"classTypes": [
+							"Enum"
+						]
+					},
+					"name": "lookB",
+					"description": ""
+				},
+				{
+					"type": {
+						"name": "ZEvergreenIntelWallDataProvider.ELook",
+						"genericName": "ZEvergreenIntelWallDataProvider.ELook",
+						"classTypes": [
+							"Enum"
+						]
+					},
+					"name": "lookC",
+					"description": ""
+				},
+				{
+					"type": {
+						"name": "ZEvergreenIntelWallDataProvider.ELook",
+						"genericName": "ZEvergreenIntelWallDataProvider.ELook",
+						"classTypes": [
+							"Enum"
+						]
+					},
+					"name": "lookD",
+					"description": ""
+				}
+			],
+			"inputPins": []
+		},
+		{
 			"name": "ZHM5GenericEventConsumer.SGenericEventData",
 			"classTypes": [
 				"Class"
@@ -72028,6 +73701,17 @@
 							"Primitive"
 						]
 					},
+					"name": "m_nSuspects",
+					"description": ""
+				},
+				{
+					"type": {
+						"name": "int32",
+						"genericName": "int32",
+						"classTypes": [
+							"Primitive"
+						]
+					},
 					"name": "m_nStashes",
 					"description": ""
 				},
@@ -72154,12 +73838,12 @@
 			],
 			"inputPins": [
 				{
-					"type": "",
+					"type": "ZString",
 					"name": "SetWeapon",
 					"description": ""
 				},
 				{
-					"type": "",
+					"type": "ZString",
 					"name": "SetIActor",
 					"description": ""
 				},
@@ -73192,6 +74876,96 @@
 			"inputPins": []
 		},
 		{
+			"name": "ZEvergreenCampaignProgressDataProvider.SData",
+			"classTypes": [
+				"Class"
+			],
+			"interfaces": [],
+			"baseClasses": [],
+			"properties": [
+				{
+					"type": {
+						"name": "int32",
+						"genericName": "TArray<int32>",
+						"classTypes": [
+							"Array",
+							"Container"
+						]
+					},
+					"name": "campaign",
+					"description": ""
+				},
+				{
+					"type": {
+						"name": "int32",
+						"genericName": "TArray<int32>",
+						"classTypes": [
+							"Array",
+							"Container"
+						]
+					},
+					"name": "completed",
+					"description": ""
+				},
+				{
+					"type": {
+						"name": "int32",
+						"genericName": "int32",
+						"classTypes": [
+							"Primitive"
+						]
+					},
+					"name": "step",
+					"description": ""
+				},
+				{
+					"type": {
+						"name": "bool",
+						"genericName": "bool",
+						"classTypes": [
+							"Primitive"
+						]
+					},
+					"name": "hardcore",
+					"description": ""
+				},
+				{
+					"type": {
+						"name": "bool",
+						"genericName": "bool",
+						"classTypes": [
+							"Primitive"
+						]
+					},
+					"name": "goToExitObjectivesDone",
+					"description": ""
+				},
+				{
+					"type": {
+						"name": "bool",
+						"genericName": "bool",
+						"classTypes": [
+							"Primitive"
+						]
+					},
+					"name": "goToExitObjectivesFail",
+					"description": ""
+				},
+				{
+					"type": {
+						"name": "bool",
+						"genericName": "bool",
+						"classTypes": [
+							"Primitive"
+						]
+					},
+					"name": "campaignActivatorInUse",
+					"description": ""
+				}
+			],
+			"inputPins": []
+		},
+		{
 			"name": "TEntityRef<IItem>",
 			"classTypes": [
 				"Class",
@@ -73520,7 +75294,7 @@
 			],
 			"inputPins": [
 				{
-					"type": "",
+					"type": "ZActor",
 					"name": "SetIActor",
 					"description": ""
 				},
@@ -74493,7 +76267,7 @@
 			],
 			"inputPins": [
 				{
-					"type": "",
+					"type": "ZActor",
 					"name": "SetIActor",
 					"description": ""
 				},
@@ -74595,6 +76369,49 @@
 			],
 			"properties": [],
 			"inputPins": []
+		},
+		{
+			"name": "ZTextLineEntity",
+			"classTypes": [
+				"Class"
+			],
+			"interfaces": [
+				"ZTextLineEntity",
+				"IEntity"
+			],
+			"baseClasses": [
+				"ZEntityImpl"
+			],
+			"properties": [
+				{
+					"type": {
+						"name": "ZString",
+						"genericName": "ZString",
+						"classTypes": []
+					},
+					"name": "m_sText",
+					"description": ""
+				},
+				{
+					"type": {
+						"name": "TResourcePtr",
+						"genericName": "TResourcePtr",
+						"classTypes": [
+							"Class",
+							"Resource"
+						]
+					},
+					"name": "m_rTextLineResource",
+					"description": ""
+				}
+			],
+			"inputPins": [
+				{
+					"type": "void",
+					"name": "4065762186",
+					"description": ""
+				}
+			]
 		},
 		{
 			"name": "ZHeroEscortSituation2Entity",
@@ -74924,12 +76741,12 @@
 					"description": ""
 				},
 				{
-					"type": "",
+					"type": "ZString",
 					"name": "AddActor",
 					"description": ""
 				},
 				{
-					"type": "",
+					"type": "ZString",
 					"name": "RemoveActor",
 					"description": ""
 				},
@@ -75050,7 +76867,7 @@
 			],
 			"inputPins": [
 				{
-					"type": "",
+					"type": "ZString",
 					"name": "SetValue",
 					"description": ""
 				},
@@ -75334,12 +77151,12 @@
 			],
 			"inputPins": [
 				{
-					"type": "",
+					"type": "SVector3",
 					"name": "A",
 					"description": ""
 				},
 				{
-					"type": "",
+					"type": "SVector3",
 					"name": "B",
 					"description": ""
 				}
@@ -76191,7 +78008,7 @@
 			],
 			"inputPins": [
 				{
-					"type": "",
+					"type": "ZActor",
 					"name": "SetActor",
 					"description": ""
 				}
@@ -76959,7 +78776,7 @@
 					"description": ""
 				},
 				{
-					"type": "",
+					"type": "ZString",
 					"name": "AddEvent",
 					"description": ""
 				},
@@ -77022,7 +78839,7 @@
 					"description": ""
 				},
 				{
-					"type": "",
+					"type": "ZVariant",
 					"name": "SignalData",
 					"description": ""
 				}
@@ -77199,6 +79016,46 @@
 						]
 					},
 					"name": "m_bApplySpeedMultiplier",
+					"description": ""
+				}
+			],
+			"inputPins": []
+		},
+		{
+			"name": "ZHeroFlatSurfaceAreaConditionEntity",
+			"classTypes": [
+				"Class"
+			],
+			"interfaces": [
+				"ZHeroFlatSurfaceAreaConditionEntity",
+				"ZBaseConditionEntity",
+				"IEntity",
+				"IBoolCondition"
+			],
+			"baseClasses": [
+				"ZBaseConditionEntity"
+			],
+			"properties": [
+				{
+					"type": {
+						"name": "float32",
+						"genericName": "float32",
+						"classTypes": [
+							"Primitive"
+						]
+					},
+					"name": "m_fMaxSlopeAngle",
+					"description": ""
+				},
+				{
+					"type": {
+						"name": "float32",
+						"genericName": "float32",
+						"classTypes": [
+							"Primitive"
+						]
+					},
+					"name": "m_fRadius",
 					"description": ""
 				}
 			],
@@ -77496,7 +79353,7 @@
 					"description": ""
 				},
 				{
-					"type": "",
+					"type": "ZString",
 					"name": "PlaySpecific",
 					"description": ""
 				},
@@ -77687,6 +79544,17 @@
 					},
 					"name": "m_Name",
 					"description": ""
+				},
+				{
+					"type": {
+						"name": "bool",
+						"genericName": "bool",
+						"classTypes": [
+							"Primitive"
+						]
+					},
+					"name": "m_SaveOnChange",
+					"description": ""
 				}
 			],
 			"inputPins": []
@@ -77848,17 +79716,17 @@
 			"properties": [],
 			"inputPins": [
 				{
-					"type": "",
+					"type": "ZString",
 					"name": "Add",
 					"description": ""
 				},
 				{
-					"type": "",
+					"type": "ZString",
 					"name": "Remove",
 					"description": ""
 				},
 				{
-					"type": "",
+					"type": "ZString",
 					"name": "2005665832",
 					"description": ""
 				}
@@ -79585,12 +81453,12 @@
 					"description": ""
 				},
 				{
-					"type": "int64",
+					"type": "",
 					"name": "Int64",
 					"description": ""
 				},
 				{
-					"type": "int64",
+					"type": "",
 					"name": "UInt64",
 					"description": ""
 				},
@@ -79722,7 +81590,7 @@
 			],
 			"inputPins": [
 				{
-					"type": "",
+					"type": "ZString",
 					"name": "HintLookToDirection",
 					"description": ""
 				}
@@ -79882,6 +81750,50 @@
 			],
 			"properties": [],
 			"inputPins": []
+		},
+		{
+			"name": "ZValueBool_Repository",
+			"classTypes": [
+				"Class"
+			],
+			"interfaces": [
+				"ZValueBool_Repository",
+				"IEntity",
+				"IBoolCondition"
+			],
+			"baseClasses": [
+				"ZEntityImpl",
+				"IBoolCondition"
+			],
+			"properties": [
+				{
+					"type": {
+						"name": "ZRepositoryID",
+						"genericName": "ZRepositoryID",
+						"classTypes": [
+							"Class"
+						]
+					},
+					"name": "m_sRepositoryID",
+					"description": ""
+				},
+				{
+					"type": {
+						"name": "ZString",
+						"genericName": "ZString",
+						"classTypes": []
+					},
+					"name": "m_sPath",
+					"description": ""
+				}
+			],
+			"inputPins": [
+				{
+					"type": "ZString",
+					"name": "SetRepositoryID",
+					"description": ""
+				}
+			]
 		},
 		{
 			"name": "SCondition_AreVisibleWeaponsSuspicious",
@@ -80055,7 +81967,7 @@
 					"description": ""
 				},
 				{
-					"type": "",
+					"type": "ZString",
 					"name": "Set",
 					"description": ""
 				},
@@ -80374,7 +82286,7 @@
 					"description": ""
 				},
 				{
-					"type": "",
+					"type": "ZString",
 					"name": "SetText",
 					"description": ""
 				},
@@ -80389,7 +82301,7 @@
 					"description": ""
 				},
 				{
-					"type": "",
+					"type": "ZString",
 					"name": "SetColor",
 					"description": ""
 				}
@@ -81278,12 +83190,12 @@
 			"properties": [],
 			"inputPins": [
 				{
-					"type": "",
+					"type": "ZString",
 					"name": "InA",
 					"description": ""
 				},
 				{
-					"type": "",
+					"type": "ZString",
 					"name": "InB",
 					"description": ""
 				}
@@ -81434,6 +83346,17 @@
 					"description": ""
 				}
 			],
+			"inputPins": []
+		},
+		{
+			"name": "TEntityRef<ZEvergreenDestination>",
+			"classTypes": [
+				"Class",
+				"Entity"
+			],
+			"interfaces": [],
+			"baseClasses": [],
+			"properties": [],
 			"inputPins": []
 		},
 		{
@@ -82376,7 +84299,7 @@
 			],
 			"inputPins": [
 				{
-					"type": "int64",
+					"type": "",
 					"name": "SetValue",
 					"description": ""
 				},
@@ -82590,7 +84513,7 @@
 			],
 			"inputPins": [
 				{
-					"type": "",
+					"type": "ZString",
 					"name": "SetValue",
 					"description": ""
 				}
@@ -82853,7 +84776,7 @@
 			],
 			"inputPins": [
 				{
-					"type": "",
+					"type": "ZString",
 					"name": "Color",
 					"description": ""
 				}
@@ -82955,6 +84878,23 @@
 					"description": ""
 				}
 			],
+			"inputPins": []
+		},
+		{
+			"name": "ZPhotoModeMenuGlobalCondition",
+			"classTypes": [
+				"Class"
+			],
+			"interfaces": [
+				"ZPhotoModeMenuGlobalCondition",
+				"ZBoolConditionBase",
+				"IEntity",
+				"IBoolCondition"
+			],
+			"baseClasses": [
+				"ZBoolConditionBase"
+			],
+			"properties": [],
 			"inputPins": []
 		},
 		{
@@ -83985,7 +85925,7 @@
 			],
 			"inputPins": [
 				{
-					"type": "",
+					"type": "ZString",
 					"name": "SetRepositoryID",
 					"description": ""
 				},
@@ -84891,7 +86831,7 @@
 					"description": ""
 				},
 				{
-					"type": "",
+					"type": "ZString",
 					"name": "Set",
 					"description": ""
 				}
@@ -84910,8 +86850,38 @@
 			"baseClasses": [
 				"ZContractProgressionDataBase"
 			],
-			"properties": [],
-			"inputPins": []
+			"properties": [
+				{
+					"type": {
+						"name": "ZString",
+						"genericName": "ZString",
+						"classTypes": []
+					},
+					"name": "m_Value",
+					"description": ""
+				},
+				{
+					"type": {
+						"name": "ZString",
+						"genericName": "ZString",
+						"classTypes": []
+					},
+					"name": "m_ResetValue",
+					"description": ""
+				}
+			],
+			"inputPins": [
+				{
+					"type": "ZString",
+					"name": "SetValue",
+					"description": ""
+				},
+				{
+					"type": "void",
+					"name": "Reset",
+					"description": ""
+				}
+			]
 		},
 		{
 			"name": "SBehavior_RequestSuitcaseAssistanceOverRadio",
@@ -85256,6 +87226,54 @@
 			],
 			"properties": [],
 			"inputPins": []
+		},
+		{
+			"name": "ZLerpMultiSpatialEntity",
+			"classTypes": [
+				"Class"
+			],
+			"interfaces": [
+				"ZLerpMultiSpatialEntity",
+				"ZSpatialEntity",
+				"IEntity",
+				"ISavableEntity"
+			],
+			"baseClasses": [
+				"ZSpatialEntity",
+				"ISavableEntity"
+			],
+			"properties": [
+				{
+					"type": {
+						"name": "ZSpatialEntity",
+						"genericName": "TArray<TEntityRef<ZSpatialEntity>>",
+						"classTypes": [
+							"Array",
+							"Container"
+						]
+					},
+					"name": "m_nodes",
+					"description": ""
+				},
+				{
+					"type": {
+						"name": "float32",
+						"genericName": "float32",
+						"classTypes": [
+							"Primitive"
+						]
+					},
+					"name": "m_T",
+					"description": ""
+				}
+			],
+			"inputPins": [
+				{
+					"type": "float32",
+					"name": "T",
+					"description": ""
+				}
+			]
 		},
 		{
 			"name": "ZParticleRenderEntityBase",
@@ -85726,7 +87744,7 @@
 					"description": ""
 				},
 				{
-					"type": "",
+					"type": "ZString",
 					"name": "Position",
 					"description": ""
 				}
@@ -85794,6 +87812,17 @@
 					},
 					"name": "m_rSearchVolume",
 					"description": ""
+				},
+				{
+					"type": {
+						"name": "bool",
+						"genericName": "bool",
+						"classTypes": [
+							"Primitive"
+						]
+					},
+					"name": "m_bGrabAllDrops",
+					"description": ""
 				}
 			],
 			"inputPins": []
@@ -85838,7 +87867,7 @@
 			],
 			"inputPins": [
 				{
-					"type": "",
+					"type": "ZEntityReference",
 					"name": "TransmitEvent",
 					"description": ""
 				}
@@ -86127,6 +88156,21 @@
 					"description": ""
 				}
 			],
+			"inputPins": []
+		},
+		{
+			"name": "ZPayoutObjectiveStateEntity",
+			"classTypes": [
+				"Class"
+			],
+			"interfaces": [
+				"ZPayoutObjectiveStateEntity",
+				"IEntity"
+			],
+			"baseClasses": [
+				"ZEntityImpl"
+			],
+			"properties": [],
 			"inputPins": []
 		},
 		{
@@ -87186,12 +89230,12 @@
 					"description": ""
 				},
 				{
-					"type": "",
+					"type": "ZString",
 					"name": "ActivateShot",
 					"description": ""
 				},
 				{
-					"type": "",
+					"type": "ZString",
 					"name": "ActivateCollision",
 					"description": ""
 				}
@@ -87628,31 +89672,59 @@
 					"description": ""
 				},
 				{
-					"type": "",
+					"type": "ZString",
 					"name": "InColor",
 					"description": ""
 				},
 				{
-					"type": "",
+					"type": "ZString",
 					"name": "2582250362",
 					"description": ""
 				},
 				{
-					"type": "",
+					"type": "ZString",
 					"name": "2786260070",
 					"description": ""
 				},
 				{
-					"type": "",
+					"type": "ZString",
 					"name": "2695440171",
 					"description": ""
 				},
 				{
-					"type": "",
+					"type": "ZString",
 					"name": "3324302413",
 					"description": ""
 				}
 			]
+		},
+		{
+			"name": "ZEverGreenSuspectDescriptor",
+			"classTypes": [
+				"Class"
+			],
+			"interfaces": [
+				"ZEverGreenSuspectDescriptor",
+				"IEntity"
+			],
+			"baseClasses": [
+				"ZEntityImpl"
+			],
+			"properties": [
+				{
+					"type": {
+						"name": "TResourcePtr",
+						"genericName": "TResourcePtr",
+						"classTypes": [
+							"Class",
+							"Resource"
+						]
+					},
+					"name": "m_pActorResource",
+					"description": ""
+				}
+			],
+			"inputPins": []
 		},
 		{
 			"name": "ZHUDSilentAssassinOptionController",
@@ -87763,7 +89835,7 @@
 			],
 			"inputPins": [
 				{
-					"type": "",
+					"type": "ZString",
 					"name": "SetOriginal",
 					"description": ""
 				},
@@ -88760,7 +90832,7 @@
 			],
 			"inputPins": [
 				{
-					"type": "",
+					"type": "ZActor",
 					"name": "SetIActor",
 					"description": ""
 				},
@@ -88895,7 +90967,7 @@
 					"description": ""
 				},
 				{
-					"type": "",
+					"type": "ZString",
 					"name": "SetProbability",
 					"description": ""
 				}
@@ -89079,12 +91151,12 @@
 			],
 			"inputPins": [
 				{
-					"type": "",
+					"type": "ZActor",
 					"name": "SetGreetingActor",
 					"description": ""
 				},
 				{
-					"type": "",
+					"type": "ZActor",
 					"name": "SetRespondingActor",
 					"description": ""
 				},
@@ -89673,6 +91745,17 @@
 							"Primitive"
 						]
 					},
+					"name": "m_nAmmoCountDartEmetic",
+					"description": ""
+				},
+				{
+					"type": {
+						"name": "uint32",
+						"genericName": "uint32",
+						"classTypes": [
+							"Primitive"
+						]
+					},
 					"name": "m_nAmmoCountAmmoShotgunBeanbag",
 					"description": ""
 				},
@@ -90248,7 +92331,7 @@
 			],
 			"inputPins": [
 				{
-					"type": "",
+					"type": "ZVariant",
 					"name": "Variant",
 					"description": ""
 				},
@@ -90281,6 +92364,36 @@
 						]
 					},
 					"name": "m_eEvent",
+					"description": ""
+				}
+			],
+			"inputPins": []
+		},
+		{
+			"name": "ZHUDWalkSpeedDataProvider",
+			"classTypes": [
+				"Class"
+			],
+			"interfaces": [
+				"ZHUDWalkSpeedDataProvider",
+				"IEntity",
+				"ZUIDataProvider"
+			],
+			"baseClasses": [
+				"ZEntityImpl",
+				"ZUIDataProvider"
+			],
+			"properties": [
+				{
+					"type": {
+						"name": "IBoolCondition",
+						"genericName": "TEntityRef<IBoolCondition>",
+						"classTypes": [
+							"Class",
+							"Entity"
+						]
+					},
+					"name": "m_IsInMenuThatOverlapsIcons",
 					"description": ""
 				}
 			],
@@ -90832,12 +92945,12 @@
 					"description": ""
 				},
 				{
-					"type": "",
+					"type": "ZActor",
 					"name": "AddActor",
 					"description": ""
 				},
 				{
-					"type": "",
+					"type": "ZActor",
 					"name": "RemoveActor",
 					"description": ""
 				}
@@ -90921,7 +93034,7 @@
 					"description": ""
 				},
 				{
-					"type": "",
+					"type": "ZActor",
 					"name": "SetIActor",
 					"description": ""
 				}
@@ -91076,7 +93189,7 @@
 			],
 			"inputPins": [
 				{
-					"type": "",
+					"type": "ZString",
 					"name": "SetValue",
 					"description": ""
 				},
@@ -91159,6 +93272,56 @@
 					"description": ""
 				}
 			]
+		},
+		{
+			"name": "ZUIDataProviderToMenuData",
+			"classTypes": [
+				"Class"
+			],
+			"interfaces": [
+				"ZUIDataProviderToMenuData",
+				"IEntity",
+				"IUIDataListener"
+			],
+			"baseClasses": [
+				"ZEntityImpl",
+				"IUIDataListener"
+			],
+			"properties": [
+				{
+					"type": {
+						"name": "ZString",
+						"genericName": "ZString",
+						"classTypes": []
+					},
+					"name": "m_token",
+					"description": ""
+				},
+				{
+					"type": {
+						"name": "float32",
+						"genericName": "float32",
+						"classTypes": [
+							"Primitive"
+						]
+					},
+					"name": "m_maxUpdateInterval",
+					"description": ""
+				},
+				{
+					"type": {
+						"name": "ZUIDataProvider",
+						"genericName": "TEntityRef<ZUIDataProvider>",
+						"classTypes": [
+							"Class",
+							"Entity"
+						]
+					},
+					"name": "m_pDataProvider",
+					"description": ""
+				}
+			],
+			"inputPins": []
 		},
 		{
 			"name": "ZActionGroupToImageManagerEntity",
@@ -91368,7 +93531,7 @@
 					"description": ""
 				},
 				{
-					"type": "",
+					"type": "ZString",
 					"name": "SetWorldMultiplier",
 					"description": ""
 				}
@@ -91689,6 +93852,17 @@
 						]
 					},
 					"name": "m_fPrecisionShotFOV",
+					"description": ""
+				},
+				{
+					"type": {
+						"name": "bool",
+						"genericName": "bool",
+						"classTypes": [
+							"Primitive"
+						]
+					},
+					"name": "m_autoFitViewportByFOV",
 					"description": ""
 				},
 				{
@@ -93611,7 +95785,7 @@
 			"properties": [],
 			"inputPins": [
 				{
-					"type": "",
+					"type": "ZVariant",
 					"name": "Variant",
 					"description": ""
 				}
@@ -93825,12 +95999,12 @@
 			],
 			"inputPins": [
 				{
-					"type": "",
+					"type": "ZActor",
 					"name": "SetActor",
 					"description": ""
 				},
 				{
-					"type": "",
+					"type": "ZActor",
 					"name": "SetIActor",
 					"description": ""
 				},
@@ -94924,6 +97098,36 @@
 			"inputPins": []
 		},
 		{
+			"name": "ZActorProviderSuspect",
+			"classTypes": [
+				"Class"
+			],
+			"interfaces": [
+				"ZActorProviderSuspect",
+				"IEntity",
+				"IActorProvider"
+			],
+			"baseClasses": [
+				"ZEntityImpl",
+				"IActorProvider"
+			],
+			"properties": [
+				{
+					"type": {
+						"name": "ZEvergreenSuspectHandler",
+						"genericName": "TEntityRef<ZEvergreenSuspectHandler>",
+						"classTypes": [
+							"Class",
+							"Entity"
+						]
+					},
+					"name": "m_rSuspectHandler",
+					"description": ""
+				}
+			],
+			"inputPins": []
+		},
+		{
 			"name": "SCondition_IsValidForSuitcaseAssistance",
 			"classTypes": [
 				"Class"
@@ -95928,7 +98132,7 @@
 			],
 			"inputPins": [
 				{
-					"type": "",
+					"type": "ZString",
 					"name": "SniperScoringEvent",
 					"description": ""
 				}
@@ -96260,12 +98464,12 @@
 					"description": ""
 				},
 				{
-					"type": "",
+					"type": "ZString",
 					"name": "AddActor",
 					"description": ""
 				},
 				{
-					"type": "",
+					"type": "ZString",
 					"name": "RemoveActor",
 					"description": ""
 				},
@@ -96664,12 +98868,12 @@
 					"description": ""
 				},
 				{
-					"type": "",
+					"type": "ZString",
 					"name": "AddActor",
 					"description": ""
 				},
 				{
-					"type": "",
+					"type": "ZString",
 					"name": "RemoveActor",
 					"description": ""
 				},
@@ -97380,12 +99584,12 @@
 			],
 			"inputPins": [
 				{
-					"type": "",
+					"type": "ZString",
 					"name": "IActor",
 					"description": ""
 				},
 				{
-					"type": "",
+					"type": "ZString",
 					"name": "Actor",
 					"description": ""
 				}
@@ -97493,7 +99697,7 @@
 					"description": ""
 				},
 				{
-					"type": "",
+					"type": "ZActor",
 					"name": "ApplyOnIActor",
 					"description": ""
 				}
@@ -97950,12 +100154,12 @@
 			],
 			"inputPins": [
 				{
-					"type": "",
+					"type": "SVector3",
 					"name": "A",
 					"description": ""
 				},
 				{
-					"type": "",
+					"type": "SVector3",
 					"name": "B",
 					"description": ""
 				},
@@ -98259,7 +100463,7 @@
 					"description": ""
 				},
 				{
-					"type": "",
+					"type": "ZActor",
 					"name": "BodyHidden",
 					"description": ""
 				}
@@ -98508,7 +100712,7 @@
 					"description": ""
 				},
 				{
-					"type": "",
+					"type": "ZString",
 					"name": "Request",
 					"description": ""
 				},
@@ -98613,7 +100817,7 @@
 			],
 			"inputPins": [
 				{
-					"type": "",
+					"type": "ZString",
 					"name": "SetGravity",
 					"description": ""
 				}
@@ -98804,6 +101008,27 @@
 			"inputPins": []
 		},
 		{
+			"name": "ZCpdManager",
+			"classTypes": [
+				"Class"
+			],
+			"interfaces": [
+				"ZCpdManager",
+				"IEntity"
+			],
+			"baseClasses": [
+				"ZEntityImpl"
+			],
+			"properties": [],
+			"inputPins": [
+				{
+					"type": "void",
+					"name": "4115961312",
+					"description": ""
+				}
+			]
+		},
+		{
 			"name": "ZBaseCharacter",
 			"classTypes": [
 				"Class"
@@ -98908,17 +101133,17 @@
 			],
 			"inputPins": [
 				{
-					"type": "",
+					"type": "ZString",
 					"name": "4252613213",
 					"description": ""
 				},
 				{
-					"type": "",
+					"type": "ZString",
 					"name": "617630668",
 					"description": ""
 				},
 				{
-					"type": "",
+					"type": "ZString",
 					"name": "CheckShotVolumeIntersection",
 					"description": ""
 				}
@@ -99978,8 +102203,33 @@
 			],
 			"inputPins": [
 				{
-					"type": "",
+					"type": "void",
+					"name": "11826585",
+					"description": ""
+				},
+				{
+					"type": "void",
+					"name": "2073148177",
+					"description": ""
+				},
+				{
+					"type": "ZString",
+					"name": "849479552",
+					"description": ""
+				},
+				{
+					"type": "void",
+					"name": "775194024",
+					"description": ""
+				},
+				{
+					"type": "ZString",
 					"name": "PlaceIntoContainerItem",
+					"description": ""
+				},
+				{
+					"type": "ZString",
+					"name": "122140494",
 					"description": ""
 				},
 				{
@@ -100083,6 +102333,17 @@
 			"inputPins": []
 		},
 		{
+			"name": "TEntityRef<ZWaypointEntity>",
+			"classTypes": [
+				"Class",
+				"Entity"
+			],
+			"interfaces": [],
+			"baseClasses": [],
+			"properties": [],
+			"inputPins": []
+		},
+		{
 			"name": "ZDynamicObject.SArrayTypesRegistrar",
 			"classTypes": [
 				"Class"
@@ -100115,17 +102376,6 @@
 					"description": ""
 				}
 			],
-			"inputPins": []
-		},
-		{
-			"name": "TEntityRef<ZWaypointEntity>",
-			"classTypes": [
-				"Class",
-				"Entity"
-			],
-			"interfaces": [],
-			"baseClasses": [],
-			"properties": [],
 			"inputPins": []
 		},
 		{
@@ -102019,6 +104269,17 @@
 			"inputPins": []
 		},
 		{
+			"name": "TEntityRef<ZEvergreenSuspectHandler>",
+			"classTypes": [
+				"Class",
+				"Entity"
+			],
+			"interfaces": [],
+			"baseClasses": [],
+			"properties": [],
+			"inputPins": []
+		},
+		{
 			"name": "ZValueInt_Set",
 			"classTypes": [
 				"Class"
@@ -102058,7 +104319,7 @@
 			],
 			"inputPins": [
 				{
-					"type": "",
+					"type": "ZString",
 					"name": "SetValue",
 					"description": ""
 				}
@@ -102514,12 +104775,12 @@
 			],
 			"inputPins": [
 				{
-					"type": "",
+					"type": "ZString",
 					"name": "3301792850",
 					"description": ""
 				},
 				{
-					"type": "",
+					"type": "ZString",
 					"name": "1573129704",
 					"description": ""
 				},
@@ -103250,7 +105511,7 @@
 			"properties": [],
 			"inputPins": [
 				{
-					"type": "",
+					"type": "ZString",
 					"name": "In",
 					"description": ""
 				}
@@ -103281,6 +105542,39 @@
 				"ZSituationGroup"
 			],
 			"properties": [],
+			"inputPins": []
+		},
+		{
+			"name": "SClothSheetEntitySaveData",
+			"classTypes": [
+				"Class"
+			],
+			"interfaces": [],
+			"baseClasses": [],
+			"properties": [
+				{
+					"type": {
+						"name": "bool",
+						"genericName": "bool",
+						"classTypes": [
+							"Primitive"
+						]
+					},
+					"name": "m_bSimulationEnabled",
+					"description": ""
+				},
+				{
+					"type": {
+						"name": "bool",
+						"genericName": "bool",
+						"classTypes": [
+							"Primitive"
+						]
+					},
+					"name": "m_bVisible",
+					"description": ""
+				}
+			],
 			"inputPins": []
 		},
 		{
@@ -104086,7 +106380,7 @@
 			"properties": [],
 			"inputPins": [
 				{
-					"type": "",
+					"type": "ZString",
 					"name": "ItemReady",
 					"description": ""
 				}
@@ -104207,7 +106501,7 @@
 					"description": ""
 				},
 				{
-					"type": "",
+					"type": "ZString",
 					"name": "Set",
 					"description": ""
 				},
@@ -104270,6 +106564,44 @@
 			"interfaces": [],
 			"baseClasses": [],
 			"properties": [],
+			"inputPins": []
+		},
+		{
+			"name": "ZActorObstacleBlockageFlagsAspect",
+			"classTypes": [
+				"Class"
+			],
+			"interfaces": [
+				"ZActorObstacleBlockageFlagsAspect",
+				"IEntity"
+			],
+			"baseClasses": [
+				"ZEntityImpl"
+			],
+			"properties": [
+				{
+					"type": {
+						"name": "uint32",
+						"genericName": "uint32",
+						"classTypes": [
+							"Primitive"
+						]
+					},
+					"name": "m_nObstacleBlockageFlags",
+					"description": ""
+				},
+				{
+					"type": {
+						"name": "EActorObstacleBlockage",
+						"genericName": "EActorObstacleBlockage",
+						"classTypes": [
+							"Enum"
+						]
+					},
+					"name": "m_eActorObstacleBlockage",
+					"description": ""
+				}
+			],
 			"inputPins": []
 		},
 		{
@@ -104576,6 +106908,28 @@
 				},
 				{
 					"type": {
+						"name": "EDifficultyLevel",
+						"genericName": "EDifficultyLevel",
+						"classTypes": [
+							"Enum"
+						]
+					},
+					"name": "m_eDifficultyParameterOverride",
+					"description": ""
+				},
+				{
+					"type": {
+						"name": "EDifficultyLevel",
+						"genericName": "EDifficultyLevel",
+						"classTypes": [
+							"Enum"
+						]
+					},
+					"name": "m_eDifficultyBrickOverride",
+					"description": ""
+				},
+				{
+					"type": {
 						"name": "bool",
 						"genericName": "bool",
 						"classTypes": [
@@ -104583,6 +106937,17 @@
 						]
 					},
 					"name": "m_bForceContractEnd",
+					"description": ""
+				},
+				{
+					"type": {
+						"name": "bool",
+						"genericName": "bool",
+						"classTypes": [
+							"Primitive"
+						]
+					},
+					"name": "m_bKeepCurrentStartDisguise",
 					"description": ""
 				}
 			],
@@ -104595,6 +106960,16 @@
 				{
 					"type": "",
 					"name": "329316886",
+					"description": ""
+				},
+				{
+					"type": "int32",
+					"name": "4038897742",
+					"description": ""
+				},
+				{
+					"type": "int32",
+					"name": "3306478563",
 					"description": ""
 				},
 				{
@@ -104742,7 +107117,7 @@
 			],
 			"inputPins": [
 				{
-					"type": "",
+					"type": "ZString",
 					"name": "SetItem",
 					"description": ""
 				},
@@ -105942,6 +108317,17 @@
 				},
 				{
 					"type": {
+						"name": "ZDynamicObject",
+						"genericName": "ZDynamicObject",
+						"classTypes": [
+							"Class"
+						]
+					},
+					"name": "m_aSuspects",
+					"description": ""
+				},
+				{
+					"type": {
 						"name": "bool",
 						"genericName": "bool",
 						"classTypes": [
@@ -106363,7 +108749,7 @@
 					"description": ""
 				},
 				{
-					"type": "",
+					"type": "ZString",
 					"name": "Set",
 					"description": ""
 				},
@@ -106623,7 +109009,7 @@
 			],
 			"inputPins": [
 				{
-					"type": "",
+					"type": "SVector3",
 					"name": "A",
 					"description": ""
 				},
@@ -107127,6 +109513,17 @@
 						]
 					},
 					"name": "m_bUseThousandsSeparator",
+					"description": ""
+				},
+				{
+					"type": {
+						"name": "bool",
+						"genericName": "bool",
+						"classTypes": [
+							"Primitive"
+						]
+					},
+					"name": "m_bShowPositiveSign",
 					"description": ""
 				}
 			],
@@ -108097,6 +110494,17 @@
 						]
 					},
 					"name": "m_bValue",
+					"description": ""
+				},
+				{
+					"type": {
+						"name": "bool",
+						"genericName": "bool",
+						"classTypes": [
+							"Primitive"
+						]
+					},
+					"name": "m_bAnyPausingMenu",
 					"description": ""
 				},
 				{
@@ -109527,7 +111935,7 @@
 			],
 			"inputPins": [
 				{
-					"type": "",
+					"type": "ZVariant",
 					"name": "Variant",
 					"description": ""
 				}
@@ -110275,12 +112683,12 @@
 					"description": ""
 				},
 				{
-					"type": "",
+					"type": "SVector3",
 					"name": "SignalExplosionInCrowd",
 					"description": ""
 				},
 				{
-					"type": "",
+					"type": "SVector3",
 					"name": "1491755924",
 					"description": ""
 				}
@@ -110302,7 +112710,7 @@
 			"properties": [],
 			"inputPins": [
 				{
-					"type": "",
+					"type": "ZString",
 					"name": "ItemReady",
 					"description": ""
 				}
@@ -111393,6 +113801,17 @@
 							"Primitive"
 						]
 					},
+					"name": "m_dtZoomInDelayTime",
+					"description": ""
+				},
+				{
+					"type": {
+						"name": "float32",
+						"genericName": "float32",
+						"classTypes": [
+							"Primitive"
+						]
+					},
 					"name": "m_dtZoomInBlendTime",
 					"description": ""
 				},
@@ -111416,6 +113835,17 @@
 						]
 					},
 					"name": "m_dtZoomPanBlendTime",
+					"description": ""
+				},
+				{
+					"type": {
+						"name": "bool",
+						"genericName": "bool",
+						"classTypes": [
+							"Primitive"
+						]
+					},
+					"name": "m_bSuppressSpatialIcons",
 					"description": ""
 				},
 				{
@@ -111451,6 +113881,17 @@
 						]
 					},
 					"name": "m_dtActionCoolDown",
+					"description": ""
+				},
+				{
+					"type": {
+						"name": "float32",
+						"genericName": "float32",
+						"classTypes": [
+							"Primitive"
+						]
+					},
+					"name": "m_fMouseCursorLockSpeed",
 					"description": ""
 				},
 				{
@@ -112407,17 +114848,6 @@
 			"baseClasses": [
 				"IComponentInterface"
 			],
-			"properties": [],
-			"inputPins": []
-		},
-		{
-			"name": "TEntityRef<ZEvergreenBonusRequirementExclusionGroupConfig>",
-			"classTypes": [
-				"Class",
-				"Entity"
-			],
-			"interfaces": [],
-			"baseClasses": [],
 			"properties": [],
 			"inputPins": []
 		},
@@ -113386,6 +115816,39 @@
 			"inputPins": []
 		},
 		{
+			"name": "ZEvergreenCampaignInfoDataProvider.SCampaignInfo",
+			"classTypes": [
+				"Class"
+			],
+			"interfaces": [],
+			"baseClasses": [],
+			"properties": [
+				{
+					"type": {
+						"name": "int32",
+						"genericName": "int32",
+						"classTypes": [
+							"Primitive"
+						]
+					},
+					"name": "nDifficultyRank",
+					"description": ""
+				},
+				{
+					"type": {
+						"name": "bool",
+						"genericName": "bool",
+						"classTypes": [
+							"Primitive"
+						]
+					},
+					"name": "bHardcore",
+					"description": ""
+				}
+			],
+			"inputPins": []
+		},
+		{
 			"name": "ZEvergreenTravelDestinationReceiverEntity",
 			"classTypes": [
 				"Class"
@@ -113479,7 +115942,7 @@
 			],
 			"inputPins": [
 				{
-					"type": "",
+					"type": "ZString",
 					"name": "QueueHint",
 					"description": ""
 				},
@@ -113748,12 +116211,12 @@
 			],
 			"inputPins": [
 				{
-					"type": "",
+					"type": "ZActor",
 					"name": "AddIntelSpatial",
 					"description": ""
 				},
 				{
-					"type": "",
+					"type": "ZActor",
 					"name": "RemoveIntelSpatial",
 					"description": ""
 				}
@@ -113857,7 +116320,7 @@
 			],
 			"inputPins": [
 				{
-					"type": "",
+					"type": "ZActor",
 					"name": "SetIActor",
 					"description": ""
 				},
@@ -114620,12 +117083,12 @@
 					"description": ""
 				},
 				{
-					"type": "",
+					"type": "ZActor",
 					"name": "2061863157",
 					"description": ""
 				},
 				{
-					"type": "",
+					"type": "ZString",
 					"name": "ChangeHomeGroup",
 					"description": ""
 				}
@@ -115138,7 +117601,7 @@
 			],
 			"inputPins": [
 				{
-					"type": "",
+					"type": "ZVariant",
 					"name": "SignalData",
 					"description": ""
 				}
@@ -115237,7 +117700,7 @@
 			"properties": [],
 			"inputPins": [
 				{
-					"type": "",
+					"type": "ZString",
 					"name": "In",
 					"description": ""
 				}
@@ -115412,7 +117875,7 @@
 			],
 			"inputPins": [
 				{
-					"type": "",
+					"type": "ZString",
 					"name": "In",
 					"description": ""
 				}
@@ -115755,7 +118218,7 @@
 					"description": ""
 				},
 				{
-					"type": "",
+					"type": "ZString",
 					"name": "OpenFraction",
 					"description": ""
 				}
@@ -116958,8 +119421,8 @@
 				},
 				{
 					"type": {
-						"name": "ZEvergreenWorldMapTerritoryDataProvider.SBonusRequirement",
-						"genericName": "TArray<ZEvergreenWorldMapTerritoryDataProvider.SBonusRequirement>",
+						"name": "SBonusRequirementData",
+						"genericName": "TArray<SBonusRequirementData>",
 						"classTypes": [
 							"Array",
 							"Container"
@@ -117529,12 +119992,12 @@
 					"description": ""
 				},
 				{
-					"type": "",
+					"type": "ZActor",
 					"name": "926895941",
 					"description": ""
 				},
 				{
-					"type": "",
+					"type": "ZString",
 					"name": "SetValue",
 					"description": ""
 				},
@@ -118258,6 +120721,74 @@
 			"inputPins": []
 		},
 		{
+			"name": "ZValueContainer_ZRepositoryID",
+			"classTypes": [
+				"Class"
+			],
+			"interfaces": [
+				"ZValueContainer_ZRepositoryID",
+				"IEntity"
+			],
+			"baseClasses": [
+				"ZEntityImpl"
+			],
+			"properties": [
+				{
+					"type": {
+						"name": "bool",
+						"genericName": "bool",
+						"classTypes": [
+							"Primitive"
+						]
+					},
+					"name": "m_RemoveFirstOnly",
+					"description": ""
+				},
+				{
+					"type": {
+						"name": "bool",
+						"genericName": "bool",
+						"classTypes": [
+							"Primitive"
+						]
+					},
+					"name": "m_AllowDuplicates",
+					"description": ""
+				},
+				{
+					"type": {
+						"name": "ZString",
+						"genericName": "ZString",
+						"classTypes": []
+					},
+					"name": "m_ArrayName",
+					"description": ""
+				}
+			],
+			"inputPins": [
+				{
+					"type": "ZString",
+					"name": "Push",
+					"description": ""
+				},
+				{
+					"type": "ZString",
+					"name": "Remove",
+					"description": ""
+				},
+				{
+					"type": "void",
+					"name": "Clear",
+					"description": ""
+				},
+				{
+					"type": "void",
+					"name": "GetValue",
+					"description": ""
+				}
+			]
+		},
+		{
 			"name": "SObjetiveSaveData",
 			"classTypes": [
 				"Class"
@@ -118314,17 +120845,6 @@
 				},
 				{
 					"type": {
-						"name": "int32",
-						"genericName": "int32",
-						"classTypes": [
-							"Primitive"
-						]
-					},
-					"name": "m_exclusionGroup",
-					"description": ""
-				},
-				{
-					"type": {
 						"name": "ZString",
 						"genericName": "ZString",
 						"classTypes": []
@@ -118346,6 +120866,54 @@
 				},
 				{
 					"type": {
+						"name": "TArray",
+						"genericName": "TArray",
+						"classTypes": [
+							"Array",
+							"Container"
+						]
+					},
+					"name": "m_argsTitle",
+					"description": ""
+				},
+				{
+					"type": {
+						"name": "ZEvergreenDestination",
+						"genericName": "TArray<TEntityRef<ZEvergreenDestination>>",
+						"classTypes": [
+							"Array",
+							"Container"
+						]
+					},
+					"name": "m_destinationBlacklist",
+					"description": ""
+				},
+				{
+					"type": {
+						"name": "IValueIntGet",
+						"genericName": "TArray<TEntityRef<IValueIntGet>>",
+						"classTypes": [
+							"Array",
+							"Container"
+						]
+					},
+					"name": "m_crimeSectorBlacklist",
+					"description": ""
+				},
+				{
+					"type": {
+						"name": "TArray",
+						"genericName": "TArray",
+						"classTypes": [
+							"Array",
+							"Container"
+						]
+					},
+					"name": "m_requirementBlacklist",
+					"description": ""
+				},
+				{
+					"type": {
 						"name": "EUIIconLibrary",
 						"genericName": "EUIIconLibrary",
 						"classTypes": [
@@ -118353,6 +120921,17 @@
 						]
 					},
 					"name": "m_icon",
+					"description": ""
+				},
+				{
+					"type": {
+						"name": "bool",
+						"genericName": "bool",
+						"classTypes": [
+							"Primitive"
+						]
+					},
+					"name": "m_killRequirement",
 					"description": ""
 				}
 			],
@@ -119890,12 +122469,12 @@
 			],
 			"inputPins": [
 				{
-					"type": "",
+					"type": "ZActor",
 					"name": "SetIActor",
 					"description": ""
 				},
 				{
-					"type": "",
+					"type": "ZActor",
 					"name": "SetActor",
 					"description": ""
 				},
@@ -120184,6 +122763,74 @@
 			],
 			"properties": [],
 			"inputPins": []
+		},
+		{
+			"name": "ZEvergreenMenuCursorAnchoredSpatialEntity",
+			"classTypes": [
+				"Class"
+			],
+			"interfaces": [
+				"ZEvergreenMenuCursorAnchoredSpatialEntity",
+				"ZSpatialEntity",
+				"IEntity"
+			],
+			"baseClasses": [
+				"ZSpatialEntity"
+			],
+			"properties": [
+				{
+					"type": {
+						"name": "ZEvergreenMenuEntryEntity",
+						"genericName": "TEntityRef<ZEvergreenMenuEntryEntity>",
+						"classTypes": [
+							"Class",
+							"Entity"
+						]
+					},
+					"name": "m_entry",
+					"description": ""
+				},
+				{
+					"type": {
+						"name": "bool",
+						"genericName": "bool",
+						"classTypes": [
+							"Primitive"
+						]
+					},
+					"name": "m_isEnabled",
+					"description": ""
+				},
+				{
+					"type": {
+						"name": "SVector2",
+						"genericName": "SVector2",
+						"classTypes": [
+							"Class"
+						]
+					},
+					"name": "m_fAnchorPoint",
+					"description": ""
+				},
+				{
+					"type": {
+						"name": "float32",
+						"genericName": "float32",
+						"classTypes": [
+							"Primitive"
+						]
+					},
+					"name": "m_pxMargin",
+					"description": ""
+				}
+			],
+			"inputPins": [
+				{
+					"type": "bool",
+					"name": "3228163031",
+					"description": ""
+				}
+			]
 		},
 		{
 			"name": "ZHeroStateConditionEntity",
@@ -121894,12 +124541,12 @@
 			],
 			"inputPins": [
 				{
-					"type": "",
+					"type": "ZActor",
 					"name": "AddActor",
 					"description": ""
 				},
 				{
-					"type": "",
+					"type": "ZActor",
 					"name": "RemoveActor",
 					"description": ""
 				}
@@ -121957,6 +124604,62 @@
 				}
 			],
 			"inputPins": []
+		},
+		{
+			"name": "ZEvergreenCampaignProgressHelperEntity",
+			"classTypes": [
+				"Class"
+			],
+			"interfaces": [
+				"ZEvergreenCampaignProgressHelperEntity",
+				"IEntity"
+			],
+			"baseClasses": [
+				"ZEntityImpl"
+			],
+			"properties": [
+				{
+					"type": {
+						"name": "ZValueInt",
+						"genericName": "TEntityRef<ZValueInt>",
+						"classTypes": [
+							"Class",
+							"Entity"
+						]
+					},
+					"name": "m_ProgressCPD",
+					"description": ""
+				},
+				{
+					"type": {
+						"name": "ZValueInt",
+						"genericName": "TEntityRef<ZValueInt>",
+						"classTypes": [
+							"Class",
+							"Entity"
+						]
+					},
+					"name": "m_StepCPD",
+					"description": ""
+				}
+			],
+			"inputPins": [
+				{
+					"type": "bool",
+					"name": "4229299879",
+					"description": ""
+				},
+				{
+					"type": "void",
+					"name": "40010521",
+					"description": ""
+				},
+				{
+					"type": "void",
+					"name": "Reset",
+					"description": ""
+				}
+			]
 		},
 		{
 			"name": "ZEvergreenCampaignActivationTransmitterEntity",
@@ -122063,32 +124766,32 @@
 					"description": ""
 				},
 				{
-					"type": "",
+					"type": "ZEntityReference",
 					"name": "SetTarget",
 					"description": ""
 				},
 				{
-					"type": "",
+					"type": "ZEntityReference",
 					"name": "2933227972",
 					"description": ""
 				},
 				{
-					"type": "",
+					"type": "ZEntityReference",
 					"name": "829810159",
 					"description": ""
 				},
 				{
-					"type": "",
+					"type": "ZActor",
 					"name": "SetTargetIActor",
 					"description": ""
 				},
 				{
-					"type": "",
+					"type": "ZActor",
 					"name": "SetTargetIActorAndRenew",
 					"description": ""
 				},
 				{
-					"type": "",
+					"type": "ZActor",
 					"name": "SetTargetIActorAndExpire",
 					"description": ""
 				}
@@ -122172,6 +124875,33 @@
 				}
 			],
 			"inputPins": []
+		},
+		{
+			"name": "ZHeroDontDrawInMainCamera",
+			"classTypes": [
+				"Class"
+			],
+			"interfaces": [
+				"ZHeroDontDrawInMainCamera",
+				"ZHeroReference",
+				"IEntity"
+			],
+			"baseClasses": [
+				"ZHeroReference"
+			],
+			"properties": [],
+			"inputPins": [
+				{
+					"type": "void",
+					"name": "Enable",
+					"description": ""
+				},
+				{
+					"type": "void",
+					"name": "Disable",
+					"description": ""
+				}
+			]
 		},
 		{
 			"name": "SMathDistanceSaveData_SVector3",
@@ -122817,7 +125547,7 @@
 			],
 			"inputPins": [
 				{
-					"type": "",
+					"type": "ZActor",
 					"name": "SetSpatial",
 					"description": ""
 				},
@@ -123002,7 +125732,7 @@
 			"properties": [],
 			"inputPins": [
 				{
-					"type": "",
+					"type": "ZString",
 					"name": "In",
 					"description": ""
 				}
@@ -124874,7 +127604,7 @@
 			],
 			"inputPins": [
 				{
-					"type": "",
+					"type": "ZString",
 					"name": "SetMotorsEnabled",
 					"description": ""
 				}
@@ -125033,6 +127763,17 @@
 						]
 					},
 					"name": "m_bNotebookIntelEnabled",
+					"description": ""
+				},
+				{
+					"type": {
+						"name": "bool",
+						"genericName": "bool",
+						"classTypes": [
+							"Primitive"
+						]
+					},
+					"name": "m_bNotebookIntelAutoSelectEnabled",
 					"description": ""
 				},
 				{
@@ -127893,6 +130634,17 @@
 				},
 				{
 					"type": {
+						"name": "bool",
+						"genericName": "bool",
+						"classTypes": [
+							"Primitive"
+						]
+					},
+					"name": "m_bInstinctModeOnly",
+					"description": ""
+				},
+				{
+					"type": {
 						"name": "IBoolCondition",
 						"genericName": "TEntityRef<IBoolCondition>",
 						"classTypes": [
@@ -128621,7 +131373,7 @@
 			"properties": [],
 			"inputPins": [
 				{
-					"type": "",
+					"type": "ZActor",
 					"name": "In",
 					"description": ""
 				}
@@ -129177,7 +131929,7 @@
 					"description": ""
 				},
 				{
-					"type": "",
+					"type": "ZString",
 					"name": "SetIActor",
 					"description": ""
 				}
@@ -129793,7 +132545,7 @@
 			],
 			"inputPins": [
 				{
-					"type": "",
+					"type": "ZVariant",
 					"name": "In",
 					"description": ""
 				},
@@ -131058,7 +133810,7 @@
 			],
 			"inputPins": [
 				{
-					"type": "",
+					"type": "ZString",
 					"name": "SetIActor",
 					"description": ""
 				},
@@ -131564,6 +134316,61 @@
 			]
 		},
 		{
+			"name": "ZEvergreenLocationIntelDataProvider.SData",
+			"classTypes": [
+				"Class"
+			],
+			"interfaces": [],
+			"baseClasses": [],
+			"properties": [
+				{
+					"type": {
+						"name": "int32",
+						"genericName": "int32",
+						"classTypes": [
+							"Primitive"
+						]
+					},
+					"name": "nSuppliers",
+					"description": ""
+				},
+				{
+					"type": {
+						"name": "int32",
+						"genericName": "int32",
+						"classTypes": [
+							"Primitive"
+						]
+					},
+					"name": "nMules",
+					"description": ""
+				},
+				{
+					"type": {
+						"name": "int32",
+						"genericName": "int32",
+						"classTypes": [
+							"Primitive"
+						]
+					},
+					"name": "nSafes",
+					"description": ""
+				},
+				{
+					"type": {
+						"name": "int32",
+						"genericName": "int32",
+						"classTypes": [
+							"Primitive"
+						]
+					},
+					"name": "nTargets",
+					"description": ""
+				}
+			],
+			"inputPins": []
+		},
+		{
 			"name": "ZBoundingBoxApproximationEntity",
 			"classTypes": [
 				"Class"
@@ -131763,6 +134570,18 @@
 							"Entity"
 						]
 					},
+					"name": "m_numSuspects",
+					"description": ""
+				},
+				{
+					"type": {
+						"name": "IValueIntGet",
+						"genericName": "TEntityRef<IValueIntGet>",
+						"classTypes": [
+							"Class",
+							"Entity"
+						]
+					},
 					"name": "m_numStashes",
 					"description": ""
 				},
@@ -131910,7 +134729,7 @@
 			],
 			"inputPins": [
 				{
-					"type": "",
+					"type": "ZString",
 					"name": "3744689365",
 					"description": ""
 				},
@@ -131920,12 +134739,12 @@
 					"description": ""
 				},
 				{
-					"type": "",
+					"type": "ZString",
 					"name": "2228135189",
 					"description": ""
 				},
 				{
-					"type": "",
+					"type": "ZString",
 					"name": "4130340104",
 					"description": ""
 				},
@@ -132497,7 +135316,7 @@
 					"description": ""
 				},
 				{
-					"type": "",
+					"type": "ZString",
 					"name": "SetText",
 					"description": ""
 				}
@@ -132780,12 +135599,12 @@
 			],
 			"inputPins": [
 				{
-					"type": "int64",
+					"type": "",
 					"name": "A",
 					"description": ""
 				},
 				{
-					"type": "int64",
+					"type": "",
 					"name": "B",
 					"description": ""
 				},
@@ -134244,7 +137063,7 @@
 			],
 			"inputPins": [
 				{
-					"type": "",
+					"type": "ZString",
 					"name": "SetRepositoryID",
 					"description": ""
 				},
@@ -135403,7 +138222,7 @@
 					"description": ""
 				},
 				{
-					"type": "int64",
+					"type": "",
 					"name": "ImageRID",
 					"description": ""
 				}
@@ -136531,17 +139350,17 @@
 			],
 			"inputPins": [
 				{
-					"type": "",
+					"type": "ZActor",
 					"name": "SetIActor",
 					"description": ""
 				},
 				{
-					"type": "",
+					"type": "ZString",
 					"name": "SetItem",
 					"description": ""
 				},
 				{
-					"type": "",
+					"type": "ZString",
 					"name": "SetSetpiece",
 					"description": ""
 				},
@@ -136917,12 +139736,12 @@
 					"description": ""
 				},
 				{
-					"type": "",
+					"type": "ZString",
 					"name": "Set",
 					"description": ""
 				},
 				{
-					"type": "",
+					"type": "ZString",
 					"name": "Apply",
 					"description": ""
 				},
@@ -137006,12 +139825,12 @@
 			],
 			"inputPins": [
 				{
-					"type": "",
+					"type": "ZString",
 					"name": "SetItemUsed",
 					"description": ""
 				},
 				{
-					"type": "",
+					"type": "ZString",
 					"name": "SetSetpieceUsed",
 					"description": ""
 				},
@@ -137519,6 +140338,17 @@
 						]
 					},
 					"name": "m_bSynchFrameTimeWhenHidden",
+					"description": ""
+				},
+				{
+					"type": {
+						"name": "bool",
+						"genericName": "bool",
+						"classTypes": [
+							"Primitive"
+						]
+					},
+					"name": "m_bRestorePlayingStateOnSceneReset",
 					"description": ""
 				}
 			],
@@ -139875,7 +142705,7 @@
 			],
 			"inputPins": [
 				{
-					"type": "",
+					"type": "ZString",
 					"name": "SniperScoringEvent",
 					"description": ""
 				}
@@ -140320,17 +143150,17 @@
 			],
 			"inputPins": [
 				{
-					"type": "",
+					"type": "ZActor",
 					"name": "AddActor",
 					"description": ""
 				},
 				{
-					"type": "",
+					"type": "ZActor",
 					"name": "23870719",
 					"description": ""
 				},
 				{
-					"type": "",
+					"type": "ZActor",
 					"name": "RemoveActor",
 					"description": ""
 				},
@@ -141009,6 +143839,37 @@
 			"inputPins": []
 		},
 		{
+			"name": "ZHUDWalkSpeedDataProvider.SData",
+			"classTypes": [
+				"Class"
+			],
+			"interfaces": [],
+			"baseClasses": [],
+			"properties": [
+				{
+					"type": {
+						"name": "bool",
+						"genericName": "bool",
+						"classTypes": [
+							"Primitive"
+						]
+					},
+					"name": "isVisible",
+					"description": ""
+				},
+				{
+					"type": {
+						"name": "ZString",
+						"genericName": "ZString",
+						"classTypes": []
+					},
+					"name": "speed",
+					"description": ""
+				}
+			],
+			"inputPins": []
+		},
+		{
 			"name": "SBehavior_MoveAwayFromCloseCombat",
 			"classTypes": [
 				"Class"
@@ -141214,8 +144075,190 @@
 			"properties": [],
 			"inputPins": [
 				{
-					"type": "",
+					"type": "ZString",
 					"name": "2338152588",
+					"description": ""
+				}
+			]
+		},
+		{
+			"name": "ZEvergreenIntelWallDataProvider",
+			"classTypes": [
+				"Class"
+			],
+			"interfaces": [
+				"ZEvergreenIntelWallDataProvider",
+				"IEntity",
+				"ZUIDataProvider"
+			],
+			"baseClasses": [
+				"ZEntityImpl",
+				"ZUIDataProvider"
+			],
+			"properties": [
+				{
+					"type": {
+						"name": "TEntityRef",
+						"genericName": "TEntityRef",
+						"classTypes": [
+							"Class",
+							"Entity"
+						]
+					},
+					"name": "m_campaignStatus",
+					"description": ""
+				},
+				{
+					"type": {
+						"name": "IValueIntGet",
+						"genericName": "TEntityRef<IValueIntGet>",
+						"classTypes": [
+							"Class",
+							"Entity"
+						]
+					},
+					"name": "m_nRevealedAgendas",
+					"description": ""
+				},
+				{
+					"type": {
+						"name": "IValueIntGet",
+						"genericName": "TEntityRef<IValueIntGet>",
+						"classTypes": [
+							"Class",
+							"Entity"
+						]
+					},
+					"name": "m_nRevealedTells",
+					"description": ""
+				},
+				{
+					"type": {
+						"name": "IValueIntGet",
+						"genericName": "TEntityRef<IValueIntGet>",
+						"classTypes": [
+							"Class",
+							"Entity"
+						]
+					},
+					"name": "m_nRevealedLooks",
+					"description": ""
+				}
+			],
+			"inputPins": [
+				{
+					"type": "bool",
+					"name": "3618339536",
+					"description": ""
+				},
+				{
+					"type": "bool",
+					"name": "3159993781",
+					"description": ""
+				},
+				{
+					"type": "bool",
+					"name": "2994188214",
+					"description": ""
+				},
+				{
+					"type": "bool",
+					"name": "3700780228",
+					"description": ""
+				},
+				{
+					"type": "bool",
+					"name": "3281583628",
+					"description": ""
+				},
+				{
+					"type": "bool",
+					"name": "2709741292",
+					"description": ""
+				},
+				{
+					"type": "bool",
+					"name": "970143574",
+					"description": ""
+				},
+				{
+					"type": "bool",
+					"name": "1342425162",
+					"description": ""
+				},
+				{
+					"type": "bool",
+					"name": "2163518429",
+					"description": ""
+				},
+				{
+					"type": "bool",
+					"name": "2725816573",
+					"description": ""
+				},
+				{
+					"type": "bool",
+					"name": "3464082354",
+					"description": ""
+				},
+				{
+					"type": "bool",
+					"name": "451870639",
+					"description": ""
+				},
+				{
+					"type": "bool",
+					"name": "3690082298",
+					"description": ""
+				},
+				{
+					"type": "bool",
+					"name": "2073556008",
+					"description": ""
+				},
+				{
+					"type": "bool",
+					"name": "1747455002",
+					"description": ""
+				},
+				{
+					"type": "bool",
+					"name": "3267324694",
+					"description": ""
+				},
+				{
+					"type": "bool",
+					"name": "582554542",
+					"description": ""
+				},
+				{
+					"type": "bool",
+					"name": "458955822",
+					"description": ""
+				},
+				{
+					"type": "bool",
+					"name": "1928498071",
+					"description": ""
+				},
+				{
+					"type": "bool",
+					"name": "1988229450",
+					"description": ""
+				},
+				{
+					"type": "bool",
+					"name": "1555316632",
+					"description": ""
+				},
+				{
+					"type": "bool",
+					"name": "601744730",
+					"description": ""
+				},
+				{
+					"type": "bool",
+					"name": "2861064687",
 					"description": ""
 				}
 			]
@@ -141562,7 +144605,7 @@
 			],
 			"inputPins": [
 				{
-					"type": "",
+					"type": "ZString",
 					"name": "Compare",
 					"description": ""
 				}
@@ -142176,7 +145219,7 @@
 			"properties": [],
 			"inputPins": [
 				{
-					"type": "",
+					"type": "ZEntityReference",
 					"name": "ItemReady",
 					"description": ""
 				}
@@ -143301,7 +146344,7 @@
 			],
 			"inputPins": [
 				{
-					"type": "",
+					"type": "ZString",
 					"name": "Value",
 					"description": ""
 				}
@@ -143352,12 +146395,12 @@
 			"properties": [],
 			"inputPins": [
 				{
-					"type": "",
+					"type": "ZActor",
 					"name": "IActor",
 					"description": ""
 				},
 				{
-					"type": "",
+					"type": "ZActor",
 					"name": "Actor",
 					"description": ""
 				}
@@ -144082,7 +147125,7 @@
 			"properties": [],
 			"inputPins": [
 				{
-					"type": "",
+					"type": "ZString",
 					"name": "SetItem",
 					"description": ""
 				},
@@ -144142,12 +147185,12 @@
 					"description": ""
 				},
 				{
-					"type": "",
+					"type": "ZString",
 					"name": "SetItemUsed",
 					"description": ""
 				},
 				{
-					"type": "",
+					"type": "ZString",
 					"name": "SetSetpieceUsed",
 					"description": ""
 				},
@@ -144672,12 +147715,12 @@
 			],
 			"inputPins": [
 				{
-					"type": "",
+					"type": "ZActor",
 					"name": "AddActor",
 					"description": ""
 				},
 				{
-					"type": "",
+					"type": "ZActor",
 					"name": "RemoveActor",
 					"description": ""
 				},
@@ -144871,6 +147914,18 @@
 				},
 				{
 					"type": {
+						"name": "ZOutfitProfessionEntity",
+						"genericName": "TArray<TEntityRef<ZOutfitProfessionEntity>>",
+						"classTypes": [
+							"Array",
+							"Container"
+						]
+					},
+					"name": "m_aEnforcedOutfits",
+					"description": ""
+				},
+				{
+					"type": {
 						"name": "EDamageEvent",
 						"genericName": "EDamageEvent",
 						"classTypes": [
@@ -144969,12 +148024,12 @@
 					"description": ""
 				},
 				{
-					"type": "",
+					"type": "ZActor",
 					"name": "SetActor",
 					"description": ""
 				},
 				{
-					"type": "",
+					"type": "ZActor",
 					"name": "SetIActor",
 					"description": ""
 				},
@@ -144989,12 +148044,12 @@
 					"description": ""
 				},
 				{
-					"type": "",
+					"type": "ZString",
 					"name": "SetItem",
 					"description": ""
 				},
 				{
-					"type": "",
+					"type": "ZString",
 					"name": "SetSetpiece",
 					"description": ""
 				},
@@ -145634,6 +148689,52 @@
 			"inputPins": []
 		},
 		{
+			"name": "ZHUDActorOverheadAnchoredSpatialEntity",
+			"classTypes": [
+				"Class"
+			],
+			"interfaces": [
+				"ZHUDActorOverheadAnchoredSpatialEntity",
+				"ZSpatialEntity",
+				"IEntity"
+			],
+			"baseClasses": [
+				"ZSpatialEntity"
+			],
+			"properties": [
+				{
+					"type": {
+						"name": "IActor",
+						"genericName": "TEntityRef<IActor>",
+						"classTypes": [
+							"Class",
+							"Entity"
+						]
+					},
+					"name": "m_actor",
+					"description": ""
+				},
+				{
+					"type": {
+						"name": "bool",
+						"genericName": "bool",
+						"classTypes": [
+							"Primitive"
+						]
+					},
+					"name": "m_isEnabled",
+					"description": ""
+				}
+			],
+			"inputPins": [
+				{
+					"type": "bool",
+					"name": "2665491478",
+					"description": ""
+				}
+			]
+		},
+		{
 			"name": "TEntityRef<ZPinForward>",
 			"classTypes": [
 				"Class",
@@ -145768,6 +148869,49 @@
 				}
 			],
 			"inputPins": []
+		},
+		{
+			"name": "ZEvergreenVitalInfoEntity",
+			"classTypes": [
+				"Class"
+			],
+			"interfaces": [
+				"ZEvergreenVitalInfoEntity",
+				"IEntity"
+			],
+			"baseClasses": [
+				"ZEntityImpl"
+			],
+			"properties": [
+				{
+					"type": {
+						"name": "ZEvergreenVitalInfoEntity.EVitalInfoType",
+						"genericName": "ZEvergreenVitalInfoEntity.EVitalInfoType",
+						"classTypes": [
+							"Enum"
+						]
+					},
+					"name": "m_infoType",
+					"description": ""
+				}
+			],
+			"inputPins": [
+				{
+					"type": "bool",
+					"name": "3002902989",
+					"description": ""
+				},
+				{
+					"type": "bool",
+					"name": "896875408",
+					"description": ""
+				},
+				{
+					"type": "bool",
+					"name": "108534979",
+					"description": ""
+				}
+			]
 		},
 		{
 			"name": "SHeroEscortSituationActorStateSaveData",
@@ -145953,7 +149097,7 @@
 					"description": ""
 				},
 				{
-					"type": "",
+					"type": "ZString",
 					"name": "SniperScoringEvent",
 					"description": ""
 				}
@@ -146055,7 +149199,30 @@
 			"baseClasses": [
 				"ZEntityImpl"
 			],
-			"properties": [],
+			"properties": [
+				{
+					"type": {
+						"name": "bool",
+						"genericName": "bool",
+						"classTypes": [
+							"Primitive"
+						]
+					},
+					"name": "ShowTargetLockdownAsTargetFleeing",
+					"description": ""
+				},
+				{
+					"type": {
+						"name": "bool",
+						"genericName": "bool",
+						"classTypes": [
+							"Primitive"
+						]
+					},
+					"name": "HideTargetFleeing",
+					"description": ""
+				}
+			],
 			"inputPins": []
 		},
 		{
@@ -146722,32 +149889,32 @@
 					"description": ""
 				},
 				{
-					"type": "",
+					"type": "ZString",
 					"name": "SetText",
 					"description": ""
 				},
 				{
-					"type": "",
+					"type": "ZVariant",
 					"name": "SetArg0",
 					"description": ""
 				},
 				{
-					"type": "",
+					"type": "ZVariant",
 					"name": "SetArg1",
 					"description": ""
 				},
 				{
-					"type": "",
+					"type": "ZVariant",
 					"name": "SetArg2",
 					"description": ""
 				},
 				{
-					"type": "",
+					"type": "ZVariant",
 					"name": "SetArg3",
 					"description": ""
 				},
 				{
-					"type": "",
+					"type": "ZVariant",
 					"name": "SetArg4",
 					"description": ""
 				}
@@ -146982,7 +150149,7 @@
 			],
 			"inputPins": [
 				{
-					"type": "",
+					"type": "ZString",
 					"name": "RepositoryId",
 					"description": ""
 				}
@@ -147212,7 +150379,7 @@
 			],
 			"inputPins": [
 				{
-					"type": "",
+					"type": "SVector3",
 					"name": "SetGravity",
 					"description": ""
 				},
@@ -147244,7 +150411,7 @@
 			"properties": [],
 			"inputPins": [
 				{
-					"type": "",
+					"type": "ZString",
 					"name": "Hit",
 					"description": ""
 				}
@@ -147441,7 +150608,7 @@
 			],
 			"inputPins": [
 				{
-					"type": "",
+					"type": "ZActor",
 					"name": "SetIActor",
 					"description": ""
 				},
@@ -147736,12 +150903,12 @@
 			"properties": [],
 			"inputPins": [
 				{
-					"type": "",
+					"type": "ZActor",
 					"name": "SetAcknowledgingActor",
 					"description": ""
 				},
 				{
-					"type": "",
+					"type": "ZActor",
 					"name": "SetTargetActor",
 					"description": ""
 				},
@@ -147785,7 +150952,7 @@
 			],
 			"inputPins": [
 				{
-					"type": "",
+					"type": "ZString",
 					"name": "BeforeShatter",
 					"description": ""
 				},
@@ -147879,7 +151046,7 @@
 			],
 			"inputPins": [
 				{
-					"type": "",
+					"type": "ZActor",
 					"name": "SetIActor",
 					"description": ""
 				},
@@ -148399,14 +151566,26 @@
 				},
 				{
 					"type": {
-						"name": "ZKeywordEntity",
-						"genericName": "TArray<TEntityRef<ZKeywordEntity>>",
+						"name": "ZSpatialEntity",
+						"genericName": "TEntityRef<ZSpatialEntity>",
 						"classTypes": [
-							"Array",
-							"Container"
+							"Class",
+							"Entity"
 						]
 					},
-					"name": "m_aTargetTypes",
+					"name": "m_TransformParent",
+					"description": ""
+				},
+				{
+					"type": {
+						"name": "ZRandomSelector",
+						"genericName": "TEntityRef<ZRandomSelector>",
+						"classTypes": [
+							"Class",
+							"Entity"
+						]
+					},
+					"name": "m_TargetTypeSelector",
 					"description": ""
 				},
 				{
@@ -148447,8 +151626,8 @@
 				},
 				{
 					"type": {
-						"name": "ZActor",
-						"genericName": "TArray<TEntityRef<ZActor>>",
+						"name": "ZEverGreenSuspectDescriptor",
+						"genericName": "TArray<TEntityRef<ZEverGreenSuspectDescriptor>>",
 						"classTypes": [
 							"Array",
 							"Container"
@@ -148493,7 +151672,7 @@
 			],
 			"inputPins": [
 				{
-					"type": "",
+					"type": "ZString",
 					"name": "LoadScene",
 					"description": ""
 				},
@@ -149874,6 +153053,11 @@
 			],
 			"inputPins": [
 				{
+					"type": "ZString",
+					"name": "2897666998",
+					"description": ""
+				},
+				{
 					"type": "void",
 					"name": "Evacuate",
 					"description": ""
@@ -150921,7 +154105,7 @@
 			],
 			"inputPins": [
 				{
-					"type": "",
+					"type": "ZString",
 					"name": "SetValue",
 					"description": ""
 				},
@@ -150967,6 +154151,55 @@
 			],
 			"properties": [],
 			"inputPins": []
+		},
+		{
+			"name": "ZEvergreenGearUnlockHasMasteryInfo",
+			"classTypes": [
+				"Class"
+			],
+			"interfaces": [
+				"ZEvergreenGearUnlockHasMasteryInfo",
+				"IEntity",
+				"IBoolCondition",
+				"IEnableConditionListener"
+			],
+			"baseClasses": [
+				"ZEntityImpl",
+				"IBoolCondition",
+				"IEnableConditionListener"
+			],
+			"properties": [
+				{
+					"type": {
+						"name": "ZItemRepositoryKeyEntity",
+						"genericName": "TEntityRef<ZItemRepositoryKeyEntity>",
+						"classTypes": [
+							"Class",
+							"Entity"
+						]
+					},
+					"name": "m_itemRepositoryKey",
+					"description": ""
+				},
+				{
+					"type": {
+						"name": "bool",
+						"genericName": "bool",
+						"classTypes": [
+							"Primitive"
+						]
+					},
+					"name": "m_bValue",
+					"description": ""
+				}
+			],
+			"inputPins": [
+				{
+					"type": "void",
+					"name": "Get",
+					"description": ""
+				}
+			]
 		},
 		{
 			"name": "ZHM5WeaponBasicConfigEntity",
@@ -151687,6 +154920,17 @@
 							"Primitive"
 						]
 					},
+					"name": "m_dtDelay",
+					"description": ""
+				},
+				{
+					"type": {
+						"name": "float32",
+						"genericName": "float32",
+						"classTypes": [
+							"Primitive"
+						]
+					},
 					"name": "m_dtBlendIn",
 					"description": ""
 				},
@@ -151996,7 +155240,7 @@
 			],
 			"inputPins": [
 				{
-					"type": "",
+					"type": "ZString",
 					"name": "SetVisible",
 					"description": ""
 				},
@@ -152142,18 +155386,39 @@
 			],
 			"inputPins": [
 				{
-					"type": "",
+					"type": "SVector3",
 					"name": "SetColorA",
 					"description": ""
 				},
 				{
-					"type": "",
+					"type": "SVector3",
 					"name": "SetColorB",
 					"description": ""
 				},
 				{
 					"type": "bool",
 					"name": "SetInterpolate",
+					"description": ""
+				}
+			]
+		},
+		{
+			"name": "ZEntitlementConditionPollEntity",
+			"classTypes": [
+				"Class"
+			],
+			"interfaces": [
+				"ZEntitlementConditionPollEntity",
+				"IEntity"
+			],
+			"baseClasses": [
+				"ZEntityImpl"
+			],
+			"properties": [],
+			"inputPins": [
+				{
+					"type": "ZString",
+					"name": "GetValue",
 					"description": ""
 				}
 			]
@@ -152380,12 +155645,12 @@
 			],
 			"inputPins": [
 				{
-					"type": "",
+					"type": "ZString",
 					"name": "SetItemUsed",
 					"description": ""
 				},
 				{
-					"type": "",
+					"type": "ZString",
 					"name": "SetSetpieceUsed",
 					"description": ""
 				},
@@ -153425,6 +156690,35 @@
 			"inputPins": []
 		},
 		{
+			"name": "SBonusRequirementData",
+			"classTypes": [
+				"Class"
+			],
+			"interfaces": [],
+			"baseClasses": [],
+			"properties": [
+				{
+					"type": {
+						"name": "ZString",
+						"genericName": "ZString",
+						"classTypes": []
+					},
+					"name": "lstrTitle",
+					"description": ""
+				},
+				{
+					"type": {
+						"name": "ZString",
+						"genericName": "ZString",
+						"classTypes": []
+					},
+					"name": "icon",
+					"description": ""
+				}
+			],
+			"inputPins": []
+		},
+		{
 			"name": "ZVRConfigCameraMode",
 			"classTypes": [
 				"Class"
@@ -153612,7 +156906,7 @@
 			],
 			"inputPins": [
 				{
-					"type": "",
+					"type": "ZString",
 					"name": "TransmitEvent",
 					"description": ""
 				}
@@ -154018,7 +157312,7 @@
 			],
 			"inputPins": [
 				{
-					"type": "",
+					"type": "ZString",
 					"name": "SetIActor",
 					"description": ""
 				}
@@ -154284,6 +157578,18 @@
 				},
 				{
 					"type": {
+						"name": "TResourcePtr",
+						"genericName": "TResourcePtr",
+						"classTypes": [
+							"Class",
+							"Resource"
+						]
+					},
+					"name": "m_sweetText",
+					"description": ""
+				},
+				{
+					"type": {
 						"name": "TArray",
 						"genericName": "TArray",
 						"classTypes": [
@@ -154297,8 +157603,13 @@
 			],
 			"inputPins": [
 				{
-					"type": "",
+					"type": "ZString",
 					"name": "SetValue",
+					"description": ""
+				},
+				{
+					"type": "ZString",
+					"name": "2751054893",
 					"description": ""
 				}
 			]
@@ -154343,7 +157654,7 @@
 			],
 			"inputPins": [
 				{
-					"type": "",
+					"type": "ZActor",
 					"name": "TransmitEvent",
 					"description": ""
 				}
@@ -154883,6 +158194,51 @@
 				}
 			],
 			"inputPins": []
+		},
+		{
+			"name": "ZEvergreenCampaignStatusPollString",
+			"classTypes": [
+				"Class"
+			],
+			"interfaces": [
+				"ZEvergreenCampaignStatusPollString",
+				"IEntity"
+			],
+			"baseClasses": [
+				"ZEntityImpl"
+			],
+			"properties": [
+				{
+					"type": {
+						"name": "TEntityRef",
+						"genericName": "TEntityRef",
+						"classTypes": [
+							"Class",
+							"Entity"
+						]
+					},
+					"name": "m_subject",
+					"description": ""
+				},
+				{
+					"type": {
+						"name": "ZEvergreenCampaignStatusPollString.EQuery",
+						"genericName": "ZEvergreenCampaignStatusPollString.EQuery",
+						"classTypes": [
+							"Enum"
+						]
+					},
+					"name": "m_query",
+					"description": ""
+				}
+			],
+			"inputPins": [
+				{
+					"type": "void",
+					"name": "Get",
+					"description": ""
+				}
+			]
 		},
 		{
 			"name": "ZTrajectoryTrackBase",
@@ -156568,7 +159924,7 @@
 					"description": ""
 				},
 				{
-					"type": "",
+					"type": "ZString",
 					"name": "SetSpatialBlurCenter",
 					"description": ""
 				},
@@ -156996,6 +160352,17 @@
 					},
 					"name": "m_bForceHideLoadingIndicator",
 					"description": ""
+				},
+				{
+					"type": {
+						"name": "bool",
+						"genericName": "bool",
+						"classTypes": [
+							"Primitive"
+						]
+					},
+					"name": "m_bShowTipsBackground",
+					"description": ""
 				}
 			],
 			"inputPins": [
@@ -157210,7 +160577,7 @@
 			],
 			"inputPins": [
 				{
-					"type": "",
+					"type": "ZActor",
 					"name": "SetIActor",
 					"description": ""
 				},
@@ -157324,7 +160691,7 @@
 			],
 			"inputPins": [
 				{
-					"type": "",
+					"type": "ZString",
 					"name": "EventPos",
 					"description": ""
 				}
@@ -157954,6 +161321,86 @@
 			"inputPins": []
 		},
 		{
+			"name": "ZUIBusyStateEntity",
+			"classTypes": [
+				"Class"
+			],
+			"interfaces": [
+				"ZUIBusyStateEntity",
+				"IEntity"
+			],
+			"baseClasses": [
+				"ZEntityImpl"
+			],
+			"properties": [
+				{
+					"type": {
+						"name": "EUIBusyState",
+						"genericName": "EUIBusyState",
+						"classTypes": [
+							"Enum"
+						]
+					},
+					"name": "m_State",
+					"description": ""
+				},
+				{
+					"type": {
+						"name": "bool",
+						"genericName": "bool",
+						"classTypes": [
+							"Primitive"
+						]
+					},
+					"name": "m_Discrete",
+					"description": ""
+				},
+				{
+					"type": {
+						"name": "bool",
+						"genericName": "bool",
+						"classTypes": [
+							"Primitive"
+						]
+					},
+					"name": "m_BlockInputs",
+					"description": ""
+				},
+				{
+					"type": {
+						"name": "bool",
+						"genericName": "bool",
+						"classTypes": [
+							"Primitive"
+						]
+					},
+					"name": "m_PauseGame",
+					"description": ""
+				},
+				{
+					"type": {
+						"name": "ZString",
+						"genericName": "ZString",
+						"classTypes": []
+					},
+					"name": "m_CustomMessage",
+					"description": ""
+				}
+			],
+			"inputPins": [
+				{
+					"type": "void",
+					"name": "Push",
+					"description": ""
+				},
+				{
+					"type": "void",
+					"name": "Pop",
+					"description": ""
+				}
+			]
+		},
+		{
 			"name": "SBehaviorTreeEvaluationLog",
 			"classTypes": [
 				"Class"
@@ -158097,6 +161544,53 @@
 				{
 					"type": "void",
 					"name": "Clear",
+					"description": ""
+				}
+			]
+		},
+		{
+			"name": "ZEvergreenEntitlementEnumEntity",
+			"classTypes": [
+				"Class"
+			],
+			"interfaces": [
+				"ZEvergreenEntitlementEnumEntity",
+				"IEntity",
+				"IValueIntGet"
+			],
+			"baseClasses": [
+				"ZEntityImpl",
+				"IValueIntGet"
+			],
+			"properties": [
+				{
+					"type": {
+						"name": "int32",
+						"genericName": "int32",
+						"classTypes": [
+							"Primitive"
+						]
+					},
+					"name": "m_entitlement",
+					"description": ""
+				},
+				{
+					"type": {
+						"name": "TResourcePtr",
+						"genericName": "TResourcePtr",
+						"classTypes": [
+							"Class",
+							"Resource"
+						]
+					},
+					"name": "m_pEnumType",
+					"description": ""
+				}
+			],
+			"inputPins": [
+				{
+					"type": "void",
+					"name": "Get",
 					"description": ""
 				}
 			]
@@ -159473,6 +162967,51 @@
 			"inputPins": []
 		},
 		{
+			"name": "ZEvergreenCampaignStatusPollInt",
+			"classTypes": [
+				"Class"
+			],
+			"interfaces": [
+				"ZEvergreenCampaignStatusPollInt",
+				"IEntity"
+			],
+			"baseClasses": [
+				"ZEntityImpl"
+			],
+			"properties": [
+				{
+					"type": {
+						"name": "TEntityRef",
+						"genericName": "TEntityRef",
+						"classTypes": [
+							"Class",
+							"Entity"
+						]
+					},
+					"name": "m_subject",
+					"description": ""
+				},
+				{
+					"type": {
+						"name": "ZEvergreenCampaignStatusPollInt.EQuery",
+						"genericName": "ZEvergreenCampaignStatusPollInt.EQuery",
+						"classTypes": [
+							"Enum"
+						]
+					},
+					"name": "m_query",
+					"description": ""
+				}
+			],
+			"inputPins": [
+				{
+					"type": "void",
+					"name": "Get",
+					"description": ""
+				}
+			]
+		},
+		{
 			"name": "TEntityRef<ZHM5FixedCamProfileEntity>",
 			"classTypes": [
 				"Class",
@@ -159598,11 +163137,22 @@
 					},
 					"name": "m_fProximityTriggerDistance",
 					"description": ""
+				},
+				{
+					"type": {
+						"name": "bool",
+						"genericName": "bool",
+						"classTypes": [
+							"Primitive"
+						]
+					},
+					"name": "m_bIsEvergreenMenuSpatial",
+					"description": ""
 				}
 			],
 			"inputPins": [
 				{
-					"type": "",
+					"type": "ZEntityReference",
 					"name": "SetSpatial",
 					"description": ""
 				}
@@ -159728,7 +163278,13 @@
 					"description": ""
 				}
 			],
-			"inputPins": []
+			"inputPins": [
+				{
+					"type": "bool",
+					"name": "RemovePhysics",
+					"description": ""
+				}
+			]
 		},
 		{
 			"name": "ZHM5GlobalRumbleControllerVR",
@@ -160567,44 +164123,6 @@
 			]
 		},
 		{
-			"name": "ZEvergreenBonusRequirementExclusionGroupConfig",
-			"classTypes": [
-				"Class"
-			],
-			"interfaces": [
-				"ZEvergreenBonusRequirementExclusionGroupConfig",
-				"IEntity"
-			],
-			"baseClasses": [
-				"ZEntityImpl"
-			],
-			"properties": [
-				{
-					"type": {
-						"name": "int32",
-						"genericName": "int32",
-						"classTypes": [
-							"Primitive"
-						]
-					},
-					"name": "m_Group",
-					"description": ""
-				},
-				{
-					"type": {
-						"name": "int32",
-						"genericName": "int32",
-						"classTypes": [
-							"Primitive"
-						]
-					},
-					"name": "m_MaxActive",
-					"description": ""
-				}
-			],
-			"inputPins": []
-		},
-		{
 			"name": "ZStateControllerEntity",
 			"classTypes": [
 				"Class"
@@ -161124,7 +164642,7 @@
 			],
 			"inputPins": [
 				{
-					"type": "",
+					"type": "ZString",
 					"name": "Color",
 					"description": ""
 				}
@@ -161511,7 +165029,7 @@
 			],
 			"inputPins": [
 				{
-					"type": "",
+					"type": "ZString",
 					"name": "HitInfo",
 					"description": ""
 				}
@@ -161659,7 +165177,7 @@
 			"properties": [],
 			"inputPins": [
 				{
-					"type": "",
+					"type": "SVector3",
 					"name": "In",
 					"description": ""
 				}
@@ -162122,67 +165640,67 @@
 			],
 			"inputPins": [
 				{
-					"type": "",
+					"type": "ZString",
 					"name": "Accident",
 					"description": ""
 				},
 				{
-					"type": "",
+					"type": "ZString",
 					"name": "SomeonePacified",
 					"description": ""
 				},
 				{
-					"type": "",
+					"type": "ZString",
 					"name": "SomeoneDied",
 					"description": ""
 				},
 				{
-					"type": "",
+					"type": "ZString",
 					"name": "SomeoneScared",
 					"description": ""
 				},
 				{
-					"type": "",
+					"type": "ZString",
 					"name": "ShotFired",
 					"description": ""
 				},
 				{
-					"type": "",
+					"type": "ZString",
 					"name": "ShotFiredIntoCrowd",
 					"description": ""
 				},
 				{
-					"type": "",
+					"type": "ZString",
 					"name": "ExplosionInCrowd",
 					"description": ""
 				},
 				{
-					"type": "",
+					"type": "ZString",
 					"name": "SomeonePushed",
 					"description": ""
 				},
 				{
-					"type": "",
+					"type": "ZString",
 					"name": "NPCAlerted",
 					"description": ""
 				},
 				{
-					"type": "",
+					"type": "ZString",
 					"name": "NPCCivilianAlerted",
 					"description": ""
 				},
 				{
-					"type": "",
+					"type": "ZString",
 					"name": "NPCScared",
 					"description": ""
 				},
 				{
-					"type": "",
+					"type": "ZString",
 					"name": "NPCCivilianScared",
 					"description": ""
 				},
 				{
-					"type": "",
+					"type": "ZString",
 					"name": "NPCDead",
 					"description": ""
 				}
@@ -162427,12 +165945,12 @@
 			],
 			"inputPins": [
 				{
-					"type": "",
+					"type": "SVector3",
 					"name": "A",
 					"description": ""
 				},
 				{
-					"type": "",
+					"type": "SVector3",
 					"name": "B",
 					"description": ""
 				},
@@ -164341,7 +167859,7 @@
 			],
 			"inputPins": [
 				{
-					"type": "",
+					"type": "ZString",
 					"name": "Color",
 					"description": ""
 				},
@@ -164610,7 +168128,7 @@
 			],
 			"inputPins": [
 				{
-					"type": "",
+					"type": "ZActor",
 					"name": "SetIActor",
 					"description": ""
 				},
@@ -164975,12 +168493,12 @@
 					"description": ""
 				},
 				{
-					"type": "",
+					"type": "ZActor",
 					"name": "AddActor",
 					"description": ""
 				},
 				{
-					"type": "",
+					"type": "ZActor",
 					"name": "RemoveActor",
 					"description": ""
 				}
@@ -165631,7 +169149,7 @@
 			],
 			"inputPins": [
 				{
-					"type": "",
+					"type": "ZEntityReference",
 					"name": "Evaluate",
 					"description": ""
 				},
@@ -166712,7 +170230,7 @@
 					"description": ""
 				},
 				{
-					"type": "",
+					"type": "ZString",
 					"name": "Set",
 					"description": ""
 				},
@@ -166911,7 +170429,7 @@
 			],
 			"inputPins": [
 				{
-					"type": "",
+					"type": "ZString",
 					"name": "SetMultiplier",
 					"description": ""
 				}
@@ -166945,7 +170463,7 @@
 			],
 			"inputPins": [
 				{
-					"type": "",
+					"type": "ZActor",
 					"name": "SetFromIActor",
 					"description": ""
 				},
@@ -167315,42 +170833,42 @@
 			],
 			"inputPins": [
 				{
-					"type": "",
+					"type": "ZString",
 					"name": "ApplyVelocity",
 					"description": ""
 				},
 				{
-					"type": "",
+					"type": "ZString",
 					"name": "SetVelocity",
 					"description": ""
 				},
 				{
-					"type": "",
+					"type": "ZString",
 					"name": "ApplyImpulse",
 					"description": ""
 				},
 				{
-					"type": "",
+					"type": "ZString",
 					"name": "ApplyForce",
 					"description": ""
 				},
 				{
-					"type": "",
+					"type": "ZString",
 					"name": "ApplyTorqueImpulse",
 					"description": ""
 				},
 				{
-					"type": "",
+					"type": "ZString",
 					"name": "ApplyTorque",
 					"description": ""
 				},
 				{
-					"type": "",
+					"type": "ZString",
 					"name": "SetOffset",
 					"description": ""
 				},
 				{
-					"type": "",
+					"type": "ZString",
 					"name": "SetTimerEnabled",
 					"description": ""
 				},
@@ -168316,7 +171834,7 @@
 			],
 			"inputPins": [
 				{
-					"type": "",
+					"type": "ZString",
 					"name": "In",
 					"description": ""
 				}
@@ -168754,17 +172272,17 @@
 			],
 			"inputPins": [
 				{
-					"type": "",
+					"type": "ZActor",
 					"name": "SetActor",
 					"description": ""
 				},
 				{
-					"type": "",
+					"type": "ZActor",
 					"name": "AddActor",
 					"description": ""
 				},
 				{
-					"type": "",
+					"type": "ZActor",
 					"name": "RemoveActor",
 					"description": ""
 				},
@@ -169261,7 +172779,7 @@
 					"description": ""
 				},
 				{
-					"type": "",
+					"type": "ZVariant",
 					"name": "SetValue",
 					"description": ""
 				}
@@ -169340,12 +172858,12 @@
 			],
 			"inputPins": [
 				{
-					"type": "int64",
+					"type": "",
 					"name": "A",
 					"description": ""
 				},
 				{
-					"type": "int64",
+					"type": "",
 					"name": "B",
 					"description": ""
 				}
@@ -169973,7 +173491,7 @@
 			],
 			"inputPins": [
 				{
-					"type": "",
+					"type": "ZString",
 					"name": "SetSoundEnabled",
 					"description": ""
 				}
@@ -170262,6 +173780,17 @@
 			"inputPins": []
 		},
 		{
+			"name": "TEntityRef<ZRandomSelector>",
+			"classTypes": [
+				"Class",
+				"Entity"
+			],
+			"interfaces": [],
+			"baseClasses": [],
+			"properties": [],
+			"inputPins": []
+		},
+		{
 			"name": "ZSmoothOperator",
 			"classTypes": [
 				"Class"
@@ -170414,22 +173943,22 @@
 			],
 			"inputPins": [
 				{
-					"type": "",
+					"type": "SVector3",
 					"name": "A",
 					"description": ""
 				},
 				{
-					"type": "",
+					"type": "SVector3",
 					"name": "B",
 					"description": ""
 				},
 				{
-					"type": "",
+					"type": "SVector3",
 					"name": "C",
 					"description": ""
 				},
 				{
-					"type": "",
+					"type": "SVector3",
 					"name": "D",
 					"description": ""
 				},
@@ -170694,6 +174223,45 @@
 						]
 					},
 					"name": "m_isProcInputRequired",
+					"description": ""
+				}
+			],
+			"inputPins": []
+		},
+		{
+			"name": "ZCameraAutoFitViewportByFovEntity",
+			"classTypes": [
+				"Class"
+			],
+			"interfaces": [
+				"ZCameraAutoFitViewportByFovEntity",
+				"IEntity"
+			],
+			"baseClasses": [
+				"ZEntityImpl"
+			],
+			"properties": [
+				{
+					"type": {
+						"name": "ZCameraEntity",
+						"genericName": "TEntityRef<ZCameraEntity>",
+						"classTypes": [
+							"Class",
+							"Entity"
+						]
+					},
+					"name": "m_pCamera",
+					"description": ""
+				},
+				{
+					"type": {
+						"name": "float32",
+						"genericName": "float32",
+						"classTypes": [
+							"Primitive"
+						]
+					},
+					"name": "m_fovYDeg",
 					"description": ""
 				}
 			],
@@ -170988,6 +174556,17 @@
 						]
 					},
 					"name": "m_bSignalsInEditMode",
+					"description": ""
+				},
+				{
+					"type": {
+						"name": "bool",
+						"genericName": "bool",
+						"classTypes": [
+							"Primitive"
+						]
+					},
+					"name": "m_bDeferChanges",
 					"description": ""
 				}
 			],
@@ -171714,7 +175293,7 @@
 			"properties": [],
 			"inputPins": [
 				{
-					"type": "",
+					"type": "ZVariant",
 					"name": "In",
 					"description": ""
 				}
@@ -172506,17 +176085,17 @@
 			],
 			"inputPins": [
 				{
-					"type": "",
+					"type": "ZString",
 					"name": "SendRequest",
 					"description": ""
 				},
 				{
-					"type": "",
+					"type": "ZString",
 					"name": "SetControlParameter",
 					"description": ""
 				},
 				{
-					"type": "",
+					"type": "ZString",
 					"name": "SetInstantiateNetwork",
 					"description": ""
 				}
@@ -173932,6 +177511,105 @@
 						]
 					},
 					"name": "m_fGlowContractTargetSpecialAlternate",
+					"description": ""
+				},
+				{
+					"type": {
+						"name": "SColorRGBA",
+						"genericName": "SColorRGBA",
+						"classTypes": [
+							"Class"
+						]
+					},
+					"name": "m_GlowContractSuspectColor",
+					"description": ""
+				},
+				{
+					"type": {
+						"name": "SColorRGBA",
+						"genericName": "SColorRGBA",
+						"classTypes": [
+							"Class"
+						]
+					},
+					"name": "m_GlowContractSuspectOutlineColor",
+					"description": ""
+				},
+				{
+					"type": {
+						"name": "SColorRGBA",
+						"genericName": "SColorRGBA",
+						"classTypes": [
+							"Class"
+						]
+					},
+					"name": "m_GlowContractSuspectUnconsciousColor",
+					"description": ""
+				},
+				{
+					"type": {
+						"name": "SColorRGBA",
+						"genericName": "SColorRGBA",
+						"classTypes": [
+							"Class"
+						]
+					},
+					"name": "m_GlowContractSuspectUnconsciousOutlineColor",
+					"description": ""
+				},
+				{
+					"type": {
+						"name": "float32",
+						"genericName": "float32",
+						"classTypes": [
+							"Primitive"
+						]
+					},
+					"name": "m_fGlowContractSuspectOutlineWidth",
+					"description": ""
+				},
+				{
+					"type": {
+						"name": "uint32",
+						"genericName": "uint32",
+						"classTypes": [
+							"Primitive"
+						]
+					},
+					"name": "m_nGlowContractSuspectFadeSpeed",
+					"description": ""
+				},
+				{
+					"type": {
+						"name": "SVector2",
+						"genericName": "SVector2",
+						"classTypes": [
+							"Class"
+						]
+					},
+					"name": "m_vGlowContractSuspectVignetteRadii",
+					"description": ""
+				},
+				{
+					"type": {
+						"name": "SVector2",
+						"genericName": "SVector2",
+						"classTypes": [
+							"Class"
+						]
+					},
+					"name": "m_vGlowContractSuspectFadeNearFar",
+					"description": ""
+				},
+				{
+					"type": {
+						"name": "float32",
+						"genericName": "float32",
+						"classTypes": [
+							"Primitive"
+						]
+					},
+					"name": "m_fGlowContractSuspectAlternate",
 					"description": ""
 				},
 				{
@@ -175418,6 +179096,17 @@
 					},
 					"name": "m_bEnableCloth",
 					"description": ""
+				},
+				{
+					"type": {
+						"name": "bool",
+						"genericName": "bool",
+						"classTypes": [
+							"Primitive"
+						]
+					},
+					"name": "m_bEnableShadowPrioritization",
+					"description": ""
 				}
 			],
 			"inputPins": [
@@ -175432,42 +179121,42 @@
 					"description": ""
 				},
 				{
-					"type": "",
+					"type": "SVector3",
 					"name": "ShaderColor0",
 					"description": ""
 				},
 				{
-					"type": "",
+					"type": "SVector3",
 					"name": "ShaderColor1",
 					"description": ""
 				},
 				{
-					"type": "",
+					"type": "SVector3",
 					"name": "ShaderColor2",
 					"description": ""
 				},
 				{
-					"type": "",
+					"type": "SVector3",
 					"name": "ShaderColor3",
 					"description": ""
 				},
 				{
-					"type": "",
+					"type": "SVector3",
 					"name": "ShaderColor4",
 					"description": ""
 				},
 				{
-					"type": "",
+					"type": "SVector3",
 					"name": "ShaderColor5",
 					"description": ""
 				},
 				{
-					"type": "",
+					"type": "SVector3",
 					"name": "ShaderColor6",
 					"description": ""
 				},
 				{
-					"type": "",
+					"type": "SVector3",
 					"name": "ShaderColor7",
 					"description": ""
 				}
@@ -176312,7 +180001,7 @@
 			],
 			"inputPins": [
 				{
-					"type": "",
+					"type": "ZString",
 					"name": "SetSoundEnabled",
 					"description": ""
 				}
@@ -176671,12 +180360,12 @@
 			"properties": [],
 			"inputPins": [
 				{
-					"type": "",
+					"type": "ZString",
 					"name": "GetPositionOf",
 					"description": ""
 				},
 				{
-					"type": "",
+					"type": "ZString",
 					"name": "SetIActor",
 					"description": ""
 				}
@@ -176871,7 +180560,7 @@
 			],
 			"inputPins": [
 				{
-					"type": "",
+					"type": "ZString",
 					"name": "SetItem",
 					"description": ""
 				},
@@ -177618,12 +181307,12 @@
 			],
 			"inputPins": [
 				{
-					"type": "",
+					"type": "ZString",
 					"name": "HideBone",
 					"description": ""
 				},
 				{
-					"type": "",
+					"type": "ZString",
 					"name": "ShowBone",
 					"description": ""
 				},
@@ -177750,7 +181439,7 @@
 			],
 			"inputPins": [
 				{
-					"type": "",
+					"type": "ZString",
 					"name": "Color",
 					"description": ""
 				},
@@ -178461,7 +182150,7 @@
 					"description": ""
 				},
 				{
-					"type": "",
+					"type": "ZString",
 					"name": "ActivateInfo",
 					"description": ""
 				},
@@ -179036,7 +182725,7 @@
 					"description": ""
 				},
 				{
-					"type": "",
+					"type": "ZString",
 					"name": "Set",
 					"description": ""
 				},
@@ -179959,6 +183648,22 @@
 			"inputPins": []
 		},
 		{
+			"name": "ZHM5CrippleSupportItems",
+			"classTypes": [
+				"Class"
+			],
+			"interfaces": [
+				"ZHM5CrippleSupportItems",
+				"ZHeroReference",
+				"IEntity"
+			],
+			"baseClasses": [
+				"ZHeroReference"
+			],
+			"properties": [],
+			"inputPins": []
+		},
+		{
 			"name": "ZScreenplayRole2",
 			"classTypes": [
 				"Class"
@@ -180323,6 +184028,36 @@
 			"interfaces": [],
 			"baseClasses": [],
 			"properties": [],
+			"inputPins": []
+		},
+		{
+			"name": "ZEvergreenEconomyDataProvider",
+			"classTypes": [
+				"Class"
+			],
+			"interfaces": [
+				"ZEvergreenEconomyDataProvider",
+				"IEntity",
+				"ZUIDataProvider"
+			],
+			"baseClasses": [
+				"ZEntityImpl",
+				"ZUIDataProvider"
+			],
+			"properties": [
+				{
+					"type": {
+						"name": "IValueIntGet",
+						"genericName": "TEntityRef<IValueIntGet>",
+						"classTypes": [
+							"Class",
+							"Entity"
+						]
+					},
+					"name": "m_CashInHandValueEntity",
+					"description": ""
+				}
+			],
 			"inputPins": []
 		},
 		{
@@ -181716,6 +185451,43 @@
 						]
 					},
 					"name": "tension",
+					"description": ""
+				}
+			],
+			"inputPins": []
+		},
+		{
+			"name": "ZRepository_String",
+			"classTypes": [
+				"Class"
+			],
+			"interfaces": [
+				"ZRepository_String",
+				"IEntity"
+			],
+			"baseClasses": [
+				"ZEntityImpl"
+			],
+			"properties": [
+				{
+					"type": {
+						"name": "ZItemRepositoryKeyEntity",
+						"genericName": "TEntityRef<ZItemRepositoryKeyEntity>",
+						"classTypes": [
+							"Class",
+							"Entity"
+						]
+					},
+					"name": "m_itemRepositoryKey",
+					"description": ""
+				},
+				{
+					"type": {
+						"name": "ZString",
+						"genericName": "ZString",
+						"classTypes": []
+					},
+					"name": "m_path",
 					"description": ""
 				}
 			],
@@ -183975,22 +187747,22 @@
 			],
 			"inputPins": [
 				{
-					"type": "",
+					"type": "ZString",
 					"name": "ApplyImpulse",
 					"description": ""
 				},
 				{
-					"type": "",
+					"type": "ZString",
 					"name": "ApplyTorque",
 					"description": ""
 				},
 				{
-					"type": "",
+					"type": "ZString",
 					"name": "RemovePhysics",
 					"description": ""
 				},
 				{
-					"type": "",
+					"type": "ZString",
 					"name": "KinematicBody",
 					"description": ""
 				}
@@ -185240,7 +189012,7 @@
 					"description": ""
 				},
 				{
-					"type": "",
+					"type": "SVector3",
 					"name": "GetSpawnPoint",
 					"description": ""
 				}
@@ -186381,7 +190153,7 @@
 			],
 			"inputPins": [
 				{
-					"type": "",
+					"type": "ZActor",
 					"name": "TransmitEvent",
 					"description": ""
 				}
@@ -187120,7 +190892,7 @@
 			"properties": [],
 			"inputPins": [
 				{
-					"type": "",
+					"type": "ZVariant",
 					"name": "Variant",
 					"description": ""
 				}
@@ -187180,6 +190952,17 @@
 			"baseClasses": [
 				"ZRenderableEntity"
 			],
+			"properties": [],
+			"inputPins": []
+		},
+		{
+			"name": "TEntityRef<ZEvergreenGearUnlockMasteryInfo>",
+			"classTypes": [
+				"Class",
+				"Entity"
+			],
+			"interfaces": [],
+			"baseClasses": [],
 			"properties": [],
 			"inputPins": []
 		},
@@ -187474,12 +191257,12 @@
 					"description": ""
 				},
 				{
-					"type": "",
+					"type": "ZString",
 					"name": "539714552",
 					"description": ""
 				},
 				{
-					"type": "",
+					"type": "ZVariant",
 					"name": "1151314644",
 					"description": ""
 				}
@@ -187866,7 +191649,7 @@
 			],
 			"inputPins": [
 				{
-					"type": "",
+					"type": "ZString",
 					"name": "Color",
 					"description": ""
 				},
@@ -188348,7 +192131,7 @@
 			],
 			"inputPins": [
 				{
-					"type": "",
+					"type": "ZString",
 					"name": "Set",
 					"description": ""
 				}
@@ -188460,6 +192243,46 @@
 						"classTypes": []
 					},
 					"name": "m_sIcon",
+					"description": ""
+				}
+			],
+			"inputPins": []
+		},
+		{
+			"name": "ZEvergreenVitalInfoBarDataProvider",
+			"classTypes": [
+				"Class"
+			],
+			"interfaces": [
+				"ZEvergreenVitalInfoBarDataProvider",
+				"IEntity",
+				"ZUIDataProvider"
+			],
+			"baseClasses": [
+				"ZEntityImpl",
+				"ZUIDataProvider"
+			],
+			"properties": [
+				{
+					"type": {
+						"name": "float32",
+						"genericName": "float32",
+						"classTypes": [
+							"Primitive"
+						]
+					},
+					"name": "m_displayDelay",
+					"description": ""
+				},
+				{
+					"type": {
+						"name": "float32",
+						"genericName": "float32",
+						"classTypes": [
+							"Primitive"
+						]
+					},
+					"name": "m_displayDuration",
 					"description": ""
 				}
 			],
@@ -188971,7 +192794,7 @@
 			],
 			"inputPins": [
 				{
-					"type": "",
+					"type": "SVector3",
 					"name": "In",
 					"description": ""
 				},
@@ -189342,8 +193165,31 @@
 			"baseClasses": [
 				"ZSpatialEntity"
 			],
-			"properties": [],
-			"inputPins": []
+			"properties": [
+				{
+					"type": {
+						"name": "bool",
+						"genericName": "bool",
+						"classTypes": [
+							"Primitive"
+						]
+					},
+					"name": "m_bStartEnabled",
+					"description": ""
+				}
+			],
+			"inputPins": [
+				{
+					"type": "void",
+					"name": "Enable",
+					"description": ""
+				},
+				{
+					"type": "void",
+					"name": "Disable",
+					"description": ""
+				}
+			]
 		},
 		{
 			"name": "ZSoundController_Targets",
@@ -189713,7 +193559,7 @@
 			],
 			"inputPins": [
 				{
-					"type": "",
+					"type": "ZActor",
 					"name": "SetIActor",
 					"description": ""
 				},
@@ -189808,7 +193654,7 @@
 			],
 			"inputPins": [
 				{
-					"type": "",
+					"type": "ZVariant",
 					"name": "Variant",
 					"description": ""
 				},
@@ -189996,7 +193842,7 @@
 					"description": ""
 				},
 				{
-					"type": "",
+					"type": "ZActor",
 					"name": "SetIActor",
 					"description": ""
 				}
@@ -190313,6 +194159,80 @@
 					"description": ""
 				}
 			]
+		},
+		{
+			"name": "ZEvergreenBonusRequirementCollection",
+			"classTypes": [
+				"Class"
+			],
+			"interfaces": [
+				"ZEvergreenBonusRequirementCollection",
+				"IEntity"
+			],
+			"baseClasses": [
+				"ZEntityImpl"
+			],
+			"properties": [
+				{
+					"type": {
+						"name": "int32",
+						"genericName": "int32",
+						"classTypes": [
+							"Primitive"
+						]
+					},
+					"name": "m_nMinRequirements",
+					"description": ""
+				},
+				{
+					"type": {
+						"name": "int32",
+						"genericName": "int32",
+						"classTypes": [
+							"Primitive"
+						]
+					},
+					"name": "m_nMaxRequirements",
+					"description": ""
+				},
+				{
+					"type": {
+						"name": "IValueIntGet",
+						"genericName": "TEntityRef<IValueIntGet>",
+						"classTypes": [
+							"Class",
+							"Entity"
+						]
+					},
+					"name": "m_rMinRequirements",
+					"description": ""
+				},
+				{
+					"type": {
+						"name": "IValueIntGet",
+						"genericName": "TEntityRef<IValueIntGet>",
+						"classTypes": [
+							"Class",
+							"Entity"
+						]
+					},
+					"name": "m_rMaxRequirements",
+					"description": ""
+				},
+				{
+					"type": {
+						"name": "TArray",
+						"genericName": "TArray",
+						"classTypes": [
+							"Array",
+							"Container"
+						]
+					},
+					"name": "m_aBonusRequirements",
+					"description": ""
+				}
+			],
+			"inputPins": []
 		},
 		{
 			"name": "ZUIActionSelectorNavigationInventoryEntity.SActionSelectorSlotDisplayInfoSlim",
@@ -190941,7 +194861,7 @@
 			"properties": [],
 			"inputPins": [
 				{
-					"type": "",
+					"type": "ZActor",
 					"name": "SetIActor",
 					"description": ""
 				},
@@ -191757,7 +195677,7 @@
 			"properties": [],
 			"inputPins": [
 				{
-					"type": "",
+					"type": "ZString",
 					"name": "In",
 					"description": ""
 				}
@@ -192470,27 +196390,27 @@
 			],
 			"inputPins": [
 				{
-					"type": "",
+					"type": "ZString",
 					"name": "DiffuseColor",
 					"description": ""
 				},
 				{
-					"type": "",
+					"type": "ZString",
 					"name": "DiffusePower",
 					"description": ""
 				},
 				{
-					"type": "",
+					"type": "ZString",
 					"name": "NearAttenuation",
 					"description": ""
 				},
 				{
-					"type": "",
+					"type": "ZString",
 					"name": "FarAttenuation",
 					"description": ""
 				},
 				{
-					"type": "",
+					"type": "ZString",
 					"name": "AngularAttenuation",
 					"description": ""
 				},
@@ -192505,12 +196425,12 @@
 					"description": ""
 				},
 				{
-					"type": "",
+					"type": "ZString",
 					"name": "ProjectorMapTiling",
 					"description": ""
 				},
 				{
-					"type": "",
+					"type": "ZString",
 					"name": "ProjectorMapOffset",
 					"description": ""
 				}
@@ -192731,6 +196651,36 @@
 			"inputPins": []
 		},
 		{
+			"name": "ZEvergreenGearUnlockMasteryMenuContextDataProvider",
+			"classTypes": [
+				"Class"
+			],
+			"interfaces": [
+				"ZEvergreenGearUnlockMasteryMenuContextDataProvider",
+				"IEntity",
+				"ZUIDataProvider"
+			],
+			"baseClasses": [
+				"ZEntityImpl",
+				"ZUIDataProvider"
+			],
+			"properties": [
+				{
+					"type": {
+						"name": "ZEvergreenGearUnlockMasteryInfo",
+						"genericName": "TEntityRef<ZEvergreenGearUnlockMasteryInfo>",
+						"classTypes": [
+							"Class",
+							"Entity"
+						]
+					},
+					"name": "m_source",
+					"description": ""
+				}
+			],
+			"inputPins": []
+		},
+		{
 			"name": "TEntityRef<ZActorPicker>",
 			"classTypes": [
 				"Class",
@@ -192876,7 +196826,7 @@
 			"properties": [],
 			"inputPins": [
 				{
-					"type": "",
+					"type": "ZString",
 					"name": "FlashGrenadeExploded",
 					"description": ""
 				}
@@ -193133,7 +197083,7 @@
 			],
 			"inputPins": [
 				{
-					"type": "",
+					"type": "ZString",
 					"name": "SetValue",
 					"description": ""
 				}
@@ -193331,11 +197281,22 @@
 					},
 					"name": "m_bNeedCollisionCheck",
 					"description": ""
+				},
+				{
+					"type": {
+						"name": "ERayLayer",
+						"genericName": "ERayLayer",
+						"classTypes": [
+							"Enum"
+						]
+					},
+					"name": "m_eCollisionCheckRayLayer",
+					"description": ""
 				}
 			],
 			"inputPins": [
 				{
-					"type": "",
+					"type": "ZString",
 					"name": "SetHero",
 					"description": ""
 				},
@@ -193497,7 +197458,7 @@
 			"properties": [],
 			"inputPins": [
 				{
-					"type": "",
+					"type": "ZVariant",
 					"name": "Variant",
 					"description": ""
 				}
@@ -193601,12 +197562,12 @@
 			],
 			"inputPins": [
 				{
-					"type": "",
+					"type": "ZString",
 					"name": "SetItem",
 					"description": ""
 				},
 				{
-					"type": "",
+					"type": "ZString",
 					"name": "SetIActor",
 					"description": ""
 				},
@@ -193716,12 +197677,12 @@
 					"description": ""
 				},
 				{
-					"type": "",
+					"type": "ZString",
 					"name": "SetItemUsed",
 					"description": ""
 				},
 				{
-					"type": "",
+					"type": "ZString",
 					"name": "SetSetpieceUsed",
 					"description": ""
 				},
@@ -193878,7 +197839,7 @@
 			],
 			"inputPins": [
 				{
-					"type": "",
+					"type": "SVector3",
 					"name": "SetModulation",
 					"description": ""
 				}
@@ -195147,7 +199108,7 @@
 			],
 			"inputPins": [
 				{
-					"type": "",
+					"type": "ZVariant",
 					"name": "SetValue",
 					"description": ""
 				}
@@ -195988,7 +199949,7 @@
 			],
 			"inputPins": [
 				{
-					"type": "",
+					"type": "ZString",
 					"name": "SetCurrentContractID",
 					"description": ""
 				},
@@ -196400,7 +200361,7 @@
 			],
 			"inputPins": [
 				{
-					"type": "",
+					"type": "ZString",
 					"name": "Position",
 					"description": ""
 				}
@@ -197136,7 +201097,7 @@
 					"description": ""
 				},
 				{
-					"type": "",
+					"type": "ZString",
 					"name": "Set",
 					"description": ""
 				}
@@ -197839,6 +201800,28 @@
 					},
 					"name": "m_pDebugShowSessionID",
 					"description": ""
+				},
+				{
+					"type": {
+						"name": "bool",
+						"genericName": "bool",
+						"classTypes": [
+							"Primitive"
+						]
+					},
+					"name": "m_showLatestIntelOnly",
+					"description": ""
+				},
+				{
+					"type": {
+						"name": "bool",
+						"genericName": "bool",
+						"classTypes": [
+							"Primitive"
+						]
+					},
+					"name": "m_triggerLatestIntelWithoutDelay",
+					"description": ""
 				}
 			],
 			"inputPins": []
@@ -197908,6 +201891,33 @@
 						]
 					},
 					"name": "situation",
+					"description": ""
+				}
+			],
+			"inputPins": []
+		},
+		{
+			"name": "ZEvergreenDestination",
+			"classTypes": [
+				"Class"
+			],
+			"interfaces": [
+				"ZEvergreenDestination",
+				"IEntity"
+			],
+			"baseClasses": [
+				"ZEntityImpl"
+			],
+			"properties": [
+				{
+					"type": {
+						"name": "IEvergreenTerritoryDefinition.EDestination",
+						"genericName": "IEvergreenTerritoryDefinition.EDestination",
+						"classTypes": [
+							"Enum"
+						]
+					},
+					"name": "m_eDestination",
 					"description": ""
 				}
 			],
@@ -198145,7 +202155,7 @@
 			],
 			"inputPins": [
 				{
-					"type": "",
+					"type": "ZString",
 					"name": "Start",
 					"description": ""
 				},
@@ -198574,6 +202584,6 @@
 				}
 			],
 			"inputPins": []
-		}
+		},
 	]
 }

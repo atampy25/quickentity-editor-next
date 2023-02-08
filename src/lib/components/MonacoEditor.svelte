@@ -1,20 +1,20 @@
 <svelte:options accessors />
 
 <script lang="ts">
-	import type monaco from "monaco-editor"
+	import * as monaco from "monaco-editor"
 	import { createEventDispatcher, onMount } from "svelte"
 	import editorWorker from "monaco-editor/esm/vs/editor/editor.worker?worker"
 	import jsonWorker from "monaco-editor/esm/vs/language/json/json.worker?worker"
 	import cssWorker from "monaco-editor/esm/vs/language/css/css.worker?worker"
 	import htmlWorker from "monaco-editor/esm/vs/language/html/html.worker?worker"
 	import tsWorker from "monaco-editor/esm/vs/language/typescript/ts.worker?worker"
-	import type { Entity, SubEntity } from "$lib/quickentity-types"
+	import type { Entity, FullRef, SubEntity } from "$lib/quickentity-types"
 	import json from "$lib/json"
 	import { addNotification, appSettings, intellisense, inVivoMetadata } from "$lib/stores"
 	import merge from "lodash/merge"
 	import { basename, dirname, join } from "@tauri-apps/api/path"
 	import { readDir, readTextFile, exists as tauriExists } from "@tauri-apps/api/fs"
-	import { getSchema, normaliseToHash } from "$lib/utils"
+	import { getReferencedExternalEntities, getSchema, normaliseToHash } from "$lib/utils"
 	import { gameServer } from "$lib/in-vivo/gameServer"
 
 	let el: HTMLDivElement = null!
@@ -163,8 +163,65 @@
 			}
 		}
 
-		editor.onDidChangeModelContent((e) => {
+		let decorations: monaco.editor.IEditorDecorationsCollection = editor.createDecorationsCollection([])
+
+		editor.onDidChangeModelContent(async (e) => {
 			dispatch("contentChanged")
+
+			if ($appSettings.gameFileExtensions) {
+				const idsToRefsExternal = Object.fromEntries(
+					getReferencedExternalEntities(jsonToDisplay, entity.entities)
+						.filter((a) => a.entity && typeof a.entity !== "string")
+						.map((a) => a.entity as FullRef)
+						.map((a) => [a.ref, a])
+				)
+
+				const idsToNamesInternal = Object.fromEntries(Object.entries(entity.entities).map((a) => [a[0], a[1].name]))
+
+				const decorationsArray: monaco.editor.IModelDeltaDecoration[] = []
+
+				for (const [no, line] of editor.getValue().split("\n").entries()) {
+					for (const [id, ref] of Object.entries(idsToRefsExternal)) {
+						if (line.includes(id)) {
+							decorationsArray.push({
+								options: {
+									isWholeLine: true,
+									after: {
+										content:
+											" " +
+											(
+												(await $intellisense.readJSONFile(
+													await join($intellisense.appSettings.gameFileExtensionsDataPath, "TEMP", normaliseToHash(ref.externalScene!) + ".TEMP.entity.json")
+												)) as Entity
+											).entities[ref.ref].name,
+										cursorStops: monaco.editor.InjectedTextCursorStops.Left,
+										inlineClassName: "monacoDecorationEntityRef"
+									}
+								},
+								range: new monaco.Range(no + 1, 0, no + 1, line.length + 1)
+							})
+						}
+					}
+
+					for (const [id, name] of Object.entries(idsToNamesInternal)) {
+						if (line.includes(id)) {
+							decorationsArray.push({
+								options: {
+									isWholeLine: true,
+									after: {
+										content: " " + name,
+										cursorStops: monaco.editor.InjectedTextCursorStops.Left,
+										inlineClassName: "monacoDecorationEntityRef"
+									}
+								},
+								range: new monaco.Range(no + 1, 0, no + 1, line.length + 1)
+							})
+						}
+					}
+				}
+
+				decorations.set(decorationsArray)
+			}
 		})
 
 		return () => {
@@ -344,3 +401,9 @@
 </script>
 
 <div bind:this={el} class="h-full" />
+
+<style global>
+	.monacoDecorationEntityRef {
+		color: #858585 !important;
+	}
+</style>
