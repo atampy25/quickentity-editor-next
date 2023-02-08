@@ -1,11 +1,11 @@
 {
-	"version": "1.25.2",
-	"notes": "Fix patch generation when number format varies",
+	"version": "1.26.0",
+	"notes": "Editor decorations for entity references",
 	"pub_date": "2023-01-18T05:39:46Z",
 	"platforms": {
 		"windows-x86_64": {
-			"signature": "dW50cnVzdGVkIGNvbW1lbnQ6IHNpZ25hdHVyZSBmcm9tIHRhdXJpIHNlY3JldCBrZXkKUlVScWpVZGd2b0lOTlZqYks0NVBtdTlxc0d0SE5ZMEQ1bW5NRWFya2tNL1lZdXFIbU9WUllYNnJlN1FIbm1qdWNQbzJ3Z01Qam9SM1hUYWxXVmc0amxJL0crNGdrOGh3K2dzPQp0cnVzdGVkIGNvbW1lbnQ6IHRpbWVzdGFtcDoxNjc1MzMxMjU3CWZpbGU6UXVpY2tFbnRpdHkgRWRpdG9yXzEuMjUuMl94NjRfZW4tVVMubXNpLnppcAo1REpPTEN2WGlWNmhuWklTanM1SUx4ZVRpMWFSNEZTMXYxdFVrUSs0V1ZXZHhHb2hkTFFrUHFqS3B3cE5Xand3YU4yU2FmaVE1LzJFWUdDWW1LUXNCQT09Cg==",
-			"url": "https://github.com/atampy25/quickentity-editor-next/releases/download/1.25.2/QuickEntity.Editor_1.25.2_x64_en-US.msi.zip"
+			"signature": "dW50cnVzdGVkIGNvbW1lbnQ6IHNpZ25hdHVyZSBmcm9tIHRhdXJpIHNlY3JldCBrZXkKUlVScWpVZGd2b0lOTlQvT2lkdGtyV0wzeWR5K2JJVEpBU0ZYaWxwUmdnMXBvb0tRTDB5YXIzUTVPcDlQd1d0Y3lDOHBWRURsRWhRQ2cwNVBNTVUxQno4cGc2a203OWVBeEFJPQp0cnVzdGVkIGNvbW1lbnQ6IHRpbWVzdGFtcDoxNjc1ODUxNjc2CWZpbGU6UXVpY2tFbnRpdHkgRWRpdG9yXzEuMjYuMF94NjRfZW4tVVMubXNpLnppcAo3bmpvVHI2Q3p3RnNPcUkyelNyUkNNeVVOS09JWHZyOW8wc1VNUm1SOVJsczFqRGh1T25aYmJidE8zYWFud0VSMjI1aDU1WEpVcmZCSnBFQi9tUDNBdz09Cg==",
+			"url": "https://github.com/atampy25/quickentity-editor-next/releases/download/1.26.0/QuickEntity.Editor_1.26.0_x64_en-US.msi.zip"
 		}
 	}
 }
