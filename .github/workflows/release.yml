@@ -70,6 +70,7 @@ jobs:
           copy "temp/quickentity-rs.exe" "src-tauri/sidecar/quickentity-rs-x86_64-pc-windows-msvc.exe"
           robocopy "temp" "game-file-extensions" "quickentity-rs.exe" "quickentity-rs.exe"; if ($lastexitcode -lt 8) { $global:LASTEXITCODE = $null }
           robocopy "temp" "src-tauri" "hash_list.txt" "hash_list.txt"; if ($lastexitcode -lt 8) { $global:LASTEXITCODE = $null }
+          robocopy "temp" "src-tauri" "quickentity_rs.dll" "quickentity_rs.dll"; if ($lastexitcode -lt 8) { $global:LASTEXITCODE = $null }
 
       - name: Clear temp
         run: |

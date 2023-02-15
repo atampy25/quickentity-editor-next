@@ -21,3 +21,4 @@ src-tauri/ResourceLib_HMA.pdb
 src-tauri/ResourceTool.exe
 src-tauri/ResourceTool.pdb
 src-tauri/ResourceTool-x86_64-pc-windows-msvc.exe
+src-tauri/quickentity_rs.dll
