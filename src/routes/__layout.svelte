@@ -1084,15 +1084,17 @@
 		</nav>
 
 		<div data-tauri-drag-region class="pointer-events-none cursor-none w-full text-center text-neutral-400">
-			{($sessionMetadata.loadedFromGameFiles
+			{$sessionMetadata.loadedFromGameFiles
 				? $entity.tempHash
 				: $sessionMetadata.saveAsPatch
 				? $sessionMetadata.saveAsPatchPath.split(sep).length > 4
 					? "..." + $sessionMetadata.saveAsPatchPath.split(sep).slice(-4).join(sep)
 					: $sessionMetadata.saveAsPatchPath
-				: $sessionMetadata.saveAsEntityPath.split(sep).length > 4
-				? "..." + $sessionMetadata.saveAsEntityPath.split(sep).slice(-4).join(sep)
-				: $sessionMetadata.saveAsEntityPath) || ""}
+				: $sessionMetadata.saveAsEntityPath
+				? $sessionMetadata.saveAsEntityPath.split(sep).length > 4
+					? "..." + $sessionMetadata.saveAsEntityPath.split(sep).slice(-4).join(sep)
+					: $sessionMetadata.saveAsEntityPath
+				: ""}
 		</div>
 
 		<div data-tauri-drag-region class="flex flex-row items-center justify-end text-white">
