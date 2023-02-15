@@ -42,6 +42,7 @@
 	import { appDir, join, sep } from "@tauri-apps/api/path"
 	import { Command } from "@tauri-apps/api/shell"
 	import { getVersion } from "@tauri-apps/api/app"
+	import { appWindow } from "@tauri-apps/api/window"
 	import md5 from "md5"
 	import Shepherd from "shepherd.js"
 	import cloneDeep from "lodash/cloneDeep"
@@ -374,95 +375,39 @@
 </script>
 
 {#if ready}
-	<Header company="QuickEntity" platformName="Editor" bind:isSideNavOpen>
-		<svelte:fragment slot="skip-to-content">
-			<SkipToContent />
-		</svelte:fragment>
-		<HeaderNav>
-			<HeaderNavMenu text="Load">
-				<HeaderNavItem
-					href="#"
-					text="Load workspace folder"
-					on:click={async () => {
-						let x = await open({
-							directory: true,
-							title: "Select the workspace folder"
-						})
+	<header data-tauri-drag-region class:bx--header={true}>
+		<SkipToContent />
+		<!-- svelte-ignore a11y-missing-attribute -->
+		<a data-tauri-drag-region class:bx--header__name={true}>
+			<span data-tauri-drag-region class:bx--header__name--prefix={true}>QuickEntity&nbsp;</span>
+			Editor
+		</a>
+		<nav data-tauri-drag-region class:bx--header__nav={true} class:w-full={true}>
+			<ul data-tauri-drag-region role="menubar" class:bx--header__menu-bar={true}>
+				<HeaderNavMenu text="Load">
+					<HeaderNavItem
+						href="#"
+						text="Load workspace folder"
+						on:click={async () => {
+							let x = await open({
+								directory: true,
+								title: "Select the workspace folder"
+							})
 
-						if (x && !Array.isArray(x)) {
-							$workspaceData.path = x
+							if (x && !Array.isArray(x)) {
+								$workspaceData.path = x
 
-							goto("/tree")
-						}
-					}}
-				/>
-				<li
-					role="none"
-					use:shortcut={{ control: true, key: "o" }}
-					on:click={async () => {
-						let x = await open({
-							multiple: false,
-							title: "Select the entity JSON",
-							filters: [
-								{
-									name: "QuickEntity JSON",
-									extensions: ["json"]
-								}
-							]
-						})
-
-						if (x && !Array.isArray(x)) {
-							$sessionMetadata.originalEntityPath = x
-							$sessionMetadata.saveAsPatch = false
-							$sessionMetadata.saveAsEntityPath = $sessionMetadata.originalEntityPath
-							$sessionMetadata.loadedFromGameFiles = false
-							$entity = await getEntityFromText(await readTextFile(x))
-
-							breadcrumb("entity", `Loaded ${$entity.tempHash} from file`)
-
-							goto("/tree")
-						}
-					}}
-				>
-					<HeaderNavItem href="#" text="Load entity from file" />
-				</li>
-				<li
-					role="none"
-					use:shortcut={{ control: true, alt: true, key: "o" }}
-					on:click={() => {
-						askGameFileModalOpen = true
-					}}
-				>
-					<HeaderNavItem href="#" text="Load entity from game" />
-				</li>
-				<li
-					role="none"
-					use:shortcut={{ control: true, shift: true, key: "O" }}
-					on:click={async () => {
-						let y = await open({
-							multiple: false,
-							title: "Select the patch JSON",
-							filters: [
-								{
-									name: "Patch JSON",
-									extensions: ["json"]
-								}
-							]
-						})
-
-						if (!y || Array.isArray(y)) return
-
-						let patch = json.parse(await readTextFile(y))
-						let entityPath
-
-						if ($appSettings.gameFileExtensions && (await exists(await join($appSettings.gameFileExtensionsDataPath, "TEMP", patch.tempHash + ".TEMP.entity.json")))) {
-							await extractForInspection(patch.tempHash, Number(patch.patchVersion))
-
-							entityPath = await join(await appDir(), "inspection", "entity.json")
-						} else {
+								goto("/tree")
+							}
+						}}
+					/>
+					<li
+						role="none"
+						use:shortcut={{ control: true, key: "o" }}
+						on:click={async () => {
 							let x = await open({
 								multiple: false,
-								title: "Select the original entity JSON",
+								title: "Select the entity JSON",
 								filters: [
 									{
 										name: "QuickEntity JSON",
@@ -471,129 +416,165 @@
 								]
 							})
 
-							if (!x || Array.isArray(x)) return
+							if (x && !Array.isArray(x)) {
+								$sessionMetadata.originalEntityPath = x
+								$sessionMetadata.saveAsPatch = false
+								$sessionMetadata.saveAsEntityPath = $sessionMetadata.originalEntityPath
+								$sessionMetadata.loadedFromGameFiles = false
+								$entity = await getEntityFromText(await readTextFile(x))
 
-							entityPath = x
-						}
+								breadcrumb("entity", `Loaded ${$entity.tempHash} from file`)
 
-						if (Number(patch.patchVersion) < 6) {
-							await Command.sidecar("sidecar/quickentity-3", ["patch", "apply", "--input", entityPath, "--patch", y, "--output", await join(await appDir(), "patched.json")]).execute()
-						} else {
-							await Command.sidecar("sidecar/quickentity-rs", ["patch", "apply", "--input", entityPath, "--patch", y, "--output", await join(await appDir(), "patched.json")]).execute()
-						}
-
-						$sessionMetadata.saveAsPatch = true
-						$sessionMetadata.saveAsPatchPath = y
-						$sessionMetadata.loadedFromGameFiles = false
-						$sessionMetadata.originalEntityPath = entityPath
-						$entity = await getEntityFromText(await readTextFile(await join(await appDir(), "patched.json")))
-
-						breadcrumb("entity", `Loaded ${$entity.tempHash} from patch`)
-
-						goto("/tree")
-					}}
-				>
-					<HeaderNavItem href="#" text="Load entity from patch" />
-				</li>
-			</HeaderNavMenu>
-			<HeaderNavMenu text="Save as">
-				<li
-					role="none"
-					use:shortcut={{ control: true, shift: true, key: "S" }}
-					on:click={async () => {
-						let x = await save({
-							title: "Save the entity JSON",
-							filters: [
-								{
-									name: "QuickEntity JSON",
-									extensions: ["json"]
-								}
-							]
-						})
-
-						if (!x) return
-
-						$forceSaveSubEntity = { value: true }
-
-						setTimeout(async () => {
-							await writeTextFile(x, await getEntityAsText())
-
-							$forceSaveSubEntity = { value: false }
-
-							$sessionMetadata.saveAsPatch = false
-							$sessionMetadata.saveAsEntityPath = x
-							$sessionMetadata.loadedFromGameFiles = false
-
-							breadcrumb("entity", "Saved to file")
-
-							$addNotification = {
-								kind: "success",
-								title: "Saved entity successfully",
-								subtitle: "Saved the entity to the selected path"
+								goto("/tree")
 							}
-						}, 500)
-					}}
-				>
-					<HeaderNavItem href="#" text="Save as entity file" />
-				</li>
-				<li
-					role="none"
-					use:shortcut={{ control: true, shift: true, alt: true, key: "S" }}
-					on:click={async () => {
-						let x = await save({
-							title: "Save the patch JSON",
-							filters: [
-								{
-									name: "Patch JSON",
-									extensions: ["json"]
-								}
-							]
-						})
-
-						if (!x) return
-
-						$forceSaveSubEntity = { value: true }
-
-						setTimeout(async () => {
-							await writeTextFile("entity.json", await getEntityAsText(), { dir: BaseDirectory.App })
-
-							await Command.sidecar("sidecar/quickentity-rs", [
-								"patch",
-								"generate",
-								"--input1",
-								String($sessionMetadata.originalEntityPath),
-								"--input2",
-								await join(await appDir(), "entity.json"),
-								"--output",
-								x,
-								"--format-fix"
-							]).execute()
-
-							$forceSaveSubEntity = { value: false }
-
-							$sessionMetadata.saveAsPatch = true
-							$sessionMetadata.saveAsPatchPath = x
-							$sessionMetadata.loadedFromGameFiles = false
-
-							breadcrumb("entity", "Saved to patch")
-
-							$addNotification = {
-								kind: "success",
-								title: "Saved patch successfully",
-								subtitle: "Saved the changes from the original entity to the selected path"
-							}
-						}, 500)
-					}}
-				>
-					<HeaderNavItem href="#" text="Save as patch file" />
-				</li>
-			</HeaderNavMenu>
-			{#if $sessionMetadata.originalEntityPath && !$sessionMetadata.loadedFromGameFiles}
-				{#if $sessionMetadata.saveAsPatch}
+						}}
+					>
+						<HeaderNavItem href="#" text="Load entity from file" />
+					</li>
 					<li
 						role="none"
-						use:shortcut={{ control: true, key: "s" }}
+						use:shortcut={{ control: true, alt: true, key: "o" }}
+						on:click={() => {
+							askGameFileModalOpen = true
+						}}
+					>
+						<HeaderNavItem href="#" text="Load entity from game" />
+					</li>
+					<li
+						role="none"
+						use:shortcut={{ control: true, shift: true, key: "O" }}
 						on:click={async () => {
+							let y = await open({
+								multiple: false,
+								title: "Select the patch JSON",
+								filters: [
+									{
+										name: "Patch JSON",
+										extensions: ["json"]
+									}
+								]
+							})
+
+							if (!y || Array.isArray(y)) return
+
+							let patch = json.parse(await readTextFile(y))
+							let entityPath
+
+							if ($appSettings.gameFileExtensions && (await exists(await join($appSettings.gameFileExtensionsDataPath, "TEMP", patch.tempHash + ".TEMP.entity.json")))) {
+								await extractForInspection(patch.tempHash, Number(patch.patchVersion))
+
+								entityPath = await join(await appDir(), "inspection", "entity.json")
+							} else {
+								let x = await open({
+									multiple: false,
+									title: "Select the original entity JSON",
+									filters: [
+										{
+											name: "QuickEntity JSON",
+											extensions: ["json"]
+										}
+									]
+								})
+
+								if (!x || Array.isArray(x)) return
+
+								entityPath = x
+							}
+
+							if (Number(patch.patchVersion) < 6) {
+								await Command.sidecar("sidecar/quickentity-3", [
+									"patch",
+									"apply",
+									"--input",
+									entityPath,
+									"--patch",
+									y,
+									"--output",
+									await join(await appDir(), "patched.json")
+								]).execute()
+							} else {
+								await Command.sidecar("sidecar/quickentity-rs", [
+									"patch",
+									"apply",
+									"--input",
+									entityPath,
+									"--patch",
+									y,
+									"--output",
+									await join(await appDir(), "patched.json")
+								]).execute()
+							}
+
+							$sessionMetadata.saveAsPatch = true
+							$sessionMetadata.saveAsPatchPath = y
+							$sessionMetadata.loadedFromGameFiles = false
+							$sessionMetadata.originalEntityPath = entityPath
+							$entity = await getEntityFromText(await readTextFile(await join(await appDir(), "patched.json")))
+
+							breadcrumb("entity", `Loaded ${$entity.tempHash} from patch`)
+
+							goto("/tree")
+						}}
+					>
+						<HeaderNavItem href="#" text="Load entity from patch" />
+					</li>
+				</HeaderNavMenu>
+				<HeaderNavMenu text="Save&nbsp;as">
+					<li
+						role="none"
+						use:shortcut={{ control: true, shift: true, key: "S" }}
+						on:click={async () => {
+							let x = await save({
+								title: "Save the entity JSON",
+								filters: [
+									{
+										name: "QuickEntity JSON",
+										extensions: ["json"]
+									}
+								]
+							})
+
+							if (!x) return
+
+							$forceSaveSubEntity = { value: true }
+
+							setTimeout(async () => {
+								await writeTextFile(x, await getEntityAsText())
+
+								$forceSaveSubEntity = { value: false }
+
+								$sessionMetadata.saveAsPatch = false
+								$sessionMetadata.saveAsEntityPath = x
+								$sessionMetadata.loadedFromGameFiles = false
+
+								breadcrumb("entity", "Saved to file")
+
+								$addNotification = {
+									kind: "success",
+									title: "Saved entity successfully",
+									subtitle: "Saved the entity to the selected path"
+								}
+							}, 500)
+						}}
+					>
+						<HeaderNavItem href="#" text="Save as entity file" />
+					</li>
+					<li
+						role="none"
+						use:shortcut={{ control: true, shift: true, alt: true, key: "S" }}
+						on:click={async () => {
+							let x = await save({
+								title: "Save the patch JSON",
+								filters: [
+									{
+										name: "Patch JSON",
+										extensions: ["json"]
+									}
+								]
+							})
+
+							if (!x) return
+
 							$forceSaveSubEntity = { value: true }
 
 							setTimeout(async () => {
@@ -607,346 +588,372 @@
 									"--input2",
 									await join(await appDir(), "entity.json"),
 									"--output",
-									String($sessionMetadata.saveAsPatchPath),
+									x,
 									"--format-fix"
 								]).execute()
 
 								$forceSaveSubEntity = { value: false }
 
+								$sessionMetadata.saveAsPatch = true
+								$sessionMetadata.saveAsPatchPath = x
 								$sessionMetadata.loadedFromGameFiles = false
+
+								breadcrumb("entity", "Saved to patch")
 
 								$addNotification = {
 									kind: "success",
 									title: "Saved patch successfully",
-									subtitle:
-										"Saved the changes from the original entity to " +
-										($sessionMetadata.saveAsPatchPath.split(sep).length > 3
-											? "..." + $sessionMetadata.saveAsPatchPath.split(sep).slice(-3).join(sep)
-											: $sessionMetadata.saveAsPatchPath)
+									subtitle: "Saved the changes from the original entity to the selected path"
 								}
-
-								breadcrumb("entity", "Saved to patch (original path)")
 							}, 500)
 						}}
 					>
-						<a role="menuitem" tabindex="0" href="#" class="bx--header__menu-item"><span class="bx--text-truncate--end">Save patch</span></a>
+						<HeaderNavItem href="#" text="Save as patch file" />
 					</li>
-				{:else}
-					<li
-						role="none"
-						use:shortcut={{ control: true, key: "s" }}
-						on:click={async () => {
-							$forceSaveSubEntity = { value: true }
+				</HeaderNavMenu>
+				{#if $sessionMetadata.originalEntityPath && !$sessionMetadata.loadedFromGameFiles}
+					{#if $sessionMetadata.saveAsPatch}
+						<li
+							role="none"
+							use:shortcut={{ control: true, key: "s" }}
+							on:click={async () => {
+								$forceSaveSubEntity = { value: true }
 
-							setTimeout(async () => {
-								await writeTextFile($sessionMetadata.saveAsEntityPath, await getEntityAsText())
+								setTimeout(async () => {
+									await writeTextFile("entity.json", await getEntityAsText(), { dir: BaseDirectory.App })
 
-								$forceSaveSubEntity = { value: false }
+									await Command.sidecar("sidecar/quickentity-rs", [
+										"patch",
+										"generate",
+										"--input1",
+										String($sessionMetadata.originalEntityPath),
+										"--input2",
+										await join(await appDir(), "entity.json"),
+										"--output",
+										String($sessionMetadata.saveAsPatchPath),
+										"--format-fix"
+									]).execute()
 
-								$sessionMetadata.loadedFromGameFiles = false
+									$forceSaveSubEntity = { value: false }
 
-								$addNotification = {
-									kind: "success",
-									title: "Saved entity successfully",
-									subtitle:
-										"Saved the entity to " +
-										($sessionMetadata.saveAsEntityPath.split(sep).length > 3
-											? "..." + $sessionMetadata.saveAsEntityPath.split(sep).slice(-3).join(sep)
-											: $sessionMetadata.saveAsEntityPath)
-								}
+									$sessionMetadata.loadedFromGameFiles = false
 
-								breadcrumb("entity", "Saved to file (original path)")
-							}, 500)
-						}}
-					>
-						<a role="menuitem" tabindex="0" href="#" class="bx--header__menu-item"><span class="bx--text-truncate--end">Save entity</span></a>
-					</li>
-				{/if}
-			{/if}
-			{#if $sessionMetadata.originalEntityPath}
-				{#if $appSettings.inVivoExtensions}
-					<HeaderNavItem
-						href="#"
-						text="{!gameServer.connected ? 'Enable' : 'Disable'} game connection"
-						class="shepherd-gameConnection"
-						on:click={async () => {
-							if (!gameServer.connected) {
-								try {
-									await copyFile("GameConnection.dll", await join($appSettings.retailPath, "mods", "GameConnection.dll"))
-								} catch {}
+									$addNotification = {
+										kind: "success",
+										title: "Saved patch successfully",
+										subtitle:
+											"Saved the changes from the original entity to " +
+											($sessionMetadata.saveAsPatchPath.split(sep).length > 3
+												? "..." + $sessionMetadata.saveAsPatchPath.split(sep).slice(-3).join(sep)
+												: $sessionMetadata.saveAsPatchPath)
+									}
 
-								try {
-									await copyFile("GameConnection.pdb", await join($appSettings.retailPath, "mods", "GameConnection.pdb"))
-								} catch {}
+									breadcrumb("entity", "Saved to patch (original path)")
+								}, 500)
+							}}
+						>
+							<a role="menuitem" tabindex="0" href="#" class="bx--header__menu-item"><span class="bx--text-truncate--end">Save patch</span></a>
+						</li>
+					{:else}
+						<li
+							role="none"
+							use:shortcut={{ control: true, key: "s" }}
+							on:click={async () => {
+								$forceSaveSubEntity = { value: true }
 
-								await gameServer.start()
+								setTimeout(async () => {
+									await writeTextFile($sessionMetadata.saveAsEntityPath, await getEntityAsText())
 
-								gameServer.client.addListener(({ datagram }) => {
-									gameServer.lastMessage = Date.now()
-								})
+									$forceSaveSubEntity = { value: false }
 
-								$inVivoMetadata.entities = {}
-							} else {
-								await gameServer.kill()
-							}
+									$sessionMetadata.loadedFromGameFiles = false
 
-							gameServer.connected = gameServer.connected
+									$addNotification = {
+										kind: "success",
+										title: "Saved entity successfully",
+										subtitle:
+											"Saved the entity to " +
+											($sessionMetadata.saveAsEntityPath.split(sep).length > 3
+												? "..." + $sessionMetadata.saveAsEntityPath.split(sep).slice(-3).join(sep)
+												: $sessionMetadata.saveAsEntityPath)
+									}
 
-							breadcrumb("gameserver", `Toggled to ${gameServer.connected}`)
-						}}
-					/>
-					{#if gameServer.connected}
-						<li role="none">
-							<a href="#" disabled class="bx--header__menu-item">
-								<span class="bx--text-truncate--end" style:color={currentTime - gameServer.lastMessage < 5000 ? "#bbf7d0" : "#fecaca"}>
-									Last message from game: {gameServer.lastMessage != 0 ? Math.max(0, currentTime - gameServer.lastMessage) : "never"}
-								</span>
-							</a>
+									breadcrumb("entity", "Saved to file (original path)")
+								}, 500)
+							}}
+						>
+							<a role="menuitem" tabindex="0" href="#" class="bx--header__menu-item"><span class="bx--text-truncate--end">Save entity</span></a>
 						</li>
 					{/if}
 				{/if}
-			{/if}
-			{#if $page.url.pathname == "/metadata" || $page.url.pathname == "/overrides" || $page.url.pathname == "/tree" || $page.url.pathname == "/graph" || $page.url.pathname == "/3d"}
-				<HeaderNavItem
-					href="#"
-					on:click={() => {
-						if ($page.url.pathname == "/metadata") {
-							const tour = new Shepherd.Tour({
-								useModalOverlay: true,
-								defaultStepOptions: {
-									classes: "shadow-md bg-purple-dark",
-									scrollTo: true
+				{#if $sessionMetadata.originalEntityPath}
+					{#if $appSettings.inVivoExtensions}
+						<HeaderNavItem
+							href="#"
+							text="{!gameServer.connected ? 'Enable' : 'Disable'} game connection"
+							class="shepherd-gameConnection"
+							on:click={async () => {
+								if (!gameServer.connected) {
+									try {
+										await copyFile("GameConnection.dll", await join($appSettings.retailPath, "mods", "GameConnection.dll"))
+									} catch {}
+
+									try {
+										await copyFile("GameConnection.pdb", await join($appSettings.retailPath, "mods", "GameConnection.pdb"))
+									} catch {}
+
+									await gameServer.start()
+
+									gameServer.client.addListener(({ datagram }) => {
+										gameServer.lastMessage = Date.now()
+									})
+
+									$inVivoMetadata.entities = {}
+								} else {
+									await gameServer.kill()
 								}
-							})
 
-							tour.addStep({
-								id: "page",
-								text: "You're looking at the Metadata view, where you can customise general properties of the opened entity.",
-								buttons: [
-									{
-										text: "Next",
-										action: tour.next
+								gameServer.connected = gameServer.connected
+
+								breadcrumb("gameserver", `Toggled to ${gameServer.connected}`)
+							}}
+						/>
+						{#if gameServer.connected}
+							<li role="none">
+								<a href="#" disabled class="bx--header__menu-item">
+									<span class="bx--text-truncate--end" style:color={currentTime - gameServer.lastMessage < 5000 ? "#bbf7d0" : "#fecaca"}>
+										Last message from game: {gameServer.lastMessage != 0 ? Math.max(0, currentTime - gameServer.lastMessage) : "never"}
+									</span>
+								</a>
+							</li>
+						{/if}
+					{/if}
+				{/if}
+				{#if $page.url.pathname == "/metadata" || $page.url.pathname == "/overrides" || $page.url.pathname == "/tree" || $page.url.pathname == "/graph" || $page.url.pathname == "/3d"}
+					<HeaderNavItem
+						href="#"
+						on:click={() => {
+							if ($page.url.pathname == "/metadata") {
+								const tour = new Shepherd.Tour({
+									useModalOverlay: true,
+									defaultStepOptions: {
+										classes: "shadow-md bg-purple-dark",
+										scrollTo: true
 									}
-								]
-							})
+								})
 
-							tour.addStep({
-								id: "factoryHash",
-								text: "This is the alphanumeric 16 character game hash of the factory (TEMP) of the opened entity.",
-								attachTo: {
-									element: ".shepherd-factoryHash",
-									on: "bottom"
-								},
-								buttons: [
-									{
-										text: "Next",
-										action: tour.next
-									}
-								]
-							})
-
-							tour.addStep({
-								id: "blueprintHash",
-								text: "This is the alphanumeric 16 character game hash of the blueprint (TBLU) of the opened entity.",
-								attachTo: {
-									element: ".shepherd-blueprintHash",
-									on: "bottom"
-								},
-								buttons: [
-									{
-										text: "Next",
-										action: tour.next
-									}
-								]
-							})
-
-							tour.addStep({
-								id: "rootEntity",
-								text: "This is the entity ID of the root entity. For templates, the root entity should be the one that implements the required interfaces, exposes the required entities and aliases the required properties; properties of the template in another brick are propagated to the root entity. For scenes and bricks, the root entity should be a spatial entity which the other entities are parented to.",
-								attachTo: {
-									element: ".shepherd-rootEntity",
-									on: "bottom"
-								},
-								buttons: [
-									{
-										text: "Next",
-										action: tour.next
-									}
-								]
-							})
-
-							tour.addStep({
-								id: "entityType",
-								text: "This is the entity's type. Scenes are entities that are loaded by contract JSONs; they're the highest up in the hierarchy. Bricks are entities that are loaded by scenes. Templates are entities designed for a specific purpose that are then used by other entities.",
-								attachTo: {
-									element: ".shepherd-entityType",
-									on: "bottom"
-								},
-								buttons: [
-									{
-										text: "Next",
-										action: tour.next
-									}
-								]
-							})
-
-							tour.addStep({
-								id: "externalScenes",
-								text: "These are the external scenes that this entity references. Anything used in an externalScene property of a reference should be here, as well as any other bricks or entities you might want to load alongside this entity.",
-								attachTo: {
-									element: ".shepherd-externalScenes",
-									on: "bottom"
-								},
-								buttons: [
-									{
-										text: "Next",
-										action: tour.next
-									}
-								]
-							})
-
-							tour.addStep({
-								id: "extraDependencies",
-								text: "If you want to add any extra dependencies to the factory or blueprint, you can do so here.",
-								attachTo: {
-									element: ".shepherd-extraDependencies",
-									on: "bottom"
-								},
-								buttons: [
-									{
-										text: "Next",
-										action: tour.next
-									}
-								]
-							})
-
-							tour.start()
-						}
-
-						if ($page.url.pathname == "/overrides") {
-							const tour = new Shepherd.Tour({
-								useModalOverlay: true,
-								defaultStepOptions: {
-									classes: "shadow-md bg-purple-dark",
-									scrollTo: true
-								}
-							})
-
-							tour.addStep({
-								id: "page",
-								text: "You're looking at the Overrides view, where you can customise how this entity overrides other entities when it's loaded. This is usually used by bricks or scenes.",
-								buttons: [
-									{
-										text: "Next",
-										action: tour.next
-									}
-								]
-							})
-
-							tour.addStep({
-								id: "propertyOverrides",
-								text: "These are entity properties that will be overriden when this entity is loaded.",
-								attachTo: {
-									element: ".shepherd-propertyOverrides",
-									on: "auto"
-								},
-								buttons: [
-									{
-										text: "Next",
-										action: tour.next
-									}
-								]
-							})
-
-							tour.addStep({
-								id: "overrideDeletes",
-								text: "These are entities that will be removed when this entity is loaded.",
-								attachTo: {
-									element: ".shepherd-overrideDeletes",
-									on: "auto"
-								},
-								buttons: [
-									{
-										text: "Next",
-										action: tour.next
-									}
-								]
-							})
-
-							tour.start()
-						}
-
-						if ($page.url.pathname == "/tree") {
-							const tour = new Shepherd.Tour({
-								useModalOverlay: true,
-								defaultStepOptions: {
-									classes: "shadow-md bg-purple-dark",
-									scrollTo: true
-								}
-							})
-
-							tour.addStep({
-								id: "page",
-								text: "You're looking at the Tree view, where you'll spend most of your time in QuickEntity Editor. There are three components to this view: the tree, the information pane and the editor.",
-								buttons: [
-									{
-										text: "Next",
-										action: tour.next
-									}
-								]
-							})
-
-							tour.addStep({
-								id: "tree",
-								text: "This is the tree itself. It displays the sub-entities of the game entity you're looking at. You can also right click on sub-entities to create new ones, delete them, rename them, add comments or access other advanced options. The tree is sorted alphabetically, and you can drag sub-entities to re-parent them.",
-								attachTo: {
-									element: ".shepherd-tree",
-									on: "right"
-								},
-								buttons: [
-									{
-										text: "Next",
-										action: tour.next
-									}
-								]
-							})
-
-							tour.addStep({
-								id: "information",
-								text: "When you select an entity in the tree, you'll see relevant information show up here, like entities that reference the entity you clicked, or a 3D preview of the entity.",
-								attachTo: {
-									element: ".shepherd-information",
-									on: "right"
-								},
-								buttons: [
-									{
-										text: "Next",
-										action: tour.next
-									}
-								]
-							})
-
-							tour.addStep({
-								id: "editor",
-								text: "You'll also see an editor show up here, allowing you to change the properties of an entity or edit the text of a comment. Some properties, like colours, have visual editors as well, which will show up below the main JSON editor.",
-								attachTo: {
-									element: ".shepherd-editor",
-									on: "left"
-								},
-								buttons: [
-									{
-										text: "Next",
-										action: tour.next
-									}
-								]
-							})
-
-							if ($appSettings.inVivoExtensions) {
 								tour.addStep({
-									id: "gameConnection",
-									text: "Since you've enabled in-vivo extensions, you can connect to a running instance of the game using this (you should turn this on before launching the game). If you save an entity while the game connection is enabled, a helper sub-entity will be added to allow you to perform in-game actions on everything in the entity - if something isn't working right, save while the game connection is enabled and re-deploy.",
+									id: "page",
+									text: "You're looking at the Metadata view, where you can customise general properties of the opened entity.",
+									buttons: [
+										{
+											text: "Next",
+											action: tour.next
+										}
+									]
+								})
+
+								tour.addStep({
+									id: "factoryHash",
+									text: "This is the alphanumeric 16 character game hash of the factory (TEMP) of the opened entity.",
 									attachTo: {
-										element: ".shepherd-gameConnection",
+										element: ".shepherd-factoryHash",
+										on: "bottom"
+									},
+									buttons: [
+										{
+											text: "Next",
+											action: tour.next
+										}
+									]
+								})
+
+								tour.addStep({
+									id: "blueprintHash",
+									text: "This is the alphanumeric 16 character game hash of the blueprint (TBLU) of the opened entity.",
+									attachTo: {
+										element: ".shepherd-blueprintHash",
+										on: "bottom"
+									},
+									buttons: [
+										{
+											text: "Next",
+											action: tour.next
+										}
+									]
+								})
+
+								tour.addStep({
+									id: "rootEntity",
+									text: "This is the entity ID of the root entity. For templates, the root entity should be the one that implements the required interfaces, exposes the required entities and aliases the required properties; properties of the template in another brick are propagated to the root entity. For scenes and bricks, the root entity should be a spatial entity which the other entities are parented to.",
+									attachTo: {
+										element: ".shepherd-rootEntity",
+										on: "bottom"
+									},
+									buttons: [
+										{
+											text: "Next",
+											action: tour.next
+										}
+									]
+								})
+
+								tour.addStep({
+									id: "entityType",
+									text: "This is the entity's type. Scenes are entities that are loaded by contract JSONs; they're the highest up in the hierarchy. Bricks are entities that are loaded by scenes. Templates are entities designed for a specific purpose that are then used by other entities.",
+									attachTo: {
+										element: ".shepherd-entityType",
+										on: "bottom"
+									},
+									buttons: [
+										{
+											text: "Next",
+											action: tour.next
+										}
+									]
+								})
+
+								tour.addStep({
+									id: "externalScenes",
+									text: "These are the external scenes that this entity references. Anything used in an externalScene property of a reference should be here, as well as any other bricks or entities you might want to load alongside this entity.",
+									attachTo: {
+										element: ".shepherd-externalScenes",
+										on: "bottom"
+									},
+									buttons: [
+										{
+											text: "Next",
+											action: tour.next
+										}
+									]
+								})
+
+								tour.addStep({
+									id: "extraDependencies",
+									text: "If you want to add any extra dependencies to the factory or blueprint, you can do so here.",
+									attachTo: {
+										element: ".shepherd-extraDependencies",
+										on: "bottom"
+									},
+									buttons: [
+										{
+											text: "Next",
+											action: tour.next
+										}
+									]
+								})
+
+								tour.start()
+							}
+
+							if ($page.url.pathname == "/overrides") {
+								const tour = new Shepherd.Tour({
+									useModalOverlay: true,
+									defaultStepOptions: {
+										classes: "shadow-md bg-purple-dark",
+										scrollTo: true
+									}
+								})
+
+								tour.addStep({
+									id: "page",
+									text: "You're looking at the Overrides view, where you can customise how this entity overrides other entities when it's loaded. This is usually used by bricks or scenes.",
+									buttons: [
+										{
+											text: "Next",
+											action: tour.next
+										}
+									]
+								})
+
+								tour.addStep({
+									id: "propertyOverrides",
+									text: "These are entity properties that will be overriden when this entity is loaded.",
+									attachTo: {
+										element: ".shepherd-propertyOverrides",
+										on: "auto"
+									},
+									buttons: [
+										{
+											text: "Next",
+											action: tour.next
+										}
+									]
+								})
+
+								tour.addStep({
+									id: "overrideDeletes",
+									text: "These are entities that will be removed when this entity is loaded.",
+									attachTo: {
+										element: ".shepherd-overrideDeletes",
+										on: "auto"
+									},
+									buttons: [
+										{
+											text: "Next",
+											action: tour.next
+										}
+									]
+								})
+
+								tour.start()
+							}
+
+							if ($page.url.pathname == "/tree") {
+								const tour = new Shepherd.Tour({
+									useModalOverlay: true,
+									defaultStepOptions: {
+										classes: "shadow-md bg-purple-dark",
+										scrollTo: true
+									}
+								})
+
+								tour.addStep({
+									id: "page",
+									text: "You're looking at the Tree view, where you'll spend most of your time in QuickEntity Editor. There are three components to this view: the tree, the information pane and the editor.",
+									buttons: [
+										{
+											text: "Next",
+											action: tour.next
+										}
+									]
+								})
+
+								tour.addStep({
+									id: "tree",
+									text: "This is the tree itself. It displays the sub-entities of the game entity you're looking at. You can also right click on sub-entities to create new ones, delete them, rename them, add comments or access other advanced options. The tree is sorted alphabetically, and you can drag sub-entities to re-parent them.",
+									attachTo: {
+										element: ".shepherd-tree",
+										on: "right"
+									},
+									buttons: [
+										{
+											text: "Next",
+											action: tour.next
+										}
+									]
+								})
+
+								tour.addStep({
+									id: "information",
+									text: "When you select an entity in the tree, you'll see relevant information show up here, like entities that reference the entity you clicked, or a 3D preview of the entity.",
+									attachTo: {
+										element: ".shepherd-information",
+										on: "right"
+									},
+									buttons: [
+										{
+											text: "Next",
+											action: tour.next
+										}
+									]
+								})
+
+								tour.addStep({
+									id: "editor",
+									text: "You'll also see an editor show up here, allowing you to change the properties of an entity or edit the text of a comment. Some properties, like colours, have visual editors as well, which will show up below the main JSON editor.",
+									attachTo: {
+										element: ".shepherd-editor",
 										on: "left"
 									},
 									buttons: [
@@ -956,108 +963,159 @@
 										}
 									]
 								})
+
+								if ($appSettings.inVivoExtensions) {
+									tour.addStep({
+										id: "gameConnection",
+										text: "Since you've enabled in-vivo extensions, you can connect to a running instance of the game using this (you should turn this on before launching the game). If you save an entity while the game connection is enabled, a helper sub-entity will be added to allow you to perform in-game actions on everything in the entity - if something isn't working right, save while the game connection is enabled and re-deploy.",
+										attachTo: {
+											element: ".shepherd-gameConnection",
+											on: "left"
+										},
+										buttons: [
+											{
+												text: "Next",
+												action: tour.next
+											}
+										]
+									})
+								}
+
+								tour.start()
 							}
 
-							tour.start()
-						}
-
-						if ($page.url.pathname == "/3d") {
-							const tour = new Shepherd.Tour({
-								useModalOverlay: true,
-								defaultStepOptions: {
-									classes: "shadow-md bg-purple-dark",
-									scrollTo: true
-								}
-							})
-
-							tour.addStep({
-								id: "page",
-								text: "You're looking at the 3D Preview. It's currently very experimental and probably won't work.",
-								buttons: [
-									{
-										text: "Next",
-										action: tour.next
+							if ($page.url.pathname == "/3d") {
+								const tour = new Shepherd.Tour({
+									useModalOverlay: true,
+									defaultStepOptions: {
+										classes: "shadow-md bg-purple-dark",
+										scrollTo: true
 									}
-								]
-							})
+								})
 
-							tour.start()
-						}
+								tour.addStep({
+									id: "page",
+									text: "You're looking at the 3D Preview. It's currently very experimental and probably won't work.",
+									buttons: [
+										{
+											text: "Next",
+											action: tour.next
+										}
+									]
+								})
 
-						if ($page.url.pathname == "/graph") {
-							const tour = new Shepherd.Tour({
-								useModalOverlay: true,
-								defaultStepOptions: {
-									classes: "shadow-md bg-purple-dark",
-									scrollTo: true
-								}
-							})
+								tour.start()
+							}
 
-							tour.addStep({
-								id: "page",
-								text: "You're looking at the Graph view, where you can wire up events and triggers in a visual way. Forwarding (input and output copying) isn't supported in this view, at least right now.",
-								buttons: [
-									{
-										text: "Next",
-										action: tour.next
+							if ($page.url.pathname == "/graph") {
+								const tour = new Shepherd.Tour({
+									useModalOverlay: true,
+									defaultStepOptions: {
+										classes: "shadow-md bg-purple-dark",
+										scrollTo: true
 									}
-								]
-							})
+								})
 
-							tour.addStep({
-								id: "graphTree",
-								text: "This is the tree view. Select an entity here and its children will be displayed on the graph. It's slimmed down compared to the Tree view; the only right-click action supported, currently, is Rename.",
-								attachTo: {
-									element: ".shepherd-graphTree",
-									on: "bottom"
-								},
-								buttons: [
-									{
-										text: "Next",
-										action: tour.next
-									}
-								]
-							})
+								tour.addStep({
+									id: "page",
+									text: "You're looking at the Graph view, where you can wire up events and triggers in a visual way. Forwarding (input and output copying) isn't supported in this view, at least right now.",
+									buttons: [
+										{
+											text: "Next",
+											action: tour.next
+										}
+									]
+								})
 
-							tour.addStep({
-								id: "graph",
-								text: "This is the graph itself. It displays entities, their inputs and their outputs, in a visual way allowing you to drag to connect events. You can add a new entity by dragging it from the left pane to the main view.",
-								attachTo: {
-									element: ".shepherd-graph",
-									on: "bottom"
-								},
-								buttons: [
-									{
-										text: "Next",
-										action: tour.next
-									}
-								]
-							})
+								tour.addStep({
+									id: "graphTree",
+									text: "This is the tree view. Select an entity here and its children will be displayed on the graph. It's slimmed down compared to the Tree view; the only right-click action supported, currently, is Rename.",
+									attachTo: {
+										element: ".shepherd-graphTree",
+										on: "bottom"
+									},
+									buttons: [
+										{
+											text: "Next",
+											action: tour.next
+										}
+									]
+								})
 
-							tour.addStep({
-								id: "graph",
-								text: "You can format the graph by clicking this button; the nodes will be automatically re-arranged in a way that makes everything as clean and visible as possible.",
-								attachTo: {
-									element: ".shepherd-formatGraphButton",
-									on: "bottom"
-								},
-								buttons: [
-									{
-										text: "Next",
-										action: tour.next
-									}
-								]
-							})
+								tour.addStep({
+									id: "graph",
+									text: "This is the graph itself. It displays entities, their inputs and their outputs, in a visual way allowing you to drag to connect events. You can add a new entity by dragging it from the left pane to the main view.",
+									attachTo: {
+										element: ".shepherd-graph",
+										on: "bottom"
+									},
+									buttons: [
+										{
+											text: "Next",
+											action: tour.next
+										}
+									]
+								})
 
-							tour.start()
-						}
+								tour.addStep({
+									id: "graph",
+									text: "You can format the graph by clicking this button; the nodes will be automatically re-arranged in a way that makes everything as clean and visible as possible.",
+									attachTo: {
+										element: ".shepherd-formatGraphButton",
+										on: "bottom"
+									},
+									buttons: [
+										{
+											text: "Next",
+											action: tour.next
+										}
+									]
+								})
 
-						breadcrumb("ui", "Tour activated")
-					}}
-					text="Help"
-				/>
-			{/if}
-		</HeaderNav>
+								tour.start()
+							}
+
+							breadcrumb("ui", "Tour activated")
+						}}
+						text="Help"
+					/>
+				{/if}
+			</ul>
+		</nav>
+
+		<div data-tauri-drag-region class="pointer-events-none cursor-none w-full text-center text-neutral-400">
+			{($sessionMetadata.loadedFromGameFiles
+				? $entity.tempHash
+				: $sessionMetadata.saveAsPatch
+				? $sessionMetadata.saveAsPatchPath.split(sep).length > 4
+					? "..." + $sessionMetadata.saveAsPatchPath.split(sep).slice(-4).join(sep)
+					: $sessionMetadata.saveAsPatchPath
+				: $sessionMetadata.saveAsEntityPath.split(sep).length > 4
+				? "..." + $sessionMetadata.saveAsEntityPath.split(sep).slice(-4).join(sep)
+				: $sessionMetadata.saveAsEntityPath) || ""}
+		</div>
+
+		<div data-tauri-drag-region class="flex flex-row items-center justify-end text-white">
+			<div class="h-full p-4 hover:bg-neutral-700 active:bg-neutral-600" on:click={appWindow.minimize}>
+				<svg fill="none" stroke="currentColor" width="16px" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+					<path stroke-linecap="round" stroke-linejoin="round" d="M18 12H6" />
+				</svg>
+			</div>
+			<div class="h-full p-4 hover:bg-neutral-700 active:bg-neutral-600" on:click={appWindow.toggleMaximize}>
+				<svg fill="none" stroke="currentColor" width="16px" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+					<path
+						stroke-linecap="round"
+						stroke-linejoin="round"
+						d="M16.5 8.25V6a2.25 2.25 0 00-2.25-2.25H6A2.25 2.25 0 003.75 6v8.25A2.25 2.25 0 006 16.5h2.25m8.25-8.25H18a2.25 2.25 0 012.25 2.25V18A2.25 2.25 0 0118 20.25h-7.5A2.25 2.25 0 018.25 18v-1.5m8.25-8.25h-6a2.25 2.25 0 00-2.25 2.25v6"
+					/>
+				</svg>
+			</div>
+			<div class="h-full p-4 hover:bg-red-600 active:bg-red-700" on:click={appWindow.close}>
+				<svg fill="none" stroke="currentColor" width="16px" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+					<path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+				</svg>
+			</div>
+		</div>
 
 		<SideNav bind:isOpen={isSideNavOpen} rail>
 			<SideNavItems>
@@ -1146,7 +1204,7 @@
 				{/if}
 			</SideNavItems>
 		</SideNav>
-	</Header>
+	</header>
 	<Content>
 		<div class="px-16 h-[90vh]">
 			<SplitPanes theme="">
