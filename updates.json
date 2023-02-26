@@ -1,11 +1,11 @@
 {
-	"version": "1.27.2",
-	"notes": "Fix QN dll bundling for RPKG",
-	"pub_date": "2023-01-18T05:39:46Z",
+	"version": "1.27.3",
+	"notes": "Better error handling for inspection",
+	"pub_date": "2023-02-18T08:42:26Z",
 	"platforms": {
 		"windows-x86_64": {
-			"signature": "dW50cnVzdGVkIGNvbW1lbnQ6IHNpZ25hdHVyZSBmcm9tIHRhdXJpIHNlY3JldCBrZXkKUlVScWpVZGd2b0lOTlg0QTJQbWNuWHBnUFQ4Nmp5Z0hmdCt4ZnZCT3E5TVJIZEp6UGF2RzNWU1hTL2J0RFY2ZTJVSHNMQkpEaVlNMFRPcVRBbmhHMGNuRVJoNC9ZYjdGdGdzPQp0cnVzdGVkIGNvbW1lbnQ6IHRpbWVzdGFtcDoxNjc2NDY3MDgwCWZpbGU6UXVpY2tFbnRpdHkgRWRpdG9yXzEuMjcuMl94NjRfZW4tVVMubXNpLnppcApaelFUVkY2UUdYTkJ3cVhKd01HK1FsRlFIRXlQWlphOGUrT09UZHVjK0FSVVh2c2FqTTllNDFScTlWL3pmR0U5VjFhRXNneGlEUzhFNU51cmhlQ2FBZz09Cg==",
-			"url": "https://github.com/atampy25/quickentity-editor-next/releases/download/1.27.2/QuickEntity.Editor_1.27.2_x64_en-US.msi.zip"
+			"signature": "dW50cnVzdGVkIGNvbW1lbnQ6IHNpZ25hdHVyZSBmcm9tIHRhdXJpIHNlY3JldCBrZXkKUlVScWpVZGd2b0lOTmRLTXV4Zno2dVE0L05GM0dXTG40TEhKcEs1SGVkcHlTRHg4V1ZhVEIxd1Q0aWRhdnpKRWs3K3NMQ3RFZTBEM2wrT2xaY0F6OEFEYVYzV1IwNVptendzPQp0cnVzdGVkIGNvbW1lbnQ6IHRpbWVzdGFtcDoxNjc3Mzk4OTcxCWZpbGU6UXVpY2tFbnRpdHkgRWRpdG9yXzEuMjcuM194NjRfZW4tVVMubXNpLnppcApjZ0RGaDZBSmZFWDRIc3BnWTQ3ZTNHb2hyQUtpTDB4MHNRbS9hb3JaVFluTlZOeW1SSVV5ZlVzRzd2V1hLZWFXY1ZueUNUNlp2eEYwSU41ZStJYVZBZz09Cg==",
+			"url": "https://github.com/atampy25/quickentity-editor-next/releases/download/1.27.3/QuickEntity.Editor_1.27.3_x64_en-US.msi.zip"
 		}
 	}
 }
