@@ -2,6 +2,8 @@
 
 import type Decimal from "decimal.js"
 
+export type ArrayPatchOperation = { RemoveItemByValue: any } | { AddItemAfter: [any, any] } | { AddItemBefore: [any, any] } | { AddItem: any }
+
 export interface CommentEntity {
 	parent: Ref
 	name: string
@@ -145,11 +147,13 @@ export type SubEntityOperation =
 	| { AddProperty: [string, Property] }
 	| { SetPropertyType: [string, string] }
 	| { SetPropertyValue: { property_name: string; value: any } }
+	| { PatchPropertyValue: [string, Array<ArrayPatchOperation>] }
 	| { SetPropertyPostInit: [string, boolean] }
 	| { RemovePropertyByName: string }
 	| { AddPlatformSpecificProperty: [string, string, Property] }
 	| { SetPlatformSpecificPropertyType: [string, string, string] }
 	| { SetPlatformSpecificPropertyValue: { platform: string; property_name: string; value: any } }
+	| { PatchPlatformSpecificPropertyValue: [string, string, Array<ArrayPatchOperation>] }
 	| { SetPlatformSpecificPropertyPostInit: [string, string, boolean] }
 	| { RemovePlatformSpecificPropertyByName: [string, string] }
 	| { RemovePlatformSpecificPropertiesForPlatform: string }
