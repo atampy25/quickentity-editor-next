@@ -1,11 +1,11 @@
 {
-	"version": "1.27.4",
-	"notes": "QuickEntity update: array patches",
+	"version": "1.27.5",
+	"notes": "Meaningless update to make QuickEntity use latest version",
 	"pub_date": "2023-02-18T08:42:26Z",
 	"platforms": {
 		"windows-x86_64": {
-			"signature": "dW50cnVzdGVkIGNvbW1lbnQ6IHNpZ25hdHVyZSBmcm9tIHRhdXJpIHNlY3JldCBrZXkKUlVScWpVZGd2b0lOTlkwbHJyKzd3Zm1Ic2Nock1WVlYvT3NlaWFqeElHVzdnNVRlcjNOdjQxSW02YVVlYUhmcjAzdmh5RHQ0VEQvNWlCc0llWGh2MXB6VzRDWUVYUXdOQkF3PQp0cnVzdGVkIGNvbW1lbnQ6IHRpbWVzdGFtcDoxNjc3NjYxMDU0CWZpbGU6UXVpY2tFbnRpdHkgRWRpdG9yXzEuMjcuNF94NjRfZW4tVVMubXNpLnppcAplMTVWVW5FdTFkV2Vydm83cksvV2xWZVJwQWhaWGNDVnZBTEY4TEh3TkVrUjRCdlY5R09rYW1nNU11RXg5eVhqSW8wS0NLZGZnaXg3RHJWOFNwOFdBZz09Cg==",
-			"url": "https://github.com/atampy25/quickentity-editor-next/releases/download/1.27.4/QuickEntity.Editor_1.27.4_x64_en-US.msi.zip"
+			"signature": "dW50cnVzdGVkIGNvbW1lbnQ6IHNpZ25hdHVyZSBmcm9tIHRhdXJpIHNlY3JldCBrZXkKUlVScWpVZGd2b0lOTmY2bXByOXFlUFYvMEpRdnBjbituUUJMZWhzckNpcmdObGtNMWFabmNyTUF3WUoxYTNUNWhRcTdGUTc0QmZ6VXZxYllsVXdoMHFqYmJ5U2RHS2VmSndNPQp0cnVzdGVkIGNvbW1lbnQ6IHRpbWVzdGFtcDoxNjc3NjcxNDc5CWZpbGU6UXVpY2tFbnRpdHkgRWRpdG9yXzEuMjcuNV94NjRfZW4tVVMubXNpLnppcApBTXJhbXVuR1ZlTkduaEYwNkxYS2FaTDZmQk1ycGZwcVRFaVkyNmZoQlM1RXlVOHNLNkMxOUVVMldYR0U5Q3VhdGJqSG43NzI3ZzlVV3RBOUU1MnRDZz09Cg==",
+			"url": "https://github.com/atampy25/quickentity-editor-next/releases/download/1.27.5/QuickEntity.Editor_1.27.5_x64_en-US.msi.zip"
 		}
 	}
 }
