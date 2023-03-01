@@ -1,2 +1,2 @@
 # QuickEntity Editor
-among us
+QuickEntity Editor
