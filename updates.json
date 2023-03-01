@@ -1,11 +1,11 @@
 {
-	"version": "1.27.3",
-	"notes": "Better error handling for inspection",
+	"version": "1.27.4",
+	"notes": "QuickEntity update: array patches",
 	"pub_date": "2023-02-18T08:42:26Z",
 	"platforms": {
 		"windows-x86_64": {
-			"signature": "dW50cnVzdGVkIGNvbW1lbnQ6IHNpZ25hdHVyZSBmcm9tIHRhdXJpIHNlY3JldCBrZXkKUlVScWpVZGd2b0lOTmRLTXV4Zno2dVE0L05GM0dXTG40TEhKcEs1SGVkcHlTRHg4V1ZhVEIxd1Q0aWRhdnpKRWs3K3NMQ3RFZTBEM2wrT2xaY0F6OEFEYVYzV1IwNVptendzPQp0cnVzdGVkIGNvbW1lbnQ6IHRpbWVzdGFtcDoxNjc3Mzk4OTcxCWZpbGU6UXVpY2tFbnRpdHkgRWRpdG9yXzEuMjcuM194NjRfZW4tVVMubXNpLnppcApjZ0RGaDZBSmZFWDRIc3BnWTQ3ZTNHb2hyQUtpTDB4MHNRbS9hb3JaVFluTlZOeW1SSVV5ZlVzRzd2V1hLZWFXY1ZueUNUNlp2eEYwSU41ZStJYVZBZz09Cg==",
-			"url": "https://github.com/atampy25/quickentity-editor-next/releases/download/1.27.3/QuickEntity.Editor_1.27.3_x64_en-US.msi.zip"
+			"signature": "dW50cnVzdGVkIGNvbW1lbnQ6IHNpZ25hdHVyZSBmcm9tIHRhdXJpIHNlY3JldCBrZXkKUlVScWpVZGd2b0lOTlkwbHJyKzd3Zm1Ic2Nock1WVlYvT3NlaWFqeElHVzdnNVRlcjNOdjQxSW02YVVlYUhmcjAzdmh5RHQ0VEQvNWlCc0llWGh2MXB6VzRDWUVYUXdOQkF3PQp0cnVzdGVkIGNvbW1lbnQ6IHRpbWVzdGFtcDoxNjc3NjYxMDU0CWZpbGU6UXVpY2tFbnRpdHkgRWRpdG9yXzEuMjcuNF94NjRfZW4tVVMubXNpLnppcAplMTVWVW5FdTFkV2Vydm83cksvV2xWZVJwQWhaWGNDVnZBTEY4TEh3TkVrUjRCdlY5R09rYW1nNU11RXg5eVhqSW8wS0NLZGZnaXg3RHJWOFNwOFdBZz09Cg==",
+			"url": "https://github.com/atampy25/quickentity-editor-next/releases/download/1.27.4/QuickEntity.Editor_1.27.4_x64_en-US.msi.zip"
 		}
 	}
 }
