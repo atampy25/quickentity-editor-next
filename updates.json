@@ -1,11 +1,11 @@
 {
-	"version": "1.27.5",
-	"notes": "Meaningless update to make QuickEntity use latest version",
+	"version": "1.27.6",
+	"notes": "Update GameConnection",
 	"pub_date": "2023-02-18T08:42:26Z",
 	"platforms": {
 		"windows-x86_64": {
-			"signature": "dW50cnVzdGVkIGNvbW1lbnQ6IHNpZ25hdHVyZSBmcm9tIHRhdXJpIHNlY3JldCBrZXkKUlVScWpVZGd2b0lOTmY2bXByOXFlUFYvMEpRdnBjbituUUJMZWhzckNpcmdObGtNMWFabmNyTUF3WUoxYTNUNWhRcTdGUTc0QmZ6VXZxYllsVXdoMHFqYmJ5U2RHS2VmSndNPQp0cnVzdGVkIGNvbW1lbnQ6IHRpbWVzdGFtcDoxNjc3NjcxNDc5CWZpbGU6UXVpY2tFbnRpdHkgRWRpdG9yXzEuMjcuNV94NjRfZW4tVVMubXNpLnppcApBTXJhbXVuR1ZlTkduaEYwNkxYS2FaTDZmQk1ycGZwcVRFaVkyNmZoQlM1RXlVOHNLNkMxOUVVMldYR0U5Q3VhdGJqSG43NzI3ZzlVV3RBOUU1MnRDZz09Cg==",
-			"url": "https://github.com/atampy25/quickentity-editor-next/releases/download/1.27.5/QuickEntity.Editor_1.27.5_x64_en-US.msi.zip"
+			"signature": "dW50cnVzdGVkIGNvbW1lbnQ6IHNpZ25hdHVyZSBmcm9tIHRhdXJpIHNlY3JldCBrZXkKUlVScWpVZGd2b0lOTlF0dDJwN2kyN2NSc2hqWXFEVllpWFpFZW4zREIwZkRtNGRnaFVQSEdPck1PVDBERXdOWm45Rk5WS21kK1RhYzlQNENmRDF3SFJVWDdNQ1g1OE9Qa0FVPQp0cnVzdGVkIGNvbW1lbnQ6IHRpbWVzdGFtcDoxNjc3ODIzNjI5CWZpbGU6UXVpY2tFbnRpdHkgRWRpdG9yXzEuMjcuNl94NjRfZW4tVVMubXNpLnppcApIQ0liOFpaMEpjUTMrZWJzSVoxYTlFNXlRZEVhMDFkVUdKVllsTHE0WEI1RW1COFB1N2dNazdzUDNOZmppVUNCeExYNjdYVThrUkNwQUJIK0FTM09Edz09Cg==",
+			"url": "https://github.com/atampy25/quickentity-editor-next/releases/download/1.27.6/QuickEntity.Editor_1.27.6_x64_en-US.msi.zip"
 		}
 	}
 }
