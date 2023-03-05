@@ -631,3 +631,10 @@ export function changeEntityHashesToFriendly(entity: Entity, friendly: Record<st
 export function changeEntityHashesFromFriendly(entity: Entity, friendly: Record<string, string>) {
 	changeEntityHashesToFriendly(entity, Object.fromEntries(Object.entries(friendly).map((a) => [a[1], a[0]])))
 }
+
+export function sanitise(a: string) {
+	const sanitiser = new DOMParser().parseFromString(`<div></div>`, "text/html")
+	sanitiser.querySelector("div")!.innerText = a
+
+	return sanitiser.querySelector("div")!.innerHTML
+}

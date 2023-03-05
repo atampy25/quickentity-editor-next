@@ -4,7 +4,7 @@
 	import "./treeview.css"
 
 	import type { Entity } from "$lib/quickentity-types"
-	import { getReferencedLocalEntity } from "$lib/utils"
+	import { getReferencedLocalEntity, sanitise } from "$lib/utils"
 
 	import { createEventDispatcher, onMount } from "svelte"
 	import { v4 } from "uuid"
@@ -73,7 +73,8 @@
 					dots: true,
 					icons: true
 				},
-				check_callback: true
+				check_callback: true,
+				force_text: true
 			},
 			search: {
 				fuzzy: true,
@@ -155,7 +156,7 @@
 						: icons.find((a) => entityData.factory.includes(a[0]))
 						? icons.find((a) => entityData.factory.includes(a[0]))![1]
 						: "far fa-file",
-				text: `${entityData.name} (ref ${entityID})`,
+				text: `${sanitise(entityData.name)} (ref ${entityID})`,
 				folder: entityData.factory == "[modules:/zentity.class].pc_entitytype" && reverseReferences[entityID].some((a) => a.type == "parent") // for sorting and stuff
 			})
 		}
@@ -166,7 +167,7 @@
 				id: "comment-" + index,
 				parent: getReferencedLocalEntity(entry.parent) || "#",
 				icon: "far fa-sticky-note",
-				text: entry.name + " (comment)",
+				text: sanitise(entry.name) + " (comment)",
 				folder: false // for sorting and stuff
 			})
 
