@@ -633,7 +633,7 @@ export function changeEntityHashesFromFriendly(entity: Entity, friendly: Record<
 }
 
 export function sanitise(a: string) {
-	const sanitiser = new DOMParser().parseFromString(`<div></div>`, "text/html")
+	const sanitiser = new DOMParser().parseFromString("<div></div>", "text/html")
 	sanitiser.querySelector("div")!.innerText = a
 
 	return sanitiser.querySelector("div")!.innerHTML
