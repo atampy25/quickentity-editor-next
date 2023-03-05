@@ -165,23 +165,21 @@
 
 		let decorations: monaco.editor.IEditorDecorationsCollection = editor.createDecorationsCollection([])
 
+		const idsToRefsExternal = getReferencedExternalEntities(jsonToDisplay, entity.entities)
+			.filter((a) => a.entity && typeof a.entity !== "string")
+			.map((a) => a.entity as FullRef)
+			.map((a) => [a.ref, a]) as unknown as [string, FullRef][]
+
+		const idsToNamesInternal = Object.entries(entity.entities).map((a) => [a[0], a[1].name])
+
 		editor.onDidChangeModelContent(async (e) => {
 			dispatch("contentChanged")
 
 			if ($appSettings.gameFileExtensions) {
-				const idsToRefsExternal = Object.fromEntries(
-					getReferencedExternalEntities(jsonToDisplay, entity.entities)
-						.filter((a) => a.entity && typeof a.entity !== "string")
-						.map((a) => a.entity as FullRef)
-						.map((a) => [a.ref, a])
-				)
-
-				const idsToNamesInternal = Object.fromEntries(Object.entries(entity.entities).map((a) => [a[0], a[1].name]))
-
 				const decorationsArray: monaco.editor.IModelDeltaDecoration[] = []
 
 				for (const [no, line] of editor.getValue().split("\n").entries()) {
-					for (const [id, ref] of Object.entries(idsToRefsExternal)) {
+					for (const [id, ref] of idsToRefsExternal) {
 						if (line.includes(id)) {
 							decorationsArray.push({
 								options: {
@@ -203,7 +201,7 @@
 						}
 					}
 
-					for (const [id, name] of Object.entries(idsToNamesInternal)) {
+					for (const [id, name] of idsToNamesInternal) {
 						if (line.includes(id)) {
 							decorationsArray.push({
 								options: {
