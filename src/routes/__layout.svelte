@@ -429,7 +429,7 @@
 </script>
 
 {#if ready}
-	<header data-tauri-drag-region class:bx--header={true}>
+	<header data-tauri-drag-region class:bx--header={true} class:compact={$appSettings.compactMode}>
 		<SkipToContent />
 		<!-- svelte-ignore a11y-missing-attribute -->
 		<a data-tauri-drag-region class:bx--header__name={true}>
@@ -1173,7 +1173,7 @@
 			</div>
 		</div>
 
-		<SideNav bind:isOpen={isSideNavOpen} rail>
+		<SideNav bind:isOpen={isSideNavOpen} rail class={$appSettings.compactMode ? "compact" : ""}>
 			<SideNavItems>
 				<SideNavLink
 					icon={Data2}
@@ -1261,8 +1261,8 @@
 			</SideNavItems>
 		</SideNav>
 	</header>
-	<Content>
-		<div class="px-16 h-[90vh]">
+	<Content class={ $appSettings.compactMode ? "compact" : "" }>
+		<div class={ $appSettings.compactMode ? "h-[calc(100vh-2rem)]" : "px-16 h-[90vh]" }>
 			<SplitPanes theme="">
 				{#if $workspaceData.path}
 					<Pane size={15}>
@@ -1534,4 +1534,57 @@
 	.bx--tree .bx--tree-node {
 		background-color: inherit;
 	}
+
+	/* Compact mode styles */
+	.bx--content.compact {
+		padding: 0 0 0 2rem;
+	}
+
+	.compact .bx--tile {
+		padding: 0.2rem;
+		min-height: auto;
+	}
+
+	.compact .bx--search-input, .compact .bx--text-input, .bx--select-input {
+		height: 2rem;
+	}
+
+	.compact .bx--btn {
+		min-height: auto;
+		padding-top: 0.2rem;
+		padding-bottom: 0.2rem;
+	}
+
+	.compact h1 {
+		font-size: 1.75rem;
+	}
+
+	.compact h2 {
+		font-size: 1.5rem;
+	}
+
+	.compact h3 {
+		font-size: 1.3rem;
+	}
+
+	.bx--header.compact {
+		height: 2rem;
+	}
+
+	.bx--header.compact~.bx--content {
+		margin-top: 2rem;
+	}
+
+	.compact .bx--side-nav--rail {
+		width: 2rem;
+	}
+
+	.compact .bx--side-nav--ux {
+		top: 2rem;
+	}
+
+	.compact a.bx--side-nav__link {
+		padding: 0 0.5rem;
+	}
+
 </style>

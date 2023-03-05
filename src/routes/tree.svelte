@@ -174,13 +174,15 @@
 	let helpMenuOutputs: string[] = []
 
 	let editorComponent: MonacoEditor
+
+	const padding = $appSettings.compactMode ? "p-1" : "p-2 px-3"
 </script>
 
 <SplitPanes on:resize={() => editor?.layout()} theme="">
 	<Pane>
 		<SplitPanes on:resize={() => editor?.layout()} theme="" horizontal={true}>
 			<Pane>
-				<div class="flex flex-col h-full shepherd-tree p-2 px-3">
+				<div class="flex flex-col h-full shepherd-tree {padding}">
 					<div class="flex flex-row gap-4 items-center">
 						<h1>Tree</h1>
 						<div class="flex-grow flex flex-row gap-2 items-center">
@@ -356,7 +358,7 @@
 				</div>
 			</Pane>
 			<Pane>
-				<div class="flex flex-col h-full shepherd-information p-2 px-3">
+				<div class="flex flex-col h-full shepherd-information {padding}">
 					<h1>Information</h1>
 					<div class="flex-grow overflow-y-auto overflow-x-hidden pr-2">
 						{#if selectionType}
@@ -475,7 +477,7 @@
 		</SplitPanes>
 	</Pane>
 	<Pane>
-		<div class="flex flex-col h-full shepherd-editor p-2 px-3">
+		<div class="flex flex-col h-full shepherd-editor {padding}">
 			{#if selectionType == "entity"}
 				<h1>
 					{selectedEntity.name}

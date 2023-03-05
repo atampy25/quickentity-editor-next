@@ -4,6 +4,8 @@
 	import CloseOutline from "carbon-icons-svelte/lib/CloseOutline.svelte"
 	import Edit from "carbon-icons-svelte/lib/Edit.svelte"
 	import AddAlt from "carbon-icons-svelte/lib/AddAlt.svelte"
+	
+	import { appSettings } from "$lib/stores"
 
 	import { createEventDispatcher } from "svelte"
 
@@ -16,6 +18,8 @@
 	let newValueInputModal: TextInputModal
 	let newValueInputModalOpen = false
 	let valueToEdit = ""
+
+	const padding = $appSettings.compactMode ? "py-0.5 px-2" : "py-2 px-4"
 </script>
 
 <br />
@@ -23,7 +27,7 @@
 	<tbody>
 		{#each data as value, index (value)}
 			<tr class:border-b={index != data.length - 1} class="border-solid border-b-white">
-				<td class="p-2 px-4 text-[#f4f4f4]">
+				<td class="{padding} text-[#f4f4f4]">
 					<div class="flex flex-row gap-4 items-center">
 						<code class="flex-grow break-all">{value}</code>
 						<Button
@@ -53,7 +57,7 @@
 		{/each}
 		{#if data.length == 0}
 			<tr class="border-solid border-b-white">
-				<td class="p-2 px-4 text-[#f4f4f4]">
+				<td class="{padding} text-[#f4f4f4]">
 					<div class="flex flex-row gap-4 items-center">
 						<code class="flex-grow">No entries</code>
 					</div>

@@ -76,7 +76,10 @@
 		editor = Monaco.editor.create(el, {
 			model,
 			roundedSelection: false,
-			theme: "theme"
+			theme: "theme",
+			minimap: {
+				enabled: !$appSettings.compactMode
+			},
 		})
 
 		if (inVivoExtensions) {
