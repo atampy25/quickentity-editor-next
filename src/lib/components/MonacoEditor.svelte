@@ -12,7 +12,7 @@
 	import json from "$lib/json"
 	import { addNotification, appSettings, intellisense, inVivoMetadata } from "$lib/stores"
 	import merge from "lodash/merge"
-	import { basename, dirname, join } from "@tauri-apps/api/path"
+	import { appDir, basename, dirname, join } from "@tauri-apps/api/path"
 	import { readDir, readTextFile, exists as tauriExists } from "@tauri-apps/api/fs"
 	import { getReferencedExternalEntities, getSchema, normaliseToHash } from "$lib/utils"
 	import { gameServer } from "$lib/in-vivo/gameServer"
@@ -172,6 +172,10 @@
 
 		const idsToNamesInternal = Object.entries(entity.entities).map((a) => [a[0], a[1].name])
 
+		const repoIDstoNames = (await exists(await join(await appDir(), "repository", "repo.json")))
+			? (await $intellisense.readJSONFile(await join(await appDir(), "repository", "repo.json"))).map((a) => [a["ID_"], a["Name"] || a["CommonName"]])
+			: []
+
 		editor.onDidChangeModelContent(async (e) => {
 			dispatch("contentChanged")
 
@@ -202,6 +206,22 @@
 					}
 
 					for (const [id, name] of idsToNamesInternal) {
+						if (line.includes(id)) {
+							decorationsArray.push({
+								options: {
+									isWholeLine: true,
+									after: {
+										content: " " + name,
+										cursorStops: monaco.editor.InjectedTextCursorStops.Left,
+										inlineClassName: "monacoDecorationEntityRef"
+									}
+								},
+								range: new monaco.Range(no + 1, 0, no + 1, line.length + 1)
+							})
+						}
+					}
+
+					for (const [id, name] of repoIDstoNames) {
 						if (line.includes(id)) {
 							decorationsArray.push({
 								options: {

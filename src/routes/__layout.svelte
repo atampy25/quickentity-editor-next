@@ -226,6 +226,40 @@
 
 	async function extractForInspection(tempHash: string, patchVersion: number) {
 		try {
+			if (!(await exists(await join(await appDir(), "repository", "repo.json")))) {
+				$addNotification = {
+					kind: "info",
+					title: "Extracting repository",
+					subtitle: "Extracting the repository file"
+				}
+
+				let latestChunkRepo = $appSettings.extractModdedFiles
+					? /is in: (.*?.rpkg)/gi.exec((await Command.sidecar("sidecar/rpkg-cli", ["-latest_hash", $appSettings.runtimePath, "-filter", "00204D1AFD76AB13"]).execute()).stdout)![1]
+					: [
+							...(await Command.sidecar("sidecar/rpkg-cli", ["-latest_hash", $appSettings.runtimePath, "-filter", "00204D1AFD76AB13"]).execute()).stdout.matchAll(
+								/was found in RPKG file: (.*?.rpkg)/gi
+							)
+					  ]
+							.filter((a) => !a[1].includes("patch") || Number(/(?:chunk|dlc)[0-9]*patch([0-9]*)\.rpkg/g.exec(a[1])![1]) < 10)
+							.sort((a, b) =>
+								b[1].localeCompare(a[1], undefined, {
+									numeric: true,
+									sensitivity: "base"
+								})
+							)[0][1]
+
+				await Command.sidecar("sidecar/rpkg-cli", [
+					"-extract_from_rpkg",
+					await join($appSettings.runtimePath, latestChunkRepo),
+					"-filter",
+					"00204D1AFD76AB13",
+					"-output_path",
+					await join(await appDir(), "repository")
+				]).execute()
+
+				await copyFile(await join(await appDir(), "repository", latestChunkRepo.replace(".rpkg", ""), "REPO", "00204D1AFD76AB13.REPO"), await join(await appDir(), "repository", "repo.json"))
+			}
+
 			if (!(await exists(await join(await appDir(), "inspection-cache-" + patchVersion, tempHash + ".json")))) {
 				if (await exists(await join(await appDir(), "inspection"))) {
 					await removeDir(await join(await appDir(), "inspection"), { recursive: true })
