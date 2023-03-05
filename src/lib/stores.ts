@@ -3,6 +3,7 @@ import type { Entity } from "$lib/quickentity-types"
 import { getReferencedEntities } from "$lib/utils"
 import Decimal from "decimal.js"
 import { forage } from "@tauri-apps/tauri-forage"
+import { appWindow } from '@tauri-apps/api/window'
 import json from "$lib/json"
 import { Intellisense } from "$lib/intellisense"
 import { v4 } from "uuid"
@@ -98,6 +99,18 @@ export const entity: Writable<Entity> = writable({
 	extraFactoryDependencies: [],
 	extraBlueprintDependencies: [],
 	comments: []
+})
+
+entity.subscribe((value: Entity) => {
+	// Change the title of the window to reflect the currently edited entity
+	// by showing the name of its root entity and its hash. If the root entity
+	// name is "Scene" and the hash is empty, assume that nothing is being edited
+	// and just show "QuickEntity Editor" instead.
+	if (value.entities[value.rootEntity].name !== "Scene" || value.tempHash !== "") {
+		appWindow.setTitle(`${value.entities[value.rootEntity].name} (${value.tempHash}) - QuickEntity Editor`);
+	} else {
+		appWindow.setTitle('QuickEntity Editor');
+	}
 })
 
 export const references: Readable<
