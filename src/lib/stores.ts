@@ -50,7 +50,7 @@ await forage.setItem({
 				preferredHighlightColour: "#0000ff",
 				extractModdedFiles: false,
 				h1: false,
-				compactMode: false,
+				compactMode: false
 			},
 			json.parse((await forage.getItem({ key: "appSettings" })()) || "{}")
 		)

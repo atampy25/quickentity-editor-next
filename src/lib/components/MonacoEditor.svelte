@@ -79,7 +79,7 @@
 			theme: "theme",
 			minimap: {
 				enabled: !$appSettings.compactMode
-			},
+			}
 		})
 
 		if (inVivoExtensions) {

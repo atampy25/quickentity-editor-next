@@ -1261,8 +1261,8 @@
 			</SideNavItems>
 		</SideNav>
 	</header>
-	<Content class={ $appSettings.compactMode ? "compact" : "" }>
-		<div class={ $appSettings.compactMode ? "h-[calc(100vh-2rem)]" : "px-16 h-[90vh]" }>
+	<Content class={$appSettings.compactMode ? "compact" : ""}>
+		<div class={$appSettings.compactMode ? "h-[calc(100vh-2rem)]" : "px-16 h-[90vh]"}>
 			<SplitPanes theme="">
 				{#if $workspaceData.path}
 					<Pane size={15}>
@@ -1545,7 +1545,9 @@
 		min-height: auto;
 	}
 
-	.compact .bx--search-input, .compact .bx--text-input, .bx--select-input {
+	.compact .bx--search-input,
+	.compact .bx--text-input,
+	.bx--select-input {
 		height: 2rem;
 	}
 
@@ -1571,7 +1573,7 @@
 		height: 2rem;
 	}
 
-	.bx--header.compact~.bx--content {
+	.bx--header.compact ~ .bx--content {
 		margin-top: 2rem;
 	}
 
@@ -1586,5 +1588,4 @@
 	.compact a.bx--side-nav__link {
 		padding: 0 0.5rem;
 	}
-
 </style>

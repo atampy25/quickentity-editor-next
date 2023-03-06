@@ -40,6 +40,15 @@
 		</TooltipIcon>
 	</div>
 	<br />
+	<div class="flex items-center gap-2">
+		<div class="flex-shrink">
+			<Checkbox bind:checked={$appSettings.compactMode} labelText="Enable compact mode" />
+		</div>
+		<TooltipIcon icon={Information}>
+			<span slot="tooltipText" style="font-size: 0.875rem; margin-top: 0.5rem; margin-bottom: 0.5rem">Reduces whitespace and makes the UI more compact.</span>
+		</TooltipIcon>
+	</div>
+	<br />
 	<Checkbox bind:checked={$appSettings.autoSaveOnSwitchFile} labelText="Automatically save when switching workspace files" />
 	<br />
 	<Checkbox bind:checked={$appSettings.extractModdedFiles} labelText="Load modded versions when loading from game files" />
@@ -128,15 +137,4 @@
 		<TextInput labelText="Identifier for reporting" placeholder={"EpicGamer123 (leave blank to be anonymous)"} bind:value={$appSettings.logRocketName} />
 		<br />
 	{/if}
-	<div class="flex items-center gap-2">
-		<div class="flex-shrink">
-			<Checkbox bind:checked={$appSettings.compactMode} labelText="Enable compact mode" />
-		</div>
-		<TooltipIcon icon={Information}>
-			<span slot="tooltipText" style="font-size: 0.875rem; margin-top: 0.5rem; margin-bottom: 0.5rem">
-				Reduce whitespace and make the UI more compact.
-			</span>
-		</TooltipIcon>
-	</div>
-	<br />
 </div>

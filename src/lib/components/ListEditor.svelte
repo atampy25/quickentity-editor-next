@@ -4,7 +4,7 @@
 	import CloseOutline from "carbon-icons-svelte/lib/CloseOutline.svelte"
 	import Edit from "carbon-icons-svelte/lib/Edit.svelte"
 	import AddAlt from "carbon-icons-svelte/lib/AddAlt.svelte"
-	
+
 	import { appSettings } from "$lib/stores"
 
 	import { createEventDispatcher } from "svelte"
