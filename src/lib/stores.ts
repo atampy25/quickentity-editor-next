@@ -6,6 +6,7 @@ import { forage } from "@tauri-apps/tauri-forage"
 import json from "$lib/json"
 import { Intellisense } from "$lib/intellisense"
 import { v4 } from "uuid"
+import { SdkEditor } from "./sdk-editor"
 
 interface AppSettings {
 	runtimePath: string
@@ -28,6 +29,7 @@ interface AppSettings {
 	logRocketName: string
 
 	technicalMode: boolean
+	sdkEditorEnabled: boolean
 }
 
 await forage.setItem({
@@ -48,7 +50,8 @@ await forage.setItem({
 				autoSaveOnSwitchFile: true,
 				preferredHighlightColour: "#0000ff",
 				extractModdedFiles: false,
-				h1: false
+				h1: false,
+				sdkEditorEnabled: false,
 			},
 			json.parse((await forage.getItem({ key: "appSettings" })()) || "{}")
 		)
@@ -61,6 +64,10 @@ appSettings.subscribe((value: AppSettings) => {
 	void (async () => {
 		await forage.setItem({ key: "appSettings", value: json.stringify(value) })()
 	})()
+
+	if (value.sdkEditorEnabled) {
+		SdkEditor.init()
+	}
 })
 
 export const sessionMetadata: Writable<{
