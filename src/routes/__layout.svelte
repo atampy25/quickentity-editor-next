@@ -188,6 +188,12 @@
 			}
 		}
 
+		if (ent.entities[ent.rootEntity].name !== "Scene" || ent.tempHash !== "") {
+			appWindow.setTitle(`${ent.entities[ent.rootEntity].name} (${ent.tempHash}) - QuickEntity Editor`)
+		} else {
+			appWindow.setTitle("QuickEntity Editor")
+		}
+
 		return ent
 	}
 
