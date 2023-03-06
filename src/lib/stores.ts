@@ -28,6 +28,7 @@ interface AppSettings {
 	logRocketName: string
 
 	technicalMode: boolean
+	compactMode: boolean
 }
 
 await forage.setItem({
@@ -48,7 +49,8 @@ await forage.setItem({
 				autoSaveOnSwitchFile: true,
 				preferredHighlightColour: "#0000ff",
 				extractModdedFiles: false,
-				h1: false
+				h1: false,
+				compactMode: false
 			},
 			json.parse((await forage.getItem({ key: "appSettings" })()) || "{}")
 		)
