@@ -1,11 +1,11 @@
 {
-	"version": "1.28.1",
-	"notes": "Sanitise tree view text",
+	"version": "1.29.0",
+	"notes": "Add a \"compact mode\" UI setting (#13)",
 	"pub_date": "2023-02-18T08:42:26Z",
 	"platforms": {
 		"windows-x86_64": {
-			"signature": "dW50cnVzdGVkIGNvbW1lbnQ6IHNpZ25hdHVyZSBmcm9tIHRhdXJpIHNlY3JldCBrZXkKUlVScWpVZGd2b0lOTlJVamRwcE9zczdMUlh6QWdxTWcvLzlxaEZRajBwdisxaHlOS2s1NCtmQldxdTVuTXo4NldzV1doQnBwUlQ5RkFXbTRSU2dSUFAwOE9ZSnppUlV0QUE0PQp0cnVzdGVkIGNvbW1lbnQ6IHRpbWVzdGFtcDoxNjc3OTg3NjA5CWZpbGU6UXVpY2tFbnRpdHkgRWRpdG9yXzEuMjguMV94NjRfZW4tVVMubXNpLnppcApZMURTMWM3c2JxWFVnamRFaUo5YXBGRVpmK25Dci96TWxIbUwrd2pIQzBsRmxhTnR4RG5BMWs2V1RvVTU1Z05oekc1UUwzRjdoSTVZTDJVRElkTmJBUT09Cg==",
-			"url": "https://github.com/atampy25/quickentity-editor-next/releases/download/1.28.1/QuickEntity.Editor_1.28.1_x64_en-US.msi.zip"
+			"signature": "dW50cnVzdGVkIGNvbW1lbnQ6IHNpZ25hdHVyZSBmcm9tIHRhdXJpIHNlY3JldCBrZXkKUlVScWpVZGd2b0lOTlFra1VqMUozZmd3OTVHcWFEdk8vRTBkVWN1UXZzckxhU0p1MVlFTW5DRGNDdHg4YUs3VngxS2tCSUhOS2cvakRIaVM5azFyYnhOVy96NElwQ0wvZHc4PQp0cnVzdGVkIGNvbW1lbnQ6IHRpbWVzdGFtcDoxNjgxMDQyNjM2CWZpbGU6UXVpY2tFbnRpdHkgRWRpdG9yXzEuMjkuMF94NjRfZW4tVVMubXNpLnppcApDV2VoaHNoYmZ1c1NHejJ5aDZWU0Rrd1g3R2lDTHdxd09DaVRzaXErM05ja2FzN2NqTmgzeU1nVm1HZko0UFdYOUdXYmZCVkpTd0FPNmYzL0MvUThCQT09Cg==",
+			"url": "https://github.com/atampy25/quickentity-editor-next/releases/download/1.29.0/QuickEntity.Editor_1.29.0_x64_en-US.msi.zip"
 		}
 	}
 }
