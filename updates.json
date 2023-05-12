@@ -1,11 +1,11 @@
 {
-	"version": "1.29.0",
-	"notes": "Add a \"compact mode\" UI setting (#13)",
+	"version": "1.29.1",
+	"notes": "Fix scrollbar dragging issue",
 	"pub_date": "2023-02-18T08:42:26Z",
 	"platforms": {
 		"windows-x86_64": {
-			"signature": "dW50cnVzdGVkIGNvbW1lbnQ6IHNpZ25hdHVyZSBmcm9tIHRhdXJpIHNlY3JldCBrZXkKUlVScWpVZGd2b0lOTlFra1VqMUozZmd3OTVHcWFEdk8vRTBkVWN1UXZzckxhU0p1MVlFTW5DRGNDdHg4YUs3VngxS2tCSUhOS2cvakRIaVM5azFyYnhOVy96NElwQ0wvZHc4PQp0cnVzdGVkIGNvbW1lbnQ6IHRpbWVzdGFtcDoxNjgxMDQyNjM2CWZpbGU6UXVpY2tFbnRpdHkgRWRpdG9yXzEuMjkuMF94NjRfZW4tVVMubXNpLnppcApDV2VoaHNoYmZ1c1NHejJ5aDZWU0Rrd1g3R2lDTHdxd09DaVRzaXErM05ja2FzN2NqTmgzeU1nVm1HZko0UFdYOUdXYmZCVkpTd0FPNmYzL0MvUThCQT09Cg==",
-			"url": "https://github.com/atampy25/quickentity-editor-next/releases/download/1.29.0/QuickEntity.Editor_1.29.0_x64_en-US.msi.zip"
+			"signature": "dW50cnVzdGVkIGNvbW1lbnQ6IHNpZ25hdHVyZSBmcm9tIHRhdXJpIHNlY3JldCBrZXkKUlVScWpVZGd2b0lOTmEyYk00bzNocFNua3pieDBkWWk3WVZpZmhZbERoZVd0ekplZm4xR0hUMm1sMFk1d0hJQWNIbEQ3anNxTTVISmZoYklqTkNzZUd6aHBSekF4eFNjRHdFPQp0cnVzdGVkIGNvbW1lbnQ6IHRpbWVzdGFtcDoxNjgzODc2NDg2CWZpbGU6UXVpY2tFbnRpdHkgRWRpdG9yXzEuMjkuMV94NjRfZW4tVVMubXNpLnppcApYSEZ4QzFKc2d6cVFvSDRHSWN4V1JQdmxzLzBHZWVqU1lhUXZMRHhwdmtjQTJhbEJiOERKOHZndWxreTRYVmp2cGowWWhtUEZZOGJRR2tWSkFlZmxBdz09Cg==",
+			"url": "https://github.com/atampy25/quickentity-editor-next/releases/download/1.29.1/QuickEntity.Editor_1.29.1_x64_en-US.msi.zip"
 		}
 	}
 }
