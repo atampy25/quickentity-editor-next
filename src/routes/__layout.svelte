@@ -1541,6 +1541,10 @@
 		background-color: inherit;
 	}
 
+	.monaco-scrollable-element > .invisible.scrollbar.vertical.fade {
+		z-index: 99999; /* Fixes an issue where the scrollbar can't be dragged from anywhere except its top because the minimap takes priority */
+	}
+
 	/* Compact mode styles */
 	.bx--content.compact {
 		padding: 0 0 0 2rem;
