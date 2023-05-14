@@ -1,13 +1,33 @@
 <script lang="ts">
 	import ColorPicker from "$lib/components/ColorPicker.svelte"
 	import { gameServer } from "$lib/in-vivo/gameServer"
-	import { appSettings } from "$lib/stores"
+	import { addNotification, appSettings } from "$lib/stores"
 	import { BaseDirectory, copyFile, removeFile } from "@tauri-apps/api/fs"
-	import { documentDir, join } from "@tauri-apps/api/path"
-	import { Checkbox, TextInput, Tooltip, TooltipIcon } from "carbon-components-svelte"
+	import { appDir, documentDir, join } from "@tauri-apps/api/path"
+	import { Checkbox, TextInput, Tooltip, Button, TooltipIcon } from "carbon-components-svelte"
+	import { rm } from 'fs'
 
 	import Information from "carbon-icons-svelte/lib/Information.svelte"
 	import { slide } from "svelte/transition"
+
+	let displayNotifications: { kind: "error" | "info" | "info-square" | "success" | "warning" | "warning-alt"; title: string; subtitle: string }[] = []
+
+	addNotification.subscribe((value) => {
+		if (value) {
+			if (!displayNotifications.some((a) => a.title == value!.title)) {
+				displayNotifications = [...displayNotifications, value]
+				timeoutRemoveNotification(value.title)
+			}
+
+			value = null
+		}
+	})
+
+	function timeoutRemoveNotification(title: string) {
+		setTimeout(() => {
+			displayNotifications = displayNotifications.filter((a) => a.title != title)
+		}, 6000)
+	}
 
 	let documentsPath: string
 	;(async () => {
@@ -137,4 +157,24 @@
 		<TextInput labelText="Identifier for reporting" placeholder={"EpicGamer123 (leave blank to be anonymous)"} bind:value={$appSettings.logRocketName} />
 		<br />
 	{/if}
+	<Button
+		kind="secondary"
+		on:click={async () => {
+			rm(await appDir(), { recursive: true, force: true }, error => {
+				if(error) {
+					$addNotification = {
+						kind: "error",
+						title: "Failed to clear cache",
+						subtitle: error.message
+					}
+					return
+				}
+				$addNotification = {
+					kind: "success",
+					title: "Cache cleared succesfully",
+					subtitle: "QNE's patch has successfully been cleared."
+				}
+			})
+		}}
+		>Clear Cache</Button>
 </div>
