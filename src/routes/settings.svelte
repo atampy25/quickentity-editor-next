@@ -5,10 +5,11 @@
 	import { BaseDirectory, copyFile, removeFile } from "@tauri-apps/api/fs"
 	import { appDir, documentDir, join } from "@tauri-apps/api/path"
 	import { Checkbox, TextInput, Tooltip, Button, TooltipIcon } from "carbon-components-svelte"
-	import { rm } from 'fs'
+	import { invoke } from '@tauri-apps/api/tauri'
 
 	import Information from "carbon-icons-svelte/lib/Information.svelte"
 	import { slide } from "svelte/transition"
+	import { TrashCan } from 'carbon-icons-svelte'
 
 	let displayNotifications: { kind: "error" | "info" | "info-square" | "success" | "warning" | "warning-alt"; title: string; subtitle: string }[] = []
 
@@ -159,22 +160,23 @@
 	{/if}
 	<Button
 		kind="secondary"
-		on:click={async () => {
-			rm(await appDir(), { recursive: true, force: true }, error => {
-				if(error) {
+		icon={TrashCan}
+		on:click={() => {
+			invoke('clear_cache')
+				.then(() => {
+					$addNotification = {
+						kind: "success",
+						title: "Cache cleared succesfully",
+						subtitle: "QNE's patch has successfully been cleared."
+					}
+				})
+				.catch(error => {
 					$addNotification = {
 						kind: "error",
 						title: "Failed to clear cache",
-						subtitle: error.message
+						subtitle: error
 					}
-					return
-				}
-				$addNotification = {
-					kind: "success",
-					title: "Cache cleared succesfully",
-					subtitle: "QNE's patch has successfully been cleared."
-				}
-			})
+				})
 		}}
 		>Clear Cache</Button>
 </div>
