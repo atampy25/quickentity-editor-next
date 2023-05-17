@@ -6,7 +6,7 @@ module.exports = async ({ file, n, allFilesLength }) => {
 		execSync('ResourceTool HM3 convert TBLU "' + file.path + '" "' + file.path + '.json" --simple')
 	} catch {
 		console.log("Error converting TBLU " + file.path)
-		fs.removeSync(file.path + '.json')
+		fs.removeSync(file.path + ".json")
 	}
 
 	if (n % 1000 == 0) {

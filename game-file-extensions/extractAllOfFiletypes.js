@@ -30,7 +30,7 @@ async function a() {
 			.sort((a, b) => {
 				const aChunk = /(chunk[0-9]*)(?:patch[0-9]*)?/gi.exec(a.rpkg)[1]
 				const bChunk = /(chunk[0-9]*)(?:patch[0-9]*)?/gi.exec(b.rpkg)[1]
-				
+
 				if (aChunk.localeCompare(bChunk) !== 0) {
 					return aChunk.localeCompare(bChunk, undefined, {
 						numeric: true,
