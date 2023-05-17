@@ -27,12 +27,22 @@ async function a() {
 					path: a
 				}
 			})
-			.sort((a, b) =>
-				b.rpkg.localeCompare(a.rpkg, undefined, {
-					numeric: true,
-					sensitivity: "base"
-				})
-			)
+			.sort((a, b) => {
+				const aChunk = /(chunk[0-9]*)(?:patch[0-9]*)?/gi.exec(a.rpkg)[1]
+				const bChunk = /(chunk[0-9]*)(?:patch[0-9]*)?/gi.exec(b.rpkg)[1]
+				
+				if (aChunk.localeCompare(bChunk) !== 0) {
+					return aChunk.localeCompare(bChunk, undefined, {
+						numeric: true,
+						sensitivity: "base"
+					})
+				} else {
+					return b.rpkg.localeCompare(a.rpkg, undefined, {
+						numeric: true,
+						sensitivity: "base"
+					})
+				}
+			})
 
 		let allFilesSuperseded = []
 		let allFilesSupersededBasenames = new Set()
