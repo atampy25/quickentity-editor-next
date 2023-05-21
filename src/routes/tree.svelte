@@ -395,19 +395,21 @@
 										{#if $reverseReferences[selectedEntityID]?.length}
 											<div class="flex flex-wrap gap-2">
 												{#each $reverseReferences[selectedEntityID] as ref}
-													<ClickableTile
-														on:click={() => {
-															tree.navigateTo(ref.entity)
-														}}
-													>
-														<h4 class="-mt-1">
-															{ref.type.replace(/([A-Z])/g, " $1")[0].toUpperCase() + ref.type.replace(/([A-Z])/g, " $1").slice(1)}
-															<span style="font-size: 1rem;">{ref.context?.join("/") || ""}</span>
-														</h4>
-														{$entity.entities[ref.entity].name} (
-														<code>{ref.entity}</code>
-														)
-													</ClickableTile>
+													{#if ref.type !== 'parent' || !$appSettings.hideParentReverseReferences}
+														<ClickableTile
+															on:click={() => {
+																tree.navigateTo(ref.entity)
+															}}
+														>
+															<h4 class="-mt-1">
+																{ref.type.replace(/([A-Z])/g, " $1")[0].toUpperCase() + ref.type.replace(/([A-Z])/g, " $1").slice(1)}
+																<span style="font-size: 1rem;">{ref.context?.join("/") || ""}</span>
+															</h4>
+															{$entity.entities[ref.entity].name} (
+															<code>{ref.entity}</code>
+															)
+														</ClickableTile>
+													{/if}
 												{/each}
 											</div>
 										{:else}

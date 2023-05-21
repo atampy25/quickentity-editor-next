@@ -69,6 +69,8 @@
 		<TextInput labelText="Path to game file data (required)" placeholder={documentsPath + "blabla"} bind:value={$appSettings.gameFileExtensionsDataPath} />
 		<br />
 	{/if}
+	<Checkbox bind:checked={$appSettings.hideParentReverseReferences} labelText="Hide parent reverse references" />
+	<br />
 	<div class="flex items-center gap-2">
 		<div class="flex-shrink">
 			<Checkbox

@@ -29,6 +29,8 @@ interface AppSettings {
 
 	technicalMode: boolean
 	compactMode: boolean
+
+	hideParentReverseReferences: boolean
 }
 
 await forage.setItem({
