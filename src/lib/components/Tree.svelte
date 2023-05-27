@@ -198,20 +198,20 @@
 										icon: "fas fa-right-left",
 										action: false,
 										submenu: {
-											highlight: {
+											select: {
 												separator_before: false,
 												separator_after: false,
-												label: "Highlight",
+												label: "Select in Editor",
 												icon: "fas fa-highlighter",
 												action: async (b: { reference: string | HTMLElement | JQuery<HTMLElement> }) => {
 													let d = tree.get_node(b.reference)
 
-													await gameServer.highlightEntity(d.id, entity.entities[d.id])
+													await gameServer.selectEntity(d.id, entity)
 
 													$addNotification = {
 														kind: "success",
-														title: "Entity highlighted",
-														subtitle: "Check your game; the entity should now be displaying its bounding box."
+														title: "Entity selected",
+														subtitle: "Check your game; the entity should now be selected."
 													}
 												}
 											},
@@ -713,7 +713,7 @@
 					currentlySelected = data[1].node.id
 
 					if (inVivoExtensions && autoHighlightEntities && gameServer.connected && gameServer.lastAddress && !data[1].node.id.startsWith("comment")) {
-						gameServer.highlightEntity(data[1].node.id, entity.entities[data[1].node.id])
+						gameServer.selectEntity(data[1].node.id, entity)
 					}
 
 					dispatch("selectionUpdate", data)

@@ -71,30 +71,7 @@
 	{/if}
 	<div class="flex items-center gap-2">
 		<div class="flex-shrink">
-			<Checkbox
-				bind:checked={$appSettings.inVivoExtensions}
-				on:change={async () => {
-					if ($appSettings.inVivoExtensions) {
-						try {
-							await copyFile("GameConnection.dll", await join($appSettings.retailPath, "mods", "GameConnection.dll"))
-						} catch {}
-
-						try {
-							await copyFile("GameConnection.pdb", await join($appSettings.retailPath, "mods", "GameConnection.pdb"))
-						} catch {}
-					} else {
-						try {
-							await removeFile(await join($appSettings.retailPath, "mods", "GameConnection.dll"))
-						} catch {}
-
-						try {
-							await removeFile(await join($appSettings.retailPath, "mods", "GameConnection.pdb"))
-						} catch {}
-					}
-				}}
-				labelText="Enable in-vivo extensions"
-				disabled={$appSettings.retailPath == "" || $appSettings.runtimePath == ""}
-			/>
+			<Checkbox bind:checked={$appSettings.inVivoExtensions} labelText="Enable in-vivo extensions" disabled={$appSettings.retailPath == "" || $appSettings.runtimePath == ""} />
 		</div>
 		<TooltipIcon icon={Information}>
 			<span slot="tooltipText" style="font-size: 0.875rem; margin-top: 0.5rem; margin-bottom: 0.5rem">
@@ -104,23 +81,6 @@
 		</TooltipIcon>
 	</div>
 	<br />
-	{#if $appSettings.inVivoExtensions}
-		<Checkbox bind:checked={$appSettings.autoHighlightEntities} labelText="Automatically highlight selected entities" />
-		<br />
-		<div class="flex flex-wrap gap-2 items-center">
-			Preferred highlight colour
-			<ColorPicker
-				type="rgb"
-				bind:value={$appSettings.preferredHighlightColour}
-				on:change={async ({ detail }) => {
-					if (gameServer.connected && gameServer.lastMessage != 0 && Math.max(0, Date.now() - gameServer.lastMessage) > 0) {
-						await gameServer.setHighlightColour(detail)
-					}
-				}}
-			/>
-		</div>
-		<br />
-	{/if}
 	<div class="flex items-center gap-2">
 		<div class="flex-shrink">
 			<Checkbox bind:checked={$appSettings.enableLogRocket} labelText="Enable issue reporting (requires a restart to take effect)" />

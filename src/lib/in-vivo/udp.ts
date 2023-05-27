@@ -1,14 +1,15 @@
+import type { ReceivedMessage, SentMessage } from "$lib/rs-types"
 import { invoke, transformCallback } from "@tauri-apps/api/tauri"
 
 export default class UDPSocket {
 	id: number
-	private listeners: Array<(data: { datagram: string; address: string }) => any>
-	private onceListeners: Array<{ id: string; condition: (data: { datagram: string; address: string }) => boolean; callback: (data: { datagram: string; address: string }) => any }>
+	private listeners: Array<(data: { message: ReceivedMessage; address: string }) => any>
+	private onceListeners: Array<{ id: string; condition: (data: { message: ReceivedMessage; address: string }) => boolean; callback: (data: { message: ReceivedMessage; address: string }) => any }>
 
 	constructor(
 		id: number,
-		listeners: Array<(data: { datagram: string; address: string }) => any>,
-		onceListeners: Array<{ id: string; condition: (data: { datagram: string; address: string }) => boolean; callback: (data: { datagram: string; address: string }) => any }>
+		listeners: Array<(data: { message: ReceivedMessage; address: string }) => any>,
+		onceListeners: Array<{ id: string; condition: (data: { message: ReceivedMessage; address: string }) => boolean; callback: (data: { message: ReceivedMessage; address: string }) => any }>
 	) {
 		this.id = id
 		this.listeners = listeners
@@ -16,9 +17,9 @@ export default class UDPSocket {
 	}
 
 	static async bind(address: string, killCallback: () => any): Promise<UDPSocket> {
-		const listeners: Array<(data: { datagram: string; address: string }) => any> = []
-		const onceListeners: Array<{ id: string; condition: (data: { datagram: string; address: string }) => boolean; callback: (data: { datagram: string; address: string }) => any }> = []
-		const handler = (data: { datagram: string; address: string }) => {
+		const listeners: Array<(data: { message: ReceivedMessage; address: string }) => any> = []
+		const onceListeners: Array<{ id: string; condition: (data: { message: ReceivedMessage; address: string }) => boolean; callback: (data: { message: ReceivedMessage; address: string }) => any }> = []
+		const handler = (data: { message: ReceivedMessage; address: string }) => {
 			listeners.forEach((l) => l(data))
 			onceListeners.forEach(({ id, condition, callback }) => {
 				if (condition(data)) {
@@ -31,27 +32,25 @@ export default class UDPSocket {
 			})
 		}
 
-		return invoke<number>("plugin:udp|bind", {
+		return invoke<number>("udp_bind", {
 			address,
 			callbackFunction: transformCallback(handler),
 			killCallbackFunction: transformCallback(killCallback)
 		}).then((id) => new UDPSocket(id, listeners, onceListeners))
 	}
 
-	addListener(cb: (data: { datagram: string; address: string }) => any) {
+	addListener(cb: (data: { message: ReceivedMessage; address: string }) => any) {
 		this.listeners.push(cb)
 	}
 
-	once(id: string, condition: (data: { datagram: string; address: string }) => boolean, callback: (data: { datagram: string; address: string }) => any) {
+	once(id: string, condition: (data: { message: ReceivedMessage; address: string }) => boolean, callback: (data: { message: ReceivedMessage; address: string }) => any) {
 		this.onceListeners.push({ id, condition, callback })
 	}
 
 	send(address: string, message: string): Promise<void> {
-		if (message != "Ping") {
-			console.log("Sending datagram", message, "to", address)
-		}
+		console.log("Sending message", message, "to", address)
 
-		return invoke("plugin:udp|send", {
+		return invoke("udp_send", {
 			id: this.id,
 			address,
 			message
@@ -59,7 +58,7 @@ export default class UDPSocket {
 	}
 
 	kill(): Promise<void> {
-		return invoke("plugin:udp|kill", {
+		return invoke("udp_kill", {
 			id: this.id
 		})
 	}

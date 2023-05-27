@@ -94,11 +94,6 @@
 	let currentTime = 0
 	setInterval(() => {
 		currentTime = Date.now()
-
-		if (gameServer.connected && gameServer.lastAddress) {
-			void gameServer.client.send(gameServer.lastAddress, "Ping")
-			void gameServer.setHighlightColour($appSettings.preferredHighlightColour)
-		}
 	}, 100)
 
 	const exists = async (path: string) => {
@@ -754,14 +749,6 @@
 							class="shepherd-gameConnection"
 							on:click={async () => {
 								if (!gameServer.connected) {
-									try {
-										await copyFile("GameConnection.dll", await join($appSettings.retailPath, "mods", "GameConnection.dll"))
-									} catch {}
-
-									try {
-										await copyFile("GameConnection.pdb", await join($appSettings.retailPath, "mods", "GameConnection.pdb"))
-									} catch {}
-
 									await gameServer.start()
 
 									gameServer.client.addListener(({ datagram }) => {
