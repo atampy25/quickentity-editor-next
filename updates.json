@@ -1,11 +1,11 @@
 {
-	"version": "1.29.2",
-	"notes": "Ignore single TEMP/TBLU errors in GFE and sort files better",
+	"version": "1.30.0",
+	"notes": "Repository ID decorations for override editor",
 	"pub_date": "2023-02-18T08:42:26Z",
 	"platforms": {
 		"windows-x86_64": {
-			"signature": "dW50cnVzdGVkIGNvbW1lbnQ6IHNpZ25hdHVyZSBmcm9tIHRhdXJpIHNlY3JldCBrZXkKUlVScWpVZGd2b0lOTlM3ZzR5NWdpckJWNkw3R080dVpuc0xWNjVjZUJOdTFlcmZERERCZlY5ekY3S010RDJvOVdEZlhPUW5IcFFiVzFZZUlWWWt1Q2M3YUR1ZlUxNXMzK2dNPQp0cnVzdGVkIGNvbW1lbnQ6IHRpbWVzdGFtcDoxNjg0MzAyMDU5CWZpbGU6UXVpY2tFbnRpdHkgRWRpdG9yXzEuMjkuMl94NjRfZW4tVVMubXNpLnppcApkczdGODZzeG92Q3dsK1ZOT1YxVDZDYTU5cEhhYmVRamJHaGxwVWxBLzFzQm4zZk9VV2JzVk05aERCVzJZWDlhZGRWSVRVRkdiU25FRDd0dUpVcU9DUT09Cg==",
-			"url": "https://github.com/atampy25/quickentity-editor-next/releases/download/1.29.2/QuickEntity.Editor_1.29.2_x64_en-US.msi.zip"
+			"signature": "dW50cnVzdGVkIGNvbW1lbnQ6IHNpZ25hdHVyZSBmcm9tIHRhdXJpIHNlY3JldCBrZXkKUlVScWpVZGd2b0lOTlFVR1J5VFg3cllVQmM4V21KOXhYVSt5eUpJTTRQZ2NuTXo1eDdBVU9wWHg2UHRad0Q5SEJreTRiaW9qQ3lyWTVZV1JpdHJsV2lKbjRPQWJqWmJ0Y0FFPQp0cnVzdGVkIGNvbW1lbnQ6IHRpbWVzdGFtcDoxNjg2NzI3ODc1CWZpbGU6UXVpY2tFbnRpdHkgRWRpdG9yXzEuMzAuMF94NjRfZW4tVVMubXNpLnppcApEbmdaOXU1amtMVjBFcGxiOHJrOVl4WVhlOHpqbFNVdUM1MWV3dmlMejRJZTkyZzBDSVkvNXBDTmlLTWZHWStBNHZjNW56a0NOSWI5Mm0zY3FNZFNEZz09Cg==",
+			"url": "https://github.com/atampy25/quickentity-editor-next/releases/download/1.30.0/QuickEntity.Editor_1.30.0_x64_en-US.msi.zip"
 		}
 	}
 }

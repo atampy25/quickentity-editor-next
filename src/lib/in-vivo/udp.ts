@@ -18,7 +18,11 @@ export default class UDPSocket {
 
 	static async bind(address: string, killCallback: () => any): Promise<UDPSocket> {
 		const listeners: Array<(data: { message: ReceivedMessage; address: string }) => any> = []
-		const onceListeners: Array<{ id: string; condition: (data: { message: ReceivedMessage; address: string }) => boolean; callback: (data: { message: ReceivedMessage; address: string }) => any }> = []
+		const onceListeners: Array<{
+			id: string
+			condition: (data: { message: ReceivedMessage; address: string }) => boolean
+			callback: (data: { message: ReceivedMessage; address: string }) => any
+		}> = []
 		const handler = (data: { message: ReceivedMessage; address: string }) => {
 			listeners.forEach((l) => l(data))
 			onceListeners.forEach(({ id, condition, callback }) => {

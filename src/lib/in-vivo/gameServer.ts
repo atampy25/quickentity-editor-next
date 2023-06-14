@@ -32,11 +32,14 @@ class GameServer {
 
 			if (Object.keys(message)[0] === "Hello") {
 				if (Object.values(message)[0].protocol_version === 1) {
-					void this.client.send(this.lastAddress, JSON.stringify({
-						"Hello": {
-							protocol_version: 1
-						}
-					}))
+					void this.client.send(
+						this.lastAddress,
+						JSON.stringify({
+							Hello: {
+								protocol_version: 1
+							}
+						})
+					)
 				} else {
 					addNotification.set({
 						kind: "error",
@@ -134,12 +137,15 @@ class GameServer {
 	}
 
 	async selectEntity(id: string, entity: Entity) {
-		await this.client.send(this.lastAddress, JSON.stringify({
-			"SelectEntity": {
-				entity_id: new Decimal(`0x${id}`).toString(),
-				tblu_hash: new Decimal(`0x${normaliseToHash(entity.tbluHash)}`).toString()
-			}
-		}))
+		await this.client.send(
+			this.lastAddress,
+			JSON.stringify({
+				SelectEntity: {
+					entity_id: new Decimal(`0x${id}`).toString(),
+					tblu_hash: new Decimal(`0x${normaliseToHash(entity.tbluHash)}`).toString()
+				}
+			})
+		)
 	}
 }
 

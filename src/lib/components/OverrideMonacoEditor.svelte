@@ -88,7 +88,7 @@
 				}
 			]
 		})
-		
+
 		let decorations: monaco.editor.IEditorDecorationsCollection = editor.createDecorationsCollection([])
 
 		const repoIDstoNames = (await exists(await join(await appDir(), "repository", "repo.json")))

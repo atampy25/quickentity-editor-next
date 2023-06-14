@@ -1,5 +1,5 @@
 use bincode::Options;
-use serde_json::{json, from_str};
+use serde_json::{from_str, json};
 use std::{collections::HashMap, net::SocketAddr, sync::Arc};
 use tauri::{
 	api::ipc::{format_callback, CallbackFn},
@@ -80,7 +80,10 @@ pub async fn udp_send(
 	if let Some((tx, _)) = manager.0.lock().await.get_mut(&id) {
 		tx.send_to(
 			&get_bincode()
-				.serialize(&from_str::<SentMessage>(&message).expect("Couldn't deserialise message to send"))
+				.serialize(
+					&from_str::<SentMessage>(&message)
+						.expect("Couldn't deserialise message to send"),
+				)
 				.expect("Couldn't serialise message to send"),
 			address.parse::<SocketAddr>().unwrap(),
 		)
