@@ -1,5 +1,5 @@
 <script lang="ts">
-	import type monaco from "monaco-editor"
+	import * as monaco from "monaco-editor"
 	import { createEventDispatcher, onMount } from "svelte"
 	import editorWorker from "monaco-editor/esm/vs/editor/editor.worker?worker"
 	import jsonWorker from "monaco-editor/esm/vs/language/json/json.worker?worker"
@@ -7,10 +7,21 @@
 	import htmlWorker from "monaco-editor/esm/vs/language/html/html.worker?worker"
 	import tsWorker from "monaco-editor/esm/vs/language/typescript/ts.worker?worker"
 	import type { Property } from "$lib/quickentity-types"
+	import { appSettings, intellisense } from "$lib/stores"
 	import json from "$lib/json"
 	import { v4 } from "uuid"
+	import { appDir, join } from "@tauri-apps/api/path"
+	import { exists as tauriExists } from "@tauri-apps/api/fs"
 	import { getSchema } from "$lib/utils"
 	import merge from "lodash/merge"
+
+	const exists = async (path: string) => {
+		try {
+			return await tauriExists(path)
+		} catch {
+			return false
+		}
+	}
 
 	let el: HTMLDivElement = null!
 	let Monaco: typeof monaco
@@ -77,9 +88,39 @@
 				}
 			]
 		})
+		
+		let decorations: monaco.editor.IEditorDecorationsCollection = editor.createDecorationsCollection([])
 
-		editor.onDidChangeModelContent((e) => {
-			dispatch("contentChanged", editor.getValue())
+		const repoIDstoNames = (await exists(await join(await appDir(), "repository", "repo.json")))
+			? (await $intellisense.readJSONFile(await join(await appDir(), "repository", "repo.json"))).map((a) => [a["ID_"], a["Name"] || a["CommonName"]])
+			: []
+
+		editor.onDidChangeModelContent(async (e) => {
+			dispatch("contentChanged")
+
+			if ($appSettings.gameFileExtensions) {
+				const decorationsArray: monaco.editor.IModelDeltaDecoration[] = []
+
+				for (const [no, line] of editor.getValue().split("\n").entries()) {
+					for (const [id, name] of repoIDstoNames) {
+						if (line.includes(id)) {
+							decorationsArray.push({
+								options: {
+									isWholeLine: true,
+									after: {
+										content: " " + name,
+										cursorStops: monaco.editor.InjectedTextCursorStops.Left,
+										inlineClassName: "monacoDecorationEntityRef"
+									}
+								},
+								range: new monaco.Range(no + 1, 0, no + 1, line.length + 1)
+							})
+						}
+					}
+				}
+
+				decorations.set(decorationsArray)
+			}
 		})
 
 		return () => {
@@ -95,3 +136,9 @@
 </script>
 
 <div bind:this={el} class="mt-1 h-full" />
+
+<style global>
+	.monacoDecorationEntityRef {
+		color: #858585 !important;
+	}
+</style>
