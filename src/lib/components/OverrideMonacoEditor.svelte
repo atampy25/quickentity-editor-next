@@ -96,7 +96,7 @@
 			: []
 
 		editor.onDidChangeModelContent(async (e) => {
-			dispatch("contentChanged")
+			dispatch("contentChanged", editor.getValue())
 
 			if ($appSettings.gameFileExtensions) {
 				const decorationsArray: monaco.editor.IModelDeltaDecoration[] = []
