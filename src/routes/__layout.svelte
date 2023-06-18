@@ -306,7 +306,7 @@
 
 				for (let entry of (await readDir(await join(await appDir(), "inspection", latestChunkTemp.replace(".rpkg", "")), { recursive: true })).flatMap((a) => a.children || a)) {
 					if (entry.path.endsWith(".TEMP")) {
-						await Command.sidecar("ResourceTool", [$appSettings.h1 ? "HM2016" : "HM3", "convert", "TEMP", entry.path, entry.path + ".json", "--simple"]).execute()
+						await Command.sidecar("ResourceTool", [$appSettings.h1 ? "HM2016" : $appSettings.h2 ? "HM2" : "HM3", "convert", "TEMP", entry.path, entry.path + ".json", "--simple"]).execute()
 						tempPath = entry.path + ".json"
 					} else if (entry.path.endsWith(".TEMP.meta")) {
 						await Command.sidecar("sidecar/rpkg-cli", ["-hash_meta_to_json", entry.path]).execute()
@@ -357,7 +357,7 @@
 
 				for (let entry of (await readDir(await join(await appDir(), "inspection", latestChunkTblu.replace(".rpkg", "")), { recursive: true })).flatMap((a) => a.children || a)) {
 					if (entry.path.endsWith(".TBLU")) {
-						await Command.sidecar("ResourceTool", [$appSettings.h1 ? "HM2016" : "HM3", "convert", "TBLU", entry.path, entry.path + ".json", "--simple"]).execute()
+						await Command.sidecar("ResourceTool", [$appSettings.h1 ? "HM2016" : $appSettings.h2 ? "HM2" : "HM3", "convert", "TBLU", entry.path, entry.path + ".json", "--simple"]).execute()
 						tbluPath = entry.path + ".json"
 					} else if (entry.path.endsWith(".TBLU.meta")) {
 						await Command.sidecar("sidecar/rpkg-cli", ["-hash_meta_to_json", entry.path]).execute()
