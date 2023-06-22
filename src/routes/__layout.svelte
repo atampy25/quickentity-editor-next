@@ -1233,8 +1233,8 @@
 						}}
 						isSelected={$page.url.pathname == "/3d"}
 					/>
-					<SideNavDivider />
 				{/if}
+				<SideNavDivider />
 				<SideNavLink
 					icon={Settings}
 					text="Settings"

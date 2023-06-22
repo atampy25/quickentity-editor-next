@@ -463,15 +463,15 @@
 						},
 						{
 							"type": "number",
-							"description": "The second coefficient of the polynomial (i.e. the 3 in 3x^2 + 2x + 12)."
+							"description": "The second coefficient of the polynomial (i.e. the 3 in 3x^2 + 4x + 12)."
 						},
 						{
 							"type": "number",
-							"description": "The first coefficient of the polynomial (i.e. the 2 in 3x^2 + 2x + 12)."
+							"description": "The first coefficient of the polynomial (i.e. the 4 in 3x^2 + 4x + 12)."
 						},
 						{
 							"type": "number",
-							"description": "The constant term of the polynomial (i.e. the 12 in 3x^2 + 2x + 12)."
+							"description": "The constant term of the polynomial (i.e. the 12 in 3x^2 + 4x + 12)."
 						}
 					],
 					"additionalItems": false,

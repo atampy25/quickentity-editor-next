@@ -16,6 +16,8 @@
 	import { readDir, readTextFile, exists as tauriExists } from "@tauri-apps/api/fs"
 	import { getReferencedExternalEntities, getSchema, normaliseToHash } from "$lib/utils"
 	import { gameServer } from "$lib/in-vivo/gameServer"
+	import { Modal } from "carbon-components-svelte"
+	import GraphRenderer from "./GraphRenderer.svelte"
 
 	let el: HTMLDivElement = null!
 	export let Monaco: typeof monaco
@@ -36,6 +38,9 @@
 			return false
 		}
 	}
+
+	let showCurvePreview = false
+	let curveToPreview = null
 
 	onMount(async () => {
 		// @ts-ignore
@@ -96,6 +101,7 @@
 			}
 
 			const showUpdatePropertyCondition = customContextKey("showUpdatePropertyCondition", false)
+			const showPreviewCurveCondition = customContextKey("showPreviewCurveCondition", false)
 
 			const contextmenu = editor.getContribution("editor.contrib.contextmenu")!
 			const realOnContextMenuMethod = contextmenu._onContextMenu
@@ -112,7 +118,15 @@
 				if (!word || !gameServer.connected || !gameServer.lastAddress) {
 					showUpdatePropertyCondition.set(false)
 				} else {
-					showUpdatePropertyCondition.set(!!json.parse(editor.getValue()).properties[word])
+					showUpdatePropertyCondition.set(!!(json.parse(editor.getValue()).properties && json.parse(editor.getValue()).properties[word]))
+				}
+
+				if (!word) {
+					showPreviewCurveCondition.set(false)
+				} else {
+					showPreviewCurveCondition.set(
+						json.parse(editor.getValue()).properties && json.parse(editor.getValue()).properties[word] && json.parse(editor.getValue()).properties[word].type === "ZCurve"
+					)
 				}
 
 				realOnContextMenuMethod.apply(contextmenu, arguments)
@@ -145,6 +159,22 @@
 						title: "Property updated",
 						subtitle: `The value of the ${propertyName} property should now be reflected in-game.`
 					}
+				}
+			})
+
+			editor.addAction({
+				id: "preview-curve",
+				label: "Preview curve",
+				contextMenuGroupId: "navigation",
+				contextMenuOrder: 0,
+				keybindings: [],
+				precondition: "showPreviewCurveCondition",
+				run: async (ed) => {
+					const propertyName = editor.getModel()!.getWordAtPosition(ed.getPosition()!)!.word
+
+					curveToPreview = json.parse(editor.getValue()).properties[propertyName].value.data
+
+					showCurvePreview = true
 				}
 			})
 
@@ -422,6 +452,12 @@
 </script>
 
 <div bind:this={el} class="h-full" />
+
+<Modal passiveModal bind:open={showCurvePreview} modalHeading="Curve preview">
+	{#if curveToPreview}
+		<GraphRenderer {curveToPreview} />
+	{/if}
+</Modal>
 
 <style global>
 	.monacoDecorationEntityRef {
