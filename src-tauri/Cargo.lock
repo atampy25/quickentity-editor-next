@@ -2345,7 +2345,7 @@ dependencies = [
 
 [[package]]
 name = "quickentity-editor"
-version = "1.32.0"
+version = "1.32.1"
 dependencies = [
  "bincode",
  "futures-util",
