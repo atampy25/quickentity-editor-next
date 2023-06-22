@@ -57,9 +57,7 @@
 		"default": {
 			"m_nTicks": 0
 		},
-		"required": [
-			"m_nTicks"
-		]
+		"required": ["m_nTicks"]
 	},
 	"ZRuntimeResourceID": {
 		"anyOf": [
@@ -91,10 +89,7 @@
 			"x": 0,
 			"y": 0
 		},
-		"required": [
-			"x",
-			"y"
-		]
+		"required": ["x", "y"]
 	},
 	"SVector3": {
 		"type": "object",
@@ -115,11 +110,7 @@
 			"y": 0,
 			"z": 0
 		},
-		"required": [
-			"x",
-			"y",
-			"z"
-		]
+		"required": ["x", "y", "z"]
 	},
 	"SVector4": {
 		"type": "object",
@@ -144,12 +135,7 @@
 			"z": 0,
 			"w": 0
 		},
-		"required": [
-			"x",
-			"y",
-			"z",
-			"w"
-		]
+		"required": ["x", "y", "z", "w"]
 	},
 	"SWorldSpaceSettings": {
 		"type": "object",
@@ -174,14 +160,7 @@
 				"type": "integer"
 			}
 		},
-		"required": [
-			"bDynamicScale",
-			"fCloseupDistance",
-			"fDynamicScaleAlpha",
-			"fDynamicScaleBlendRange",
-			"fDynamicScaleNearDistance",
-			"fScale"
-		]
+		"required": ["bDynamicScale", "fCloseupDistance", "fDynamicScaleAlpha", "fDynamicScaleBlendRange", "fDynamicScaleNearDistance", "fScale"]
 	},
 	"S25DProjectionSettings": {
 		"type": "object",
@@ -272,14 +251,7 @@
 						"type": "integer"
 					}
 				},
-				"required": [
-					"bDynamicScale",
-					"fCloseupDistance",
-					"fDynamicScaleAlpha",
-					"fDynamicScaleBlendRange",
-					"fDynamicScaleNearDistance",
-					"fScale"
-				]
+				"required": ["bDynamicScale", "fCloseupDistance", "fDynamicScaleAlpha", "fDynamicScaleBlendRange", "fDynamicScaleNearDistance", "fScale"]
 			}
 		},
 		"required": [
@@ -440,10 +412,7 @@
 				"type": "string"
 			}
 		},
-		"required": [
-			"m_eDecalEffect",
-			"m_eEmitterEffect"
-		]
+		"required": ["m_eDecalEffect", "m_eEmitterEffect"]
 	},
 	"SSCCuriousConfiguration": {
 		"type": "object",
@@ -459,11 +428,7 @@
 				"type": "boolean"
 			}
 		},
-		"required": [
-			"m_CanCiviliansInvestigate",
-			"m_CanGuardsInvestigate",
-			"m_CanVIPsInvestigate"
-		]
+		"required": ["m_CanCiviliansInvestigate", "m_CanGuardsInvestigate", "m_CanVIPsInvestigate"]
 	},
 	"ZCurve": {
 		"type": "array",

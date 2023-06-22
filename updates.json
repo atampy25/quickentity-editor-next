@@ -1,11 +1,11 @@
 {
-	"version": "1.31.0",
-	"notes": "Add H2 support",
+	"version": "1.32.0",
+	"notes": "Documentation for all property types",
 	"pub_date": "2023-02-18T08:42:26Z",
 	"platforms": {
 		"windows-x86_64": {
-			"signature": "dW50cnVzdGVkIGNvbW1lbnQ6IHNpZ25hdHVyZSBmcm9tIHRhdXJpIHNlY3JldCBrZXkKUlVScWpVZGd2b0lOTlplMC9Yck1GbU14Q3FFQjF3NW12QTVpZ2lWUDcvb01SUHZhNzhYVHBYbEsvcHMxVnh5NFRISUdsZVFNeW1Xc3lsQ1lGekdhUUlRWVZwVGh5aDRMbXdjPQp0cnVzdGVkIGNvbW1lbnQ6IHRpbWVzdGFtcDoxNjg3MDY2ODE5CWZpbGU6UXVpY2tFbnRpdHkgRWRpdG9yXzEuMzEuMF94NjRfZW4tVVMubXNpLnppcApZbnMvS3FXZ1h4bFE4ckNsODMvNnlIMWtpVFQyWDY3djhBSXViQmtoaW1oSkE1NFBWbVdaSnAyTGVLcTlMellxbzVCTXBmUUxoYS9pU2hvT1g2RU9DZz09Cg==",
-			"url": "https://github.com/atampy25/quickentity-editor-next/releases/download/1.31.0/QuickEntity.Editor_1.31.0_x64_en-US.msi.zip"
+			"signature": "dW50cnVzdGVkIGNvbW1lbnQ6IHNpZ25hdHVyZSBmcm9tIHRhdXJpIHNlY3JldCBrZXkKUlVScWpVZGd2b0lOTmRvSTNvdWRrZjNQaWRVNjNFcHBRdVIzb1drdWVDOUovY0E0eW5MT3dwYjMrcnRsa0dUUTV2M3EyZE01YU9Dd3BlT1ZjeFpERDBjNWJMem9SZnlpd2dvPQp0cnVzdGVkIGNvbW1lbnQ6IHRpbWVzdGFtcDoxNjg3NDIzMTYwCWZpbGU6UXVpY2tFbnRpdHkgRWRpdG9yXzEuMzIuMF94NjRfZW4tVVMubXNpLnppcAp3Nm52elJpcGxjTFBGNUt0eGhFWUNTTzBNL0ltTHV1Q1haMnQ2L2JZQ2RubW9nanhlZzYxanhkZy8ybjNNVWN3ak9hdmEzTm9KMEc0M08xSkRUOUdBUT09Cg==",
+			"url": "https://github.com/atampy25/quickentity-editor-next/releases/download/1.32.0/QuickEntity.Editor_1.32.0_x64_en-US.msi.zip"
 		}
 	}
 }
