@@ -432,45 +432,54 @@
 	},
 	"ZCurve": {
 		"type": "array",
-		"description": "A curve made up of polynomial functions. ZCurves usually end with a constant curve where all coefficients are set to zero.",
-		"items": {
-			"type": "array",
-			"description": "A polynomial function.",
-			"items": [
-				{
-					"type": "number",
-					"description": "An X position on the curve where this polynomial starts. Usually between 0 and 1 if the curve deals with time."
-				},
-				{
-					"type": "number",
-					"description": "The exact value of the curve at the given time."
-				},
-				{
-					"type": "number",
-					"description": "The fifth coefficient of the polynomial (i.e. what x^5 is multiplied by)."
-				},
-				{
-					"type": "number",
-					"description": "The fourth coefficient of the polynomial (i.e. what x^4 is multiplied by)."
-				},
-				{
-					"type": "number",
-					"description": "The third coefficient of the polynomial (i.e. what x^3 is multiplied by)."
-				},
-				{
-					"type": "number",
-					"description": "The second coefficient of the polynomial (i.e. the 3 in 3x^2 + 2x + 12)."
-				},
-				{
-					"type": "number",
-					"description": "The first coefficient of the polynomial (i.e. the 2 in 3x^2 + 2x + 12)."
-				},
-				{
-					"type": "number",
-					"description": "The constant term of the polynomial (i.e. the 12 in 3x^2 + 2x + 12)."
+		"description": "A ZCurve.",
+		"properties": {
+			"data": {
+				"type": "array",
+				"description": "A curve made up of polynomial functions. ZCurves usually end with a constant curve where all coefficients are set to zero.",
+				"items": {
+					"type": "array",
+					"description": "A polynomial function.",
+					"items": [
+						{
+							"type": "number",
+							"description": "An X position on the curve where this polynomial starts. Usually between 0 and 1 if the curve deals with time."
+						},
+						{
+							"type": "number",
+							"description": "The exact value of the curve at the given time."
+						},
+						{
+							"type": "number",
+							"description": "The fifth coefficient of the polynomial (i.e. what x^5 is multiplied by)."
+						},
+						{
+							"type": "number",
+							"description": "The fourth coefficient of the polynomial (i.e. what x^4 is multiplied by)."
+						},
+						{
+							"type": "number",
+							"description": "The third coefficient of the polynomial (i.e. what x^3 is multiplied by)."
+						},
+						{
+							"type": "number",
+							"description": "The second coefficient of the polynomial (i.e. the 3 in 3x^2 + 2x + 12)."
+						},
+						{
+							"type": "number",
+							"description": "The first coefficient of the polynomial (i.e. the 2 in 3x^2 + 2x + 12)."
+						},
+						{
+							"type": "number",
+							"description": "The constant term of the polynomial (i.e. the 12 in 3x^2 + 2x + 12)."
+						}
+					],
+					"additionalItems": false,
+					"minItems": 8,
+					"maxItems": 8
 				}
-			],
-			"additionalItems": false
-		}
+			}
+		},
+		"required": ["data"]
 	}
 }
