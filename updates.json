@@ -1,11 +1,11 @@
 {
-	"version": "1.32.1",
-	"notes": "Fix ZCurve schema",
+	"version": "1.33.0",
+	"notes": "Curve preview",
 	"pub_date": "2023-02-18T08:42:26Z",
 	"platforms": {
 		"windows-x86_64": {
-			"signature": "dW50cnVzdGVkIGNvbW1lbnQ6IHNpZ25hdHVyZSBmcm9tIHRhdXJpIHNlY3JldCBrZXkKUlVScWpVZGd2b0lOTlNRV0lwU2YxejkzV1NvUHFCZ09MVHBMNmtiS2JWUTd1Sk5kaW9QZ1pkNW9WNE1yWHZQRmpCVmw2ZW5kSlEyeUExcXprZXZiYk5Sd1kxL1RJdXpjMWdjPQp0cnVzdGVkIGNvbW1lbnQ6IHRpbWVzdGFtcDoxNjg3NDI2MDA2CWZpbGU6UXVpY2tFbnRpdHkgRWRpdG9yXzEuMzIuMV94NjRfZW4tVVMubXNpLnppcApkRHFFbFd1N3pONU9iL0VvSnM3V3l2enlzRS8xQVpxT3IxWkYycFVJS0JmM3ZWbHFaOVVWRW5FVjJwMFUxcmx4YzVBelpqUnQ4T0g1STJzbFhIcXRDZz09Cg==",
-			"url": "https://github.com/atampy25/quickentity-editor-next/releases/download/1.32.1/QuickEntity.Editor_1.32.1_x64_en-US.msi.zip"
+			"signature": "dW50cnVzdGVkIGNvbW1lbnQ6IHNpZ25hdHVyZSBmcm9tIHRhdXJpIHNlY3JldCBrZXkKUlVScWpVZGd2b0lOTmRHNWJHVHNSMVR3YXRTS2hmWWxJNDhXSDRrMGNvMmJWMmJ4QStEOWh3b1czWW8wS0IzWERUaklzOCsvNDRFRkpSbkhPSHNGY0Rub0xsczk2UnU0VXc0PQp0cnVzdGVkIGNvbW1lbnQ6IHRpbWVzdGFtcDoxNjg3NDQwNTMyCWZpbGU6UXVpY2tFbnRpdHkgRWRpdG9yXzEuMzMuMF94NjRfZW4tVVMubXNpLnppcAp2QU14QWtuVUk0VVQrY2NWSzM0UlplWTVsM1NHbm8rL2dJc3VTRXVDT1M5UHJYcSszczJSdDdvRFBNdFJGYzVlb0lkTEE3MmtaWnhGVkZPMXhyRXJCdz09Cg==",
+			"url": "https://github.com/atampy25/quickentity-editor-next/releases/download/1.33.0/QuickEntity.Editor_1.33.0_x64_en-US.msi.zip"
 		}
 	}
 }
