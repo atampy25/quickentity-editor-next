@@ -87,113 +87,111 @@
 			}
 		})
 
-		if (inVivoExtensions) {
-			const customContextKey = (id: string, defaultValue: any) => {
-				const condition = editor.createContextKey(id, defaultValue)
-				let cachedValue = defaultValue
-				return {
-					set: (value: any) => {
-						cachedValue = value
-						condition.set(value)
-					},
-					get: () => cachedValue
-				}
+		const customContextKey = (id: string, defaultValue: any) => {
+			const condition = editor.createContextKey(id, defaultValue)
+			let cachedValue = defaultValue
+			return {
+				set: (value: any) => {
+					cachedValue = value
+					condition.set(value)
+				},
+				get: () => cachedValue
+			}
+		}
+
+		const showUpdatePropertyCondition = customContextKey("showUpdatePropertyCondition", false)
+		const showPreviewCurveCondition = customContextKey("showPreviewCurveCondition", false)
+
+		const contextmenu = editor.getContribution("editor.contrib.contextmenu")!
+		const realOnContextMenuMethod = contextmenu._onContextMenu
+		contextmenu._onContextMenu = function () {
+			const event = arguments[0]
+
+			let word: string | undefined | false
+			try {
+				word = editor.getModel()!.getWordAtPosition(event.target.position)?.word
+			} catch {
+				word = false
 			}
 
-			const showUpdatePropertyCondition = customContextKey("showUpdatePropertyCondition", false)
-			const showPreviewCurveCondition = customContextKey("showPreviewCurveCondition", false)
-
-			const contextmenu = editor.getContribution("editor.contrib.contextmenu")!
-			const realOnContextMenuMethod = contextmenu._onContextMenu
-			contextmenu._onContextMenu = function () {
-				const event = arguments[0]
-
-				let word: string | undefined | false
-				try {
-					word = editor.getModel()!.getWordAtPosition(event.target.position)?.word
-				} catch {
-					word = false
-				}
-
-				if (!word || !gameServer.connected || !gameServer.lastAddress) {
-					showUpdatePropertyCondition.set(false)
-				} else {
-					showUpdatePropertyCondition.set(!!(json.parse(editor.getValue()).properties && json.parse(editor.getValue()).properties[word]))
-				}
-
-				if (!word) {
-					showPreviewCurveCondition.set(false)
-				} else {
-					showPreviewCurveCondition.set(
-						json.parse(editor.getValue()).properties && json.parse(editor.getValue()).properties[word] && json.parse(editor.getValue()).properties[word].type === "ZCurve"
-					)
-				}
-
-				realOnContextMenuMethod.apply(contextmenu, arguments)
-			}
-
-			editor.addAction({
-				id: "update-property",
-				label: "Update property in-game",
-				contextMenuGroupId: "navigation",
-				contextMenuOrder: 0,
-				keybindings: [],
-				precondition: "showUpdatePropertyCondition",
-				run: async (ed) => {
-					const propertyName = editor.getModel()!.getWordAtPosition(ed.getPosition()!)!.word
-
-					await gameServer.updateProperty(subEntityID, propertyName, json.parse(editor.getValue()).properties[propertyName])
-
-					$inVivoMetadata.entities[subEntityID] ??= {
-						dirtyPins: false,
-						dirtyUnchangeables: false,
-						dirtyExtensions: false,
-						dirtyProperties: [],
-						hasSetProperties: false
-					}
-
-					$inVivoMetadata.entities[subEntityID].dirtyProperties = $inVivoMetadata.entities[subEntityID].dirtyProperties.filter((a) => a != propertyName)
-
-					$addNotification = {
-						kind: "success",
-						title: "Property updated",
-						subtitle: `The value of the ${propertyName} property should now be reflected in-game.`
-					}
-				}
-			})
-
-			editor.addAction({
-				id: "preview-curve",
-				label: "Preview curve",
-				contextMenuGroupId: "navigation",
-				contextMenuOrder: 0,
-				keybindings: [],
-				precondition: "showPreviewCurveCondition",
-				run: async (ed) => {
-					const propertyName = editor.getModel()!.getWordAtPosition(ed.getPosition()!)!.word
-
-					curveToPreview = json.parse(editor.getValue()).properties[propertyName].value.data
-
-					showCurvePreview = true
-				}
-			})
-
-			const realDoShowContextMenuMethod = contextmenu._doShowContextMenu
-			contextmenu._doShowContextMenu = function () {
-				let index = 0
-				if (showUpdatePropertyCondition.get()) index++
-
-				if (index > 0)
-					arguments[0].splice(
-						index,
-						0,
-						arguments[0].find((item: { id: string }) => item.id === "vs.actions.separator")
-					)
-
-				realDoShowContextMenuMethod.apply(contextmenu, arguments)
-
+			if (!word || !inVivoExtensions || !gameServer.connected || !gameServer.lastAddress) {
 				showUpdatePropertyCondition.set(false)
+			} else {
+				showUpdatePropertyCondition.set(!!(json.parse(editor.getValue()).properties && json.parse(editor.getValue()).properties[word]))
 			}
+
+			if (!word) {
+				showPreviewCurveCondition.set(false)
+			} else {
+				showPreviewCurveCondition.set(
+					json.parse(editor.getValue()).properties && json.parse(editor.getValue()).properties[word] && json.parse(editor.getValue()).properties[word].type === "ZCurve"
+				)
+			}
+
+			realOnContextMenuMethod.apply(contextmenu, arguments)
+		}
+
+		editor.addAction({
+			id: "update-property",
+			label: "Update property in-game",
+			contextMenuGroupId: "navigation",
+			contextMenuOrder: 0,
+			keybindings: [],
+			precondition: "showUpdatePropertyCondition",
+			run: async (ed) => {
+				const propertyName = editor.getModel()!.getWordAtPosition(ed.getPosition()!)!.word
+
+				await gameServer.updateProperty(subEntityID, propertyName, json.parse(editor.getValue()).properties[propertyName])
+
+				$inVivoMetadata.entities[subEntityID] ??= {
+					dirtyPins: false,
+					dirtyUnchangeables: false,
+					dirtyExtensions: false,
+					dirtyProperties: [],
+					hasSetProperties: false
+				}
+
+				$inVivoMetadata.entities[subEntityID].dirtyProperties = $inVivoMetadata.entities[subEntityID].dirtyProperties.filter((a) => a != propertyName)
+
+				$addNotification = {
+					kind: "success",
+					title: "Property updated",
+					subtitle: `The value of the ${propertyName} property should now be reflected in-game.`
+				}
+			}
+		})
+
+		editor.addAction({
+			id: "preview-curve",
+			label: "Preview curve",
+			contextMenuGroupId: "navigation",
+			contextMenuOrder: 0,
+			keybindings: [],
+			precondition: "showPreviewCurveCondition",
+			run: async (ed) => {
+				const propertyName = editor.getModel()!.getWordAtPosition(ed.getPosition()!)!.word
+
+				curveToPreview = json.parse(editor.getValue()).properties[propertyName].value.data
+
+				showCurvePreview = true
+			}
+		})
+
+		const realDoShowContextMenuMethod = contextmenu._doShowContextMenu
+		contextmenu._doShowContextMenu = function () {
+			let index = 0
+			if (showUpdatePropertyCondition.get()) index++
+
+			if (index > 0)
+				arguments[0].splice(
+					index,
+					0,
+					arguments[0].find((item: { id: string }) => item.id === "vs.actions.separator")
+				)
+
+			realDoShowContextMenuMethod.apply(contextmenu, arguments)
+
+			showUpdatePropertyCondition.set(false)
 		}
 
 		let decorations: monaco.editor.IEditorDecorationsCollection = editor.createDecorationsCollection([])
@@ -206,16 +204,16 @@
 		const idsToNamesInternal = Object.entries(entity.entities).map((a) => [a[0], a[1].name])
 
 		const repoIDstoNames = (await exists(await join(await appDir(), "repository", "repo.json")))
-			? (await $intellisense.readJSONFile(await join(await appDir(), "repository", "repo.json"))).map((a) => [a["ID_"], a["Name"] || a["CommonName"]])
+			? json.parse(await readTextFile(await join(await appDir(), "repository", "repo.json"))).map((a) => [a["ID_"], a["Name"] || a["CommonName"]])
 			: []
 
 		editor.onDidChangeModelContent(async (e) => {
 			dispatch("contentChanged")
 
-			if ($appSettings.gameFileExtensions) {
-				const decorationsArray: monaco.editor.IModelDeltaDecoration[] = []
+			const decorationsArray: monaco.editor.IModelDeltaDecoration[] = []
 
-				for (const [no, line] of editor.getValue().split("\n").entries()) {
+			for (const [no, line] of editor.getValue().split("\n").entries()) {
+				if ($appSettings.gameFileExtensions) {
 					for (const [id, ref] of idsToRefsExternal) {
 						if (line.includes(id)) {
 							decorationsArray.push({
@@ -237,42 +235,42 @@
 							})
 						}
 					}
+				}
 
-					for (const [id, name] of idsToNamesInternal) {
-						if (line.includes(id)) {
-							decorationsArray.push({
-								options: {
-									isWholeLine: true,
-									after: {
-										content: " " + name,
-										cursorStops: monaco.editor.InjectedTextCursorStops.Left,
-										inlineClassName: "monacoDecorationEntityRef"
-									}
-								},
-								range: new monaco.Range(no + 1, 0, no + 1, line.length + 1)
-							})
-						}
-					}
-
-					for (const [id, name] of repoIDstoNames) {
-						if (line.includes(id)) {
-							decorationsArray.push({
-								options: {
-									isWholeLine: true,
-									after: {
-										content: " " + name,
-										cursorStops: monaco.editor.InjectedTextCursorStops.Left,
-										inlineClassName: "monacoDecorationEntityRef"
-									}
-								},
-								range: new monaco.Range(no + 1, 0, no + 1, line.length + 1)
-							})
-						}
+				for (const [id, name] of idsToNamesInternal) {
+					if (line.includes(id)) {
+						decorationsArray.push({
+							options: {
+								isWholeLine: true,
+								after: {
+									content: " " + name,
+									cursorStops: monaco.editor.InjectedTextCursorStops.Left,
+									inlineClassName: "monacoDecorationEntityRef"
+								}
+							},
+							range: new monaco.Range(no + 1, 0, no + 1, line.length + 1)
+						})
 					}
 				}
 
-				decorations.set(decorationsArray)
+				for (const [id, name] of repoIDstoNames) {
+					if (line.includes(id)) {
+						decorationsArray.push({
+							options: {
+								isWholeLine: true,
+								after: {
+									content: " " + name,
+									cursorStops: monaco.editor.InjectedTextCursorStops.Left,
+									inlineClassName: "monacoDecorationEntityRef"
+								}
+							},
+							range: new monaco.Range(no + 1, 0, no + 1, line.length + 1)
+						})
+					}
+				}
 			}
+
+			decorations.set(decorationsArray)
 		})
 
 		return () => {
