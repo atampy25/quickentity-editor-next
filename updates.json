@@ -1,11 +1,11 @@
 {
-	"version": "1.33.0",
-	"notes": "Curve preview",
+	"version": "1.33.1",
+	"notes": "Fix display conditions of decorations and curve preview",
 	"pub_date": "2023-02-18T08:42:26Z",
 	"platforms": {
 		"windows-x86_64": {
-			"signature": "dW50cnVzdGVkIGNvbW1lbnQ6IHNpZ25hdHVyZSBmcm9tIHRhdXJpIHNlY3JldCBrZXkKUlVScWpVZGd2b0lOTmRHNWJHVHNSMVR3YXRTS2hmWWxJNDhXSDRrMGNvMmJWMmJ4QStEOWh3b1czWW8wS0IzWERUaklzOCsvNDRFRkpSbkhPSHNGY0Rub0xsczk2UnU0VXc0PQp0cnVzdGVkIGNvbW1lbnQ6IHRpbWVzdGFtcDoxNjg3NDQwNTMyCWZpbGU6UXVpY2tFbnRpdHkgRWRpdG9yXzEuMzMuMF94NjRfZW4tVVMubXNpLnppcAp2QU14QWtuVUk0VVQrY2NWSzM0UlplWTVsM1NHbm8rL2dJc3VTRXVDT1M5UHJYcSszczJSdDdvRFBNdFJGYzVlb0lkTEE3MmtaWnhGVkZPMXhyRXJCdz09Cg==",
-			"url": "https://github.com/atampy25/quickentity-editor-next/releases/download/1.33.0/QuickEntity.Editor_1.33.0_x64_en-US.msi.zip"
+			"signature": "dW50cnVzdGVkIGNvbW1lbnQ6IHNpZ25hdHVyZSBmcm9tIHRhdXJpIHNlY3JldCBrZXkKUlVScWpVZGd2b0lOTlJqZ05HTzRjUVF5TjhhQklwNWNZM0dtaFdYMTBsTlAxSEhpWEpnTDl2MVFkVWt1UW4xQktZQVlZMGZxNnpLbUFFT1ZkeEduNWlqeEgxMlhzZzRLVWdnPQp0cnVzdGVkIGNvbW1lbnQ6IHRpbWVzdGFtcDoxNjg3NDc5ODg4CWZpbGU6UXVpY2tFbnRpdHkgRWRpdG9yXzEuMzMuMV94NjRfZW4tVVMubXNpLnppcApBT3VFeWQ1b0F0eVFsYjVwTFh5cnF5aS96cExGV1BoUWJJQm5jR0RWdFJIS0dUdGgxSjZoYkxQSDBaQ2xNU3E3QUY3Tk5KTXQvSXBFUHloK0FxODVCUT09Cg==",
+			"url": "https://github.com/atampy25/quickentity-editor-next/releases/download/1.33.1/QuickEntity.Editor_1.33.1_x64_en-US.msi.zip"
 		}
 	}
 }
