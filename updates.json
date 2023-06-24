@@ -1,11 +1,11 @@
 {
-	"version": "1.34.0",
-	"notes": "Game file quick switcher in workspace panel",
+	"version": "1.35.0",
+	"notes": "Maintain selection and tree view node open state when switching files",
 	"pub_date": "2023-02-18T08:42:26Z",
 	"platforms": {
 		"windows-x86_64": {
-			"signature": "dW50cnVzdGVkIGNvbW1lbnQ6IHNpZ25hdHVyZSBmcm9tIHRhdXJpIHNlY3JldCBrZXkKUlVScWpVZGd2b0lOTmRjNmdYQ2hyaURudnZZVmhyRlNlRlhvbUZXZ0phVUUvWm14YlgwSW1tK2VFWWJOWEM0anBONVEzbzdlT2hVREhWSStENFM4S3ZabVdUaDdZMkNiVVFNPQp0cnVzdGVkIGNvbW1lbnQ6IHRpbWVzdGFtcDoxNjg3NjEwNTY3CWZpbGU6UXVpY2tFbnRpdHkgRWRpdG9yXzEuMzQuMF94NjRfZW4tVVMubXNpLnppcApoL3lLcklMVzlWTlRJTWZZbFhSZUFTS0d5cFlwZG5RNTdYbHRmUTVZU1FRMm1Yc3g1SVgrQ1JkdlZhWFRtakVJYThQMnJFcEJCdTh0bDNYaWZtMWxEQT09Cg==",
-			"url": "https://github.com/atampy25/quickentity-editor-next/releases/download/1.34.0/QuickEntity.Editor_1.34.0_x64_en-US.msi.zip"
+			"signature": "dW50cnVzdGVkIGNvbW1lbnQ6IHNpZ25hdHVyZSBmcm9tIHRhdXJpIHNlY3JldCBrZXkKUlVScWpVZGd2b0lOTmZiei9Pa2QzZnZJdjNGSjBoMGpLWElCQmtCM21xR1VkZ1Nkd3p1SmNBRWtpSzJSakl1bHdDWHVuWGE1RDNVaWo1Zmd2RDZpdE9kOVEyZFpoeVF5S2d3PQp0cnVzdGVkIGNvbW1lbnQ6IHRpbWVzdGFtcDoxNjg3NjEzNTY0CWZpbGU6UXVpY2tFbnRpdHkgRWRpdG9yXzEuMzUuMF94NjRfZW4tVVMubXNpLnppcAp3N1c3OHNXc1VMK3FaelJZMldBVHdXUDBCaUx3NE1GNnU4SDlkaXBYQTA2UEtCb1lmVTJmSE83MmV6Z3RGT2llSUdFUFdFYXRiN2FLRGZzbklCOURBZz09Cg==",
+			"url": "https://github.com/atampy25/quickentity-editor-next/releases/download/1.35.0/QuickEntity.Editor_1.35.0_x64_en-US.msi.zip"
 		}
 	}
 }
