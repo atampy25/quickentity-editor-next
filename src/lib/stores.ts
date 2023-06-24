@@ -78,7 +78,10 @@ export const sessionMetadata: Writable<{
 
 export const workspaceData: Writable<{
 	path?: string
-}> = writable({})
+	ephemeralFiles: string[]
+}> = writable({
+	ephemeralFiles: []
+})
 
 export const entity: Writable<Entity> = writable({
 	tempHash: "",

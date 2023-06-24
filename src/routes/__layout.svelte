@@ -26,10 +26,11 @@
 		Modal,
 		TextInput,
 		Select,
-		TreeView
+		TreeView,
+		Button
 	} from "carbon-components-svelte"
 
-	import { addNotification, appSettings, entity, forceSaveSubEntity, inVivoMetadata, sessionMetadata, workspaceData } from "$lib/stores"
+	import { addNotification, appSettings, entity, forceSaveSubEntity, intellisense, inVivoMetadata, sessionMetadata, workspaceData } from "$lib/stores"
 	import json from "$lib/json"
 	import { shortcut } from "$lib/shortcut"
 	import { gameServer } from "$lib/in-vivo/gameServer"
@@ -62,6 +63,7 @@
 	import { changeEntityHashesFromFriendly, changeEntityHashesToFriendly } from "$lib/utils"
 	import { goto } from "$app/navigation"
 	import Decimal from "decimal.js"
+	import { data } from "jquery"
 
 	let displayNotifications: { kind: "error" | "info" | "info-square" | "success" | "warning" | "warning-alt"; title: string; subtitle: string }[] = []
 
@@ -427,6 +429,8 @@
 
 	let selectedWorkspaceTreeItem = ""
 	let previousSelectedWorkspaceTreeItem = ""
+
+	$: if ($entity.tempHash) appWindow.setTitle(`${$entity.entities[$entity.rootEntity].name} (${$entity.tempHash})`)
 </script>
 
 {#if ready}
@@ -1383,6 +1387,74 @@
 								}}
 							/>
 						{/await}
+						<div class="pt-2 -mb-3.5 px-3">
+							<h1>Game files</h1>
+							{#each [...new Set($workspaceData.ephemeralFiles)] as hash}
+								<Button
+									style="width: 100%"
+									kind={hash == $entity.tempHash ? "secondary" : "tertiary"}
+									on:click={async () => {
+										// save old file
+										if ($appSettings.autoSaveOnSwitchFile) {
+											$forceSaveSubEntity = { value: true }
+
+											setTimeout(async () => {
+												$forceSaveSubEntity = { value: false }
+												if ($sessionMetadata.originalEntityPath && !$sessionMetadata.loadedFromGameFiles) {
+													if ($sessionMetadata.saveAsPatch) {
+														await writeTextFile("entity.json", await getEntityAsText(), { dir: BaseDirectory.App })
+
+														await Command.sidecar("sidecar/quickentity-rs", [
+															"patch",
+															"generate",
+															"--input1",
+															String($sessionMetadata.originalEntityPath),
+															"--input2",
+															await join(await appDir(), "entity.json"),
+															"--output",
+															String($sessionMetadata.saveAsPatchPath),
+															"--format-fix"
+														]).execute()
+
+														$sessionMetadata.loadedFromGameFiles = false
+
+														breadcrumb("entity", "Saved to patch (original path) when switching to ephemeral file")
+													} else {
+														await writeTextFile($sessionMetadata.saveAsEntityPath, await getEntityAsText())
+
+														$sessionMetadata.loadedFromGameFiles = false
+
+														breadcrumb("entity", "Saved to file (original path) when switching to ephemeral file")
+													}
+												}
+											}, 500)
+										}
+
+										// load game file
+										await extractForInspection(hash, 6)
+
+										$sessionMetadata.originalEntityPath = await join(await appDir(), "inspection", "entity.json")
+										$sessionMetadata.saveAsPatch = false
+										$sessionMetadata.saveAsEntityPath = $sessionMetadata.originalEntityPath
+										$sessionMetadata.loadedFromGameFiles = true
+
+										$entity = await getEntityFromText(await readTextFile(await join(await appDir(), "inspection", "entity.json")))
+
+										previousSelectedWorkspaceTreeItem = ""
+										selectedWorkspaceTreeItem = ""
+
+										breadcrumb("entity", `Loaded ${$entity.tempHash} from game files`)
+									}}
+								>
+									{hash}{#if $appSettings.gameFileExtensions}{#await (async () => {
+											return await $intellisense.readJSONFile(await join($appSettings.gameFileExtensionsDataPath, "TEMP", hash + ".TEMP.entity.json"))
+										})() then data}
+											{` (${data.entities[data.rootEntity].name})`}
+										{/await}{/if}
+								</Button>
+								<div class="mt-2" />
+							{/each}
+						</div>
 					</Pane>
 				{/if}
 				<Pane>
@@ -1422,6 +1494,8 @@
 			$sessionMetadata.loadedFromGameFiles = true
 
 			$entity = await getEntityFromText(await readTextFile(await join(await appDir(), "inspection", "entity.json")))
+
+			$workspaceData.ephemeralFiles = [...$workspaceData.ephemeralFiles, x]
 
 			breadcrumb("entity", `Loaded ${$entity.tempHash} from game files`)
 
