@@ -8,7 +8,7 @@
 	import ColorPicker from "$lib/components/ColorPicker.svelte"
 	import Entity3DMesh from "$lib/components/Entity3DMesh.svelte"
 
-	import { addNotification, appSettings, entity, sessionMetadata, references, reverseReferences, inVivoMetadata, forceSaveSubEntity } from "$lib/stores"
+	import { addNotification, appSettings, entity, sessionMetadata, references, reverseReferences, inVivoMetadata, forceSaveSubEntity, workspaceData } from "$lib/stores"
 	import { changeReferenceToLocalEntity, checkValidityOfEntity, deleteReferencesToEntity, genRandHex, normaliseToHash, traverseEntityTree } from "$lib/utils"
 	import json from "$lib/json"
 
@@ -20,11 +20,11 @@
 	import isEqual from "lodash/isEqual"
 	import { AmbientLight, Canvas, DirectionalLight, Mesh, OrbitControls, PerspectiveCamera } from "@threlte/core"
 	import { appDir, join } from "@tauri-apps/api/path"
-	import { readTextFile, exists as tauriExists } from "@tauri-apps/api/fs"
+	import { readTextFile, exists as tauriExists, writeTextFile } from "@tauri-apps/api/fs"
 	import { DEG2RAD } from "three/src/math/MathUtils"
 	import { CircleGeometry, DoubleSide, MeshStandardMaterial } from "three"
 	import { writeText } from "@tauri-apps/api/clipboard"
-	import deepMerge from "lodash/merge"
+	import mergeWith from "lodash/mergeWith"
 	import { gameServer } from "$lib/in-vivo/gameServer"
 	import { onDestroy } from "svelte"
 
@@ -36,6 +36,13 @@
 			return false
 		}
 	}
+
+	const deepMerge = (a: any, b: any) =>
+		mergeWith(a, b, (orig: any, src: any) => {
+			if (Array.isArray(orig)) {
+				return src
+			}
+		})
 
 	let editor: monaco.editor.IStandaloneCodeEditor
 
@@ -66,14 +73,16 @@
 
 	let entityPath: string | undefined
 
-	sessionMetadata.subscribe(async (value) => {
-		if (value.originalEntityPath != entityPath || value.originalEntityPath == (await join(await appDir(), "inspection", "entity.json"))) {
-			selectionType = null
-			selectedEntityID = undefined!
-			selectedEntity = undefined!
-			entityPath = value.originalEntityPath
-		}
-	})
+	onDestroy(
+		sessionMetadata.subscribe(async (value) => {
+			if (value.originalEntityPath != entityPath || value.originalEntityPath == (await join(await appDir(), "inspection", "entity.json"))) {
+				selectionType = null
+				selectedEntityID = undefined!
+				selectedEntity = undefined!
+				entityPath = value.originalEntityPath
+			}
+		})
+	)
 
 	let evaluationPaneInput = ""
 
@@ -176,6 +185,29 @@
 	let editorComponent: MonacoEditor
 
 	const padding = $appSettings.compactMode ? "p-1" : "p-2 px-3"
+
+	$: $entity.tempHash,
+		tree &&
+			tree.onRefresh(async () => {
+				if ($workspaceData.path) {
+					if (await exists(await join($workspaceData.path, "project.json"))) {
+						const proj = JSON.parse(await readTextFile(await join($workspaceData.path, "project.json")))
+
+						if (proj.treeViewState && proj.treeViewState[$entity.tempHash]) {
+							if (proj.treeViewState[$entity.tempHash].expandedNodes) {
+								tree.setOpenedNodes(proj.treeViewState[$entity.tempHash].expandedNodes)
+							}
+
+							if (proj.treeViewState[$entity.tempHash].selectedEntity && $entity.entities[proj.treeViewState[$entity.tempHash].selectedEntity]) {
+								tree.navigateTo(proj.treeViewState[$entity.tempHash].selectedEntity)
+								selectedEntityID = proj.treeViewState[$entity.tempHash].selectedEntity
+								selectedEntity = $entity.entities[proj.treeViewState[$entity.tempHash].selectedEntity]
+								selectionType = "entity"
+							}
+						}
+					}
+				}
+			})
 </script>
 
 <SplitPanes on:resize={() => editor?.layout()} theme="">
@@ -205,7 +237,7 @@
 					</div>
 					<div class="flex-grow overflow-auto">
 						<Tree
-							on:selectionUpdate={({ detail }) => {
+							on:selectionUpdate={async ({ detail }) => {
 								if (selectionType == "entity") {
 									if (editorIsValid) {
 										$entity.entities[selectedEntityID] = json.parse(editor.getValue())
@@ -220,6 +252,23 @@
 								if (selectionType == "entity") {
 									selectedEntityID = detail[1].node.id
 									selectedEntity = $entity.entities[detail[1].node.id]
+
+									if ($workspaceData.path) {
+										if (await exists(await join($workspaceData.path, "project.json"))) {
+											await writeTextFile(
+												await join($workspaceData.path, "project.json"),
+												JSON.stringify(
+													deepMerge(JSON.parse(await readTextFile(await join($workspaceData.path, "project.json"))), {
+														treeViewState: {
+															[$entity.tempHash]: {
+																selectedEntity: selectedEntityID
+															}
+														}
+													})
+												)
+											)
+										}
+									}
 								} else {
 									selectedComment = Number(detail[1].node.id.replace("comment-", ""))
 								}
@@ -298,6 +347,24 @@
 							on:forceUpdateEntity={() => {
 								$entity.bla = Math.random()
 								delete $entity.bla
+							}}
+							on:openedNodesChanged={async ({ detail }) => {
+								if ($workspaceData.path) {
+									if (await exists(await join($workspaceData.path, "project.json"))) {
+										await writeTextFile(
+											await join($workspaceData.path, "project.json"),
+											JSON.stringify(
+												deepMerge(JSON.parse(await readTextFile(await join($workspaceData.path, "project.json"))), {
+													treeViewState: {
+														[$entity.tempHash]: {
+															expandedNodes: detail
+														}
+													}
+												})
+											)
+										)
+									}
+								}
 							}}
 							entity={$entity}
 							reverseReferences={$reverseReferences}

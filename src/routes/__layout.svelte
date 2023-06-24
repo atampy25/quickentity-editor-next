@@ -144,10 +144,11 @@
 
 		if ($workspaceData.path) {
 			if (await exists(await join($workspaceData.path, "project.json"))) {
-				changeEntityHashesFromFriendly(
-					ent,
-					Object.fromEntries(JSON.parse(await readTextFile(await join($workspaceData.path, "project.json"))).customPaths.map((a: string) => [("00" + md5(a).slice(2, 16)).toUpperCase(), a]))
-				)
+				const proj = JSON.parse(await readTextFile(await join($workspaceData.path, "project.json")))
+
+				if (proj.customPaths) {
+					changeEntityHashesFromFriendly(ent, Object.fromEntries(proj.customPaths.map((a: string) => [("00" + md5(a).slice(2, 16)).toUpperCase(), a])))
+				}
 			}
 		}
 

@@ -42,6 +42,8 @@
 	export let helpMenuInputs: string[] = []
 	export let helpMenuOutputs: string[] = []
 
+	let onRefreshFunc: () => any
+
 	const dispatch = createEventDispatcher()
 
 	const exists = async (path: string) => {
@@ -727,6 +729,19 @@
 		jQuery("#" + elemID).on("create_node.jstree", (...data) => dispatch("nodeCreated", data))
 		jQuery("#" + elemID).on("rename_node.jstree", (...data) => dispatch("nodeRenamed", data))
 		jQuery("#" + elemID).on("delete_node.jstree", (...data) => dispatch("nodeDeleted", data))
+
+		jQuery("#" + elemID).on("open_node.jstree", (...data) =>
+			dispatch(
+				"openedNodesChanged",
+				Object.keys(entity.entities).filter((a) => tree.is_open(a))
+			)
+		)
+		jQuery("#" + elemID).on("close_node.jstree", (...data) =>
+			dispatch(
+				"openedNodesChanged",
+				Object.keys(entity.entities).filter((a) => tree.is_open(a))
+			)
+		)
 	})
 
 	export function refreshTree(
@@ -777,6 +792,8 @@
 		}, 100)
 
 		tree.refresh()
+
+		jQuery("#" + elemID).one("refresh.jstree", onRefreshFunc)
 	}
 
 	let oldEntityNames: string[] = []
@@ -825,6 +842,19 @@
 				return (json.stringify(entity.entities[node.id] || entity.comments[Number(node.id.split("-")[1])]) + node.id).toLowerCase().includes(search)
 			}
 		})
+	}
+
+	export function setOpenedNodes(entities: string[]) {
+		tree.close_all()
+
+		for (const id of entities) {
+			console.log("deez")
+			tree.open_node(id)
+		}
+	}
+
+	export function onRefresh(func: () => any) {
+		onRefreshFunc = func
 	}
 </script>
 
