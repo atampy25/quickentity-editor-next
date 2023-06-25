@@ -53,7 +53,6 @@
 	import Edit from "carbon-icons-svelte/lib/Edit.svelte"
 	import TreeViewIcon from "carbon-icons-svelte/lib/TreeView.svelte"
 	import Settings from "carbon-icons-svelte/lib/Settings.svelte"
-	import Chart_3D from "carbon-icons-svelte/lib/Chart_3D.svelte"
 	import WarningAlt from "carbon-icons-svelte/lib/WarningAlt.svelte"
 	import DataUnstructured from "carbon-icons-svelte/lib/DataUnstructured.svelte"
 	import WatsonHealthRotate_360 from "carbon-icons-svelte/lib/WatsonHealthRotate_360.svelte"
@@ -65,7 +64,7 @@
 	import { goto } from "$app/navigation"
 	import Decimal from "decimal.js"
 	import { data } from "jquery"
-	import type { RefMaybeConstantValue, SubEntity } from "$lib/quickentity-types"
+	import type { FullRef, RefMaybeConstantValue, SubEntity } from "$lib/quickentity-types"
 
 	let displayNotifications: { kind: "error" | "info" | "info-square" | "success" | "warning" | "warning-alt"; title: string; subtitle: string }[] = []
 
@@ -189,38 +188,21 @@
 		}
 
 		// Compatibility for QN change where all entity IDs are 16 characters
-		Object.entries(ent.entities).forEach(([entityID, entityData]: [string, SubEntity]) => {
-			const localRef = getReferencedLocalEntity(entityData.parent)
-			if (localRef) {
-				entityData.parent = changeReferenceToLocalEntity(entityData.parent, localRef.padStart(16, "0"))
+		for (const [entityID, entityData] of Object.entries(ent.entities) as [string, SubEntity][]) {
+			if (entityData.parent) {
+				const localRef = getReferencedLocalEntity(entityData.parent)
+				if (localRef) {
+					entityData.parent = changeReferenceToLocalEntity(entityData.parent, localRef.padStart(16, "0"))
+				}
 			}
 
 			if (entityData.properties) {
 				for (const [property, data] of Object.entries(entityData.properties)) {
 					if (data.type == "SEntityTemplateReference" || data.type == "TArray<SEntityTemplateReference>") {
 						const localRef = getReferencedLocalEntity(data.value)
-						if (data.type == "SEntityTemplateReference" && localRef) {
-							data.value = changeReferenceToLocalEntity(data.value, localRef.padStart(16, "0"))
-						} else {
-							data.value = data.value.map((a) => {
-								const localRef = getReferencedLocalEntity(a)
-								if (localRef) {
-									return changeReferenceToLocalEntity(data.value, localRef.padStart(16, "0"))
-								} else {
-									return a
-								}
-							})
-						}
-					}
-				}
-			}
 
-			if (entityData.platformSpecificProperties) {
-				for (const [platform, properties] of Object.entries(entityData.platformSpecificProperties)) {
-					for (const [property, data] of Object.entries(properties)) {
-						if (data.type == "SEntityTemplateReference" || data.type == "TArray<SEntityTemplateReference>") {
-							const localRef = getReferencedLocalEntity(data.value)
-							if (data.type == "SEntityTemplateReference" && localRef) {
+						if (localRef) {
+							if (data.type == "SEntityTemplateReference") {
 								data.value = changeReferenceToLocalEntity(data.value, localRef.padStart(16, "0"))
 							} else {
 								data.value = data.value.map((a) => {
@@ -231,6 +213,31 @@
 										return a
 									}
 								})
+							}
+						}
+					}
+				}
+			}
+
+			if (entityData.platformSpecificProperties) {
+				for (const [platform, properties] of Object.entries(entityData.platformSpecificProperties)) {
+					for (const [property, data] of Object.entries(properties)) {
+						if (data.type == "SEntityTemplateReference" || data.type == "TArray<SEntityTemplateReference>") {
+							const localRef = getReferencedLocalEntity(data.value)
+
+							if (localRef) {
+								if (data.type == "SEntityTemplateReference") {
+									data.value = changeReferenceToLocalEntity(data.value, localRef.padStart(16, "0"))
+								} else {
+									data.value = data.value.map((a) => {
+										const localRef = getReferencedLocalEntity(a)
+										if (localRef) {
+											return changeReferenceToLocalEntity(data.value, localRef.padStart(16, "0"))
+										} else {
+											return a
+										}
+									})
+								}
 							}
 						}
 					}
@@ -248,7 +255,11 @@
 							y[1] = y[1].map((ent) => {
 								const localRef = getReferencedLocalEntity(ent && typeof ent != "string" && Object.prototype.hasOwnProperty.call(ent, "value") ? ent.ref : (ent as FullRef))
 								if (localRef) {
-									return changeReferenceToLocalEntity(ent, localRef.padStart(16, "0"))
+									if (ent && typeof ent != "string" && Object.prototype.hasOwnProperty.call(ent, "value")) {
+										return { ...ent, ref: changeReferenceToLocalEntity(ent.ref, localRef.padStart(16, "0")) }
+									} else {
+										return changeReferenceToLocalEntity(ent as FullRef, localRef.padStart(16, "0"))
+									}
 								} else {
 									return ent
 								}
@@ -295,7 +306,7 @@
 					x[1] = x[1].map((ent) => ent.padStart(16, "0"))
 				}
 			}
-		})
+		}
 
 		if (ent.entities[ent.rootEntity].name !== "Scene" || ent.tempHash !== "") {
 			appWindow.setTitle(`${ent.entities[ent.rootEntity].name} (${ent.tempHash}) - QuickEntity Editor`)
@@ -894,7 +905,7 @@
 						{/if}
 					{/if}
 				{/if}
-				{#if $page.url.pathname == "/metadata" || $page.url.pathname == "/overrides" || $page.url.pathname == "/tree" || $page.url.pathname == "/graph" || $page.url.pathname == "/3d"}
+				{#if $page.url.pathname == "/metadata" || $page.url.pathname == "/overrides" || $page.url.pathname == "/tree" || $page.url.pathname == "/graph"}
 					<HeaderNavItem
 						href="#"
 						on:click={() => {
@@ -1101,7 +1112,7 @@
 
 								tour.addStep({
 									id: "information",
-									text: "When you select an entity in the tree, you'll see relevant information show up here, like entities that reference the entity you clicked, or a 3D preview of the entity.",
+									text: "When you select an entity in the tree, you'll see relevant information show up here like entities that reference the entity you clicked.",
 									attachTo: {
 										element: ".shepherd-information",
 										on: "right"
@@ -1145,29 +1156,6 @@
 										]
 									})
 								}
-
-								tour.start()
-							}
-
-							if ($page.url.pathname == "/3d") {
-								const tour = new Shepherd.Tour({
-									useModalOverlay: true,
-									defaultStepOptions: {
-										classes: "shadow-md bg-purple-dark",
-										scrollTo: true
-									}
-								})
-
-								tour.addStep({
-									id: "page",
-									text: "You're looking at the 3D Preview. It's currently very experimental and probably won't work.",
-									buttons: [
-										{
-											text: "Next",
-											action: tour.next
-										}
-									]
-								})
 
 								tour.start()
 							}
@@ -1337,19 +1325,6 @@
 							}, 500)
 						}}
 						isSelected={$page.url.pathname == "/graph"}
-					/>
-					<SideNavDivider />
-					<SideNavLink
-						icon={Chart_3D}
-						text="3D Preview"
-						href="/3d"
-						on:click={() => {
-							$forceSaveSubEntity = { value: true }
-							setTimeout(() => {
-								$forceSaveSubEntity = { value: false }
-							}, 500)
-						}}
-						isSelected={$page.url.pathname == "/3d"}
 					/>
 				{/if}
 				<SideNavDivider />

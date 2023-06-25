@@ -2,7 +2,7 @@
 	import OverrideMonacoEditor from "$lib/components/OverrideMonacoEditor.svelte"
 	import json from "$lib/json"
 	import type { Entity, PropertyOverride } from "$lib/quickentity-types"
-	import { appSettings, entity, parsedEntities, workspaceData } from "$lib/stores"
+	import { appSettings, entity, intellisense, workspaceData } from "$lib/stores"
 	import { normaliseToHash } from "$lib/utils"
 	import { readTextFile, exists as tauriExists } from "@tauri-apps/api/fs"
 	import { join } from "@tauri-apps/api/path"
@@ -43,13 +43,7 @@
 			for (let override of $entity.propertyOverrides) {
 				for (let ref of override.entities) {
 					if (typeof ref == "object" && ref?.externalScene) {
-						if (!$parsedEntities[normaliseToHash(ref.externalScene)]) {
-							$parsedEntities[normaliseToHash(ref.externalScene)] = json.parse(
-								await readTextFile(await join($appSettings.gameFileExtensionsDataPath, "TEMP", normaliseToHash(ref.externalScene) + ".TEMP.entity.json"))
-							)
-						}
-
-						overriddenEntityNames[normaliseToHash(ref.externalScene) + ref.ref] = $parsedEntities[normaliseToHash(ref.externalScene)].entities[ref.ref].name
+						overriddenEntityNames[normaliseToHash(ref.externalScene) + ref.ref] = (await $intellisense.getEntityByFactory(ref.externalScene))!.entities[ref.ref].name
 
 						overriddenEntityNames = overriddenEntityNames
 					}
@@ -58,13 +52,7 @@
 
 			for (let ref of $entity.overrideDeletes) {
 				if (typeof ref == "object" && ref?.externalScene) {
-					if (!$parsedEntities[normaliseToHash(ref.externalScene)]) {
-						$parsedEntities[normaliseToHash(ref.externalScene)] = json.parse(
-							await readTextFile(await join($appSettings.gameFileExtensionsDataPath, "TEMP", normaliseToHash(ref.externalScene) + ".TEMP.entity.json"))
-						)
-					}
-
-					overriddenEntityNames[normaliseToHash(ref.externalScene) + ref.ref] = $parsedEntities[normaliseToHash(ref.externalScene)].entities[ref.ref].name
+					overriddenEntityNames[normaliseToHash(ref.externalScene) + ref.ref] = (await $intellisense.getEntityByFactory(ref.externalScene))!.entities[ref.ref].name
 
 					overriddenEntityNames = overriddenEntityNames
 				}

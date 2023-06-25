@@ -101,7 +101,7 @@ export function getReferencedLocalEntity(ref: Ref) {
 }
 
 /** Returns a modified Ref that points to a given local entity, keeping any exposed entity reference the same */
-export function changeReferenceToLocalEntity(ref: Ref, ent: string) {
+export function changeReferenceToLocalEntity(ref: Ref, ent: string): Ref {
 	if (typeof ref == "string" || ref === null) {
 		return ent
 	} else {

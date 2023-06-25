@@ -159,9 +159,6 @@ export const reverseReferences: Readable<
 // Complete misuse of a store but it works
 export const addNotification: Writable<{ kind: "error" | "info" | "info-square" | "success" | "warning" | "warning-alt"; title: string; subtitle: string } | null> = writable(null)
 
-// For caching deep intellisense data
-export const parsedEntities: Writable<Record<string, Entity>> = writable({})
-
 export let intellisense: Readable<Intellisense>
 
 appSettings.subscribe((value: { gameFileExtensions: boolean; gameFileExtensionsDataPath: string; inVivoExtensions: boolean }) => {

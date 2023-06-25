@@ -6,7 +6,6 @@
 	import Tree from "$lib/components/Tree.svelte"
 	import ExpandableSection from "$lib/components/ExpandableSection.svelte"
 	import ColorPicker from "$lib/components/ColorPicker.svelte"
-	import Entity3DMesh from "$lib/components/Entity3DMesh.svelte"
 
 	import { addNotification, appSettings, entity, sessionMetadata, references, reverseReferences, inVivoMetadata, forceSaveSubEntity, workspaceData } from "$lib/stores"
 	import { changeReferenceToLocalEntity, checkValidityOfEntity, deleteReferencesToEntity, genRandHex, normaliseToHash, traverseEntityTree } from "$lib/utils"
@@ -486,54 +485,6 @@
 										{/if}
 									</div>
 								</ExpandableSection>
-								{#if $appSettings.gameFileExtensions}
-									{#await join($appSettings.gameFileExtensionsDataPath, "TEMP", normaliseToHash(selectedEntity.factory) + ".TEMP.entity.json") then joined}
-										{#await exists(joined) then condition}
-											{#if condition}
-												<ExpandableSection initiallyOpen={false}>
-													<h2 slot="heading">3D preview</h2>
-													<div slot="content">
-														<div class="h-96">
-															<Canvas>
-																<PerspectiveCamera position={{ x: 10, y: 10, z: 10 }} fov={24}>
-																	<OrbitControls maxPolarAngle={DEG2RAD * 80} autoRotate={true} enableZoom={true} target={{ y: 0.5 }} />
-																</PerspectiveCamera>
-
-																<DirectionalLight shadow position={{ x: 5, y: 10, z: 10 }} />
-																<DirectionalLight position={{ x: -5, y: 10, z: -10 }} intensity={0.2} />
-																<AmbientLight intensity={1} />
-
-																{#await readJSON(joined) then content}
-																	<Entity3DMesh
-																		entity={content}
-																		rotation={{
-																			x: selectedEntity.properties?.m_mTransform?.value?.rotation?.x * DEG2RAD || 0,
-																			y: selectedEntity.properties?.m_mTransform?.value?.rotation?.z * DEG2RAD || 0,
-																			z: selectedEntity.properties?.m_mTransform?.value?.rotation?.y * DEG2RAD || 0
-																		}}
-																		scale={{
-																			x: 1,
-																			y: 1,
-																			z: 1
-																		}}
-																	/>
-																{/await}
-
-																<!-- Floor -->
-																<Mesh
-																	receiveShadow
-																	rotation={{ x: -90 * (Math.PI / 180) }}
-																	geometry={new CircleGeometry(3, 72)}
-																	material={new MeshStandardMaterial({ side: DoubleSide, color: "white" })}
-																/>
-															</Canvas>
-														</div>
-													</div>
-												</ExpandableSection>
-											{/if}
-										{/await}
-									{/await}
-								{/if}
 							{:else}
 								<p>
 									{@html `You've selected a <i>comment entity</i>, a kind of entity that is ignored when the entity is converted for use with the game. Put any developer comments in here.`}
