@@ -216,23 +216,21 @@
 				if ($appSettings.gameFileExtensions) {
 					for (const [id, ref] of idsToRefsExternal) {
 						if (line.includes(id)) {
-							decorationsArray.push({
-								options: {
-									isWholeLine: true,
-									after: {
-										content:
-											" " +
-											(
-												(await $intellisense.readJSONFile(
-													await join($intellisense.appSettings.gameFileExtensionsDataPath, "TEMP", normaliseToHash(ref.externalScene!) + ".TEMP.entity.json")
-												)) as Entity
-											).entities[ref.ref].name,
-										cursorStops: monaco.editor.InjectedTextCursorStops.Left,
-										inlineClassName: "monacoDecorationEntityRef"
-									}
-								},
-								range: new monaco.Range(no + 1, 0, no + 1, line.length + 1)
-							})
+							const e = await $intellisense.getEntityByFactory(ref.externalScene!)
+
+							if (e) {
+								decorationsArray.push({
+									options: {
+										isWholeLine: true,
+										after: {
+											content: " " + e.entities[ref.ref].name,
+											cursorStops: monaco.editor.InjectedTextCursorStops.Left,
+											inlineClassName: "monacoDecorationEntityRef"
+										}
+									},
+									range: new monaco.Range(no + 1, 0, no + 1, line.length + 1)
+								})
+							}
 						}
 					}
 				}
@@ -288,7 +286,7 @@
 				let outputs: Record<string, any> = {}
 
 				if ($appSettings.gameFileExtensions) {
-					let allFoundProperties = []
+					let allFoundProperties: string[] = []
 
 					for (let factory of (await exists(await join($appSettings.gameFileExtensionsDataPath, "ASET", normaliseToHash(jsonToDisplay.factory) + ".ASET.meta.JSON")))
 						? json
@@ -296,10 +294,7 @@
 								.hash_reference_data.slice(0, -1)
 								.map((a) => a.hash)
 						: [normaliseToHash(jsonToDisplay.factory)]) {
-						if (await exists(await join($appSettings.gameFileExtensionsDataPath, "TEMP", factory + ".TEMP.entity.json"))) {
-							await $intellisense.findProperties(await join($appSettings.gameFileExtensionsDataPath, "TEMP", factory + ".TEMP.entity.json"), allFoundProperties)
-							jsonToDisplay.propertyAliases && allFoundProperties.push(...Object.keys(jsonToDisplay.propertyAliases))
-						} else if ($intellisense.knownCPPTProperties[factory]) {
+						if ($intellisense.knownCPPTProperties[factory]) {
 							allFoundProperties.push(...Object.keys($intellisense.knownCPPTProperties[factory]))
 						} else if ($intellisense.allUICTs.has(factory)) {
 							allFoundProperties.push(...Object.keys($intellisense.knownCPPTProperties["002C4526CC9753E6"])) // All UI controls have the properties of ZUIControlEntity
@@ -317,6 +312,13 @@
 									).properties
 								)
 							) // Get the specific properties from the UICB
+						} else {
+							const e = await $intellisense.getEntityByFactory(factory)
+
+							if (e) {
+								await $intellisense.findProperties(e, allFoundProperties)
+								jsonToDisplay.propertyAliases && allFoundProperties.push(...Object.keys(jsonToDisplay.propertyAliases))
+							}
 						}
 					}
 
@@ -352,7 +354,7 @@
 						}
 					} else {
 						for (let foundProp of allFoundProperties) {
-							let val = await $intellisense.findDefaultPropertyValue(entity.tempHash + ".TEMP.entity.json", subEntityID, foundProp, entity, subEntityID)
+							let val = await $intellisense.findDefaultPropertyValue(entity, subEntityID, foundProp, subEntityID)
 
 							if (val) {
 								props[foundProp] = {

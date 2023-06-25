@@ -638,7 +638,7 @@
 											helpMenuInputs = []
 											helpMenuOutputs = []
 
-											let allFoundProperties = []
+											let allFoundProperties: string[] = []
 
 											for (let factory of (await exists(await join($appSettings.gameFileExtensionsDataPath, "ASET", normaliseToHash(entityData.factory) + ".ASET.meta.JSON")))
 												? json
@@ -646,10 +646,7 @@
 														.hash_reference_data.slice(0, -1)
 														.map((a) => a.hash)
 												: [normaliseToHash(entityData.factory)]) {
-												if (await exists(await join($appSettings.gameFileExtensionsDataPath, "TEMP", factory + ".TEMP.entity.json"))) {
-													await $intellisense.findProperties(await join($appSettings.gameFileExtensionsDataPath, "TEMP", factory + ".TEMP.entity.json"), allFoundProperties)
-													entityData.propertyAliases && allFoundProperties.push(...Object.keys(entityData.propertyAliases))
-												} else if ($intellisense.knownCPPTProperties[factory]) {
+												if ($intellisense.knownCPPTProperties[factory]) {
 													allFoundProperties.push(...Object.keys($intellisense.knownCPPTProperties[factory]))
 												} else if ($intellisense.allUICTs.has(factory)) {
 													allFoundProperties.push(...Object.keys($intellisense.knownCPPTProperties["002C4526CC9753E6"])) // All UI controls have the properties of ZUIControlEntity
@@ -667,6 +664,13 @@
 															).properties
 														)
 													) // Get the specific properties from the UICB
+												} else {
+													const e = await $intellisense.getEntityByFactory(factory)
+
+													if (e) {
+														await $intellisense.findProperties(e, allFoundProperties)
+														entityData.propertyAliases && allFoundProperties.push(...Object.keys(entityData.propertyAliases))
+													}
 												}
 											}
 
@@ -683,7 +687,7 @@
 												}
 											} else {
 												for (let foundProp of allFoundProperties) {
-													let val = await $intellisense.findDefaultPropertyValue(entity.tempHash + ".TEMP.entity.json", entityID, foundProp, entity, entityID)
+													let val = await $intellisense.findDefaultPropertyValue(entity, entityID, foundProp, entityID)
 
 													if (val) {
 														helpMenuProps[foundProp] = val

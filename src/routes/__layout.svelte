@@ -1447,11 +1447,27 @@
 										breadcrumb("entity", `Loaded ${$entity.tempHash} from game files`)
 									}}
 								>
-									{hash}{#if $appSettings.gameFileExtensions}{#await (async () => {
-											return await $intellisense.readJSONFile(await join($appSettings.gameFileExtensionsDataPath, "TEMP", hash + ".TEMP.entity.json"))
-										})() then data}
-											{` (${data.entities[data.rootEntity].name})`}
-										{/await}{/if}
+									{hash}
+									{#if $appSettings.gameFileExtensions}
+										{#await $intellisense.getEntityByFactory(hash) then data}
+											{#if data}
+												({data.entities[data.rootEntity].name})
+											{/if}
+										{/await}
+										{#await (async () => {
+											const files = await $intellisense.getWorkspaceFiles()
+											for (const file of files) {
+												if ((await $intellisense.readJSONFile(file)).tempHash === hash) {
+													return true
+												}
+											}
+											return false
+										})() then altered}
+											{#if altered}
+												(modified by workspace file)
+											{/if}
+										{/await}
+									{/if}
 								</Button>
 								<div class="mt-2" />
 							{/each}
