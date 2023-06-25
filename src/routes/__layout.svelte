@@ -56,6 +56,7 @@
 	import Chart_3D from "carbon-icons-svelte/lib/Chart_3D.svelte"
 	import WarningAlt from "carbon-icons-svelte/lib/WarningAlt.svelte"
 	import DataUnstructured from "carbon-icons-svelte/lib/DataUnstructured.svelte"
+	import WatsonHealthRotate_360 from "carbon-icons-svelte/lib/WatsonHealthRotate_360.svelte"
 
 	import * as Sentry from "@sentry/browser"
 	import { BrowserTracing } from "@sentry/tracing"
@@ -1264,8 +1265,15 @@
 			<SplitPanes theme="">
 				{#if $workspaceData.path}
 					<Pane size={15}>
-						<div class="pt-2 -mb-3.5 px-3">
-							<h1>Workspace</h1>
+						<div class="pt-2 -mb-3.5 px-3 flex items-center mr-2">
+							<h1 class="flex-grow">Workspace</h1>
+							<Button
+								icon={WatsonHealthRotate_360}
+								iconDescription="Refresh"
+								on:click={() => {
+									$workspaceData.path = $workspaceData.path
+								}}
+							/>
 						</div>
 						{#await readDir($workspaceData.path, { recursive: true }) then d}
 							<TreeView
