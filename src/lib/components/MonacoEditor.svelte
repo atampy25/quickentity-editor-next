@@ -101,15 +101,12 @@
 
 		const showUpdatePropertyCondition = customContextKey("showUpdatePropertyCondition", false)
 		const showPreviewCurveCondition = customContextKey("showPreviewCurveCondition", false)
+		const showFollowReferenceCondition = customContextKey("showFollowReferenceCondition", false)
 
-		const contextmenu = editor.getContribution("editor.contrib.contextmenu")!
-		const realOnContextMenuMethod = contextmenu._onContextMenu
-		contextmenu._onContextMenu = function () {
-			const event = arguments[0]
-
+		editor.onDidChangeCursorPosition((e) => {
 			let word: string | undefined | false
 			try {
-				word = editor.getModel()!.getWordAtPosition(event.target.position)?.word
+				word = editor.getModel()!.getWordAtPosition(e.position)?.word
 			} catch {
 				word = false
 			}
@@ -128,8 +125,12 @@
 				)
 			}
 
-			realOnContextMenuMethod.apply(contextmenu, arguments)
-		}
+			if (!word) {
+				showFollowReferenceCondition.set(false)
+			} else {
+				showFollowReferenceCondition.set(Object.keys(entity.entities).includes(word))
+			}
+		})
 
 		editor.addAction({
 			id: "update-property",
@@ -177,22 +178,17 @@
 			}
 		})
 
-		const realDoShowContextMenuMethod = contextmenu._doShowContextMenu
-		contextmenu._doShowContextMenu = function () {
-			let index = 0
-			if (showUpdatePropertyCondition.get()) index++
-
-			if (index > 0)
-				arguments[0].splice(
-					index,
-					0,
-					arguments[0].find((item: { id: string }) => item.id === "vs.actions.separator")
-				)
-
-			realDoShowContextMenuMethod.apply(contextmenu, arguments)
-
-			showUpdatePropertyCondition.set(false)
-		}
+		editor.addAction({
+			id: "follow-reference",
+			label: "Follow reference",
+			contextMenuGroupId: "navigation",
+			contextMenuOrder: 0,
+			keybindings: [monaco.KeyCode.F12],
+			precondition: "showFollowReferenceCondition",
+			run: async (ed) => {
+				dispatch("followRef", editor.getModel()!.getWordAtPosition(ed.getPosition()!)!.word)
+			}
+		})
 
 		let decorations: monaco.editor.IEditorDecorationsCollection = editor.createDecorationsCollection([])
 

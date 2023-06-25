@@ -164,6 +164,43 @@
 		}
 	}
 
+	async function attemptToSelect(entityID: string) {
+		if (selectionType == "entity") {
+			if (editorIsValid) {
+				$entity.entities[selectedEntityID] = json.parse(editor.getValue())
+			} else {
+				tree.navigateTo(selectedEntityID)
+				return
+			}
+		}
+
+		selectionType = entityID.startsWith("comment") ? "comment" : "entity"
+
+		if (selectionType == "entity") {
+			selectedEntityID = entityID
+			selectedEntity = $entity.entities[entityID]
+
+			if ($workspaceData.path) {
+				if (await exists(await join($workspaceData.path, "project.json"))) {
+					await writeTextFile(
+						await join($workspaceData.path, "project.json"),
+						JSON.stringify(
+							deepMerge(JSON.parse(await readTextFile(await join($workspaceData.path, "project.json"))), {
+								treeViewState: {
+									[$entity.tempHash]: {
+										selectedEntity: selectedEntityID
+									}
+								}
+							})
+						)
+					)
+				}
+			}
+		} else {
+			selectedComment = Number(entityID.replace("comment-", ""))
+		}
+	}
+
 	const unsubscribe = forceSaveSubEntity.subscribe(async (value) => {
 		if (value.value) {
 			if (editorIsValid && selectionType == "entity") {
@@ -238,40 +275,7 @@
 					<div class="flex-grow overflow-auto">
 						<Tree
 							on:selectionUpdate={async ({ detail }) => {
-								if (selectionType == "entity") {
-									if (editorIsValid) {
-										$entity.entities[selectedEntityID] = json.parse(editor.getValue())
-									} else {
-										tree.navigateTo(selectedEntityID)
-										return
-									}
-								}
-
-								selectionType = detail[1].node.id.startsWith("comment") ? "comment" : "entity"
-
-								if (selectionType == "entity") {
-									selectedEntityID = detail[1].node.id
-									selectedEntity = $entity.entities[detail[1].node.id]
-
-									if ($workspaceData.path) {
-										if (await exists(await join($workspaceData.path, "project.json"))) {
-											await writeTextFile(
-												await join($workspaceData.path, "project.json"),
-												JSON.stringify(
-													deepMerge(JSON.parse(await readTextFile(await join($workspaceData.path, "project.json"))), {
-														treeViewState: {
-															[$entity.tempHash]: {
-																selectedEntity: selectedEntityID
-															}
-														}
-													})
-												)
-											)
-										}
-									}
-								} else {
-									selectedComment = Number(detail[1].node.id.replace("comment-", ""))
-								}
+								await attemptToSelect(detail[1].node.id)
 							}}
 							on:dragAndDrop={({ detail }) => {
 								if (detail[1].old_parent != detail[1].parent) {
@@ -589,6 +593,10 @@
 								if (selectionType) {
 									checkEditorValidity(selectedEntityID, editor.getValue())
 								}
+							}}
+							on:followRef={async ({ detail }) => {
+								await attemptToSelect(detail)
+								tree.navigateTo(detail)
 							}}
 						/>
 					{:else}

@@ -233,12 +233,12 @@ export function deleteReferencesToEntity(
 }
 
 /** Gets the referenced entities of an entity. */
-export function getReferencedEntities(entityData: SubEntity): {
-	type: string
-	entity: string
-	context?: string[]
-}[] {
-	const refs = []
+export function getReferencedEntities(entityData: SubEntity) {
+	const refs: {
+		type: string
+		entity: string
+		context?: string[]
+	}[] = []
 
 	const localRef = getReferencedLocalEntity(entityData.parent)
 	if (localRef) {
