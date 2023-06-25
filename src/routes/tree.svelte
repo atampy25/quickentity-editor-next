@@ -74,7 +74,7 @@
 
 	onDestroy(
 		sessionMetadata.subscribe(async (value) => {
-			if (value.originalEntityPath != entityPath || value.originalEntityPath == (await join(await appDir(), "inspection", "entity.json"))) {
+			if (value.originalEntityPath != entityPath || value.originalEntityPath == (await join(await appDir(), "inspection", "originalEntity.json"))) {
 				selectionType = null
 				selectedEntityID = undefined!
 				selectedEntity = undefined!

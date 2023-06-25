@@ -252,7 +252,7 @@
 				if (data) {
 					for (const [event, x] of Object.entries(data)) {
 						for (const y of Object.entries(x)) {
-							y[1] = y[1].map((ent) => {
+							x[y[0]] = x[y[0]].map((ent) => {
 								const localRef = getReferencedLocalEntity(ent && typeof ent != "string" && Object.prototype.hasOwnProperty.call(ent, "value") ? ent.ref : (ent as FullRef))
 								if (localRef) {
 									if (ent && typeof ent != "string" && Object.prototype.hasOwnProperty.call(ent, "value")) {
@@ -520,7 +520,7 @@
 				await createDir(await join(await appDir(), "inspection"))
 			}
 
-			await copyFile(await join(await appDir(), "inspection-cache-" + patchVersion, tempHash + ".json"), await join(await appDir(), "inspection", "entity.json"))
+			await copyFile(await join(await appDir(), "inspection-cache-" + patchVersion, tempHash + ".json"), await join(await appDir(), "inspection", "originalEntity.json"))
 		} catch (e) {
 			if ($appSettings.enableLogRocket) {
 				Sentry.captureException(e)
@@ -645,7 +645,7 @@
 							if ($appSettings.gameFileExtensions && (await exists(await join($appSettings.gameFileExtensionsDataPath, "TEMP", patch.tempHash + ".TEMP.entity.json")))) {
 								await extractForInspection(patch.tempHash, Number(patch.patchVersion))
 
-								entityPath = await join(await appDir(), "inspection", "entity.json")
+								entityPath = await join(await appDir(), "inspection", "originalEntity.json")
 							} else {
 								let x = await open({
 									multiple: false,
@@ -1429,7 +1429,7 @@
 											if ($appSettings.gameFileExtensions && (await exists(await join($appSettings.gameFileExtensionsDataPath, "TEMP", patch.tempHash + ".TEMP.entity.json")))) {
 												await extractForInspection(patch.tempHash, Number(patch.patchVersion))
 
-												entityPath = await join(await appDir(), "inspection", "entity.json")
+												entityPath = await join(await appDir(), "inspection", "originalEntity.json")
 											} else {
 												let x = await open({
 													multiple: false,
@@ -1531,17 +1531,17 @@
 										// load game file
 										await extractForInspection(hash, 6)
 
-										$sessionMetadata.originalEntityPath = await join(await appDir(), "inspection", "entity.json")
+										$sessionMetadata.originalEntityPath = await join(await appDir(), "inspection", "originalEntity.json")
 										$sessionMetadata.saveAsPatch = false
 										$sessionMetadata.saveAsEntityPath = $sessionMetadata.originalEntityPath
 										$sessionMetadata.loadedFromGameFiles = true
 
-										$entity = await getEntityFromText(await readTextFile(await join(await appDir(), "inspection", "entity.json")))
+										$entity = await getEntityFromText(await readTextFile(await join(await appDir(), "inspection", "originalEntity.json")))
 
 										previousSelectedWorkspaceTreeItem = ""
 										selectedWorkspaceTreeItem = ""
 
-										breadcrumb("entity", `Loaded ${$entity.tempHash} from game files`)
+										breadcrumb("entity", `Loaded ${$entity.tempHash} as ephemeral file`)
 									}}
 								>
 									{hash}
@@ -1602,12 +1602,12 @@
 
 			await extractForInspection(x, 6)
 
-			$sessionMetadata.originalEntityPath = await join(await appDir(), "inspection", "entity.json")
+			$sessionMetadata.originalEntityPath = await join(await appDir(), "inspection", "originalEntity.json")
 			$sessionMetadata.saveAsPatch = false
 			$sessionMetadata.saveAsEntityPath = $sessionMetadata.originalEntityPath
 			$sessionMetadata.loadedFromGameFiles = true
 
-			$entity = await getEntityFromText(await readTextFile(await join(await appDir(), "inspection", "entity.json")))
+			$entity = await getEntityFromText(await readTextFile(await join(await appDir(), "inspection", "originalEntity.json")))
 
 			$workspaceData.ephemeralFiles = [...$workspaceData.ephemeralFiles, x]
 
