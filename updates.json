@@ -1,11 +1,11 @@
 {
-	"version": "1.36.0",
-	"notes": "Consider workspace in intellisense",
+	"version": "1.37.0",
+	"notes": "Follow reference action (F12)",
 	"pub_date": "2023-02-18T08:42:26Z",
 	"platforms": {
 		"windows-x86_64": {
-			"signature": "dW50cnVzdGVkIGNvbW1lbnQ6IHNpZ25hdHVyZSBmcm9tIHRhdXJpIHNlY3JldCBrZXkKUlVScWpVZGd2b0lOTlV6ZnZWcWZQbFFJamJmWUtXOGgxdVhGSk5VdEowU1R5MHdXeWJPS3IzQ1AyRnJaYktFMEFSODNieGV4SUdLalFmUjQrNU5zNzVrdWp1R1ZKNDlDWXdnPQp0cnVzdGVkIGNvbW1lbnQ6IHRpbWVzdGFtcDoxNjg3NjYyMTkzCWZpbGU6UXVpY2tFbnRpdHkgRWRpdG9yXzEuMzYuMF94NjRfZW4tVVMubXNpLnppcApVaU5vTWVuS1d6MmdsTDQvQzUwUzlSZ1NsZGlQbGx2YXkxYnE2K1RNNkFhcWlFTUhGRjN1R1lTdm1RVExvNjZWOTJMMGVJVXF1TEtjVllleHdEeDVBUT09Cg==",
-			"url": "https://github.com/atampy25/quickentity-editor-next/releases/download/1.36.0/QuickEntity.Editor_1.36.0_x64_en-US.msi.zip"
+			"signature": "dW50cnVzdGVkIGNvbW1lbnQ6IHNpZ25hdHVyZSBmcm9tIHRhdXJpIHNlY3JldCBrZXkKUlVScWpVZGd2b0lOTmJ3RDBRakpNNjVubTR4c1VQR1JJU0dNdzRYV2VXWit2OVJVUVo0WjJQQVZ4enVHcUpqWFkvbjhlSk1vU0plWHMrenlYaVlldnlXWjkrVk5PcDNVSEEwPQp0cnVzdGVkIGNvbW1lbnQ6IHRpbWVzdGFtcDoxNjg3NjcyNTE0CWZpbGU6UXVpY2tFbnRpdHkgRWRpdG9yXzEuMzcuMF94NjRfZW4tVVMubXNpLnppcApPNUlzNWFnWW5NeTQ0ckcyMnB5RFNqbDhiNTZCMnUybWJGdmxtYllydDNzcU1WbzlCZ0JJQ3lWb0F3TWpyV2FuNHRKUHFEc0FSZitPdUl0Sitsb0ZCdz09Cg==",
+			"url": "https://github.com/atampy25/quickentity-editor-next/releases/download/1.37.0/QuickEntity.Editor_1.37.0_x64_en-US.msi.zip"
 		}
 	}
 }
