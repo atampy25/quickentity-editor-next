@@ -199,11 +199,34 @@
 			if (entityData.properties) {
 				for (const [property, data] of Object.entries(entityData.properties)) {
 					if (data.type == "SEntityTemplateReference" || data.type == "TArray<SEntityTemplateReference>") {
-						const localRef = getReferencedLocalEntity(data.value)
-
-						if (localRef) {
-							if (data.type == "SEntityTemplateReference") {
+						if (data.type == "SEntityTemplateReference") {
+							const localRef = getReferencedLocalEntity(data.value)
+							if (localRef) {
 								data.value = changeReferenceToLocalEntity(data.value, localRef.padStart(16, "0"))
+							}
+						} else {
+							data.value = data.value.map((a) => {
+								const localRef = getReferencedLocalEntity(a)
+								if (localRef) {
+									return changeReferenceToLocalEntity(data.value, localRef.padStart(16, "0"))
+								} else {
+									return a
+								}
+							})
+						}
+					}
+				}
+			}
+
+			if (entityData.platformSpecificProperties) {
+				for (const [platform, properties] of Object.entries(entityData.platformSpecificProperties)) {
+					for (const [property, data] of Object.entries(properties)) {
+						if (data.type == "SEntityTemplateReference" || data.type == "TArray<SEntityTemplateReference>") {
+							if (data.type == "SEntityTemplateReference") {
+								const localRef = getReferencedLocalEntity(data.value)
+								if (localRef) {
+									data.value = changeReferenceToLocalEntity(data.value, localRef.padStart(16, "0"))
+								}
 							} else {
 								data.value = data.value.map((a) => {
 									const localRef = getReferencedLocalEntity(a)
@@ -219,31 +242,6 @@
 				}
 			}
 
-			if (entityData.platformSpecificProperties) {
-				for (const [platform, properties] of Object.entries(entityData.platformSpecificProperties)) {
-					for (const [property, data] of Object.entries(properties)) {
-						if (data.type == "SEntityTemplateReference" || data.type == "TArray<SEntityTemplateReference>") {
-							const localRef = getReferencedLocalEntity(data.value)
-
-							if (localRef) {
-								if (data.type == "SEntityTemplateReference") {
-									data.value = changeReferenceToLocalEntity(data.value, localRef.padStart(16, "0"))
-								} else {
-									data.value = data.value.map((a) => {
-										const localRef = getReferencedLocalEntity(a)
-										if (localRef) {
-											return changeReferenceToLocalEntity(data.value, localRef.padStart(16, "0"))
-										} else {
-											return a
-										}
-									})
-								}
-							}
-						}
-					}
-				}
-			}
-
 			for (const [type, data] of [
 				["event", entityData.events],
 				["inputCopy", entityData.inputCopying],
@@ -251,8 +249,8 @@
 			] as [string, Record<string, Record<string, RefMaybeConstantValue[]>>][]) {
 				if (data) {
 					for (const [event, x] of Object.entries(data)) {
-						for (const y of Object.entries(x)) {
-							x[y[0]] = x[y[0]].map((ent) => {
+						for (const y of Object.keys(x)) {
+							x[y] = x[y].map((ent) => {
 								const localRef = getReferencedLocalEntity(ent && typeof ent != "string" && Object.prototype.hasOwnProperty.call(ent, "value") ? ent.ref : (ent as FullRef))
 								if (localRef) {
 									if (ent && typeof ent != "string" && Object.prototype.hasOwnProperty.call(ent, "value")) {
@@ -270,10 +268,12 @@
 			}
 
 			if (entityData.propertyAliases) {
-				for (const x of Object.entries(entityData.propertyAliases)) {
-					x[1] = x[1].map((alias) => {
+				for (const alias of Object.keys(entityData.propertyAliases)) {
+					entityData.propertyAliases[alias] = entityData.propertyAliases[alias].map((alias) => {
 						const localRef = getReferencedLocalEntity(alias.originalEntity)
 						if (localRef) {
+							if (alias.originalProperty === "m_nPriority")
+								console.log(alias, { ...alias, originalEntity: changeReferenceToLocalEntity(alias.originalEntity, localRef.padStart(16, "0")) })
 							return { ...alias, originalEntity: changeReferenceToLocalEntity(alias.originalEntity, localRef.padStart(16, "0")) }
 						} else {
 							return alias
@@ -296,14 +296,14 @@
 			}
 
 			if (entityData.exposedInterfaces) {
-				for (const x of Object.entries(entityData.exposedInterfaces)) {
-					x[1] = x[1].padStart(16, "0")
+				for (const x of Object.keys(entityData.exposedInterfaces)) {
+					entityData.exposedInterfaces[x] = entityData.exposedInterfaces[x].padStart(16, "0")
 				}
 			}
 
 			if (entityData.subsets) {
-				for (const x of Object.entries(entityData.subsets)) {
-					x[1] = x[1].map((ent) => ent.padStart(16, "0"))
+				for (const x of Object.keys(entityData.subsets)) {
+					entityData.subsets[x] = entityData.subsets[x].map((ent) => ent.padStart(16, "0"))
 				}
 			}
 		}
