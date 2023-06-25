@@ -17,7 +17,7 @@
 				(symbols = symbols.filter(function (sym) {
 					return Object.getOwnPropertyDescriptor(object, sym).enumerable
 				})),
-			keys.push.apply(keys, symbols)
+				keys.push.apply(keys, symbols)
 		}
 
 		return keys
@@ -28,11 +28,11 @@
 			var source = null != arguments[i] ? arguments[i] : {}
 			i % 2
 				? ownKeys(Object(source), !0).forEach(function (key) {
-					_defineProperty(target, key, source[key])
+						_defineProperty(target, key, source[key])
 				  })
 				: Object.getOwnPropertyDescriptors
-					? Object.defineProperties(target, Object.getOwnPropertyDescriptors(source))
-					: ownKeys(Object(source)).forEach(function (key) {
+				? Object.defineProperties(target, Object.getOwnPropertyDescriptors(source))
+				: ownKeys(Object(source)).forEach(function (key) {
 						Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key))
 				  })
 		}
@@ -47,10 +47,10 @@
 			(_typeof =
 				"function" == typeof Symbol && "symbol" == typeof Symbol.iterator
 					? function (obj) {
-						return typeof obj
+							return typeof obj
 					  }
 					: function (obj) {
-						return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj
+							return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj
 					  }),
 			_typeof(obj)
 		)
@@ -640,7 +640,7 @@
 			fn =
 				_ref$fn === void 0
 					? function () {
-						return true
+							return true
 					  }
 					: _ref$fn,
 			_ref$initialDuration = _ref.initialDuration,

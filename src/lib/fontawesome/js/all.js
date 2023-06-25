@@ -32,7 +32,7 @@
 				(symbols = symbols.filter(function (sym) {
 					return Object.getOwnPropertyDescriptor(object, sym).enumerable
 				})),
-			keys.push.apply(keys, symbols)
+				keys.push.apply(keys, symbols)
 		}
 
 		return keys
@@ -43,11 +43,11 @@
 			var source = null != arguments[i] ? arguments[i] : {}
 			i % 2
 				? ownKeys(Object(source), !0).forEach(function (key) {
-					_defineProperty(target, key, source[key])
+						_defineProperty(target, key, source[key])
 				  })
 				: Object.getOwnPropertyDescriptors
-					? Object.defineProperties(target, Object.getOwnPropertyDescriptors(source))
-					: ownKeys(Object(source)).forEach(function (key) {
+				? Object.defineProperties(target, Object.getOwnPropertyDescriptors(source))
+				: ownKeys(Object(source)).forEach(function (key) {
 						Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key))
 				  })
 		}
@@ -3517,7 +3517,7 @@
 				(symbols = symbols.filter(function (sym) {
 					return Object.getOwnPropertyDescriptor(object, sym).enumerable
 				})),
-			keys.push.apply(keys, symbols)
+				keys.push.apply(keys, symbols)
 		}
 
 		return keys
@@ -3528,11 +3528,11 @@
 			var source = null != arguments[i] ? arguments[i] : {}
 			i % 2
 				? ownKeys(Object(source), !0).forEach(function (key) {
-					_defineProperty(target, key, source[key])
+						_defineProperty(target, key, source[key])
 				  })
 				: Object.getOwnPropertyDescriptors
-					? Object.defineProperties(target, Object.getOwnPropertyDescriptors(source))
-					: ownKeys(Object(source)).forEach(function (key) {
+				? Object.defineProperties(target, Object.getOwnPropertyDescriptors(source))
+				: ownKeys(Object(source)).forEach(function (key) {
 						Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key))
 				  })
 		}
@@ -4990,7 +4990,7 @@
 				(symbols = symbols.filter(function (sym) {
 					return Object.getOwnPropertyDescriptor(object, sym).enumerable
 				})),
-			keys.push.apply(keys, symbols)
+				keys.push.apply(keys, symbols)
 		}
 
 		return keys
@@ -5001,11 +5001,11 @@
 			var source = null != arguments[i] ? arguments[i] : {}
 			i % 2
 				? ownKeys(Object(source), !0).forEach(function (key) {
-					_defineProperty(target, key, source[key])
+						_defineProperty(target, key, source[key])
 				  })
 				: Object.getOwnPropertyDescriptors
-					? Object.defineProperties(target, Object.getOwnPropertyDescriptors(source))
-					: ownKeys(Object(source)).forEach(function (key) {
+				? Object.defineProperties(target, Object.getOwnPropertyDescriptors(source))
+				: ownKeys(Object(source)).forEach(function (key) {
 						Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key))
 				  })
 		}
@@ -14943,7 +14943,7 @@
 				(symbols = symbols.filter(function (sym) {
 					return Object.getOwnPropertyDescriptor(object, sym).enumerable
 				})),
-			keys.push.apply(keys, symbols)
+				keys.push.apply(keys, symbols)
 		}
 
 		return keys
@@ -14954,11 +14954,11 @@
 			var source = null != arguments[i] ? arguments[i] : {}
 			i % 2
 				? ownKeys(Object(source), !0).forEach(function (key) {
-					_defineProperty(target, key, source[key])
+						_defineProperty(target, key, source[key])
 				  })
 				: Object.getOwnPropertyDescriptors
-					? Object.defineProperties(target, Object.getOwnPropertyDescriptors(source))
-					: ownKeys(Object(source)).forEach(function (key) {
+				? Object.defineProperties(target, Object.getOwnPropertyDescriptors(source))
+				: ownKeys(Object(source)).forEach(function (key) {
 						Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key))
 				  })
 		}
@@ -14973,10 +14973,10 @@
 			(_typeof =
 				"function" == typeof Symbol && "symbol" == typeof Symbol.iterator
 					? function (obj) {
-						return typeof obj
+							return typeof obj
 					  }
 					: function (obj) {
-						return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj
+							return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj
 					  }),
 			_typeof(obj)
 		)
@@ -16091,8 +16091,8 @@
 			oldUnicode ||
 			(newUnicode
 				? {
-					prefix: "fas",
-					iconName: newUnicode
+						prefix: "fas",
+						iconName: newUnicode
 				  }
 				: null) || {
 				prefix: null,
@@ -16257,7 +16257,7 @@
 					var normalized =
 						definition.prefix && definition.iconName && definition.icon
 							? {
-								0: definition
+									0: definition
 							  }
 							: definition
 					Object.keys(normalized).map(function (key) {
@@ -16649,7 +16649,7 @@
 		var uploadedIconWidthStyle =
 			isUploadedIcon && !~extra.classes.indexOf("fa-fw")
 				? {
-					width: "".concat((width / height) * 16 * 0.0625, "em")
+						width: "".concat((width / height) * 16 * 0.0625, "em")
 				  }
 				: {}
 
@@ -16686,12 +16686,12 @@
 		var _ref2 =
 				mask.found && main.found
 					? callProvided("generateAbstractMask", args) || {
-						children: [],
-						attributes: {}
+							children: [],
+							attributes: {}
 					  }
 					: callProvided("generateAbstractIcon", args) || {
-						children: [],
-						attributes: {}
+							children: [],
+							attributes: {}
 					  },
 			children = _ref2.children,
 			attributes = _ref2.attributes
@@ -16720,7 +16720,7 @@
 				_objectSpread2({}, extra.attributes),
 				title
 					? {
-						title: title
+							title: title
 					  }
 					: {}
 			),
@@ -16781,7 +16781,7 @@
 				_objectSpread2({}, extra.attributes),
 				title
 					? {
-						title: title
+							title: title
 					  }
 					: {}
 			),
@@ -16927,8 +16927,8 @@
 		config.measurePerformance && PERFORMANCE && PERFORMANCE.mark && PERFORMANCE.measure
 			? PERFORMANCE
 			: {
-				mark: noop$1,
-				measure: noop$1
+					mark: noop$1,
+					measure: noop$1
 			  }
 	var preamble = "FA \"6.2.0\""
 
@@ -17274,7 +17274,7 @@
 			arguments.length > 1 && arguments[1] !== undefined
 				? arguments[1]
 				: {
-					styleParser: true
+						styleParser: true
 				  }
 
 		var _classParser = classParser(node),
@@ -17315,7 +17315,7 @@
 		var nodeMeta =
 			config.autoReplaceSvg === "nest"
 				? parseMeta(node, {
-					styleParser: false
+						styleParser: false
 				  })
 				: parseMeta(node)
 
@@ -17350,7 +17350,7 @@
 		var prefixes = config.autoFetchSvg
 			? knownPrefixes
 			: FAMILIES.map(function (f) {
-				return "fa-".concat(f)
+					return "fa-".concat(f)
 			  }).concat(Object.keys(styles$2))
 
 		if (!prefixes.includes("fa")) {
@@ -17505,10 +17505,10 @@
 						mask: mask
 							? asFoundIcon(mask.icon)
 							: {
-								found: false,
-								width: null,
-								height: null,
-								icon: {}
+									found: false,
+									width: null,
+									height: null,
+									icon: {}
 							  }
 					},
 					prefix: prefix,
@@ -17567,10 +17567,10 @@
 						mask.iconName
 							? findIcon(mask.iconName, mask.prefix)
 							: Promise.resolve({
-								found: false,
-								width: 512,
-								height: 512,
-								icon: {}
+									found: false,
+									width: 512,
+									height: 512,
+									icon: {}
 							  })
 					])
 						.then(function (_ref) {
@@ -17653,7 +17653,7 @@
 							assembler(function (args) {
 								Array.isArray(args)
 									? args.map(function (a) {
-										children = children.concat(a.abstract)
+											children = children.concat(a.abstract)
 									  })
 									: (children = children.concat(args.abstract))
 							})
@@ -18165,9 +18165,9 @@
 					var mask = !maskData
 						? emptyCanonicalIcon()
 						: getCanonicalIcon(
-							maskData.split(" ").map(function (i) {
-								return i.trim()
-							})
+								maskData.split(" ").map(function (i) {
+									return i.trim()
+								})
 						  )
 
 					if (!mask.prefix) {
@@ -18209,7 +18209,7 @@
 				}
 				var maskInnerGroupChildrenMixin = mainPath.children
 					? {
-						children: mainPath.children.map(fillBlack)
+							children: mainPath.children.map(fillBlack)
 					  }
 					: {}
 				var maskInnerGroup = {
@@ -18371,16 +18371,16 @@
 					children: reduceMotion
 						? []
 						: [
-							{
-								tag: "animate",
-								attributes: _objectSpread2(
-									_objectSpread2({}, OPACITY_ANIMATE),
-									{},
-									{
-										values: "1;0;0;0;0;1;"
-									}
-								)
-							}
+								{
+									tag: "animate",
+									attributes: _objectSpread2(
+										_objectSpread2({}, OPACITY_ANIMATE),
+										{},
+										{
+											values: "1;0;0;0;0;1;"
+										}
+									)
+								}
 						  ]
 				})
 

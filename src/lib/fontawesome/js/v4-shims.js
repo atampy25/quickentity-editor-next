@@ -7,8 +7,8 @@
 	typeof exports === "object" && typeof module !== "undefined"
 		? (module.exports = factory())
 		: typeof define === "function" && define.amd
-			? define(factory)
-			: (global["fontawesome-free-shims"] = factory())
+		? define(factory)
+		: (global["fontawesome-free-shims"] = factory())
 })(this, function () {
 	"use strict"
 
