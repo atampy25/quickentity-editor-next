@@ -1,11 +1,11 @@
 {
-	"version": "1.37.3",
-	"notes": "Normalise entity IDs and fix ZCurve schema",
+	"version": "1.37.4",
+	"notes": "Yet another ref normalisation fix",
 	"pub_date": "2023-02-18T08:42:26Z",
 	"platforms": {
 		"windows-x86_64": {
-			"signature": "dW50cnVzdGVkIGNvbW1lbnQ6IHNpZ25hdHVyZSBmcm9tIHRhdXJpIHNlY3JldCBrZXkKUlVScWpVZGd2b0lOTmVzTTNraVNyQmFlQXhhYTR2NFlRVS8ydHNKeWEraGVmUGEyRGxlZHd0Q0hJSTM0RmRRMDFsQU5GVXRwMnhuckdzZFFpRmgreE5qTVp4R1RXMmNxV2djPQp0cnVzdGVkIGNvbW1lbnQ6IHRpbWVzdGFtcDoxNjg3Njk2NzIxCWZpbGU6UXVpY2tFbnRpdHkgRWRpdG9yXzEuMzcuM194NjRfZW4tVVMubXNpLnppcAp6VGg5b0k2cTh3OGFYVWZxTGZrUHRqcXFGRXFPaC84SHN6aTUybGQzQVYzMm4yaDNIK0J6Y0o0SkJ0cktScE9XendFVXpTdWZ6bEtvdWVvTEZ2SGtBQT09Cg==",
-			"url": "https://github.com/atampy25/quickentity-editor-next/releases/download/1.37.3/QuickEntity.Editor_1.37.3_x64_en-US.msi.zip"
+			"signature": "dW50cnVzdGVkIGNvbW1lbnQ6IHNpZ25hdHVyZSBmcm9tIHRhdXJpIHNlY3JldCBrZXkKUlVScWpVZGd2b0lOTlZQN21MM2NyYUkyNzZVSGNCNGhERlVlK0tKMi8wc0RxRDB3eW1SdkRPWU1RVG1zUWVUbThHd2JBem90a1RFU1ZvUUlxTEJ1V0pYVlZxeTVOc0x0ZGd3PQp0cnVzdGVkIGNvbW1lbnQ6IHRpbWVzdGFtcDoxNjg3Njk5MDQ2CWZpbGU6UXVpY2tFbnRpdHkgRWRpdG9yXzEuMzcuNF94NjRfZW4tVVMubXNpLnppcAo4MVVXdkw0ZG9uME1kZDNlRHVqNVFtNTZ6UnZ0cVVKdnJER3N4MW1IUW9DNGQ2UmZEbWxGNWJ6VHdLTFdRNS85MkhmaVNKM2JuSDkvbFBUcVo3WC9CUT09Cg==",
+			"url": "https://github.com/atampy25/quickentity-editor-next/releases/download/1.37.4/QuickEntity.Editor_1.37.4_x64_en-US.msi.zip"
 		}
 	}
 }
