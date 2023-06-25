@@ -431,7 +431,7 @@
 		"required": ["m_CanCiviliansInvestigate", "m_CanGuardsInvestigate", "m_CanVIPsInvestigate"]
 	},
 	"ZCurve": {
-		"type": "array",
+		"type": "object",
 		"description": "A ZCurve.",
 		"properties": {
 			"data": {

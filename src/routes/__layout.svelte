@@ -308,6 +308,8 @@
 			}
 		}
 
+		ent.entities = Object.fromEntries(Object.entries(ent.entities).map(([a, b]) => [a.padStart(16, "0"), b]))
+
 		if (ent.entities[ent.rootEntity].name !== "Scene" || ent.tempHash !== "") {
 			appWindow.setTitle(`${ent.entities[ent.rootEntity].name} (${ent.tempHash}) - QuickEntity Editor`)
 		} else {
