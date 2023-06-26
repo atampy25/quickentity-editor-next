@@ -130,14 +130,14 @@ export class Intellisense {
 						]).execute()
 					}
 
-					return await this.readJSONFile(await join(await appDir(), "patched.json"))
+					this.resolvedEntities[factory] = await this.readJSONFile(await join(await appDir(), "patched.json"))
 				} else {
-					return base
+					this.resolvedEntities[factory] = base
 				}
 			}
-		} else {
-			return this.resolvedEntities[factory]
 		}
+
+		return this.resolvedEntities[factory]
 	}
 
 	async ready() {

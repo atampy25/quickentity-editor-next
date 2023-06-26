@@ -76,22 +76,16 @@ pub enum SentMessage {
 	},
 }
 
-/**
- * We deserialize u64s from strings for messages sent from JS to Rust,
- * because JS can't handle u64s.
- */
+/// We deserialize u64s from strings for messages sent from JS to Rust because JS can't handle u64s.
 fn deserialize_u64_string<'de, D>(deserializer: D) -> Result<u64, D::Error>
 where
 	D: serde::Deserializer<'de>,
 {
 	let s: String = Deserialize::deserialize(deserializer)?;
-	u64::from_str_radix(&s, 10).map_err(serde::de::Error::custom)
+	s.parse::<u64>().map_err(serde::de::Error::custom)
 }
 
-/**
- * We serialize u64s to strings for messages sent from Rust to JS,
- * for the same reason.
- */
+/// We serialize u64s to strings for messages sent from Rust to JS for the same reason.
 fn serialize_u64_string<S>(x: &u64, serializer: S) -> Result<S::Ok, S::Error>
 where
 	S: serde::Serializer,

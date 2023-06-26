@@ -208,7 +208,7 @@
 							data.value = data.value.map((a) => {
 								const localRef = getReferencedLocalEntity(a)
 								if (localRef) {
-									return changeReferenceToLocalEntity(data.value, localRef.padStart(16, "0"))
+									return changeReferenceToLocalEntity(a, localRef.padStart(16, "0"))
 								} else {
 									return a
 								}
@@ -231,7 +231,7 @@
 								data.value = data.value.map((a) => {
 									const localRef = getReferencedLocalEntity(a)
 									if (localRef) {
-										return changeReferenceToLocalEntity(data.value, localRef.padStart(16, "0"))
+										return changeReferenceToLocalEntity(a, localRef.padStart(16, "0"))
 									} else {
 										return a
 									}
@@ -714,8 +714,8 @@
 								title: "Save the entity JSON",
 								filters: [
 									{
-										name: "QuickEntity JSON",
-										extensions: ["json"]
+										name: "Entity JSON",
+										extensions: ["entity.json"]
 									}
 								]
 							})
@@ -732,6 +732,8 @@
 								$sessionMetadata.saveAsPatch = false
 								$sessionMetadata.saveAsEntityPath = x
 								$sessionMetadata.loadedFromGameFiles = false
+
+								$workspaceData.path = $workspaceData.path
 
 								breadcrumb("entity", "Saved to file")
 
@@ -754,7 +756,7 @@
 								filters: [
 									{
 										name: "Patch JSON",
-										extensions: ["json"]
+										extensions: ["entity.patch.json"]
 									}
 								]
 							})
@@ -783,6 +785,8 @@
 								$sessionMetadata.saveAsPatch = true
 								$sessionMetadata.saveAsPatchPath = x
 								$sessionMetadata.loadedFromGameFiles = false
+
+								$workspaceData.path = $workspaceData.path
 
 								breadcrumb("entity", "Saved to patch")
 
@@ -1563,7 +1567,7 @@
 											return false
 										})() then altered}
 											{#if altered}
-												(modified by workspace file)
+												(vanilla copy)
 											{/if}
 										{/await}
 									{/if}
