@@ -1,11 +1,11 @@
 {
-	"version": "1.37.4",
-	"notes": "Yet another ref normalisation fix",
+	"version": "1.37.5",
+	"notes": "Yet again, a ref normalisation fix",
 	"pub_date": "2023-02-18T08:42:26Z",
 	"platforms": {
 		"windows-x86_64": {
-			"signature": "dW50cnVzdGVkIGNvbW1lbnQ6IHNpZ25hdHVyZSBmcm9tIHRhdXJpIHNlY3JldCBrZXkKUlVScWpVZGd2b0lOTlZQN21MM2NyYUkyNzZVSGNCNGhERlVlK0tKMi8wc0RxRDB3eW1SdkRPWU1RVG1zUWVUbThHd2JBem90a1RFU1ZvUUlxTEJ1V0pYVlZxeTVOc0x0ZGd3PQp0cnVzdGVkIGNvbW1lbnQ6IHRpbWVzdGFtcDoxNjg3Njk5MDQ2CWZpbGU6UXVpY2tFbnRpdHkgRWRpdG9yXzEuMzcuNF94NjRfZW4tVVMubXNpLnppcAo4MVVXdkw0ZG9uME1kZDNlRHVqNVFtNTZ6UnZ0cVVKdnJER3N4MW1IUW9DNGQ2UmZEbWxGNWJ6VHdLTFdRNS85MkhmaVNKM2JuSDkvbFBUcVo3WC9CUT09Cg==",
-			"url": "https://github.com/atampy25/quickentity-editor-next/releases/download/1.37.4/QuickEntity.Editor_1.37.4_x64_en-US.msi.zip"
+			"signature": "dW50cnVzdGVkIGNvbW1lbnQ6IHNpZ25hdHVyZSBmcm9tIHRhdXJpIHNlY3JldCBrZXkKUlVScWpVZGd2b0lOTlpVQ0dxeG1LNXd6My9mODVyWWZjUHBta1c1Y0F1amxrY2JYTTNQbFZNcFJ6eExYelI3S1RlcTJOc3FtRzZGK2h6VGlnUzkzOVBIWEFsMk5DYklFN3drPQp0cnVzdGVkIGNvbW1lbnQ6IHRpbWVzdGFtcDoxNjg3NzU5MDU4CWZpbGU6UXVpY2tFbnRpdHkgRWRpdG9yXzEuMzcuNV94NjRfZW4tVVMubXNpLnppcApFWFd0bFNRWG5WVGt2YTRnYlU2RFdielJDZUxDN2VST1hZa1E5WnFyb1kzMEJXdVBJVDZSVUpMZkpOcGpWWG4wNTBhSUE3bE11TEcrN0tlZExKaE5BQT09Cg==",
+			"url": "https://github.com/atampy25/quickentity-editor-next/releases/download/1.37.5/QuickEntity.Editor_1.37.5_x64_en-US.msi.zip"
 		}
 	}
 }
