@@ -30,7 +30,7 @@
 		Button
 	} from "carbon-components-svelte"
 
-	import { addNotification, appSettings, entity, forceSaveSubEntity, intellisense, inVivoMetadata, sessionMetadata, workspaceData } from "$lib/stores"
+	import { addNotification, appSettings, entity, saveWorkAndCallback, intellisense, inVivoMetadata, sessionMetadata, workspaceData } from "$lib/stores"
 	import json from "$lib/json"
 	import { shortcut } from "$lib/shortcut"
 	import { gameServer } from "$lib/in-vivo/gameServer"
@@ -722,12 +722,8 @@
 
 							if (!x) return
 
-							$forceSaveSubEntity = { value: true }
-
-							setTimeout(async () => {
+							$saveWorkAndCallback = async () => {
 								await writeTextFile(x, await getEntityAsText())
-
-								$forceSaveSubEntity = { value: false }
 
 								$sessionMetadata.saveAsPatch = false
 								$sessionMetadata.saveAsEntityPath = x
@@ -742,7 +738,7 @@
 									title: "Saved entity successfully",
 									subtitle: "Saved the entity to the selected path"
 								}
-							}, 500)
+							}
 						}}
 					>
 						<HeaderNavItem href="#" text="Save as entity file" />
@@ -763,9 +759,7 @@
 
 							if (!x) return
 
-							$forceSaveSubEntity = { value: true }
-
-							setTimeout(async () => {
+							$saveWorkAndCallback = async () => {
 								await writeTextFile("entity.json", await getEntityAsText(), { dir: BaseDirectory.App })
 
 								await Command.sidecar("sidecar/quickentity-rs", [
@@ -780,8 +774,6 @@
 									"--format-fix"
 								]).execute()
 
-								$forceSaveSubEntity = { value: false }
-
 								$sessionMetadata.saveAsPatch = true
 								$sessionMetadata.saveAsPatchPath = x
 								$sessionMetadata.loadedFromGameFiles = false
@@ -795,7 +787,7 @@
 									title: "Saved patch successfully",
 									subtitle: "Saved the changes from the original entity to the selected path"
 								}
-							}, 500)
+							}
 						}}
 					>
 						<HeaderNavItem href="#" text="Save as patch file" />
@@ -807,9 +799,7 @@
 							role="none"
 							use:shortcut={{ control: true, key: "s" }}
 							on:click={async () => {
-								$forceSaveSubEntity = { value: true }
-
-								setTimeout(async () => {
+								$saveWorkAndCallback = async () => {
 									await writeTextFile("entity.json", await getEntityAsText(), { dir: BaseDirectory.App })
 
 									await Command.sidecar("sidecar/quickentity-rs", [
@@ -824,8 +814,6 @@
 										"--format-fix"
 									]).execute()
 
-									$forceSaveSubEntity = { value: false }
-
 									$sessionMetadata.loadedFromGameFiles = false
 
 									$addNotification = {
@@ -839,7 +827,7 @@
 									}
 
 									breadcrumb("entity", "Saved to patch (original path)")
-								}, 500)
+								}
 							}}
 						>
 							<a role="menuitem" tabindex="0" href="#" class="bx--header__menu-item"><span class="bx--text-truncate--end">Save patch</span></a>
@@ -849,12 +837,8 @@
 							role="none"
 							use:shortcut={{ control: true, key: "s" }}
 							on:click={async () => {
-								$forceSaveSubEntity = { value: true }
-
-								setTimeout(async () => {
+								$saveWorkAndCallback = async () => {
 									await writeTextFile($sessionMetadata.saveAsEntityPath, await getEntityAsText())
-
-									$forceSaveSubEntity = { value: false }
 
 									$sessionMetadata.loadedFromGameFiles = false
 
@@ -869,7 +853,7 @@
 									}
 
 									breadcrumb("entity", "Saved to file (original path)")
-								}, 500)
+								}
 							}}
 						>
 							<a role="menuitem" tabindex="0" href="#" class="bx--header__menu-item"><span class="bx--text-truncate--end">Save entity</span></a>
@@ -1283,12 +1267,11 @@
 				<SideNavLink
 					icon={Data2}
 					text="Metadata"
-					href="/metadata"
+					href="#"
 					on:click={() => {
-						$forceSaveSubEntity = { value: true }
-						setTimeout(() => {
-							$forceSaveSubEntity = { value: false }
-						}, 500)
+						$saveWorkAndCallback = async () => {
+							goto("/metadata")
+						}
 					}}
 					isSelected={$page.url.pathname == "/metadata"}
 				/>
@@ -1296,12 +1279,11 @@
 				<SideNavLink
 					icon={Edit}
 					text="Overrides"
-					href="/overrides"
+					href="#"
 					on:click={() => {
-						$forceSaveSubEntity = { value: true }
-						setTimeout(() => {
-							$forceSaveSubEntity = { value: false }
-						}, 500)
+						$saveWorkAndCallback = async () => {
+							goto("/overrides")
+						}
 					}}
 					isSelected={$page.url.pathname == "/overrides"}
 				/>
@@ -1309,12 +1291,11 @@
 				<SideNavLink
 					icon={TreeViewIcon}
 					text="Tree View"
-					href="/tree"
+					href="#"
 					on:click={() => {
-						$forceSaveSubEntity = { value: true }
-						setTimeout(() => {
-							$forceSaveSubEntity = { value: false }
-						}, 500)
+						$saveWorkAndCallback = async () => {
+							goto("/tree")
+						}
 					}}
 					isSelected={$page.url.pathname == "/tree"}
 				/>
@@ -1323,12 +1304,11 @@
 					<SideNavLink
 						icon={DataUnstructured}
 						text="Graph View"
-						href="/graph"
+						href="#"
 						on:click={() => {
-							$forceSaveSubEntity = { value: true }
-							setTimeout(() => {
-								$forceSaveSubEntity = { value: false }
-							}, 500)
+							$saveWorkAndCallback = async () => {
+								goto("/graph")
+							}
 						}}
 						isSelected={$page.url.pathname == "/graph"}
 					/>
@@ -1337,12 +1317,11 @@
 				<SideNavLink
 					icon={Settings}
 					text="Settings"
-					href="/settings"
+					href="#"
 					on:click={() => {
-						$forceSaveSubEntity = { value: true }
-						setTimeout(() => {
-							$forceSaveSubEntity = { value: false }
-						}, 500)
+						$saveWorkAndCallback = async () => {
+							goto("/settings")
+						}
 					}}
 					isSelected={$page.url.pathname == "/settings"}
 				/>
@@ -1383,12 +1362,12 @@
 										previousSelectedWorkspaceTreeItem = selectedWorkspaceTreeItem
 										selectedWorkspaceTreeItem = detail.id
 
-										// save old file
-										if ($appSettings.autoSaveOnSwitchFile) {
-											$forceSaveSubEntity = { value: true }
+										$saveWorkAndCallback = async () => {
+											// typescript needs this repeated
+											if (typeof detail.id == "number") return
 
-											setTimeout(async () => {
-												$forceSaveSubEntity = { value: false }
+											// save old file
+											if ($appSettings.autoSaveOnSwitchFile) {
 												if ($sessionMetadata.originalEntityPath && !$sessionMetadata.loadedFromGameFiles) {
 													if ($sessionMetadata.saveAsPatch) {
 														await writeTextFile("entity.json", await getEntityAsText(), { dir: BaseDirectory.App })
@@ -1416,76 +1395,79 @@
 														breadcrumb("entity", "Saved to file (original path) when switching workspace file")
 													}
 												}
-											}, 500)
-										}
-
-										// load new file
-										if (detail.id.endsWith("entity.json")) {
-											$sessionMetadata.originalEntityPath = detail.id
-											$sessionMetadata.saveAsPatch = false
-											$sessionMetadata.saveAsEntityPath = $sessionMetadata.originalEntityPath
-											$sessionMetadata.loadedFromGameFiles = false
-											$entity = await getEntityFromText(await readTextFile(detail.id))
-
-											breadcrumb("entity", `Loaded ${$entity.tempHash} from workspace file`)
-										} else if (detail.id.endsWith("entity.patch.json")) {
-											let patch = json.parse(await readTextFile(detail.id))
-											let entityPath
-
-											if ($appSettings.gameFileExtensions && (await exists(await join($appSettings.gameFileExtensionsDataPath, "TEMP", patch.tempHash + ".TEMP.entity.json")))) {
-												await extractForInspection(patch.tempHash, Number(patch.patchVersion))
-
-												entityPath = await join(await appDir(), "inspection", "originalEntity.json")
-											} else {
-												let x = await open({
-													multiple: false,
-													title: "Select the original entity JSON",
-													filters: [
-														{
-															name: "QuickEntity JSON",
-															extensions: ["json"]
-														}
-													]
-												})
-
-												if (!x || Array.isArray(x)) return
-
-												entityPath = x
 											}
 
-											if (Number(patch.patchVersion) < 6) {
-												await Command.sidecar("sidecar/quickentity-3", [
-													"patch",
-													"apply",
-													"--permissive",
-													"--input",
-													entityPath,
-													"--patch",
-													detail.id,
-													"--output",
-													await join(await appDir(), "patched.json")
-												]).execute()
-											} else {
-												await Command.sidecar("sidecar/quickentity-rs", [
-													"patch",
-													"apply",
-													"--permissive",
-													"--input",
-													entityPath,
-													"--patch",
-													detail.id,
-													"--output",
-													await join(await appDir(), "patched.json")
-												]).execute()
+											// load new file
+											if (detail.id.endsWith("entity.json")) {
+												$sessionMetadata.originalEntityPath = detail.id
+												$sessionMetadata.saveAsPatch = false
+												$sessionMetadata.saveAsEntityPath = $sessionMetadata.originalEntityPath
+												$sessionMetadata.loadedFromGameFiles = false
+												$entity = await getEntityFromText(await readTextFile(detail.id))
+
+												breadcrumb("entity", `Loaded ${$entity.tempHash} from workspace file`)
+											} else if (detail.id.endsWith("entity.patch.json")) {
+												let patch = json.parse(await readTextFile(detail.id))
+												let entityPath
+
+												if (
+													$appSettings.gameFileExtensions &&
+													(await exists(await join($appSettings.gameFileExtensionsDataPath, "TEMP", patch.tempHash + ".TEMP.entity.json")))
+												) {
+													await extractForInspection(patch.tempHash, Number(patch.patchVersion))
+
+													entityPath = await join(await appDir(), "inspection", "originalEntity.json")
+												} else {
+													let x = await open({
+														multiple: false,
+														title: "Select the original entity JSON",
+														filters: [
+															{
+																name: "QuickEntity JSON",
+																extensions: ["json"]
+															}
+														]
+													})
+
+													if (!x || Array.isArray(x)) return
+
+													entityPath = x
+												}
+
+												if (Number(patch.patchVersion) < 6) {
+													await Command.sidecar("sidecar/quickentity-3", [
+														"patch",
+														"apply",
+														"--permissive",
+														"--input",
+														entityPath,
+														"--patch",
+														detail.id,
+														"--output",
+														await join(await appDir(), "patched.json")
+													]).execute()
+												} else {
+													await Command.sidecar("sidecar/quickentity-rs", [
+														"patch",
+														"apply",
+														"--permissive",
+														"--input",
+														entityPath,
+														"--patch",
+														detail.id,
+														"--output",
+														await join(await appDir(), "patched.json")
+													]).execute()
+												}
+
+												$sessionMetadata.saveAsPatch = true
+												$sessionMetadata.saveAsPatchPath = detail.id
+												$sessionMetadata.loadedFromGameFiles = false
+												$sessionMetadata.originalEntityPath = entityPath
+												$entity = await getEntityFromText(await readTextFile(await join(await appDir(), "patched.json")))
+
+												breadcrumb("entity", `Loaded ${$entity.tempHash} from workspace patch`)
 											}
-
-											$sessionMetadata.saveAsPatch = true
-											$sessionMetadata.saveAsPatchPath = detail.id
-											$sessionMetadata.loadedFromGameFiles = false
-											$sessionMetadata.originalEntityPath = entityPath
-											$entity = await getEntityFromText(await readTextFile(await join(await appDir(), "patched.json")))
-
-											breadcrumb("entity", `Loaded ${$entity.tempHash} from workspace patch`)
 										}
 									}
 								}}
@@ -1498,12 +1480,9 @@
 									style="width: 100%"
 									kind={hash == $entity.tempHash ? "secondary" : "tertiary"}
 									on:click={async () => {
-										// save old file
-										if ($appSettings.autoSaveOnSwitchFile) {
-											$forceSaveSubEntity = { value: true }
-
-											setTimeout(async () => {
-												$forceSaveSubEntity = { value: false }
+										$saveWorkAndCallback = async () => {
+											// save old file
+											if ($appSettings.autoSaveOnSwitchFile) {
 												if ($sessionMetadata.originalEntityPath && !$sessionMetadata.loadedFromGameFiles) {
 													if ($sessionMetadata.saveAsPatch) {
 														await writeTextFile("entity.json", await getEntityAsText(), { dir: BaseDirectory.App })
@@ -1531,23 +1510,23 @@
 														breadcrumb("entity", "Saved to file (original path) when switching to ephemeral file")
 													}
 												}
-											}, 500)
+											}
+
+											// load game file
+											await extractForInspection(hash, 6)
+
+											$sessionMetadata.originalEntityPath = await join(await appDir(), "inspection", "originalEntity.json")
+											$sessionMetadata.saveAsPatch = false
+											$sessionMetadata.saveAsEntityPath = $sessionMetadata.originalEntityPath
+											$sessionMetadata.loadedFromGameFiles = true
+
+											$entity = await getEntityFromText(await readTextFile(await join(await appDir(), "inspection", "originalEntity.json")))
+
+											previousSelectedWorkspaceTreeItem = ""
+											selectedWorkspaceTreeItem = ""
+
+											breadcrumb("entity", `Loaded ${$entity.tempHash} as ephemeral file`)
 										}
-
-										// load game file
-										await extractForInspection(hash, 6)
-
-										$sessionMetadata.originalEntityPath = await join(await appDir(), "inspection", "originalEntity.json")
-										$sessionMetadata.saveAsPatch = false
-										$sessionMetadata.saveAsEntityPath = $sessionMetadata.originalEntityPath
-										$sessionMetadata.loadedFromGameFiles = true
-
-										$entity = await getEntityFromText(await readTextFile(await join(await appDir(), "inspection", "originalEntity.json")))
-
-										previousSelectedWorkspaceTreeItem = ""
-										selectedWorkspaceTreeItem = ""
-
-										breadcrumb("entity", `Loaded ${$entity.tempHash} as ephemeral file`)
 									}}
 								>
 									{hash}
@@ -1720,10 +1699,6 @@
 
 	.bx--tree .bx--tree-node {
 		background-color: inherit;
-	}
-
-	.monaco-scrollable-element > .invisible.scrollbar.vertical.fade {
-		z-index: 99999; /* Fixes an issue where the scrollbar can't be dragged from anywhere except its top because the minimap takes priority */
 	}
 
 	/* Compact mode styles */

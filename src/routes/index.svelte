@@ -1,7 +1,7 @@
 <script lang="ts">
-	import { appSettings } from "$lib/stores"
+	import { appSettings, saveWorkAndCallback } from "$lib/stores"
 	import { InlineLoading } from "carbon-components-svelte"
-	import { onMount } from "svelte"
+	import { onDestroy, onMount } from "svelte"
 
 	let qotdUrl: string | null = null
 	let qotdLastAnswers: string | null = null
@@ -13,6 +13,14 @@
 			qotdLastAnswers = x.last
 		} catch {}
 	})
+
+	const unsubscribe = saveWorkAndCallback.subscribe(async (value) => {
+		if (value) {
+			void value()
+		}
+	})
+
+	onDestroy(unsubscribe)
 </script>
 
 <div class="flex w-full h-full items-center justify-center">

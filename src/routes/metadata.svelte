@@ -1,7 +1,16 @@
 <script lang="ts">
 	import ListEditor from "$lib/components/ListEditor.svelte"
-	import { entity } from "$lib/stores"
+	import { entity, saveWorkAndCallback } from "$lib/stores"
 	import { Select, TextInput } from "carbon-components-svelte"
+	import { onDestroy } from "svelte"
+
+	const unsubscribe = saveWorkAndCallback.subscribe(async (value) => {
+		if (value) {
+			void value()
+		}
+	})
+
+	onDestroy(unsubscribe)
 </script>
 
 <div class="flex flex-col h-full p-2 px-3">

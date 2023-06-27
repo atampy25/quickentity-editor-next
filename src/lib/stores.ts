@@ -185,4 +185,4 @@ export const inVivoMetadata: Writable<{
 	>
 }> = writable({ entities: {} })
 
-export const forceSaveSubEntity = writable({ value: false })
+export const saveWorkAndCallback: Writable<null | (() => any)> = writable(null)

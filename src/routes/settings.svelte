@@ -1,18 +1,27 @@
 <script lang="ts">
 	import ColorPicker from "$lib/components/ColorPicker.svelte"
 	import { gameServer } from "$lib/in-vivo/gameServer"
-	import { appSettings } from "$lib/stores"
+	import { appSettings, saveWorkAndCallback } from "$lib/stores"
 	import { BaseDirectory, copyFile, removeFile } from "@tauri-apps/api/fs"
 	import { documentDir, join } from "@tauri-apps/api/path"
 	import { Checkbox, TextInput, Tooltip, TooltipIcon } from "carbon-components-svelte"
 
 	import Information from "carbon-icons-svelte/lib/Information.svelte"
+	import { onDestroy } from "svelte"
 	import { slide } from "svelte/transition"
 
 	let documentsPath: string
 	;(async () => {
 		documentsPath = await documentDir()
 	})()
+
+	const unsubscribe = saveWorkAndCallback.subscribe(async (value) => {
+		if (value) {
+			void value()
+		}
+	})
+
+	onDestroy(unsubscribe)
 </script>
 
 <div class="p-2 px-3 h-full overflow-y-auto overflow-x-hidden">

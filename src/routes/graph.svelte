@@ -1,6 +1,6 @@
 <script lang="ts">
 	import MinimalTree from "$lib/components/MinimalTree.svelte"
-	import { appSettings, entity, forceSaveSubEntity, intellisense, reverseReferences } from "$lib/stores"
+	import { appSettings, entity, saveWorkAndCallback, intellisense, reverseReferences } from "$lib/stores"
 	import { InlineLoading, Search } from "carbon-components-svelte"
 	import debounce from "lodash/debounce"
 	import { Pane, Splitpanes as SplitPanes } from "svelte-splitpanes"
@@ -111,11 +111,15 @@
 		})
 	})
 
-	const unsubscribe = forceSaveSubEntity.subscribe((value) => {
-		if (value.value && graphView && Object.keys($entity.entities).every((a) => graphView.editor.graph.nodes.some((b) => b.id == a))) {
-			for (const node of graphView.editor.graph.nodes) {
-				$entity.entities[node.id].name = node.title.replace(/<br>.*/gi, "")
+	const unsubscribe = saveWorkAndCallback.subscribe((value) => {
+		if (value) {
+			if (graphView && Object.keys($entity.entities).every((a) => graphView.editor.graph.nodes.some((b) => b.id == a))) {
+				for (const node of graphView.editor.graph.nodes) {
+					$entity.entities[node.id].name = node.title.replace(/<br>.*/gi, "")
+				}
 			}
+
+			void value()
 		}
 	})
 

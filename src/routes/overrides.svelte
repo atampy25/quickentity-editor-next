@@ -2,12 +2,12 @@
 	import OverrideMonacoEditor from "$lib/components/OverrideMonacoEditor.svelte"
 	import json from "$lib/json"
 	import type { Entity, PropertyOverride } from "$lib/quickentity-types"
-	import { appSettings, entity, intellisense, workspaceData } from "$lib/stores"
+	import { appSettings, entity, intellisense, saveWorkAndCallback, workspaceData } from "$lib/stores"
 	import { normaliseToHash } from "$lib/utils"
 	import { readTextFile, exists as tauriExists } from "@tauri-apps/api/fs"
 	import { join } from "@tauri-apps/api/path"
 	import { Button, Modal, TextInput, Tile, Checkbox } from "carbon-components-svelte"
-	import { onMount } from "svelte"
+	import { onDestroy, onMount } from "svelte"
 	import debounce from "lodash/debounce"
 	import isEqual from "lodash/isEqual"
 
@@ -77,6 +77,14 @@
 			}
 		} catch {}
 	}, 500)
+
+	const unsubscribe = saveWorkAndCallback.subscribe(async (value) => {
+		if (value) {
+			void value()
+		}
+	})
+
+	onDestroy(unsubscribe)
 </script>
 
 <div class="flex flex-col h-full p-2 px-3">

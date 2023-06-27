@@ -7,7 +7,7 @@
 	import ExpandableSection from "$lib/components/ExpandableSection.svelte"
 	import ColorPicker from "$lib/components/ColorPicker.svelte"
 
-	import { addNotification, appSettings, entity, sessionMetadata, references, reverseReferences, inVivoMetadata, forceSaveSubEntity, workspaceData } from "$lib/stores"
+	import { addNotification, appSettings, entity, sessionMetadata, references, reverseReferences, inVivoMetadata, saveWorkAndCallback, workspaceData } from "$lib/stores"
 	import { changeReferenceToLocalEntity, checkValidityOfEntity, deleteReferencesToEntity, genRandHex, normaliseToHash, traverseEntityTree } from "$lib/utils"
 	import json from "$lib/json"
 
@@ -69,19 +69,6 @@
 			treeSearching = false
 		}, 10)
 	}
-
-	let entityPath: string | undefined
-
-	onDestroy(
-		sessionMetadata.subscribe(async (value) => {
-			if (value.originalEntityPath != entityPath || value.originalEntityPath == (await join(await appDir(), "inspection", "originalEntity.json"))) {
-				selectionType = null
-				selectedEntityID = undefined!
-				selectedEntity = undefined!
-				entityPath = value.originalEntityPath
-			}
-		})
-	)
 
 	let evaluationPaneInput = ""
 
@@ -200,13 +187,15 @@
 		}
 	}
 
-	const unsubscribe = forceSaveSubEntity.subscribe(async (value) => {
-		if (value.value) {
+	const unsubscribe = saveWorkAndCallback.subscribe(async (value) => {
+		if (value) {
 			if (editorIsValid && selectionType == "entity") {
 				$entity.entities[selectedEntityID] = json.parse(editor.getValue())
 				console.log("Updated", selectedEntityID, "with", json.parse(editor.getValue()))
 				selectedEntity = $entity.entities[selectedEntityID]
 			}
+
+			void value()
 		}
 	})
 
@@ -225,6 +214,10 @@
 	$: $entity.tempHash,
 		tree &&
 			tree.onRefresh(async () => {
+				selectedEntityID = undefined!
+				selectedEntity = undefined!
+				selectionType = null
+
 				if ($workspaceData.path) {
 					if (await exists(await join($workspaceData.path, "project.json"))) {
 						const proj = JSON.parse(await readTextFile(await join($workspaceData.path, "project.json")))
