@@ -36,6 +36,10 @@ jobs:
           yarn
           yarn prepare
 
+      - name: Remove broken symlink in dependency
+        run: |
+          rmdir node_modules/tauri-plugin-fs-watch/tsconfig.json
+
       - name: Download RPKG
         uses: aochmann/actions-download-artifact@5709392f11b5937bd316e52687ad87f7deced5f5
         with:
