@@ -156,7 +156,7 @@
 						: icons.find((a) => entityData.factory.includes(a[0]))
 						? icons.find((a) => entityData.factory.includes(a[0]))![1]
 						: "far fa-file",
-				text: `${sanitise(entityData.name)} (ref ${entityID})`,
+				text: `${sanitise(entityData.name)} (${sanitise(entityID)})`,
 				folder: entityData.factory == "[modules:/zentity.class].pc_entitytype" && reverseReferences[entityID].some((a) => a.type == "parent") // for sorting and stuff
 			})
 		}

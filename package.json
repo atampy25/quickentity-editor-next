@@ -72,6 +72,7 @@
 		"rrweb": "^2.0.0-alpha.3",
 		"shepherd.js": "^10.0.1",
 		"svelte-splitpanes": "^0.7.3",
+		"tauri-plugin-fs-watch": "https://github.com/tauri-apps/tauri-plugin-fs-watch#v1",
 		"three": "^0.144.0",
 		"uuid": "^9.0.0",
 		"web-worker": "^1.2.0"

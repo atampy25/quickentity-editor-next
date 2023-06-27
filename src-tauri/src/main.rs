@@ -22,6 +22,7 @@ fn main() {
 	.unwrap();
 
 	tauri::Builder::default()
+		.plugin(tauri_plugin_fs_watch::init())
 		.invoke_handler(generate_handler![udp_bind, udp_send, udp_kill])
 		.setup(|app_handle| {
 			app_handle.manage(ConnectionManager::default());

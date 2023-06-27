@@ -65,6 +65,7 @@
 	import Decimal from "decimal.js"
 	import { data } from "jquery"
 	import type { FullRef, RefMaybeConstantValue, SubEntity } from "$lib/quickentity-types"
+	import FileTree from "$lib/components/FileTree.svelte"
 
 	let displayNotifications: { kind: "error" | "info" | "info-square" | "success" | "warning" | "warning-alt"; title: string; subtitle: string }[] = []
 
@@ -536,24 +537,11 @@
 		}
 	}
 
-	function getReadDirAsTree(data) {
-		return data
-			.filter((a) => (a.children && getReadDirAsTree(a.children).length) || a.path.endsWith("entity.json") || a.path.endsWith("entity.patch.json"))
-			.map((a) => {
-				return {
-					id: a.path,
-					text: a.name,
-					children: a.children ? getReadDirAsTree(a.children) : undefined
-				}
-			})
-	}
-
 	let reportIssueModalOpen = false
 	let reportIssueModalSeverity = ""
 	let reportIssueModalIssue = ""
 
-	let selectedWorkspaceTreeItem = ""
-	let previousSelectedWorkspaceTreeItem = ""
+	let fileTree: FileTree
 
 	$: if ($entity.tempHash) appWindow.setTitle(`${$entity.entities[$entity.rootEntity].name} (${$entity.tempHash})`)
 </script>
@@ -729,8 +717,6 @@
 								$sessionMetadata.saveAsEntityPath = x
 								$sessionMetadata.loadedFromGameFiles = false
 
-								$workspaceData.path = $workspaceData.path
-
 								breadcrumb("entity", "Saved to file")
 
 								$addNotification = {
@@ -777,8 +763,6 @@
 								$sessionMetadata.saveAsPatch = true
 								$sessionMetadata.saveAsPatchPath = x
 								$sessionMetadata.loadedFromGameFiles = false
-
-								$workspaceData.path = $workspaceData.path
 
 								breadcrumb("entity", "Saved to patch")
 
@@ -1337,148 +1321,124 @@
 			<SplitPanes theme="">
 				{#if $workspaceData.path}
 					<Pane size={15}>
-						<div class="pt-2 -mb-3.5 px-3 flex items-center mr-2">
+						<div class="pt-2 px-3">
 							<h1 class="flex-grow">Workspace</h1>
-							<Button
-								icon={WatsonHealthRotate_360}
-								iconDescription="Refresh"
-								on:click={() => {
-									$workspaceData.path = $workspaceData.path
-								}}
-							/>
 						</div>
-						{#await readDir($workspaceData.path, { recursive: true }) then d}
-							<TreeView
-								children={getReadDirAsTree(d)}
-								bind:activeId={selectedWorkspaceTreeItem}
-								selectedIds={[selectedWorkspaceTreeItem]}
-								on:select={async ({ detail }) => {
-									// just for typescript, it's never actually a number
-									if (typeof detail.id == "number") return
+						<div class="ml-2 max-h-[40vh] overflow-x-hidden">
+							<FileTree
+								directory={$workspaceData.path}
+								bind:this={fileTree}
+								on:selectionChange={({ detail }) => {
+									$saveWorkAndCallback = async () => {
+										// save old file
+										if ($appSettings.autoSaveOnSwitchFile) {
+											if ($sessionMetadata.originalEntityPath && !$sessionMetadata.loadedFromGameFiles) {
+												if ($sessionMetadata.saveAsPatch) {
+													await writeTextFile("entity.json", await getEntityAsText(), { dir: BaseDirectory.App })
 
-									if (!detail.leaf) {
-										selectedWorkspaceTreeItem = previousSelectedWorkspaceTreeItem
-									} else {
-										previousSelectedWorkspaceTreeItem = selectedWorkspaceTreeItem
-										selectedWorkspaceTreeItem = detail.id
-
-										$saveWorkAndCallback = async () => {
-											// typescript needs this repeated
-											if (typeof detail.id == "number") return
-
-											// save old file
-											if ($appSettings.autoSaveOnSwitchFile) {
-												if ($sessionMetadata.originalEntityPath && !$sessionMetadata.loadedFromGameFiles) {
-													if ($sessionMetadata.saveAsPatch) {
-														await writeTextFile("entity.json", await getEntityAsText(), { dir: BaseDirectory.App })
-
-														await Command.sidecar("sidecar/quickentity-rs", [
-															"patch",
-															"generate",
-															"--input1",
-															String($sessionMetadata.originalEntityPath),
-															"--input2",
-															await join(await appDir(), "entity.json"),
-															"--output",
-															String($sessionMetadata.saveAsPatchPath),
-															"--format-fix"
-														]).execute()
-
-														$sessionMetadata.loadedFromGameFiles = false
-
-														breadcrumb("entity", "Saved to patch (original path) when switching workspace file")
-													} else {
-														await writeTextFile($sessionMetadata.saveAsEntityPath, await getEntityAsText())
-
-														$sessionMetadata.loadedFromGameFiles = false
-
-														breadcrumb("entity", "Saved to file (original path) when switching workspace file")
-													}
-												}
-											}
-
-											// load new file
-											if (detail.id.endsWith("entity.json")) {
-												$sessionMetadata.originalEntityPath = detail.id
-												$sessionMetadata.saveAsPatch = false
-												$sessionMetadata.saveAsEntityPath = $sessionMetadata.originalEntityPath
-												$sessionMetadata.loadedFromGameFiles = false
-												$entity = await getEntityFromText(await readTextFile(detail.id))
-
-												breadcrumb("entity", `Loaded ${$entity.tempHash} from workspace file`)
-											} else if (detail.id.endsWith("entity.patch.json")) {
-												let patch = json.parse(await readTextFile(detail.id))
-												let entityPath
-
-												if (
-													$appSettings.gameFileExtensions &&
-													(await exists(await join($appSettings.gameFileExtensionsDataPath, "TEMP", patch.tempHash + ".TEMP.entity.json")))
-												) {
-													await extractForInspection(patch.tempHash, Number(patch.patchVersion))
-
-													entityPath = await join(await appDir(), "inspection", "originalEntity.json")
-												} else {
-													let x = await open({
-														multiple: false,
-														title: "Select the original entity JSON",
-														filters: [
-															{
-																name: "QuickEntity JSON",
-																extensions: ["json"]
-															}
-														]
-													})
-
-													if (!x || Array.isArray(x)) return
-
-													entityPath = x
-												}
-
-												if (Number(patch.patchVersion) < 6) {
-													await Command.sidecar("sidecar/quickentity-3", [
-														"patch",
-														"apply",
-														"--permissive",
-														"--input",
-														entityPath,
-														"--patch",
-														detail.id,
-														"--output",
-														await join(await appDir(), "patched.json")
-													]).execute()
-												} else {
 													await Command.sidecar("sidecar/quickentity-rs", [
 														"patch",
-														"apply",
-														"--permissive",
-														"--input",
-														entityPath,
-														"--patch",
-														detail.id,
+														"generate",
+														"--input1",
+														String($sessionMetadata.originalEntityPath),
+														"--input2",
+														await join(await appDir(), "entity.json"),
 														"--output",
-														await join(await appDir(), "patched.json")
+														String($sessionMetadata.saveAsPatchPath),
+														"--format-fix"
 													]).execute()
+
+													$sessionMetadata.loadedFromGameFiles = false
+
+													breadcrumb("entity", "Saved to patch (original path) when switching workspace file")
+												} else {
+													await writeTextFile($sessionMetadata.saveAsEntityPath, await getEntityAsText())
+
+													$sessionMetadata.loadedFromGameFiles = false
+
+													breadcrumb("entity", "Saved to file (original path) when switching workspace file")
 												}
-
-												$sessionMetadata.saveAsPatch = true
-												$sessionMetadata.saveAsPatchPath = detail.id
-												$sessionMetadata.loadedFromGameFiles = false
-												$sessionMetadata.originalEntityPath = entityPath
-												$entity = await getEntityFromText(await readTextFile(await join(await appDir(), "patched.json")))
-
-												breadcrumb("entity", `Loaded ${$entity.tempHash} from workspace patch`)
 											}
+										}
+
+										// load new file
+										if (detail[1].node.id.endsWith("entity.json")) {
+											$sessionMetadata.originalEntityPath = detail[1].node.id
+											$sessionMetadata.saveAsPatch = false
+											$sessionMetadata.saveAsEntityPath = $sessionMetadata.originalEntityPath
+											$sessionMetadata.loadedFromGameFiles = false
+											$entity = await getEntityFromText(await readTextFile(detail[1].node.id))
+
+											breadcrumb("entity", `Loaded ${$entity.tempHash} from workspace file`)
+										} else if (detail[1].node.id.endsWith("entity.patch.json")) {
+											let patch = json.parse(await readTextFile(detail[1].node.id))
+											let entityPath
+
+											if ($appSettings.gameFileExtensions && (await exists(await join($appSettings.gameFileExtensionsDataPath, "TEMP", patch.tempHash + ".TEMP.entity.json")))) {
+												await extractForInspection(patch.tempHash, Number(patch.patchVersion))
+
+												entityPath = await join(await appDir(), "inspection", "originalEntity.json")
+											} else {
+												let x = await open({
+													multiple: false,
+													title: "Select the original entity JSON",
+													filters: [
+														{
+															name: "QuickEntity JSON",
+															extensions: ["json"]
+														}
+													]
+												})
+
+												if (!x || Array.isArray(x)) return
+
+												entityPath = x
+											}
+
+											if (Number(patch.patchVersion) < 6) {
+												await Command.sidecar("sidecar/quickentity-3", [
+													"patch",
+													"apply",
+													"--permissive",
+													"--input",
+													entityPath,
+													"--patch",
+													detail[1].node.id,
+													"--output",
+													await join(await appDir(), "patched.json")
+												]).execute()
+											} else {
+												await Command.sidecar("sidecar/quickentity-rs", [
+													"patch",
+													"apply",
+													"--permissive",
+													"--input",
+													entityPath,
+													"--patch",
+													detail[1].node.id,
+													"--output",
+													await join(await appDir(), "patched.json")
+												]).execute()
+											}
+
+											$sessionMetadata.saveAsPatch = true
+											$sessionMetadata.saveAsPatchPath = detail[1].node.id
+											$sessionMetadata.loadedFromGameFiles = false
+											$sessionMetadata.originalEntityPath = entityPath
+											$entity = await getEntityFromText(await readTextFile(await join(await appDir(), "patched.json")))
+
+											breadcrumb("entity", `Loaded ${$entity.tempHash} from workspace patch`)
 										}
 									}
 								}}
 							/>
-						{/await}
-						<div class="pt-2 -mb-3.5 px-3">
+						</div>
+						<div class="pt-2 px-3">
 							<h1>Game files</h1>
 							{#each [...new Set($workspaceData.ephemeralFiles)] as hash}
 								<Button
 									style="width: 100%"
-									kind={hash == $entity.tempHash ? "secondary" : "tertiary"}
+									kind={hash == $entity.tempHash && $sessionMetadata.loadedFromGameFiles ? "secondary" : "tertiary"}
 									on:click={async () => {
 										$saveWorkAndCallback = async () => {
 											// save old file
@@ -1522,8 +1482,7 @@
 
 											$entity = await getEntityFromText(await readTextFile(await join(await appDir(), "inspection", "originalEntity.json")))
 
-											previousSelectedWorkspaceTreeItem = ""
-											selectedWorkspaceTreeItem = ""
+											fileTree.deselect()
 
 											breadcrumb("entity", `Loaded ${$entity.tempHash} as ephemeral file`)
 										}
