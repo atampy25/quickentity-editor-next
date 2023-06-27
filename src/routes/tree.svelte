@@ -211,32 +211,41 @@
 
 	const padding = $appSettings.compactMode ? "p-1" : "p-2 px-3"
 
+	let oldTempHash = ""
+
 	$: $entity.tempHash,
-		tree &&
-			tree.onRefresh(async () => {
+		(() => {
+			if (oldTempHash != $entity.tempHash) {
 				selectedEntityID = undefined!
 				selectedEntity = undefined!
 				selectionType = null
 
-				if ($workspaceData.path) {
-					if (await exists(await join($workspaceData.path, "project.json"))) {
-						const proj = JSON.parse(await readTextFile(await join($workspaceData.path, "project.json")))
+				if (tree) {
+					tree.onRefresh(async () => {
+						if ($workspaceData.path) {
+							if (await exists(await join($workspaceData.path, "project.json"))) {
+								const proj = JSON.parse(await readTextFile(await join($workspaceData.path, "project.json")))
 
-						if (proj.treeViewState && proj.treeViewState[$entity.tempHash]) {
-							if (proj.treeViewState[$entity.tempHash].expandedNodes) {
-								tree.setOpenedNodes(proj.treeViewState[$entity.tempHash].expandedNodes)
-							}
+								if (proj.treeViewState && proj.treeViewState[$entity.tempHash]) {
+									if (proj.treeViewState[$entity.tempHash].expandedNodes) {
+										tree.setOpenedNodes(proj.treeViewState[$entity.tempHash].expandedNodes)
+									}
 
-							if (proj.treeViewState[$entity.tempHash].selectedEntity && $entity.entities[proj.treeViewState[$entity.tempHash].selectedEntity]) {
-								tree.navigateTo(proj.treeViewState[$entity.tempHash].selectedEntity)
-								selectedEntityID = proj.treeViewState[$entity.tempHash].selectedEntity
-								selectedEntity = $entity.entities[proj.treeViewState[$entity.tempHash].selectedEntity]
-								selectionType = "entity"
+									if (proj.treeViewState[$entity.tempHash].selectedEntity && $entity.entities[proj.treeViewState[$entity.tempHash].selectedEntity]) {
+										tree.navigateTo(proj.treeViewState[$entity.tempHash].selectedEntity)
+										selectedEntityID = proj.treeViewState[$entity.tempHash].selectedEntity
+										selectedEntity = $entity.entities[proj.treeViewState[$entity.tempHash].selectedEntity]
+										selectionType = "entity"
+									}
+								}
 							}
 						}
-					}
+					})
 				}
-			})
+
+				oldTempHash = $entity.tempHash
+			}
+		})()
 </script>
 
 <SplitPanes on:resize={() => editor?.layout()} theme="">

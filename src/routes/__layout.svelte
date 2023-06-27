@@ -1562,7 +1562,7 @@
 			</SplitPanes>
 		</div>
 	</Content>
-	<div class="absolute h-screen top-0 right-2">
+	<div class="absolute h-screen top-0 right-2" style="z-index: 9999">
 		<div class="h-screen flex flex-col-reverse content-end pb-4">
 			{#each displayNotifications as { kind, title, subtitle } (title)}
 				<div in:fly={{ x: 100 }} out:fade animate:flip>
