@@ -91,9 +91,7 @@
 
 		let decorations: monaco.editor.IEditorDecorationsCollection = editor.createDecorationsCollection([])
 
-		const repoIDstoNames = (await exists(await join(await appDir(), "repository", "repo.json")))
-			? (await $intellisense.readJSONFile(await join(await appDir(), "repository", "repo.json"))).map((a) => [a["ID_"], a["Name"] || a["CommonName"]])
-			: []
+		const repoIDstoNames = $appSettings.gameFileExtensions ? await $intellisense.getRepoIDsToNames() : []
 
 		editor.onDidChangeModelContent(async (e) => {
 			dispatch("contentChanged", editor.getValue())

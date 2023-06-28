@@ -33,6 +33,11 @@ export class Intellisense {
 	resolvedEntities: Record<string, Entity> = {}
 	entityResolverMutex = new Mutex()
 
+	repository: any[] | null = null
+	repositoryMutex = new Mutex()
+
+	repoIDsToNames?: [string, string][]
+
 	workspaceData: Parameters<typeof workspaceData["set"]>[0] = { ephemeralFiles: [] }
 
 	constructor(appSettings: { gameFileExtensions: boolean; gameFileExtensionsDataPath: string }) {
@@ -150,6 +155,26 @@ export class Intellisense {
 
 	async getNameOfEntityInFactory(entityID: string, factory: string) {
 		return (await this.getEntityByFactory(factory))?.entities[entityID].name
+	}
+
+	async getRepository() {
+		const release = await this.repositoryMutex.acquire()
+
+		if (!this.repository) {
+			this.repository = (await exists(await join(await appDir(), "repository", "repo.json"))) ? json.parse(await readTextFile(await join(await appDir(), "repository", "repo.json"))) : []
+		}
+
+		release()
+		return this.repository!
+	}
+
+	// Specifically caches the array used for decorations in the Monaco editor
+	async getRepoIDsToNames() {
+		if (!this.repoIDsToNames) {
+			this.repoIDsToNames = (await this.getRepository()).map((a) => [a["ID_"], a["Name"] || a["CommonName"]])
+		}
+
+		return this.repoIDsToNames!
 	}
 
 	async ready() {

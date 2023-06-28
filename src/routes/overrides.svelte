@@ -38,7 +38,9 @@
 		}
 	}
 
-	$: (async () => {
+	let overrideDeletes: Record<string, Ref[]> = {}
+
+	onMount(async () => {
 		if ($workspaceData.path) {
 			if (await exists(await join($workspaceData.path, "project.json"))) {
 				const proj = JSON.parse(await readTextFile(await join($workspaceData.path, "project.json")))
@@ -48,7 +50,24 @@
 				}
 			}
 		}
-	})()
+	})
+
+	async function refreshOverrideDeletes() {
+		overrideDeletes = {}
+		for (const ref of $entity.overrideDeletes) {
+			if (ref) {
+				if (typeof ref === "string") {
+					overrideDeletes["Local"] ??= []
+					overrideDeletes["Local"].push(ref)
+				} else {
+					overrideDeletes[ref.externalScene || "Local"] ??= []
+					overrideDeletes[ref.externalScene || "Local"].push(ref)
+				}
+			}
+		}
+	}
+
+	$: $entity.overrideDeletes, refreshOverrideDeletes()
 
 	const updatePropertyData = debounce((override, detail) => {
 		try {
@@ -152,48 +171,51 @@
 		</div>
 		<div class="shepherd-overrideDeletes">
 			<h2 class="mt-2">Override deletes</h2>
-			<div class="flex flex-wrap gap-2">
-				{#each $entity.overrideDeletes as ref}
-					<Tile>
-						<div class="flex items-center gap-4">
-							{#if $appSettings.gameFileExtensions && ref && typeof ref == "object" && ref.externalScene}
-								{#await $intellisense.getNameOfEntityInFactory(ref.ref, ref.externalScene)}
-									{ref.ref} in {friendlyHashes[ref.externalScene || ""] || ref.externalScene}
-								{:then name}
-									<div>
-										<span style="font-size: 0.7rem">
-											{ref.ref} in {friendlyHashes[ref.externalScene || ""] || ref.externalScene}
-										</span>
-										<br />
-										{#if name}
-											<div class="mt-0.5" style="font-size: 1rem">
-												{name}
-											</div>
-										{:else}
-											<div class="mt-0.5 text-red-200" style="font-size: 1rem">Non-existent entity</div>
-										{/if}
-									</div>
-								{/await}
-							{:else if ref && typeof ref == "object" && ref.externalScene}
-								{ref.ref} in {friendlyHashes[ref.externalScene] || ref.externalScene}
-							{:else}
-								{ref}
-							{/if}
+			{#each Object.entries(overrideDeletes) as [source, refs]}
+				<h4>{friendlyHashes[source] || source}</h4>
+				<div class="mt-2 flex flex-wrap gap-2">
+					{#each refs as ref}
+						<Tile>
+							<div class="flex items-center gap-4">
+								{#if $appSettings.gameFileExtensions && ref && typeof ref == "object" && ref.externalScene}
+									{#await $intellisense.getNameOfEntityInFactory(ref.ref, ref.externalScene)}
+										{ref.ref}
+									{:then name}
+										<div>
+											<span style="font-size: 0.7rem">
+												{ref.ref}
+											</span>
+											<br />
+											{#if name}
+												<div class="mt-0.5" style="font-size: 1rem">
+													{name}
+												</div>
+											{:else}
+												<div class="mt-0.5 text-red-200" style="font-size: 1rem">Non-existent entity</div>
+											{/if}
+										</div>
+									{/await}
+								{:else if ref && typeof ref == "object" && ref.externalScene}
+									{ref.ref}
+								{:else}
+									{ref}
+								{/if}
 
-							<Button
-								kind="ghost"
-								size="small"
-								icon={CloseOutline}
-								iconDescription="Remove"
-								on:click={() => {
-									$entity.overrideDeletes = $entity.overrideDeletes.filter((a) => !isEqual(a, ref))
-								}}
-							/>
-						</div>
-					</Tile>
-				{/each}
-			</div>
-			<br />
+								<Button
+									kind="ghost"
+									size="small"
+									icon={CloseOutline}
+									iconDescription="Remove"
+									on:click={() => {
+										$entity.overrideDeletes = $entity.overrideDeletes.filter((a) => !isEqual(a, ref))
+									}}
+								/>
+							</div>
+						</Tile>
+					{/each}
+				</div>
+				<br />
+			{/each}
 			<Button
 				icon={Add}
 				on:click={() => {

@@ -199,9 +199,7 @@
 
 		const idsToNamesInternal = Object.entries(entity.entities).map((a) => [a[0], a[1].name])
 
-		const repoIDstoNames = (await exists(await join(await appDir(), "repository", "repo.json")))
-			? json.parse(await readTextFile(await join(await appDir(), "repository", "repo.json"))).map((a) => [a["ID_"], a["Name"] || a["CommonName"]])
-			: []
+		const repoIDstoNames = $appSettings.gameFileExtensions ? await $intellisense.getRepoIDsToNames() : []
 
 		editor.onDidChangeModelContent(async (e) => {
 			dispatch("contentChanged")
