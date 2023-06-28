@@ -638,3 +638,118 @@ export function sanitise(a: string) {
 
 	return sanitiser.querySelector("div")!.innerHTML
 }
+
+function normaliseRef(ref: Ref) {
+	if (ref) {
+		if (typeof ref === "string") {
+			return ref.padStart(16, "0")
+		} else {
+			return { ...ref, ref: ref.ref.padStart(16, "0") }
+		}
+	} else {
+		return null
+	}
+}
+
+/** Compatibility for QN change where all entity IDs are 16 characters */
+export function normaliseEntityIDs(ent: Entity) {
+	for (const [entityID, entityData] of Object.entries(ent.entities) as [string, SubEntity][]) {
+		if (entityData.parent) {
+			entityData.parent = normaliseRef(entityData.parent)
+		}
+
+		if (entityData.properties) {
+			for (const [property, data] of Object.entries(entityData.properties)) {
+				if (data.type == "SEntityTemplateReference" || data.type == "TArray<SEntityTemplateReference>") {
+					if (data.type == "SEntityTemplateReference") {
+						data.value = normaliseRef(data.value)
+					} else {
+						data.value = data.value.map((a) => normaliseRef(a))
+					}
+				}
+			}
+		}
+
+		if (entityData.platformSpecificProperties) {
+			for (const [platform, properties] of Object.entries(entityData.platformSpecificProperties)) {
+				for (const [property, data] of Object.entries(properties)) {
+					if (data.type == "SEntityTemplateReference" || data.type == "TArray<SEntityTemplateReference>") {
+						if (data.type == "SEntityTemplateReference") {
+							data.value = normaliseRef(data.value)
+						} else {
+							data.value = data.value.map((a) => normaliseRef(a))
+						}
+					}
+				}
+			}
+		}
+
+		for (const [type, data] of [
+			["event", entityData.events],
+			["inputCopy", entityData.inputCopying],
+			["outputCopy", entityData.outputCopying]
+		] as [string, Record<string, Record<string, RefMaybeConstantValue[]>>][]) {
+			if (data) {
+				for (const [event, x] of Object.entries(data)) {
+					for (const y of Object.keys(x)) {
+						x[y] = x[y].map((ent) => {
+							if (ent && typeof ent != "string" && Object.prototype.hasOwnProperty.call(ent, "value")) {
+								return { ...ent, ref: normaliseRef(ent.ref) }
+							} else {
+								return normaliseRef(ent)
+							}
+						})
+					}
+				}
+			}
+		}
+
+		if (entityData.propertyAliases) {
+			for (const alias of Object.keys(entityData.propertyAliases)) {
+				entityData.propertyAliases[alias] = entityData.propertyAliases[alias].map((alias) => ({ ...alias, originalEntity: normaliseRef(alias.originalEntity) }))
+			}
+		}
+
+		if (entityData.exposedEntities) {
+			for (const [exposedEnt, data] of Object.entries(entityData.exposedEntities)) {
+				data.refersTo = data.refersTo.map((target) => normaliseRef(target))
+			}
+		}
+
+		if (entityData.exposedInterfaces) {
+			for (const x of Object.keys(entityData.exposedInterfaces)) {
+				entityData.exposedInterfaces[x] = entityData.exposedInterfaces[x].padStart(16, "0")
+			}
+		}
+
+		if (entityData.subsets) {
+			for (const x of Object.keys(entityData.subsets)) {
+				entityData.subsets[x] = entityData.subsets[x].map((ent) => ent.padStart(16, "0"))
+			}
+		}
+	}
+
+	for (const x in ent.comments) {
+		ent.comments[x].parent = normaliseRef(ent.comments[x].parent)
+	}
+
+	for (const x in ent.overrideDeletes) {
+		ent.overrideDeletes[x] = normaliseRef(ent.overrideDeletes[x])
+	}
+
+	for (const x in ent.propertyOverrides) {
+		ent.propertyOverrides[x].entities = ent.propertyOverrides[x].entities.map((a) => normaliseRef(a))
+
+		for (const [property, data] of Object.entries(ent.propertyOverrides[x].properties)) {
+			if (data.type == "SEntityTemplateReference" || data.type == "TArray<SEntityTemplateReference>") {
+				if (data.type == "SEntityTemplateReference") {
+					data.value = normaliseRef(data.value)
+				} else {
+					data.value = data.value.map((a) => normaliseRef(a))
+				}
+			}
+		}
+	}
+
+	ent.entities = Object.fromEntries(Object.entries(ent.entities).map(([a, b]) => [a.padStart(16, "0"), b]))
+}

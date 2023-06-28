@@ -39,26 +39,6 @@
 	}
 
 	$: (async () => {
-		if ($appSettings.gameFileExtensions) {
-			for (let override of $entity.propertyOverrides) {
-				for (let ref of override.entities) {
-					if (typeof ref == "object" && ref?.externalScene) {
-						overriddenEntityNames[normaliseToHash(ref.externalScene) + ref.ref] = (await $intellisense.getEntityByFactory(ref.externalScene))!.entities[ref.ref].name
-
-						overriddenEntityNames = overriddenEntityNames
-					}
-				}
-			}
-
-			for (let ref of $entity.overrideDeletes) {
-				if (typeof ref == "object" && ref?.externalScene) {
-					overriddenEntityNames[normaliseToHash(ref.externalScene) + ref.ref] = (await $intellisense.getEntityByFactory(ref.externalScene))!.entities[ref.ref].name
-
-					overriddenEntityNames = overriddenEntityNames
-				}
-			}
-		}
-
 		if ($workspaceData.path) {
 			if (await exists(await join($workspaceData.path, "project.json"))) {
 				const proj = JSON.parse(await readTextFile(await join($workspaceData.path, "project.json")))
@@ -100,19 +80,19 @@
 						{#each override.entities as ref}
 							<div class="inline-flex gap-3 items-center pl-3 bg-neutral-800">
 								{#if $appSettings.gameFileExtensions && ref && typeof ref == "object"}
-									{#if overriddenEntityNames[normaliseToHash(ref?.externalScene) + ref?.ref]}
+									{#await (async () => (await $intellisense.getEntityByFactory(ref.externalScene))?.entities[ref.ref].name)()}
+										{ref.ref} in {friendlyHashes[ref.externalScene || ""] || ref.externalScene}
+									{:then name}
 										<div>
 											<span style="font-size: 0.7rem">
 												{ref.ref} in {friendlyHashes[ref.externalScene || ""] || ref.externalScene}
 											</span>
 											<br />
 											<span style="font-size: 1rem">
-												{overriddenEntityNames[normaliseToHash(ref?.externalScene) + ref.ref]}
+												{name}
 											</span>
 										</div>
-									{:else}
-										{ref.ref} in {friendlyHashes[ref.externalScene || ""] || ref.externalScene}
-									{/if}
+									{/await}
 								{:else if ref && typeof ref == "object"}
 									{ref.ref} in {friendlyHashes[ref.externalScene || ""] || ref.externalScene}
 								{:else}
@@ -176,22 +156,26 @@
 				{#each $entity.overrideDeletes as ref}
 					<Tile>
 						<div class="flex items-center gap-4">
-							{#if $appSettings.gameFileExtensions && ref && typeof ref == "object"}
-								{#if overriddenEntityNames[normaliseToHash(ref?.externalScene) + ref?.ref]}
+							{#if $appSettings.gameFileExtensions && ref && typeof ref == "object" && ref.externalScene}
+								{#await $intellisense.getNameOfEntityInFactory(ref.ref, ref.externalScene)}
+									{ref.ref} in {friendlyHashes[ref.externalScene || ""] || ref.externalScene}
+								{:then name}
 									<div>
 										<span style="font-size: 0.7rem">
 											{ref.ref} in {friendlyHashes[ref.externalScene || ""] || ref.externalScene}
 										</span>
 										<br />
-										<span style="font-size: 1rem">
-											{overriddenEntityNames[normaliseToHash(ref?.externalScene) + ref.ref]}
-										</span>
+										{#if name}
+											<div class="mt-0.5" style="font-size: 1rem">
+												{name}
+											</div>
+										{:else}
+											<div class="mt-0.5 text-red-200" style="font-size: 1rem">Non-existent entity</div>
+										{/if}
 									</div>
-								{:else}
-									{ref.ref} in {friendlyHashes[ref.externalScene || ""] || ref.externalScene}
-								{/if}
-							{:else if ref && typeof ref == "object"}
-								{ref.ref} in {friendlyHashes[ref.externalScene || ""] || ref.externalScene}
+								{/await}
+							{:else if ref && typeof ref == "object" && ref.externalScene}
+								{ref.ref} in {friendlyHashes[ref.externalScene] || ref.externalScene}
 							{:else}
 								{ref}
 							{/if}

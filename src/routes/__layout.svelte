@@ -60,7 +60,7 @@
 	import * as Sentry from "@sentry/browser"
 	import { BrowserTracing } from "@sentry/tracing"
 	import SentryRRWeb from "@sentry/rrweb"
-	import { changeEntityHashesFromFriendly, changeEntityHashesToFriendly, changeReferenceToLocalEntity, getReferencedEntities, getReferencedLocalEntity } from "$lib/utils"
+	import { changeEntityHashesFromFriendly, changeEntityHashesToFriendly, changeReferenceToLocalEntity, getReferencedEntities, getReferencedLocalEntity, normaliseEntityIDs } from "$lib/utils"
 	import { goto } from "$app/navigation"
 	import Decimal from "decimal.js"
 	import { data } from "jquery"
@@ -188,128 +188,7 @@
 			}
 		}
 
-		// Compatibility for QN change where all entity IDs are 16 characters
-		for (const [entityID, entityData] of Object.entries(ent.entities) as [string, SubEntity][]) {
-			if (entityData.parent) {
-				const localRef = getReferencedLocalEntity(entityData.parent)
-				if (localRef) {
-					entityData.parent = changeReferenceToLocalEntity(entityData.parent, localRef.padStart(16, "0"))
-				}
-			}
-
-			if (entityData.properties) {
-				for (const [property, data] of Object.entries(entityData.properties)) {
-					if (data.type == "SEntityTemplateReference" || data.type == "TArray<SEntityTemplateReference>") {
-						if (data.type == "SEntityTemplateReference") {
-							const localRef = getReferencedLocalEntity(data.value)
-							if (localRef) {
-								data.value = changeReferenceToLocalEntity(data.value, localRef.padStart(16, "0"))
-							}
-						} else {
-							data.value = data.value.map((a) => {
-								const localRef = getReferencedLocalEntity(a)
-								if (localRef) {
-									return changeReferenceToLocalEntity(a, localRef.padStart(16, "0"))
-								} else {
-									return a
-								}
-							})
-						}
-					}
-				}
-			}
-
-			if (entityData.platformSpecificProperties) {
-				for (const [platform, properties] of Object.entries(entityData.platformSpecificProperties)) {
-					for (const [property, data] of Object.entries(properties)) {
-						if (data.type == "SEntityTemplateReference" || data.type == "TArray<SEntityTemplateReference>") {
-							if (data.type == "SEntityTemplateReference") {
-								const localRef = getReferencedLocalEntity(data.value)
-								if (localRef) {
-									data.value = changeReferenceToLocalEntity(data.value, localRef.padStart(16, "0"))
-								}
-							} else {
-								data.value = data.value.map((a) => {
-									const localRef = getReferencedLocalEntity(a)
-									if (localRef) {
-										return changeReferenceToLocalEntity(a, localRef.padStart(16, "0"))
-									} else {
-										return a
-									}
-								})
-							}
-						}
-					}
-				}
-			}
-
-			for (const [type, data] of [
-				["event", entityData.events],
-				["inputCopy", entityData.inputCopying],
-				["outputCopy", entityData.outputCopying]
-			] as [string, Record<string, Record<string, RefMaybeConstantValue[]>>][]) {
-				if (data) {
-					for (const [event, x] of Object.entries(data)) {
-						for (const y of Object.keys(x)) {
-							x[y] = x[y].map((ent) => {
-								const localRef = getReferencedLocalEntity(ent && typeof ent != "string" && Object.prototype.hasOwnProperty.call(ent, "value") ? ent.ref : (ent as FullRef))
-								if (localRef) {
-									if (ent && typeof ent != "string" && Object.prototype.hasOwnProperty.call(ent, "value")) {
-										return { ...ent, ref: changeReferenceToLocalEntity(ent.ref, localRef.padStart(16, "0")) }
-									} else {
-										return changeReferenceToLocalEntity(ent as FullRef, localRef.padStart(16, "0"))
-									}
-								} else {
-									return ent
-								}
-							})
-						}
-					}
-				}
-			}
-
-			if (entityData.propertyAliases) {
-				for (const alias of Object.keys(entityData.propertyAliases)) {
-					entityData.propertyAliases[alias] = entityData.propertyAliases[alias].map((alias) => {
-						const localRef = getReferencedLocalEntity(alias.originalEntity)
-						if (localRef) {
-							if (alias.originalProperty === "m_nPriority")
-								console.log(alias, { ...alias, originalEntity: changeReferenceToLocalEntity(alias.originalEntity, localRef.padStart(16, "0")) })
-							return { ...alias, originalEntity: changeReferenceToLocalEntity(alias.originalEntity, localRef.padStart(16, "0")) }
-						} else {
-							return alias
-						}
-					})
-				}
-			}
-
-			if (entityData.exposedEntities) {
-				for (const [exposedEnt, data] of Object.entries(entityData.exposedEntities)) {
-					data.refersTo = data.refersTo.map((target) => {
-						const localRef = getReferencedLocalEntity(target)
-						if (localRef) {
-							return changeReferenceToLocalEntity(target, localRef.padStart(16, "0"))
-						} else {
-							return target
-						}
-					})
-				}
-			}
-
-			if (entityData.exposedInterfaces) {
-				for (const x of Object.keys(entityData.exposedInterfaces)) {
-					entityData.exposedInterfaces[x] = entityData.exposedInterfaces[x].padStart(16, "0")
-				}
-			}
-
-			if (entityData.subsets) {
-				for (const x of Object.keys(entityData.subsets)) {
-					entityData.subsets[x] = entityData.subsets[x].map((ent) => ent.padStart(16, "0"))
-				}
-			}
-		}
-
-		ent.entities = Object.fromEntries(Object.entries(ent.entities).map(([a, b]) => [a.padStart(16, "0"), b]))
+		normaliseEntityIDs(ent)
 
 		if (ent.entities[ent.rootEntity].name !== "Scene" || ent.tempHash !== "") {
 			appWindow.setTitle(`${ent.entities[ent.rootEntity].name} (${ent.tempHash}) - QuickEntity Editor`)

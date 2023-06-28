@@ -1,11 +1,12 @@
 import { BaseDirectory, copyFile, readDir, readTextFile, exists as tauriExists, writeTextFile } from "@tauri-apps/api/fs"
 import type { Entity, PatchOperation } from "$lib/quickentity-types"
 import { appDir, join } from "@tauri-apps/api/path"
+import { normaliseEntityIDs, normaliseToHash } from "$lib/utils"
 
 import { Command } from "@tauri-apps/api/shell"
+import { Mutex } from "async-mutex"
 import cloneDeep from "lodash/cloneDeep"
 import json from "$lib/json"
-import { normaliseToHash } from "$lib/utils"
 import { workspaceData } from "./stores"
 
 const readJSON = async (path: string) => json.parse(await readTextFile(path))
@@ -30,6 +31,7 @@ export class Intellisense {
 
 	parsedFiles: Record<string, any> = {}
 	resolvedEntities: Record<string, Entity> = {}
+	entityResolverMutex = new Mutex()
 
 	workspaceData: Parameters<typeof workspaceData["set"]>[0] = { ephemeralFiles: [] }
 
@@ -71,6 +73,8 @@ export class Intellisense {
 	}
 
 	async getEntityByFactory(factory: string): Promise<Entity | null> {
+		const release = await this.entityResolverMutex.acquire()
+
 		if (!this.resolvedEntities[factory]) {
 			factory = normaliseToHash(factory)
 
@@ -105,6 +109,7 @@ export class Intellisense {
 			}
 
 			if (!base) {
+				release()
 				return null
 			} else {
 				if (patches.length) {
@@ -135,9 +140,16 @@ export class Intellisense {
 					this.resolvedEntities[factory] = base
 				}
 			}
+
+			normaliseEntityIDs(this.resolvedEntities[factory])
 		}
 
+		release()
 		return this.resolvedEntities[factory]
+	}
+
+	async getNameOfEntityInFactory(entityID: string, factory: string) {
+		return (await this.getEntityByFactory(factory))?.entities[entityID].name
 	}
 
 	async ready() {
