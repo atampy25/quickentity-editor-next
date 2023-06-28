@@ -129,14 +129,13 @@
 						{/each}
 						<Button
 							icon={Add}
+							iconDescription="Add an entity"
 							on:click={() => {
 								entityReferenceModalType = "property"
 								entityReferenceModalOverride = override
 								entityReferenceModalOpen = true
 							}}
-						>
-							Add an entity
-						</Button>
+						/>
 					</div>
 					<br />
 					<h4>Properties</h4>
@@ -213,6 +212,23 @@
 							</div>
 						</Tile>
 					{/each}
+					<Button
+						icon={Add}
+						iconDescription="Add another"
+						on:click={() => {
+							entityReferenceModalType = "delete"
+
+							if (source === "Local") {
+								entityReferenceModalUseExtScene = false
+								entityReferenceModalExtScene = ""
+							} else {
+								entityReferenceModalUseExtScene = true
+								entityReferenceModalExtScene = source
+							}
+
+							entityReferenceModalOpen = true
+						}}
+					/>
 				</div>
 				<br />
 			{/each}
