@@ -1,11 +1,11 @@
 {
-	"version": "1.38.1",
-	"notes": "Fix build",
+	"version": "1.39.1",
+	"notes": "Add override delete to same external scene button",
 	"pub_date": "2023-02-18T08:42:26Z",
 	"platforms": {
 		"windows-x86_64": {
-			"signature": "dW50cnVzdGVkIGNvbW1lbnQ6IHNpZ25hdHVyZSBmcm9tIHRhdXJpIHNlY3JldCBrZXkKUlVScWpVZGd2b0lOTlVOYVNLbUovYmd3S2FFMzgzNzlVOHlONFpONy80WWc2WERqVUxpYkNRS2xmV0ZnaFQ3czJqRTBFZ3M0dytzRHFYM3plVGFMSStmZHJTNjNNdHZCTndnPQp0cnVzdGVkIGNvbW1lbnQ6IHRpbWVzdGFtcDoxNjg3ODY4OTc4CWZpbGU6UXVpY2tFbnRpdHkgRWRpdG9yXzEuMzguMV94NjRfZW4tVVMubXNpLnppcApRaEM3N095dzVIWWMyQTlKZlQ5UWJOWDRmNHVPNjMwMUFiYSttQm9IOXJxMHlYd3czU3VOTmJibTExcnhVM3czYjdmL3o2Ym5jbFFZRW9hYUJocGlCUT09Cg==",
-			"url": "https://github.com/atampy25/quickentity-editor-next/releases/download/1.38.1/QuickEntity.Editor_1.38.1_x64_en-US.msi.zip"
+			"signature": "dW50cnVzdGVkIGNvbW1lbnQ6IHNpZ25hdHVyZSBmcm9tIHRhdXJpIHNlY3JldCBrZXkKUlVScWpVZGd2b0lOTldvbU1VZ3VocGhwd1FmdjFnelBDaHJMT1NybWR0cm5EbGJLMS9RMFhBcUQ4a3Ywdko5UmphRSt3Q0ppR1BGNGNIczVJc0dSblFIUVhuZTNBWmZPbEE4PQp0cnVzdGVkIGNvbW1lbnQ6IHRpbWVzdGFtcDoxNjg3OTQxNzMzCWZpbGU6UXVpY2tFbnRpdHkgRWRpdG9yXzEuMzkuMV94NjRfZW4tVVMubXNpLnppcAovOWdralpXZ1JSd0pYbTNkQVpwN1UzRFJ1aFdRVDdFZmNKRGVpNForc3pZRmJQU2ExeUNUNjFDT0d3dURvUUlHeVRVR1ZpZ0tjbW9BL1hBaHJmNEFBdz09Cg==",
+			"url": "https://github.com/atampy25/quickentity-editor-next/releases/download/1.39.1/QuickEntity.Editor_1.39.1_x64_en-US.msi.zip"
 		}
 	}
 }
