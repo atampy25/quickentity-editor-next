@@ -78,11 +78,11 @@ export class Intellisense {
 	}
 
 	async getEntityByFactory(factory: string): Promise<Entity | null> {
+		factory = normaliseToHash(factory)
+
 		const release = await this.entityResolverMutex.acquire()
 
 		if (!this.resolvedEntities[factory]) {
-			factory = normaliseToHash(factory)
-
 			let base: Entity | undefined = undefined
 			let patches: { tempHash: string; tbluHash: string; patch: PatchOperation[] }[] = []
 

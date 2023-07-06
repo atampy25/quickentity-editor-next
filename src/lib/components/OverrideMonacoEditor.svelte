@@ -93,9 +93,7 @@
 
 		const repoIDstoNames = $appSettings.gameFileExtensions ? await $intellisense.getRepoIDsToNames() : []
 
-		editor.onDidChangeModelContent(async (e) => {
-			dispatch("contentChanged", editor.getValue())
-
+		const refreshDecorations = () => {
 			if ($appSettings.gameFileExtensions) {
 				const decorationsArray: monaco.editor.IModelDeltaDecoration[] = []
 
@@ -119,6 +117,14 @@
 
 				decorations.set(decorationsArray)
 			}
+		}
+
+		refreshDecorations()
+
+		editor.onDidChangeModelContent(async (e) => {
+			dispatch("contentChanged", editor.getValue())
+
+			refreshDecorations()
 		})
 
 		return () => {
