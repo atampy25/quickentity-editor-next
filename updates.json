@@ -1,11 +1,11 @@
 {
-	"version": "1.39.2",
-	"notes": "Show Monaco editor decorations immediately",
+	"version": "1.40.0",
+	"notes": "Allow mutation in evaluation pane",
 	"pub_date": "2023-02-18T08:42:26Z",
 	"platforms": {
 		"windows-x86_64": {
-			"signature": "dW50cnVzdGVkIGNvbW1lbnQ6IHNpZ25hdHVyZSBmcm9tIHRhdXJpIHNlY3JldCBrZXkKUlVScWpVZGd2b0lOTlNzVUtsYmh0azJPU045aDRYWnMwRjRRazdhN2ZOUVlvUXduZUZRd2hUZWZJRVJldHluT1M3UVduVmtRNytUNE5QUExzLzE0eXRGU01nSVNIZlcyQ1FvPQp0cnVzdGVkIGNvbW1lbnQ6IHRpbWVzdGFtcDoxNjg4NjQ2NjA2CWZpbGU6UXVpY2tFbnRpdHkgRWRpdG9yXzEuMzkuMl94NjRfZW4tVVMubXNpLnppcAoyYU5ZbExRNS85dThnbFpBSC96MjgwRTVsVGhjaU5ycnN1RkFXV0kyKzl4ZU9iWG5pOTFjQlVqVnJRQmhYRnNHSmJudmlIZjVxZGUvWncwL0Q0dVJDQT09Cg==",
-			"url": "https://github.com/atampy25/quickentity-editor-next/releases/download/1.39.2/QuickEntity.Editor_1.39.2_x64_en-US.msi.zip"
+			"signature": "dW50cnVzdGVkIGNvbW1lbnQ6IHNpZ25hdHVyZSBmcm9tIHRhdXJpIHNlY3JldCBrZXkKUlVScWpVZGd2b0lOTlhLVnB5UU41cExLckJkT3ZCTkVWUHBNR0lTNkVSNmpBTmVKSXZkbkVwcG5DS01VbUhFdGova0kzUUo2c1Q4QkpIMmVFbzFKN2xpRXBmeVFpNmJLL1E4PQp0cnVzdGVkIGNvbW1lbnQ6IHRpbWVzdGFtcDoxNjg5MjM1Nzc1CWZpbGU6UXVpY2tFbnRpdHkgRWRpdG9yXzEuNDAuMF94NjRfZW4tVVMubXNpLnppcApKVkIxVFNjSUhqT3NYRU9QR240am1SVlBlK21oNFRnTVhVR2tVRUNZd05IT2w1VHZEY3dpWmV4K24xU3dvZVk3bXNlZEdNa3VmdVBCNFI4WDlhQ0FBUT09Cg==",
+			"url": "https://github.com/atampy25/quickentity-editor-next/releases/download/1.40.0/QuickEntity.Editor_1.40.0_x64_en-US.msi.zip"
 		}
 	}
 }
