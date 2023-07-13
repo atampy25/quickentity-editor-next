@@ -404,7 +404,7 @@
 														return { ...$entity.entities[a.id], id: a.id }
 													})
 													.filter((a) => a)
-											: Object.entries($entity.entities).map((a) => deepMerge(json.parse(json.stringify(a[1])), { id: a[0] }))) {
+											: Object.entries($entity.entities).map((a) => ({ ...a[1], id: a[0] }))) {
 											let ret = eval(evaluationPaneInput)(ent)
 											if (typeof ret != "undefined") {
 												rets.push(ret)
