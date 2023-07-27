@@ -1,18 +1,18 @@
 {
 	"$schema": "http://json-schema.org/draft-07/schema#",
-    "description": "A project.json file at a workspace root.",
-    "type": "object",
-    "properties": {
-        "customPaths": {
-            "type": "array",
-            "markdownDescription": "A list of custom paths which QNE will automatically recognise. For example, `[assembly:/some_entity.entity].pc_entitytemplate`.",
-            "items": {
-                "type": "string"
-            },
-            "default": []
-        }
-    },
-    "default": {
-        "customPaths": []
-    }
+	"description": "A project.json file at a workspace root.",
+	"type": "object",
+	"properties": {
+		"customPaths": {
+			"type": "array",
+			"markdownDescription": "A list of custom paths which QNE will automatically recognise. For example, `[assembly:/some_entity.entity].pc_entitytemplate`.",
+			"items": {
+				"type": "string"
+			},
+			"default": []
+		}
+	},
+	"default": {
+		"customPaths": []
+	}
 }

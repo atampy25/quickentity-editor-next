@@ -1,11 +1,11 @@
 {
-	"version": "1.40.0",
-	"notes": "Allow mutation in evaluation pane",
+	"version": "1.40.1",
+	"notes": "Fix comment removal",
 	"pub_date": "2023-02-18T08:42:26Z",
 	"platforms": {
 		"windows-x86_64": {
-			"signature": "dW50cnVzdGVkIGNvbW1lbnQ6IHNpZ25hdHVyZSBmcm9tIHRhdXJpIHNlY3JldCBrZXkKUlVScWpVZGd2b0lOTlhLVnB5UU41cExLckJkT3ZCTkVWUHBNR0lTNkVSNmpBTmVKSXZkbkVwcG5DS01VbUhFdGova0kzUUo2c1Q4QkpIMmVFbzFKN2xpRXBmeVFpNmJLL1E4PQp0cnVzdGVkIGNvbW1lbnQ6IHRpbWVzdGFtcDoxNjg5MjM1Nzc1CWZpbGU6UXVpY2tFbnRpdHkgRWRpdG9yXzEuNDAuMF94NjRfZW4tVVMubXNpLnppcApKVkIxVFNjSUhqT3NYRU9QR240am1SVlBlK21oNFRnTVhVR2tVRUNZd05IT2w1VHZEY3dpWmV4K24xU3dvZVk3bXNlZEdNa3VmdVBCNFI4WDlhQ0FBUT09Cg==",
-			"url": "https://github.com/atampy25/quickentity-editor-next/releases/download/1.40.0/QuickEntity.Editor_1.40.0_x64_en-US.msi.zip"
+			"signature": "dW50cnVzdGVkIGNvbW1lbnQ6IHNpZ25hdHVyZSBmcm9tIHRhdXJpIHNlY3JldCBrZXkKUlVScWpVZGd2b0lOTlYwcnh0R1dIdlpXUVZ1bnYrNTdrR3dSWDVPWFlMYXJUU3REVGI3bE1pMkVaak9CU2J3cExQM0FpekZvaUVWbzFQQjhUMEZmeHloZXlpNmY3bGR5bmdNPQp0cnVzdGVkIGNvbW1lbnQ6IHRpbWVzdGFtcDoxNjkwNDQ0MjE2CWZpbGU6UXVpY2tFbnRpdHkgRWRpdG9yXzEuNDAuMV94NjRfZW4tVVMubXNpLnppcApJOUk3eXUxWFlvSXNZRndPSmFQVjJKWVlnSit4QXhmWFZXUDZpbWVLK3V6dThwNWJNU3BPbHdQckpEdFZKZ3p4YXRRY1pJQnd3MER2aDFtdGJVU0pDQT09Cg==",
+			"url": "https://github.com/atampy25/quickentity-editor-next/releases/download/1.40.1/QuickEntity.Editor_1.40.1_x64_en-US.msi.zip"
 		}
 	}
 }
