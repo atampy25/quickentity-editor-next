@@ -290,7 +290,7 @@
 											selectedEntity = $entity.entities[detail[1].node.id]
 										}
 									} else {
-										$entity.comments[detail[1].node.id.replace("comment-", "")].parent = detail[1].parent
+										$entity.comments[+detail[1].node.id.replace("comment-", "")].parent = detail[1].parent
 									}
 								}
 							}}
@@ -312,7 +312,7 @@
 										selectedEntity = $entity.entities[detail[1].node.id]
 									}
 								} else {
-									$entity.comments[detail[1].node.id.replace("comment-", "")].name = detail[1].text.replace(/ \(comment\)/gi, "")
+									$entity.comments[+detail[1].node.id.replace("comment-", "")].name = detail[1].text.replace(/ \(comment\)/gi, "")
 								}
 							}}
 							on:nodeDeleted={({ detail }) => {
@@ -343,7 +343,7 @@
 									tree.deselect()
 								} else {
 									selectionType = null
-									$entity.comments = $entity.comments.filter((a, b) => b == +detail[1].node.id.replace("comment-", ""))
+									$entity.comments = $entity.comments.filter((a, b) => b != +detail[1].node.id.replace("comment-", ""))
 								}
 							}}
 							on:entityUpdated={({ detail }) => {

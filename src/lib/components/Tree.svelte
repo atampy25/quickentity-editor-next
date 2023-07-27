@@ -782,7 +782,7 @@
 				id: "comment-" + index,
 				parent: getReferencedLocalEntity(entry.parent) || "#",
 				icon: "far fa-sticky-note",
-				text: sanitise(entry.name) + " (comment)",
+				text: `${sanitise(entry.name)} (comment)`,
 				folder: false // for sorting and stuff
 			})
 
