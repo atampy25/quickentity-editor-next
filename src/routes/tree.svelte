@@ -290,7 +290,7 @@
 											selectedEntity = $entity.entities[detail[1].node.id]
 										}
 									} else {
-										$entity.comments[+detail[1].node.id.replace("comment-", "")].parent = detail[1].parent
+										$entity.comments[+detail[1].node.id.replace("comment-", "")].parent = detail[1].parent != "#" ? detail[1].parent : null
 									}
 								}
 							}}

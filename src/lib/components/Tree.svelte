@@ -4,7 +4,7 @@
 	import "./treeview.css"
 
 	import type { Entity, FullRef, Ref, RefWithConstantValue, SubEntity } from "$lib/quickentity-types"
-	import { changeReferenceToLocalEntity, genRandHex, getReferencedEntities, getReferencedExternalEntities, getReferencedLocalEntity, normaliseToHash, sanitise, traverseEntityTree } from "$lib/utils"
+	import { changeReferenceToLocalEntity, genRandHex, getReferencedEntities, getReferencedExternalEntities, getReferencedLocalEntity, normaliseToHash, traverseEntityTree } from "$lib/utils"
 
 	import { createEventDispatcher, onMount } from "svelte"
 	import { v4 } from "uuid"
@@ -771,7 +771,7 @@
 						: icons.find((a) => entityData.factory.includes(a[0]))
 						? icons.find((a) => entityData.factory.includes(a[0]))![1]
 						: "far fa-file",
-				text: `${sanitise(entityData.name)} (${sanitise(entityID)})`,
+				text: `${entityData.name} (${entityID})`,
 				folder: entityData.factory == "[modules:/zentity.class].pc_entitytype" && reverseReferences[entityID].some((a) => a.type == "parent") // for sorting and stuff
 			})
 		}
@@ -782,7 +782,7 @@
 				id: "comment-" + index,
 				parent: getReferencedLocalEntity(entry.parent) || "#",
 				icon: "far fa-sticky-note",
-				text: `${sanitise(entry.name)} (comment)`,
+				text: `${entry.name} (comment)`,
 				folder: false // for sorting and stuff
 			})
 
@@ -852,7 +852,6 @@
 		tree.close_all()
 
 		for (const id of entities) {
-			console.log("deez")
 			tree.open_node(id)
 		}
 	}
