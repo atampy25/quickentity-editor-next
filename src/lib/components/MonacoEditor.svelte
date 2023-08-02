@@ -2,7 +2,7 @@
 
 <script lang="ts">
 	import * as monaco from "monaco-editor"
-	import { createEventDispatcher, onMount } from "svelte"
+	import { createEventDispatcher, onDestroy, onMount } from "svelte"
 	import editorWorker from "monaco-editor/esm/vs/editor/editor.worker?worker"
 	import jsonWorker from "monaco-editor/esm/vs/language/json/json.worker?worker"
 	import cssWorker from "monaco-editor/esm/vs/language/css/css.worker?worker"
@@ -41,6 +41,10 @@
 
 	let showCurvePreview = false
 	let curveToPreview = null
+
+	let destroyFunc = () => {}
+
+	onDestroy(destroyFunc)
 
 	onMount(async () => {
 		// @ts-ignore
@@ -200,6 +204,63 @@
 		const idsToNamesInternal = Object.entries(entity.entities).map((a) => [a[0], a[1].name])
 
 		const repoIDstoNames = $appSettings.gameFileExtensions ? await $intellisense.getRepoIDsToNames() : []
+
+		destroyFunc = Monaco.languages.registerHoverProvider("json", {
+			async provideHover(model, position) {
+				for (const [id, name] of idsToNamesInternal) {
+					if (model.getValue().split("\n")[position.lineNumber - 1].includes(id)) {
+						return {
+							contents: [
+								{
+									value: "```json\n" + json.stringify(entity.entities[id], "\t") + "\n```"
+								}
+							]
+						}
+					}
+				}
+
+				if ($appSettings.gameFileExtensions) {
+					for (const [id, name] of repoIDstoNames) {
+						if (model.getValue().split("\n")[position.lineNumber - 1].includes(id)) {
+							return {
+								contents: [
+									{
+										value:
+											"```json\n" +
+											JSON.stringify(
+												(await $intellisense.getRepository()).find((a) => a["ID_"] === id),
+												undefined,
+												"\t"
+											) +
+											"\n```"
+									}
+								]
+							}
+						}
+					}
+
+					for (const [id, ref] of idsToRefsExternal) {
+						if (model.getValue().split("\n")[position.lineNumber - 1].includes(id)) {
+							const e = await $intellisense.getEntityByFactory(ref.externalScene!)
+
+							if (e) {
+								return {
+									contents: [
+										{
+											value: "```json\n" + json.stringify(e.entities[ref.ref], "\t") + "\n```"
+										}
+									]
+								}
+							}
+						}
+					}
+				}
+
+				return {
+					contents: []
+				}
+			}
+		}).dispose
 
 		const refreshDecorations = async () => {
 			const decorationsArray: monaco.editor.IModelDeltaDecoration[] = []
