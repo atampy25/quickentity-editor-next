@@ -1,6 +1,6 @@
 [package]
 name = "quickentity-editor"
-version = "1.40.2"
+version = "1.41.0"
 description = "An editor for the QuickEntity format."
 authors = ["Atampy26"]
 license = "GPL-3.0-only"
