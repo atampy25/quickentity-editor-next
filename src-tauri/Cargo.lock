@@ -335,7 +335,7 @@ checksum = "79d6dc922a2792b006573f60b2648076355daeae5ce9cb59507e5908c9625d31"
 [[package]]
 name = "auto_context"
 version = "0.1.0"
-source = "git+https://github.com/atampy25/quickentity-rs?branch=main#a353137a98875139f88636cd9fcc4a306f5a0385"
+source = "git+https://github.com/atampy25/quickentity-rs?branch=main#3548a2fe164257dbb64de87374e393ebb6108cc9"
 
 [[package]]
 name = "autocfg"
@@ -3635,7 +3635,7 @@ dependencies = [
 [[package]]
 name = "quickentity-rs"
 version = "1.0.0"
-source = "git+https://github.com/atampy25/quickentity-rs?branch=main#a353137a98875139f88636cd9fcc4a306f5a0385"
+source = "git+https://github.com/atampy25/quickentity-rs?branch=main#3548a2fe164257dbb64de87374e393ebb6108cc9"
 dependencies = [
  "anyhow",
  "auto_context",
