@@ -104,39 +104,6 @@
 	async function getEntityAsText() {
 		const ent = cloneDeep($entity)
 
-		if ($appSettings.inVivoExtensions && gameServer.connected) {
-			ent.entities["abcdefcadc2e258e"] = {
-				parent: null,
-				name: "QNE In-Vivo Helper Entity",
-				factory: "[modules:/zmultiparentspatialentity.class].pc_entitytype",
-				blueprint: "[modules:/zmultiparentspatialentity.class].pc_entityblueprint",
-				properties: {
-					m_aParents: {
-						type: "TArray<SEntityTemplateReference>",
-						value: Object.keys(ent.entities).filter((a) => a != "abcdefcadc2e258e" && a != "abcdefcadc77e4f2")
-					}
-				}
-			}
-
-			ent.entities["abcdefcadc77e4f2"] = {
-				parent: "abcdefcadc2e258e",
-				name: "QNE In-Vivo Helper Entity GameEventListener",
-				factory: "[modules:/zgameeventlistenerentity.class].pc_entitytype",
-				blueprint: "[modules:/zgameeventlistenerentity.class].pc_entityblueprint",
-				properties: {
-					m_eEvent: {
-						type: "EGameEventType",
-						value: "GET_IntroCutEnd"
-					}
-				},
-				events: {
-					EventOccurred: {
-						GetIndex: ["abcdefcadc2e258e"]
-					}
-				}
-			}
-		}
-
 		if ($workspaceData.path) {
 			if (await exists(await join($workspaceData.path, "project.json"))) {
 				const proj = JSON.parse(await readTextFile(await join($workspaceData.path, "project.json")))
@@ -165,11 +132,6 @@
 			}
 
 			ent.quickEntityVersion = new Decimal(3.1)
-		}
-
-		if (ent.entities["abcdefcadc2e258e"]) {
-			delete ent.entities["abcdefcadc2e258e"]
-			delete ent.entities["abcdefcadc77e4f2"]
 		}
 
 		if ($workspaceData.path) {

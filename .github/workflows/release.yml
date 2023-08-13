@@ -26,7 +26,7 @@ jobs:
             - name: Prepare Rust toolchain
               uses: actions-rs/toolchain@v1
               with:
-                  toolchain: stable
+                  toolchain: nightly
                   target: x86_64-pc-windows-msvc
                   default: true
 
