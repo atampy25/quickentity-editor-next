@@ -1,151 +1,139 @@
 import type { Entity, Property, SubEntity } from "$lib/quickentity-types"
 
 import Decimal from "decimal.js"
-import UDPSocket from "$lib/in-vivo/udp"
+import WebSocket, { type Message } from "tauri-plugin-websocket-api"
 import { addNotification } from "$lib/stores"
+import { invoke } from "@tauri-apps/api"
+import json from "$lib/json"
 import { normaliseToHash } from "$lib/utils"
+import { v4 } from "uuid"
 
 class GameServer {
-	// @ts-expect-error Client should be connected before use
-	client: UDPSocket
-	connected: boolean
-	lastMessage: number
-	lastAddress: string
+	active = false
+	socket: WebSocket | null
+
+	listeners: Record<string, (arg: Message) => unknown> = {}
 
 	constructor() {
-		this.connected = false
-		this.lastMessage = 0
-		this.lastAddress = null!
+		this.socket = null
 	}
 
-	async start() {
-		console.log("Binding UDP socket on localhost:49494")
+	async connect() {
+		if (this.socket) {
+			await this.socket.disconnect()
+		} else {
+			this.socket = await WebSocket.connect("ws://localhost:46735")
 
-		this.client = await UDPSocket.bind("127.0.0.1:49494", () => {
-			void this.killAndRestart()
-		})
-		this.connected = true
+			this.socket.addListener((x) => {
+				void (async () => {
+					if (x.type === "Close") {
+						console.log(`WebSocket disconnected with code ${x.data?.code}, reason ${x.data?.reason}`)
 
-		this.client.addListener(({ message, address }) => {
-			console.log("Received message", JSON.stringify(message), "from", address)
-			this.lastAddress = address
+						await this.socket?.disconnect()
+						this.socket = null
+					} else if (x.type === "Text") {
+						const data = JSON.parse(x.data)
+						console.log("Received message", data)
 
-			if (Object.keys(message)[0] === "Hello") {
-				if (Object.values(message)[0].protocol_version === 1) {
-					void this.client.send(
-						this.lastAddress,
-						JSON.stringify({
-							Hello: {
-								protocol_version: 1
-							}
-						})
-					)
-				} else {
-					addNotification.set({
-						kind: "error",
-						title: "Version mismatch",
-						subtitle: "Your SDK version is incompatible with QNE - update both and try again."
-					})
+						if (data.type === "error") {
+							addNotification.set({
+								kind: "error",
+								title: "Error in game connection",
+								subtitle: data.message
+							})
+						}
+					}
+				})()
+			})
+
+			this.socket.addListener(x=>{
+				for (const listener of Object.values(this.listeners)) {
+					listener(x)
 				}
+			})
+
+			await this.sendRequest({ type: "hello", identifier: "QuickEntity Editor" })
+			await this.waitForEvent((evt) => evt.type === "welcome")
+
+			this.active = true
+		}
+	}
+
+	async disconnect() {
+		if (this.socket) {
+			this.active = false
+
+			try {
+				await this.socket.disconnect()
+			} catch {}
+
+			this.socket = null
+		}
+	}
+
+	async sendRequest(msg: EditorRequest) {
+		console.log("Sending message to editor", msg)
+		await this.socket?.send(json.stringify(msg))
+	}
+
+	waitForEvent(check: (evt: EditorEvent) => boolean): Promise<EditorEvent> {
+		return new Promise((resolve) => {
+			void this.addListener(`waitForEvent-${v4()}`, (evt) => {
+				if (check(evt)) {
+					resolve(evt)
+				}
+			})
+		})
+	}
+
+	async addListener(id: string, cb: (evt: EditorEvent) => unknown) {
+		if (!this.listeners[id]) {
+			this.listeners[id] = (x) => {
+				if (x.type === "Text") {
+					cb(json.parse(x.data) as EditorEvent)
+				}
+			}
+		}
+	}
+
+	async removeListener(id: string) {
+		if (this.listeners[id]) {
+			delete this.listeners[id]
+		}
+	}
+
+	async selectEntity(subEntityID: string, entity: Entity) {
+		await this.sendRequest({
+			type: "selectEntity",
+			entity: {
+				id: subEntityID,
+				tblu: entity.tbluHash as ResourceId
 			}
 		})
 	}
 
-	async kill() {
-		console.log("Killing UDP socket")
+	async getPlayerPosition(): Promise<{
+		rotation: { x: Decimal; y: Decimal; z: Decimal }
+		position: { x: Decimal; y: Decimal; z: Decimal }
+		scale: { x: Decimal; y: Decimal; z: Decimal }
+	}> {
+		// TODO
 
-		await this.client.kill()
-		this.connected = false
+		return null!
 	}
 
-	async killAndRestart() {
-		console.log("Killing and restarting UDP socket")
-		await this.kill()
+	async updateProperty(id: string, tblu: string, property: string, value: Property) {
+		const convertedPropertyValue = await invoke("convert_property_value_to_rt", { value })
 
-		this.lastMessage = 0
-		this.lastAddress = null!
-
-		await this.start()
-	}
-
-	async getPlayerPosition(): Promise<{ x: number; y: number; z: number }> {
-		// await this.client.send(this.lastAddress, "GetPlayerPosition")
-		// return await new Promise((resolve) =>
-		// 	this.client.once(
-		// 		`getPlayerPosition${Date.now()}`,
-		// 		({ message }) => datagram.startsWith("PlayerPosition"),
-		// 		({ message }) => resolve({ x: +datagram.split("_")[1], y: +datagram.split("_")[2], z: +datagram.split("_")[3] })
-		// 	)
-		// )
-	}
-
-	async getPlayerRotation(): Promise<{ x: number; y: number; z: number }> {
-		// await this.client.send(this.lastAddress, "GetPlayerRotation")
-		// return await new Promise((resolve) =>
-		// 	this.client.once(
-		// 		`getPlayerRotation${Date.now()}`,
-		// 		({ message }) => datagram.startsWith("PlayerRotation"),
-		// 		({ message }) => {
-		// 			const matrix = new Matrix4()
-		// 			matrix.elements[0] = +datagram.split("_")[1]
-		// 			matrix.elements[4] = +datagram.split("_")[2]
-		// 			matrix.elements[8] = +datagram.split("_")[3]
-		// 			matrix.elements[1] = +datagram.split("_")[4]
-		// 			matrix.elements[5] = +datagram.split("_")[5]
-		// 			matrix.elements[9] = +datagram.split("_")[6]
-		// 			matrix.elements[2] = +datagram.split("_")[7]
-		// 			matrix.elements[6] = +datagram.split("_")[8]
-		// 			matrix.elements[10] = +datagram.split("_")[9]
-		// 			const euler = new Euler(0, 0, 0, "XYZ").setFromRotationMatrix(matrix)
-		// 			resolve({ x: euler.x * RAD2DEG, y: euler.y * RAD2DEG, z: euler.z * RAD2DEG })
-		// 		}
-		// 	)
-		// )
-	}
-
-	async updateProperty(id: string, propertyName: string, property: Property) {
-		// let propertyType = property.type
-		// let propertyValue = deepClone(property.value)
-		// if (enums[property.type]) {
-		// 	propertyType = "enum"
-		// 	propertyValue = enums[property.type].indexOf(property.value)
-		// }
-		// let positions, rotations, vector
-		// switch (propertyType) {
-		// 	case "SMatrix43":
-		// 		positions = [+propertyValue.position.x, +propertyValue.position.y, +propertyValue.position.z]
-		// 		rotations = [+propertyValue.rotation.x, +propertyValue.rotation.y, +propertyValue.rotation.z]
-		// 		propertyValue = `${positions.join("|")}|${rotations.join("|")}`
-		// 		break
-		// 	case "SVector3":
-		// 		vector = [+propertyValue.x, +propertyValue.y, +propertyValue.z]
-		// 		propertyValue = vector.join("|")
-		// 		break
-		// 	case "ZGuid":
-		// 		propertyValue = propertyValue.toUpperCase()
-		// 		break
-		// 	case "SEntityTemplateReference":
-		// 		propertyValue = new Decimal("0x" + getReferencedLocalEntity(propertyValue)).toFixed()
-		// 		break
-		// 	case "TArray<SEntityTemplateReference>":
-		// 		propertyValue = `${propertyValue.length}|${propertyValue.map((ref: Ref) => new Decimal("0x" + getReferencedLocalEntity(ref)).toFixed()).join("|")}`
-		// 		break
-		// 	default:
-		// 		propertyValue = propertyValue instanceof Decimal ? +propertyValue : propertyValue
-		// }
-		// await this.client.send(this.lastAddress, `UpdateProperty|${new Decimal(`0x${id}`).toFixed()}|${propertyName}|${propertyType}|${propertyValue}`)
-	}
-
-	async selectEntity(id: string, entity: Entity) {
-		await this.client.send(
-			this.lastAddress,
-			JSON.stringify({
-				SelectEntity: {
-					entity_id: new Decimal(`0x${id}`).toString(),
-					tblu_hash: new Decimal(`0x${normaliseToHash(entity.tbluHash)}`).toString()
-				}
-			})
-		)
+		await this.sendRequest({
+			type: "setEntityProperty",
+			entity: {
+				id,
+				tblu: tblu as ResourceId
+			},
+			property,
+			value: convertedPropertyValue
+		})
 	}
 }
 

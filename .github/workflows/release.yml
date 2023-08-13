@@ -1,276 +1,276 @@
 name: Release
 
 on:
-  push:
-    tags:
-      - '*.*.*'
-  workflow_dispatch:
+    push:
+        tags:
+            - "*.*.*"
+    workflow_dispatch:
 
 jobs:
-  build:
-    runs-on: windows-latest
-    if: github.event.action != 'push' || startsWith(github.ref, 'refs/tags/')
+    build:
+        runs-on: windows-latest
+        if: github.event.action != 'push' || startsWith(github.ref, 'refs/tags/')
 
-    steps:
-      - uses: actions/checkout@v2
-        with:
-          ref: "main"
-          fetch-depth: 0
-      
-      - name: Get latest tag
-        id: latestTag
-        uses: 'WyriHaximus/github-action-get-previous-tag@v1.1.0'
-        with:
-          fallback: unknown
-      
-      - name: Prepare Rust toolchain
-        uses: actions-rs/toolchain@v1
-        with:
-          toolchain: stable
-          target: x86_64-pc-windows-msvc
-          default: true
-      
-      - name: Install dependencies
-        run: |
-          yarn set version 3.2.3
-          yarn
-          yarn prepare
+        steps:
+            - uses: actions/checkout@v2
+              with:
+                  ref: "main"
+                  fetch-depth: 0
 
-      - name: Remove broken symlink in dependency
-        run: |
-          rmdir node_modules/tauri-plugin-fs-watch/tsconfig.json
+            - name: Get latest tag
+              id: latestTag
+              uses: "WyriHaximus/github-action-get-previous-tag@v1.1.0"
+              with:
+                  fallback: unknown
 
-      - name: Download RPKG
-        uses: aochmann/actions-download-artifact@5709392f11b5937bd316e52687ad87f7deced5f5
-        with:
-          repo: glacier-modding/RPKG-Tool
-          name: rpkg-cli
-          latest: true
-          path: './temp'
+            - name: Prepare Rust toolchain
+              uses: actions-rs/toolchain@v1
+              with:
+                  toolchain: stable
+                  target: x86_64-pc-windows-msvc
+                  default: true
 
-      - name: Download ResourceTool
-        uses: aochmann/actions-download-artifact@5709392f11b5937bd316e52687ad87f7deced5f5
-        with:
-          repo: OrfeasZ/ZHMTools
-          name: ResourceTool-win-x64
-          latest: true
-          path: 'src-tauri'
+            - name: Install dependencies
+              run: |
+                  yarn set version 3.2.3
+                  yarn
+                  yarn prepare
 
-      - name: Rename ResourceTool binary
-        run: |
-          ren src-tauri\ResourceTool.exe ResourceTool-x86_64-pc-windows-msvc.exe
-      
-      - name: Download quickentity-rs
-        uses: robinraju/release-downloader@v1.5
-        with:
-          repository: atampy25/quickentity-rs
-          latest: true
-          fileName: "quickentity-rs.exe"
-          out-file-path: "./temp"
-      
-      - name: Update third-party files
-        run: |
-          copy "temp/rpkg-cli.exe" "src-tauri/sidecar/rpkg-cli-x86_64-pc-windows-msvc.exe"
-          copy "temp/quickentity-rs.exe" "src-tauri/sidecar/quickentity-rs-x86_64-pc-windows-msvc.exe"
-          robocopy "temp" "game-file-extensions" "quickentity-rs.exe" "quickentity-rs.exe"; if ($lastexitcode -lt 8) { $global:LASTEXITCODE = $null }
-          robocopy "temp" "src-tauri" "hash_list.txt" "hash_list.txt"; if ($lastexitcode -lt 8) { $global:LASTEXITCODE = $null }
-          robocopy "temp" "src-tauri" "quickentity_rs.dll" "quickentity_rs.dll"; if ($lastexitcode -lt 8) { $global:LASTEXITCODE = $null }
+            - name: Remove broken symlink in dependency
+              run: |
+                  rmdir node_modules/tauri-plugin-fs-watch/tsconfig.json
 
-      - name: Clear temp
-        run: |
-          Get-ChildItem -Path "./temp" -Recurse | Remove-Item -force -recurse
-          Remove-Item "./temp" -Force
+            - name: Download RPKG
+              uses: aochmann/actions-download-artifact@5709392f11b5937bd316e52687ad87f7deced5f5
+              with:
+                  repo: glacier-modding/RPKG-Tool
+                  name: rpkg-cli
+                  latest: true
+                  path: "./temp"
 
-      - name: Update package.json version
-        uses: jossef/action-set-json-field@v2
-        with:
-          file: "package.json"
-          field: "version"
-          value: ${{ steps.latestTag.outputs.tag }}
+            - name: Download ResourceTool
+              uses: aochmann/actions-download-artifact@5709392f11b5937bd316e52687ad87f7deced5f5
+              with:
+                  repo: OrfeasZ/ZHMTools
+                  name: ResourceTool-win-x64
+                  latest: true
+                  path: "src-tauri"
 
-      - name: Update Cargo.toml version
-        uses: colathro/toml-editor@1.1.1
-        with:
-          file: "src-tauri/Cargo.toml"
-          key: "package.version"
-          value: ${{ steps.latestTag.outputs.tag }}
+            - name: Rename ResourceTool binary
+              run: |
+                  ren src-tauri\ResourceTool.exe ResourceTool-x86_64-pc-windows-msvc.exe
 
-      - name: Update tauri.conf.json version
-        uses: jossef/action-set-json-field@v2
-        with:
-          file: "src-tauri/tauri.conf.json"
-          field: "package.version"
-          value: ${{ steps.latestTag.outputs.tag }}
+            - name: Download quickentity-rs
+              uses: robinraju/release-downloader@v1.5
+              with:
+                  repository: atampy25/quickentity-rs
+                  latest: true
+                  fileName: "quickentity-rs.exe"
+                  out-file-path: "./temp"
 
-      - name: Update updates.json version
-        uses: jossef/action-set-json-field@v2
-        with:
-          file: "updates.json"
-          field: "version"
-          value: ${{ steps.latestTag.outputs.tag }}
+            - name: Update third-party files
+              run: |
+                  copy "temp/rpkg-cli.exe" "src-tauri/sidecar/rpkg-cli-x86_64-pc-windows-msvc.exe"
+                  copy "temp/quickentity-rs.exe" "src-tauri/sidecar/quickentity-rs-x86_64-pc-windows-msvc.exe"
+                  robocopy "temp" "game-file-extensions" "quickentity-rs.exe" "quickentity-rs.exe"; if ($lastexitcode -lt 8) { $global:LASTEXITCODE = $null }
+                  robocopy "temp" "src-tauri" "hash_list.txt" "hash_list.txt"; if ($lastexitcode -lt 8) { $global:LASTEXITCODE = $null }
+                  robocopy "temp" "src-tauri" "quickentity_rs.dll" "quickentity_rs.dll"; if ($lastexitcode -lt 8) { $global:LASTEXITCODE = $null }
 
-      - name: Update updates.json notes
-        uses: jossef/action-set-json-field@v2
-        with:
-          file: "updates.json"
-          field: "notes"
-          value: "${{ github.event.head_commit.message || format('v{0}', steps.latestTag.outputs.tag) }}"
+            - name: Clear temp
+              run: |
+                  Get-ChildItem -Path "./temp" -Recurse | Remove-Item -force -recurse
+                  Remove-Item "./temp" -Force
 
-      - name: Update updates.json pub_date
-        uses: jossef/action-set-json-field@v2
-        with:
-          file: "updates.json"
-          field: "pub_date"
-          value: ${{ github.event.repository.updated_at}}
+            - name: Update package.json version
+              uses: jossef/action-set-json-field@v2
+              with:
+                  file: "package.json"
+                  field: "version"
+                  value: ${{ steps.latestTag.outputs.tag }}
 
-      - name: Write key file
-        uses: DamianReeves/write-file-action@v1.0
-        with:
-          path: "src-tauri/qne.key"
-          contents: ${{ secrets.KEYDATA }}
+            - name: Update Cargo.toml version
+              uses: colathro/toml-editor@1.1.1
+              with:
+                  file: "src-tauri/Cargo.toml"
+                  key: "package.version"
+                  value: ${{ steps.latestTag.outputs.tag }}
 
-      - name: Write env file
-        uses: DamianReeves/write-file-action@v1.0
-        with:
-          path: "./.env"
-          contents: |
-            TAURI_PRIVATE_KEY=qne.key
-            TAURI_KEY_PASSWORD=${{ secrets.KEYPASS }}
+            - name: Update tauri.conf.json version
+              uses: jossef/action-set-json-field@v2
+              with:
+                  file: "src-tauri/tauri.conf.json"
+                  field: "package.version"
+                  value: ${{ steps.latestTag.outputs.tag }}
 
-      - name: Build
-        env:
-          NODE_OPTIONS: "--max-old-space-size=4096"
-        run: |
-          yarn tauri build
+            - name: Update updates.json version
+              uses: jossef/action-set-json-field@v2
+              with:
+                  file: "updates.json"
+                  field: "version"
+                  value: ${{ steps.latestTag.outputs.tag }}
 
-      - name: Remove key file
-        run: |
-          Remove-Item "src-tauri/qne.key"
+            - name: Update updates.json notes
+              uses: jossef/action-set-json-field@v2
+              with:
+                  file: "updates.json"
+                  field: "notes"
+                  value: "${{ github.event.head_commit.message || format('v{0}', steps.latestTag.outputs.tag) }}"
 
-      - name: Remove env file
-        run: |
-          Remove-Item "./.env"
-      
-      - name: Archive code coverage results
-        uses: actions/upload-artifact@v3
-        with:
-          name: svelte-build
-          path: build
-      
-      - name: Read update signature
-        id: updateSignature
-        uses: andstor/file-reader-action@v1.0.0
-        with:
-          path: "src-tauri/target/release/bundle/msi/QuickEntity Editor_${{ steps.latestTag.outputs.tag }}_x64_en-US.msi.zip.sig"
+            - name: Update updates.json pub_date
+              uses: jossef/action-set-json-field@v2
+              with:
+                  file: "updates.json"
+                  field: "pub_date"
+                  value: ${{ github.event.repository.updated_at}}
 
-      - name: Update updates.json signature
-        uses: jossef/action-set-json-field@v2
-        with:
-          file: "updates.json"
-          field: "platforms.windows-x86_64.signature"
-          value: ${{ steps.updateSignature.outputs.contents }}
+            - name: Write key file
+              uses: DamianReeves/write-file-action@v1.0
+              with:
+                  path: "src-tauri/qne.key"
+                  contents: ${{ secrets.KEYDATA }}
 
-      - name: Update updates.json URL
-        uses: jossef/action-set-json-field@v2
-        with:
-          file: "updates.json"
-          field: "platforms.windows-x86_64.url"
-          value: "https://github.com/atampy25/quickentity-editor-next/releases/download/${{ steps.latestTag.outputs.tag }}/QuickEntity.Editor_${{ steps.latestTag.outputs.tag }}_x64_en-US.msi.zip"
+            - name: Write env file
+              uses: DamianReeves/write-file-action@v1.0
+              with:
+                  path: "./.env"
+                  contents: |
+                      TAURI_PRIVATE_KEY=qne.key
+                      TAURI_KEY_PASSWORD=${{ secrets.KEYPASS }}
 
-      - name: Ready portable zip
-        run: |
-          New-Item -ItemType Directory "src-tauri/target/release/portable"
-          robocopy "src-tauri/target/release" "src-tauri/target/release/portable" "QuickEntity Editor.exe" "QuickEntity Editor.exe"; if ($lastexitcode -lt 8) { $global:LASTEXITCODE = $null }
-          robocopy "src-tauri/target/release" "src-tauri/target/release/portable" "hash_list.txt" "hash_list.txt"; if ($lastexitcode -lt 8) { $global:LASTEXITCODE = $null }
-          robocopy "src-tauri/target/release" "src-tauri/target/release/portable" "quickentity-rs.exe" "quickentity-rs.exe"; if ($lastexitcode -lt 8) { $global:LASTEXITCODE = $null }
-          robocopy "src-tauri/target/release" "src-tauri/target/release/portable" "quickentity-3.exe" "quickentity-3.exe"; if ($lastexitcode -lt 8) { $global:LASTEXITCODE = $null }
-          robocopy "src-tauri/target/release" "src-tauri/target/release/portable" "rpkg-cli.exe" "rpkg-cli.exe"; if ($lastexitcode -lt 8) { $global:LASTEXITCODE = $null }
-          robocopy "src-tauri/target/release" "src-tauri/target/release/portable" "quickentity-rs.dll" "quickentity-rs.dll"; if ($lastexitcode -lt 8) { $global:LASTEXITCODE = $null }
-          robocopy "src-tauri/target/release" "src-tauri/target/release/portable" "ResourceTool.exe" "ResourceTool.exe"; if ($lastexitcode -lt 8) { $global:LASTEXITCODE = $null }
-          robocopy "src-tauri/target/release" "src-tauri/target/release/portable" "ResourceLib_HM2016.dll" "ResourceLib_HM2016.dll"; if ($lastexitcode -lt 8) { $global:LASTEXITCODE = $null }
-          robocopy "src-tauri/target/release" "src-tauri/target/release/portable" "ResourceLib_HM2.dll" "ResourceLib_HM2.dll"; if ($lastexitcode -lt 8) { $global:LASTEXITCODE = $null }
-          robocopy "src-tauri/target/release" "src-tauri/target/release/portable" "ResourceLib_HM3.dll" "ResourceLib_HM3.dll"; if ($lastexitcode -lt 8) { $global:LASTEXITCODE = $null }
-          robocopy "src-tauri/target/release" "src-tauri/target/release/portable" "ResourceLib_HMA.dll" "ResourceLib_HMA.dll"; if ($lastexitcode -lt 8) { $global:LASTEXITCODE = $null }
+            - name: Build
+              env:
+                  NODE_OPTIONS: "--max-old-space-size=4096"
+              run: |
+                  yarn tauri build
 
-      - name: Create portable ZIP
-        uses: TheDoctor0/zip-release@4fb9e4ff72847dd3d1c111cf63834e353ed7cb3d
-        with:
-          filename: Portable.zip
-          path: src-tauri/target/release/portable
+            - name: Remove key file
+              run: |
+                  Remove-Item "src-tauri/qne.key"
 
-      - name: Create game file extensions ZIP
-        uses: TheDoctor0/zip-release@4fb9e4ff72847dd3d1c111cf63834e353ed7cb3d
-        with:
-          filename: Game_File_Extensions_Scripts.zip
-          path: "game-file-extensions"
+            - name: Remove env file
+              run: |
+                  Remove-Item "./.env"
 
-      - name: Rename installer zip
-        run: |
-          Rename-Item -Path "src-tauri/target/release/bundle/msi/QuickEntity Editor_${{ steps.latestTag.outputs.tag }}_x64_en-US.msi.zip" -NewName "QuickEntity.Editor_${{ steps.latestTag.outputs.tag }}_x64_en-US.msi.zip"
+            - name: Archive code coverage results
+              uses: actions/upload-artifact@v3
+              with:
+                  name: svelte-build
+                  path: build
 
-      - name: Release
-        uses: softprops/action-gh-release@v1
-        with:
-          name: ${{ steps.latestTag.outputs.tag }}
-          body: |
-            ${{ github.event.head_commit.message || format('v{0}', steps.latestTag.outputs.tag) }}
+            - name: Read update signature
+              id: updateSignature
+              uses: andstor/file-reader-action@v1.0.0
+              with:
+                  path: "src-tauri/target/release/bundle/msi/QuickEntity Editor_${{ steps.latestTag.outputs.tag }}_x64_en-US.msi.zip.sig"
 
-            Download the `QuickEntity.Editor_${{ steps.latestTag.outputs.tag }}_x64_en-US.msi.zip` file for an installer with automatic update capability, or the `Portable.zip` file, which makes no guarantees about automatic updates.
+            - name: Update updates.json signature
+              uses: jossef/action-set-json-field@v2
+              with:
+                  file: "updates.json"
+                  field: "platforms.windows-x86_64.signature"
+                  value: ${{ steps.updateSignature.outputs.contents }}
 
-            To enable game file extensions, which makes working with entities far easier, extract `Game_File_Extensions_Scripts.zip` to a drive with at least 6 GB of space, run `doTheThing.bat` and follow the instructions it gives.
-          tag_name: ${{ steps.latestTag.outputs.tag }}
-          repository: atampy25/quickentity-editor-next
-          files: |
-            src-tauri/target/release/bundle/msi/QuickEntity.Editor_${{ steps.latestTag.outputs.tag }}_x64_en-US.msi.zip
-            Portable.zip
-            Game_File_Extensions_Scripts.zip
-      
-      - name: Remove ZIPs
-        run: |
-          Remove-Item Portable.zip
-          Remove-Item Game_File_Extensions_Scripts.zip
-      
-      - name: Format
-        run: |
-          yarn format
-      
-      - name: Commit changes
-        uses: EndBug/add-and-commit@v9.1.0
-        with:
-          default_author: github_actions
-          message: "Post-update"
+            - name: Update updates.json URL
+              uses: jossef/action-set-json-field@v2
+              with:
+                  file: "updates.json"
+                  field: "platforms.windows-x86_64.url"
+                  value: "https://github.com/atampy25/quickentity-editor-next/releases/download/${{ steps.latestTag.outputs.tag }}/QuickEntity.Editor_${{ steps.latestTag.outputs.tag }}_x64_en-US.msi.zip"
 
-  sentry-release:
-    runs-on: ubuntu-latest
-    needs: build
-    if: github.event.action != 'push' || startsWith(github.ref, 'refs/tags/')
+            - name: Ready portable zip
+              run: |
+                  New-Item -ItemType Directory "src-tauri/target/release/portable"
+                  robocopy "src-tauri/target/release" "src-tauri/target/release/portable" "QuickEntity Editor.exe" "QuickEntity Editor.exe"; if ($lastexitcode -lt 8) { $global:LASTEXITCODE = $null }
+                  robocopy "src-tauri/target/release" "src-tauri/target/release/portable" "hash_list.txt" "hash_list.txt"; if ($lastexitcode -lt 8) { $global:LASTEXITCODE = $null }
+                  robocopy "src-tauri/target/release" "src-tauri/target/release/portable" "quickentity-rs.exe" "quickentity-rs.exe"; if ($lastexitcode -lt 8) { $global:LASTEXITCODE = $null }
+                  robocopy "src-tauri/target/release" "src-tauri/target/release/portable" "quickentity-3.exe" "quickentity-3.exe"; if ($lastexitcode -lt 8) { $global:LASTEXITCODE = $null }
+                  robocopy "src-tauri/target/release" "src-tauri/target/release/portable" "rpkg-cli.exe" "rpkg-cli.exe"; if ($lastexitcode -lt 8) { $global:LASTEXITCODE = $null }
+                  robocopy "src-tauri/target/release" "src-tauri/target/release/portable" "quickentity-rs.dll" "quickentity-rs.dll"; if ($lastexitcode -lt 8) { $global:LASTEXITCODE = $null }
+                  robocopy "src-tauri/target/release" "src-tauri/target/release/portable" "ResourceTool.exe" "ResourceTool.exe"; if ($lastexitcode -lt 8) { $global:LASTEXITCODE = $null }
+                  robocopy "src-tauri/target/release" "src-tauri/target/release/portable" "ResourceLib_HM2016.dll" "ResourceLib_HM2016.dll"; if ($lastexitcode -lt 8) { $global:LASTEXITCODE = $null }
+                  robocopy "src-tauri/target/release" "src-tauri/target/release/portable" "ResourceLib_HM2.dll" "ResourceLib_HM2.dll"; if ($lastexitcode -lt 8) { $global:LASTEXITCODE = $null }
+                  robocopy "src-tauri/target/release" "src-tauri/target/release/portable" "ResourceLib_HM3.dll" "ResourceLib_HM3.dll"; if ($lastexitcode -lt 8) { $global:LASTEXITCODE = $null }
+                  robocopy "src-tauri/target/release" "src-tauri/target/release/portable" "ResourceLib_HMA.dll" "ResourceLib_HMA.dll"; if ($lastexitcode -lt 8) { $global:LASTEXITCODE = $null }
 
-    steps:
-      - uses: actions/checkout@v2
-        with:
-          ref: "main"
-          fetch-depth: 0
-      
-      - name: Get latest tag
-        id: latestTag
-        uses: 'WyriHaximus/github-action-get-previous-tag@v1.1.0'
-        with:
-          fallback: unknown
+            - name: Create portable ZIP
+              uses: TheDoctor0/zip-release@4fb9e4ff72847dd3d1c111cf63834e353ed7cb3d
+              with:
+                  filename: Portable.zip
+                  path: src-tauri/target/release/portable
 
-      - name: Download build data
-        uses: actions/download-artifact@v3
-        with:
-          name: svelte-build
-          path: build
+            - name: Create game file extensions ZIP
+              uses: TheDoctor0/zip-release@4fb9e4ff72847dd3d1c111cf63834e353ed7cb3d
+              with:
+                  filename: Game_File_Extensions_Scripts.zip
+                  path: "game-file-extensions"
 
-      - name: Sentry release
-        uses: getsentry/action-release@v1.1.6
-        env:
-          SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
-          SENTRY_ORG: ${{ secrets.SENTRY_ORG }}
-          SENTRY_PROJECT: ${{ secrets.SENTRY_PROJECT }}
-        with:
-          environment: production
-          version: ${{ steps.latestTag.outputs.tag }}
-          sourcemaps: './build'
-          url_prefix: "~"
+            - name: Rename installer zip
+              run: |
+                  Rename-Item -Path "src-tauri/target/release/bundle/msi/QuickEntity Editor_${{ steps.latestTag.outputs.tag }}_x64_en-US.msi.zip" -NewName "QuickEntity.Editor_${{ steps.latestTag.outputs.tag }}_x64_en-US.msi.zip"
+
+            - name: Release
+              uses: softprops/action-gh-release@v1
+              with:
+                  name: ${{ steps.latestTag.outputs.tag }}
+                  body: |
+                      ${{ github.event.head_commit.message || format('v{0}', steps.latestTag.outputs.tag) }}
+
+                      Download the `QuickEntity.Editor_${{ steps.latestTag.outputs.tag }}_x64_en-US.msi.zip` file for an installer with automatic update capability, or the `Portable.zip` file, which makes no guarantees about automatic updates.
+
+                      To enable game file extensions, which makes working with entities far easier, extract `Game_File_Extensions_Scripts.zip` to a drive with at least 6 GB of space, run `doTheThing.bat` and follow the instructions it gives.
+                  tag_name: ${{ steps.latestTag.outputs.tag }}
+                  repository: atampy25/quickentity-editor-next
+                  files: |
+                      src-tauri/target/release/bundle/msi/QuickEntity.Editor_${{ steps.latestTag.outputs.tag }}_x64_en-US.msi.zip
+                      Portable.zip
+                      Game_File_Extensions_Scripts.zip
+
+            - name: Remove ZIPs
+              run: |
+                  Remove-Item Portable.zip
+                  Remove-Item Game_File_Extensions_Scripts.zip
+
+            - name: Format
+              run: |
+                  yarn format
+
+            - name: Commit changes
+              uses: EndBug/add-and-commit@v9.1.0
+              with:
+                  default_author: github_actions
+                  message: "Post-update"
+
+    sentry-release:
+        runs-on: ubuntu-latest
+        needs: build
+        if: github.event.action != 'push' || startsWith(github.ref, 'refs/tags/')
+
+        steps:
+            - uses: actions/checkout@v2
+              with:
+                  ref: "main"
+                  fetch-depth: 0
+
+            - name: Get latest tag
+              id: latestTag
+              uses: "WyriHaximus/github-action-get-previous-tag@v1.1.0"
+              with:
+                  fallback: unknown
+
+            - name: Download build data
+              uses: actions/download-artifact@v3
+              with:
+                  name: svelte-build
+                  path: build
+
+            - name: Sentry release
+              uses: getsentry/action-release@v1.1.6
+              env:
+                  SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
+                  SENTRY_ORG: ${{ secrets.SENTRY_ORG }}
+                  SENTRY_PROJECT: ${{ secrets.SENTRY_PROJECT }}
+              with:
+                  environment: production
+                  version: ${{ steps.latestTag.outputs.tag }}
+                  sourcemaps: "./build"
+                  url_prefix: "~"

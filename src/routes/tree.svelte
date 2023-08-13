@@ -7,7 +7,7 @@
 	import ExpandableSection from "$lib/components/ExpandableSection.svelte"
 	import ColorPicker from "$lib/components/ColorPicker.svelte"
 
-	import { addNotification, appSettings, entity, sessionMetadata, references, reverseReferences, inVivoMetadata, saveWorkAndCallback, workspaceData } from "$lib/stores"
+	import { addNotification, appSettings, entity, sessionMetadata, references, reverseReferences, saveWorkAndCallback, workspaceData } from "$lib/stores"
 	import { changeReferenceToLocalEntity, checkValidityOfEntity, deleteReferencesToEntity, genRandHex, normaliseToHash, traverseEntityTree } from "$lib/utils"
 	import json from "$lib/json"
 
@@ -21,7 +21,7 @@
 	import { writeText } from "@tauri-apps/api/clipboard"
 	import mergeWith from "lodash/mergeWith"
 	import { gameServer } from "$lib/in-vivo/gameServer"
-	import { onDestroy } from "svelte"
+	import { onDestroy, onMount } from "svelte"
 
 	const readJSON = async (path: string) => json.parse(await readTextFile(path))
 	const exists = async (path: string) => {
@@ -80,65 +80,6 @@
 		const invalid = checkValidityOfEntity($entity, json.parse(data))
 		if (!invalid) {
 			editorIsValid = true
-
-			if (!isEqual($entity.entities[entityID], json.parse(data))) {
-				const parsed = json.parse(data)
-
-				$inVivoMetadata.entities[entityID] ??= {
-					dirtyPins: false,
-					dirtyUnchangeables: false,
-					dirtyExtensions: false,
-					dirtyProperties: [],
-					hasSetProperties: false
-				}
-
-				$inVivoMetadata.entities[entityID].dirtyPins = !(
-					isEqual($entity.entities[entityID].events, parsed.events) &&
-					isEqual($entity.entities[entityID].inputCopying, parsed.inputCopying) &&
-					isEqual($entity.entities[entityID].outputCopying, parsed.outputCopying)
-				)
-
-				$inVivoMetadata.entities[entityID].dirtyUnchangeables =
-					$entity.entities[entityID].factory != parsed.factory ||
-					$entity.entities[entityID].factoryFlag != parsed.factoryFlag ||
-					$entity.entities[entityID].blueprint != parsed.blueprint ||
-					$entity.entities[entityID].editorOnly != parsed.editorOnly
-
-				$inVivoMetadata.entities[entityID].dirtyExtensions = !(
-					isEqual($entity.entities[entityID].propertyAliases, parsed.propertyAliases) &&
-					isEqual($entity.entities[entityID].exposedEntities, parsed.exposedEntities) &&
-					isEqual($entity.entities[entityID].exposedInterfaces, parsed.exposedInterfaces) &&
-					isEqual($entity.entities[entityID].subsets, parsed.subsets)
-				)
-
-				if (parsed.properties) {
-					if ($entity.entities[entityID].properties) {
-						$inVivoMetadata.entities[entityID].dirtyProperties = [
-							...Object.entries(parsed.properties)
-								.filter(([prop, val]) => !isEqual($entity.entities[entityID].properties![prop], val))
-								.map((a) => a[0]),
-							...Object.keys(parsed.properties).filter((a) => !$entity.entities[entityID].properties![a]),
-							...Object.keys($entity.entities[entityID].properties!).filter((a) => !parsed.properties[a])
-						]
-					} else {
-						$inVivoMetadata.entities[entityID].dirtyProperties = Object.keys(parsed.properties)
-					}
-				} else {
-					if ($entity.entities[entityID].properties) {
-						$inVivoMetadata.entities[entityID].dirtyProperties = Object.keys($entity.entities[entityID].properties!)
-					}
-				}
-
-				if (parsed.platformSpecificProperties) {
-					$inVivoMetadata.entities[entityID].dirtyProperties.push(
-						...Object.entries(parsed.platformSpecificProperties)
-							.filter(([prop, val]) => !isEqual($entity.entities[entityID].platformSpecificProperties![prop], val))
-							.map((a) => a[0]),
-						...Object.keys(parsed.platformSpecificProperties).filter((a) => !$entity.entities[entityID].platformSpecificProperties![a]),
-						...Object.keys($entity.entities[entityID].platformSpecificProperties!).filter((a) => !parsed.platformSpecificProperties[a])
-					)
-				}
-			}
 		} else {
 			editorIsValid = false
 			editorInvalidMessage = invalid
@@ -242,6 +183,20 @@
 				oldTempHash = $entity.tempHash
 			}
 		})()
+
+	onMount(() => {
+		gameServer.addListener("treeSelectEntity", async (evt) => {
+			if (evt.type === "entitySelected") {
+				if ($entity.entities[evt.entity.id]) {
+					await attemptToSelect(evt.entity.id)
+					tree.navigateTo(evt.entity.id)
+					tree.scrollToOpenNode()
+				}
+			}
+		})
+	})
+
+	onDestroy(() => gameServer.removeListener("treeSelectEntity"))
 </script>
 
 <SplitPanes on:resize={() => editor?.layout()} theme="">
@@ -370,7 +325,6 @@
 							entity={$entity}
 							reverseReferences={$reverseReferences}
 							inVivoExtensions={$appSettings.inVivoExtensions}
-							autoHighlightEntities={$appSettings.autoHighlightEntities}
 							{editorIsValid}
 							bind:helpMenuOpen
 							bind:helpMenuFactory
@@ -508,21 +462,6 @@
 						<span class="text-green-200">Valid entity</span>
 					{:else}
 						<span class="text-red-200">{editorInvalidMessage}</span>
-					{/if}
-					{#if $appSettings.inVivoExtensions && gameServer.connected && gameServer.lastAddress}
-						{#if $inVivoMetadata.entities[selectedEntityID]?.dirtyUnchangeables}
-							<span class="text-red-200">Factory/blueprint/editorOnly changes require re-deploy</span>
-						{:else if $inVivoMetadata.entities[selectedEntityID]?.dirtyExtensions}
-							<span class="text-red-200">Other-entity-affecting changes require re-deploy</span>
-						{:else if $inVivoMetadata.entities[selectedEntityID]?.dirtyProperties?.length}
-							<span class="text-yellow-200">Some property changes not reflected in-game ({$inVivoMetadata.entities[selectedEntityID]?.dirtyProperties?.join(", ")})</span>
-						{:else if $inVivoMetadata.entities[selectedEntityID]?.hasSetProperties && $inVivoMetadata.entities[selectedEntityID]?.dirtyPins}
-							<span class="text-yellow-200">Property changes reflected in-game; pin changes require re-deploy</span>
-						{:else if $inVivoMetadata.entities[selectedEntityID]?.hasSetProperties}
-							<span class="text-blue-200">Property changes reflected in-game</span>
-						{:else}
-							<span class="text-green-200">Entity unchanged from game start</span>
-						{/if}
 					{/if}
 				</div>
 			{:else}

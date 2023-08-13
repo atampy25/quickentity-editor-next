@@ -21,7 +21,6 @@ interface AppSettings {
 	gameFileExtensionsDataPath: string
 
 	inVivoExtensions: boolean
-	autoHighlightEntities: boolean
 	preferredHighlightColour: string
 
 	enableLogRocket: boolean
@@ -46,7 +45,6 @@ await forage.setItem({
 				logRocketID: v4(),
 				logRocketName: "",
 				technicalMode: false,
-				autoHighlightEntities: true,
 				autoSaveOnSwitchFile: true,
 				preferredHighlightColour: "#0000ff",
 				extractModdedFiles: false,
@@ -170,19 +168,5 @@ appSettings.subscribe((value: { gameFileExtensions: boolean; gameFileExtensionsD
 })
 
 export const inProgressMeshLoads: Writable<Record<string, boolean>> = writable({})
-
-export const inVivoMetadata: Writable<{
-	entities: Record<
-		string,
-		{
-			hasSetProperties: boolean
-
-			dirtyProperties: string[]
-			dirtyUnchangeables: boolean
-			dirtyPins: boolean
-			dirtyExtensions: boolean
-		}
-	>
-}> = writable({ entities: {} })
 
 export const saveWorkAndCallback: Writable<null | (() => any)> = writable(null)

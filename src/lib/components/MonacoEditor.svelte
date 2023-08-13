@@ -10,7 +10,7 @@
 	import tsWorker from "monaco-editor/esm/vs/language/typescript/ts.worker?worker"
 	import type { Entity, FullRef, SubEntity } from "$lib/quickentity-types"
 	import json from "$lib/json"
-	import { addNotification, appSettings, intellisense, inVivoMetadata } from "$lib/stores"
+	import { addNotification, appSettings, intellisense } from "$lib/stores"
 	import merge from "lodash/merge"
 	import { appDir, basename, dirname, join } from "@tauri-apps/api/path"
 	import { readDir, readTextFile, exists as tauriExists } from "@tauri-apps/api/fs"
@@ -108,6 +108,12 @@
 		const showFollowReferenceCondition = customContextKey("showFollowReferenceCondition", false)
 
 		editor.onDidChangeCursorPosition((e) => {
+			try {
+				json.parse(editor.getValue())
+			} catch {
+				return
+			}
+
 			let word: string | undefined | false
 			try {
 				word = editor.getModel()!.getWordAtPosition(e.position)?.word
@@ -115,7 +121,7 @@
 				word = false
 			}
 
-			if (!word || !inVivoExtensions || !gameServer.connected || !gameServer.lastAddress) {
+			if (!word || !inVivoExtensions || !gameServer.active) {
 				showUpdatePropertyCondition.set(false)
 			} else {
 				showUpdatePropertyCondition.set(!!(json.parse(editor.getValue()).properties && json.parse(editor.getValue()).properties[word]))
@@ -146,17 +152,7 @@
 			run: async (ed) => {
 				const propertyName = editor.getModel()!.getWordAtPosition(ed.getPosition()!)!.word
 
-				await gameServer.updateProperty(subEntityID, propertyName, json.parse(editor.getValue()).properties[propertyName])
-
-				$inVivoMetadata.entities[subEntityID] ??= {
-					dirtyPins: false,
-					dirtyUnchangeables: false,
-					dirtyExtensions: false,
-					dirtyProperties: [],
-					hasSetProperties: false
-				}
-
-				$inVivoMetadata.entities[subEntityID].dirtyProperties = $inVivoMetadata.entities[subEntityID].dirtyProperties.filter((a) => a != propertyName)
+				await gameServer.updateProperty(subEntityID, entity.tbluHash, propertyName, json.parse(editor.getValue()).properties[propertyName])
 
 				$addNotification = {
 					kind: "success",
@@ -328,6 +324,12 @@
 
 		editor.onDidChangeModelContent(async (e) => {
 			dispatch("contentChanged")
+
+			try {
+				json.parse(editor.getValue())
+			} catch {
+				return
+			}
 
 			await refreshDecorations()
 		})

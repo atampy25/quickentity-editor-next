@@ -1,5 +1,4 @@
 version = 1
-
 exclude_patterns = ["src/lib/fontawesome/**"]
 
 [[analyzers]]
@@ -10,5 +9,5 @@ enabled = true
 name = "rust"
 enabled = true
 
-  [analyzers.meta]
-  msrv = "stable"
+[analyzers.meta]
+msrv = "stable"

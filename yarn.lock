@@ -350,17 +350,17 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@tauri-apps/api@npm:1.4.0, @tauri-apps/api@npm:^1.2.0":
+  version: 1.4.0
+  resolution: "@tauri-apps/api@npm:1.4.0"
+  checksum: 0c24b72d6bdb1180aafc6a19bdaad1501810f880f1a52f0fbe1b1b2b04fe0b6148deba7a3769a03b877e4ddf3008348b6e1c6cb725f17effb78c9a0a0e099dc5
+  languageName: node
+  linkType: hard
+
 "@tauri-apps/api@npm:^1.1.0":
   version: 1.1.0
   resolution: "@tauri-apps/api@npm:1.1.0"
   checksum: 0e8cc6b619f7ebc3671fbc0608adc61ddd6fd812f87e18322a4d683ee188629a9c738f77a7c2a56d31f938fe2f65be733a7b30ac39d5210d51a7f0db8418cc9b
-  languageName: node
-  linkType: hard
-
-"@tauri-apps/api@npm:^1.2.0":
-  version: 1.4.0
-  resolution: "@tauri-apps/api@npm:1.4.0"
-  checksum: 0c24b72d6bdb1180aafc6a19bdaad1501810f880f1a52f0fbe1b1b2b04fe0b6148deba7a3769a03b877e4ddf3008348b6e1c6cb725f17effb78c9a0a0e099dc5
   languageName: node
   linkType: hard
 
@@ -1509,6 +1509,15 @@ __metadata:
   version: 3.25.2
   resolution: "core-js@npm:3.25.2"
   checksum: e93c6c645d44d98973efb07750975552ad405f080f5a563a99972ff6b2c5c6ee25705f55accd363f5dccd51e9e5f56be25e2be6c14a7294da65763e0e5659c02
+  languageName: node
+  linkType: hard
+
+"crc-32@npm:^1.2.2":
+  version: 1.2.2
+  resolution: "crc-32@npm:1.2.2"
+  bin:
+    crc32: bin/crc32.njs
+  checksum: ad2d0ad0cbd465b75dcaeeff0600f8195b686816ab5f3ba4c6e052a07f728c3e70df2e3ca9fd3d4484dc4ba70586e161ca5a2334ec8bf5a41bf022a6103ff243
   languageName: node
   linkType: hard
 
@@ -3896,6 +3905,7 @@ __metadata:
     carbon-components-svelte: ^0.67.1
     carbon-icons-svelte: ^11.2.0
     carbon-preprocess-svelte: ^0.9.1
+    crc-32: ^1.2.2
     decimal.js: ^10.4.1
     elkjs: ^0.8.2
     env-cmd: ^10.1.0
@@ -3922,6 +3932,7 @@ __metadata:
     svelte-splitpanes: ^0.7.3
     tailwindcss: ^3.1.6
     tauri-plugin-fs-watch: "https://github.com/tauri-apps/tauri-plugin-fs-watch#v1"
+    tauri-plugin-websocket-api: "https://github.com/tauri-apps/tauri-plugin-websocket#v1"
     three: ^0.144.0
     tslib: ^2.3.1
     typescript: ^4.7.4
@@ -4693,6 +4704,15 @@ __metadata:
   dependencies:
     "@tauri-apps/api": ^1.2.0
   checksum: bb381469deb08ed1833bc095c81d4cc7b120c6fb5ce41e8500779ffe167e0cda09a7cdfa7dd250c7928b53a1785916e0d38b2b106390a40f0b09790bef20dfc8
+  languageName: node
+  linkType: hard
+
+"tauri-plugin-websocket-api@https://github.com/tauri-apps/tauri-plugin-websocket#v1":
+  version: 0.0.0
+  resolution: "tauri-plugin-websocket-api@https://github.com/tauri-apps/tauri-plugin-websocket.git#commit=4350fdfd0446a9d384b7c00390ce441d69d10a58"
+  dependencies:
+    "@tauri-apps/api": 1.4.0
+  checksum: 488fd7b08caf921b1b398532cbafb9305e437d5ebce296493aaf6f1aa45c6b76f0d1ac321ce40438dd8dfb3a7869109cde4dced55b2ff9c26db04c431fd94882
   languageName: node
   linkType: hard
 

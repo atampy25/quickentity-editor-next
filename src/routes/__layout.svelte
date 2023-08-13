@@ -4,19 +4,16 @@
 	import "$lib/fontawesome/css/all.css"
 	import "shepherd.js/dist/css/shepherd.css"
 
-	import { onMount } from "svelte"
+	import { onDestroy, onMount } from "svelte"
 
 	let ready: boolean = false
 	onMount(() => (ready = true))
+
 	import {
-		Header,
-		HeaderNav,
 		HeaderNavItem,
 		HeaderNavMenu,
 		SideNav,
 		SideNavItems,
-		SideNavMenu,
-		SideNavMenuItem,
 		SideNavLink,
 		SideNavDivider,
 		SkipToContent,
@@ -29,12 +26,10 @@
 		TreeView,
 		Button
 	} from "carbon-components-svelte"
-
-	import { addNotification, appSettings, entity, saveWorkAndCallback, intellisense, inVivoMetadata, sessionMetadata, workspaceData } from "$lib/stores"
+	import { addNotification, appSettings, entity, saveWorkAndCallback, intellisense, sessionMetadata, workspaceData } from "$lib/stores"
 	import json from "$lib/json"
 	import { shortcut } from "$lib/shortcut"
 	import { gameServer } from "$lib/in-vivo/gameServer"
-
 	import { page } from "$app/stores"
 	import { fade, fly } from "svelte/transition"
 	import { flip } from "svelte/animate"
@@ -44,28 +39,26 @@
 	import { Command } from "@tauri-apps/api/shell"
 	import { getVersion } from "@tauri-apps/api/app"
 	import { appWindow } from "@tauri-apps/api/window"
+	import { invoke } from "@tauri-apps/api"
 	import md5 from "md5"
 	import Shepherd from "shepherd.js"
 	import cloneDeep from "lodash/cloneDeep"
 	import { Pane, Splitpanes as SplitPanes } from "svelte-splitpanes"
-
 	import Data2 from "carbon-icons-svelte/lib/Data_2.svelte"
 	import Edit from "carbon-icons-svelte/lib/Edit.svelte"
 	import TreeViewIcon from "carbon-icons-svelte/lib/TreeView.svelte"
 	import Settings from "carbon-icons-svelte/lib/Settings.svelte"
 	import WarningAlt from "carbon-icons-svelte/lib/WarningAlt.svelte"
 	import DataUnstructured from "carbon-icons-svelte/lib/DataUnstructured.svelte"
-	import WatsonHealthRotate_360 from "carbon-icons-svelte/lib/WatsonHealthRotate_360.svelte"
-
 	import * as Sentry from "@sentry/browser"
 	import { BrowserTracing } from "@sentry/tracing"
 	import SentryRRWeb from "@sentry/rrweb"
-	import { changeEntityHashesFromFriendly, changeEntityHashesToFriendly, changeReferenceToLocalEntity, getReferencedEntities, getReferencedLocalEntity, normaliseEntityIDs } from "$lib/utils"
+	import { changeEntityHashesFromFriendly, changeEntityHashesToFriendly, normaliseEntityIDs } from "$lib/utils"
 	import { goto } from "$app/navigation"
 	import Decimal from "decimal.js"
-	import { data } from "jquery"
-	import type { FullRef, RefMaybeConstantValue, SubEntity } from "$lib/quickentity-types"
 	import FileTree from "$lib/components/FileTree.svelte"
+	import propertyNames from "$lib/in-vivo/ZHMProperties.txt?raw"
+	import { str as crc32 } from "crc-32"
 
 	let displayNotifications: { kind: "error" | "info" | "info-square" | "success" | "warning" | "warning-alt"; title: string; subtitle: string }[] = []
 
@@ -423,6 +416,71 @@
 	let fileTree: FileTree
 
 	$: if ($entity.tempHash) appWindow.setTitle(`${$entity.entities[$entity.rootEntity].name} (${$entity.tempHash})`)
+
+	onMount(() => {
+		const propertyIDstoNames = Object.fromEntries(propertyNames.split("\n").map((a) => [crc32(a.trim()) >>> 0, a.trim()]))
+
+		gameServer.addListener("layoutEntityPropertyChanged", async (evt) => {
+			if (evt.type === "entityPropertyChanged") {
+				if ($entity.entities[evt.entity.id]) {
+					const convertedPropertyValue = await invoke("convert_property_value_to_qn", {
+						value: {
+							$type: evt.value.type,
+							$val: evt.value.data
+						}
+					})
+
+					console.log(propertyIDstoNames)
+
+					$entity.entities[evt.entity.id].properties ??= {}
+
+					$entity.entities[evt.entity.id].properties![propertyIDstoNames[evt.property] || evt.property] ??= {
+						type: evt.value.type,
+						value: null
+					}
+
+					$entity.entities[evt.entity.id].properties![propertyIDstoNames[evt.property] || evt.property]!.value = convertedPropertyValue
+				}
+			}
+
+			if (evt.type === "entityTransformUpdated") {
+				if ($entity.entities[evt.entity.id]) {
+					if ($entity.entities[evt.entity.id].properties?.m_eidParent?.value) {
+						// TODO: Relative transforms are not yet implemented by the SDK
+					} else {
+						$entity.entities[evt.entity.id].properties ??= {}
+
+						$entity.entities[evt.entity.id].properties!.m_mTransform ??= {
+							type: "SMatrix43",
+							value: null
+						}
+
+						$entity.entities[evt.entity.id].properties!.m_mTransform!.value = evt.entity.transform
+
+						if (
+							+$entity.entities[evt.entity.id].properties!.m_mTransform!.value.scale.x ==
+							Math.round(+$entity.entities[evt.entity.id].properties!.m_mTransform!.value.scale.x * 100) / 100
+						) {
+							if (
+								+$entity.entities[evt.entity.id].properties!.m_mTransform!.value.scale.y ==
+								Math.round(+$entity.entities[evt.entity.id].properties!.m_mTransform!.value.scale.y * 100) / 100
+							) {
+								if (
+									+$entity.entities[evt.entity.id].properties!.m_mTransform!.value.scale.z ==
+									Math.round(+$entity.entities[evt.entity.id].properties!.m_mTransform!.value.scale.z * 100) / 100
+								) {
+									// this is marginally less ugly than a massive chain for x, y and z
+									delete $entity.entities[evt.entity.id].properties!.m_mTransform!.value.scale
+								}
+							}
+						}
+					}
+				}
+			}
+		})
+	})
+
+	onDestroy(() => gameServer.removeListener("layoutEntityPropertyChanged"))
 </script>
 
 {#if ready}
@@ -727,32 +785,22 @@
 					{#if $appSettings.inVivoExtensions}
 						<HeaderNavItem
 							href="#"
-							text="{!gameServer.connected ? 'Enable' : 'Disable'} game connection"
+							text={!gameServer.active ? "Connect to game" : "Disconnect from game"}
 							class="shepherd-gameConnection"
 							on:click={async () => {
-								if (!gameServer.connected) {
-									await gameServer.start()
-
-									gameServer.client.addListener(({ datagram }) => {
-										gameServer.lastMessage = Date.now()
-									})
-
-									$inVivoMetadata.entities = {}
+								if (!gameServer.active) {
+									await gameServer.connect()
 								} else {
-									await gameServer.kill()
+									await gameServer.disconnect()
 								}
 
-								gameServer.connected = gameServer.connected
-
-								breadcrumb("gameserver", `Toggled to ${gameServer.connected}`)
+								gameServer.active = gameServer.active
 							}}
 						/>
-						{#if gameServer.connected}
+						{#if gameServer.active}
 							<li role="none">
 								<a href="#" disabled class="bx--header__menu-item">
-									<span class="bx--text-truncate--end" style:color={currentTime - gameServer.lastMessage < 5000 ? "#bbf7d0" : "#fecaca"}>
-										Last message from game: {gameServer.lastMessage != 0 ? Math.max(0, currentTime - gameServer.lastMessage) : "never"}
-									</span>
+									<span class="bx--text-truncate--end" style="color: #bbf7d0">Connected to game</span>
 								</a>
 							</li>
 						{/if}

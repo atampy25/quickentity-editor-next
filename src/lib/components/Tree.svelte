@@ -12,7 +12,7 @@
 	import json from "$lib/json"
 	import isEqual from "lodash/isEqual"
 	import { gameServer } from "$lib/in-vivo/gameServer"
-	import { addNotification, appSettings, intellisense, inVivoMetadata } from "$lib/stores"
+	import { addNotification, appSettings, intellisense } from "$lib/stores"
 	import { readTextFile } from "@tauri-apps/api/fs"
 	import { join } from "@tauri-apps/api/path"
 
@@ -30,7 +30,6 @@
 	export let currentlySelected: string = null!
 	export let previouslySelected: string = null!
 	export let editorIsValid: boolean
-	export let autoHighlightEntities: boolean
 
 	export const elemID = "tree-" + v4().replaceAll("-", "")
 
@@ -190,7 +189,7 @@
 								c.is_selected(d) ? c.delete_node(c.get_selected()) : c.delete_node(d)
 							}
 						},
-						...(!inVivoExtensions || b.id.startsWith("comment") || !gameServer.connected || !gameServer.lastAddress
+						...(!inVivoExtensions || b.id.startsWith("comment") || !gameServer.active
 							? {}
 							: {
 									inVivo: {
@@ -216,121 +215,122 @@
 														subtitle: "Check your game; the entity should now be selected."
 													}
 												}
-											},
-											moveToPlayerPosition: {
-												separator_before: false,
-												separator_after: false,
-												label: "Move to Player Position",
-												icon: "fas fa-location-dot",
-												action: async (b: { reference: string | HTMLElement | JQuery<HTMLElement> }) => {
-													let d = tree.get_node(b.reference)
-
-													let playerPos = await gameServer.getPlayerPosition()
-
-													entity.entities[d.id].properties ??= {}
-													entity.entities[d.id].properties!.m_mTransform ??= {
-														type: "SMatrix43",
-														value: {
-															rotation: {
-																x: 0,
-																y: 0,
-																z: 0
-															},
-															position: {
-																x: 0,
-																y: 0,
-																z: 0
-															}
-														}
-													}
-
-													if (entity.entities[d.id].properties!.m_eidParent) {
-														entity.entities[d.id].properties = Object.fromEntries(Object.entries(entity.entities[d.id].properties!).filter((a) => a[0] != "m_eidParent"))
-
-														// TODO: this isn't always going to work so it should probably be hooked up to intellisense in case of aliases or such
-														entity.entities[d.id].properties!.m_eRoomBehaviour = {
-															type: "ZSpatialEntity.ERoomBehaviour",
-															value: "ROOM_DYNAMIC"
-														}
-													}
-
-													entity.entities[d.id].properties!.m_mTransform.value.position.x = playerPos.x
-													entity.entities[d.id].properties!.m_mTransform.value.position.y = playerPos.y
-													entity.entities[d.id].properties!.m_mTransform.value.position.z = playerPos.z
-
-													dispatch("entityUpdated", d.id)
-
-													await gameServer.updateProperty(d.id, "m_mTransform", entity.entities[d.id].properties!.m_mTransform)
-
-													$inVivoMetadata.entities[d.id] ??= {
-														dirtyPins: false,
-														dirtyUnchangeables: false,
-														dirtyExtensions: false,
-														dirtyProperties: [],
-														hasSetProperties: false
-													}
-
-													$inVivoMetadata.entities[d.id].dirtyProperties = $inVivoMetadata.entities[d.id].dirtyProperties.filter((a) => a != "m_mTransform")
-
-													$addNotification = {
-														kind: "success",
-														title: "Entity set to player position",
-														subtitle: "The m_mTransform property has been updated accordingly."
-													}
-												}
-											},
-											adjustRotationToPlayer: {
-												separator_before: false,
-												separator_after: false,
-												label: "Adjust Rotation to Player",
-												icon: "fas fa-compass",
-												action: async (b: { reference: string | HTMLElement | JQuery<HTMLElement> }) => {
-													let d = tree.get_node(b.reference)
-
-													let playerRot = await gameServer.getPlayerRotation()
-
-													entity.entities[d.id].properties ??= {}
-													entity.entities[d.id].properties!.m_mTransform ??= {
-														type: "SMatrix43",
-														value: {
-															rotation: {
-																x: 0,
-																y: 0,
-																z: 0
-															},
-															position: {
-																x: 0,
-																y: 0,
-																z: 0
-															}
-														}
-													}
-
-													entity.entities[d.id].properties!.m_mTransform.value.rotation.x = playerRot.x
-													entity.entities[d.id].properties!.m_mTransform.value.rotation.y = playerRot.y
-													entity.entities[d.id].properties!.m_mTransform.value.rotation.z = playerRot.z
-
-													dispatch("entityUpdated", d.id)
-
-													await gameServer.updateProperty(d.id, "m_mTransform", entity.entities[d.id].properties!.m_mTransform)
-
-													$inVivoMetadata.entities[d.id] ??= {
-														dirtyPins: false,
-														dirtyUnchangeables: false,
-														dirtyExtensions: false,
-														dirtyProperties: [],
-														hasSetProperties: false
-													}
-
-													$inVivoMetadata.entities[d.id].dirtyProperties = $inVivoMetadata.entities[d.id].dirtyProperties.filter((a) => a != "m_mTransform")
-
-													$addNotification = {
-														kind: "success",
-														title: "Entity set to player rotation",
-														subtitle: "The m_mTransform property has been updated accordingly."
-													}
-												}
 											}
+											// FIXME
+											// moveToPlayerPosition: {
+											// 	separator_before: false,
+											// 	separator_after: false,
+											// 	label: "Move to Player Position",
+											// 	icon: "fas fa-location-dot",
+											// 	action: async (b: { reference: string | HTMLElement | JQuery<HTMLElement> }) => {
+											// 		let d = tree.get_node(b.reference)
+
+											// 		let playerPos = await gameServer.getPlayerPosition()
+
+											// 		entity.entities[d.id].properties ??= {}
+											// 		entity.entities[d.id].properties!.m_mTransform ??= {
+											// 			type: "SMatrix43",
+											// 			value: {
+											// 				rotation: {
+											// 					x: 0,
+											// 					y: 0,
+											// 					z: 0
+											// 				},
+											// 				position: {
+											// 					x: 0,
+											// 					y: 0,
+											// 					z: 0
+											// 				}
+											// 			}
+											// 		}
+
+											// 		if (entity.entities[d.id].properties!.m_eidParent) {
+											// 			entity.entities[d.id].properties = Object.fromEntries(Object.entries(entity.entities[d.id].properties!).filter((a) => a[0] != "m_eidParent"))
+
+											// 			// TODO: this isn't always going to work so it should probably be hooked up to intellisense in case of aliases or such
+											// 			entity.entities[d.id].properties!.m_eRoomBehaviour = {
+											// 				type: "ZSpatialEntity.ERoomBehaviour",
+											// 				value: "ROOM_DYNAMIC"
+											// 			}
+											// 		}
+
+											// 		entity.entities[d.id].properties!.m_mTransform.value.position.x = playerPos.x
+											// 		entity.entities[d.id].properties!.m_mTransform.value.position.y = playerPos.y
+											// 		entity.entities[d.id].properties!.m_mTransform.value.position.z = playerPos.z
+
+											// 		dispatch("entityUpdated", d.id)
+
+											// 		await gameServer.updateProperty(d.id, entity.tbluHash, "m_mTransform", entity.entities[d.id].properties!.m_mTransform)
+
+											// 		$inVivoMetadata.entities[d.id] ??= {
+											// 			dirtyPins: false,
+											// 			dirtyUnchangeables: false,
+											// 			dirtyExtensions: false,
+											// 			dirtyProperties: [],
+											// 			hasSetProperties: false
+											// 		}
+
+											// 		$inVivoMetadata.entities[d.id].dirtyProperties = $inVivoMetadata.entities[d.id].dirtyProperties.filter((a) => a != "m_mTransform")
+
+											// 		$addNotification = {
+											// 			kind: "success",
+											// 			title: "Entity set to player position",
+											// 			subtitle: "The m_mTransform property has been updated accordingly."
+											// 		}
+											// 	}
+											// },
+											// adjustRotationToPlayer: {
+											// 	separator_before: false,
+											// 	separator_after: false,
+											// 	label: "Adjust Rotation to Player",
+											// 	icon: "fas fa-compass",
+											// 	action: async (b: { reference: string | HTMLElement | JQuery<HTMLElement> }) => {
+											// 		let d = tree.get_node(b.reference)
+
+											// 		let playerRot = await gameServer.getPlayerRotation()
+
+											// 		entity.entities[d.id].properties ??= {}
+											// 		entity.entities[d.id].properties!.m_mTransform ??= {
+											// 			type: "SMatrix43",
+											// 			value: {
+											// 				rotation: {
+											// 					x: 0,
+											// 					y: 0,
+											// 					z: 0
+											// 				},
+											// 				position: {
+											// 					x: 0,
+											// 					y: 0,
+											// 					z: 0
+											// 				}
+											// 			}
+											// 		}
+
+											// 		entity.entities[d.id].properties!.m_mTransform.value.rotation.x = playerRot.x
+											// 		entity.entities[d.id].properties!.m_mTransform.value.rotation.y = playerRot.y
+											// 		entity.entities[d.id].properties!.m_mTransform.value.rotation.z = playerRot.z
+
+											// 		dispatch("entityUpdated", d.id)
+
+											// 		await gameServer.updateProperty(d.id, entity.tbluHash, "m_mTransform", entity.entities[d.id].properties!.m_mTransform)
+
+											// 		$inVivoMetadata.entities[d.id] ??= {
+											// 			dirtyPins: false,
+											// 			dirtyUnchangeables: false,
+											// 			dirtyExtensions: false,
+											// 			dirtyProperties: [],
+											// 			hasSetProperties: false
+											// 		}
+
+											// 		$inVivoMetadata.entities[d.id].dirtyProperties = $inVivoMetadata.entities[d.id].dirtyProperties.filter((a) => a != "m_mTransform")
+
+											// 		$addNotification = {
+											// 			kind: "success",
+											// 			title: "Entity set to player rotation",
+											// 			subtitle: "The m_mTransform property has been updated accordingly."
+											// 		}
+											// 	}
+											// }
 										}
 									}
 							  }),
@@ -718,8 +718,8 @@
 					previouslySelected = currentlySelected
 					currentlySelected = data[1].node.id
 
-					if (inVivoExtensions && autoHighlightEntities && gameServer.connected && gameServer.lastAddress && !data[1].node.id.startsWith("comment")) {
-						gameServer.selectEntity(data[1].node.id, entity)
+					if (inVivoExtensions && gameServer.active && !data[1].node.id.startsWith("comment")) {
+						void gameServer.selectEntity(data[1].node.id, entity)
 					}
 
 					dispatch("selectionUpdate", data)
@@ -854,6 +854,10 @@
 		for (const id of entities) {
 			tree.open_node(id)
 		}
+	}
+
+	export function scrollToOpenNode() {
+		tree.get_node(currentlySelected, true)[0].scrollIntoView()
 	}
 
 	export function onRefresh(func: () => any) {

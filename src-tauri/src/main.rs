@@ -3,31 +3,46 @@
 	windows_subsystem = "windows"
 )]
 
-mod communications;
-mod messages;
-
-use communications::{udp_bind, udp_kill, udp_send, ConnectionManager};
-use specta::{
-	export::ts_with_cfg,
-	ts::{BigIntExportBehavior, ExportConfiguration},
+use quickentity_rs::{
+	convert_qn_property_value_to_rt, convert_rt_property_value_to_qn, qn_structs::Property,
+	rt_structs::SEntityTemplatePropertyValue,
 };
-use tauri::{generate_handler, Manager};
+use tauri::generate_handler;
 
 fn main() {
-	#[cfg(debug_assertions)]
-	ts_with_cfg(
-		"../src/lib/rs-types.ts",
-		&ExportConfiguration::default().bigint(BigIntExportBehavior::String),
-	)
-	.unwrap();
-
 	tauri::Builder::default()
 		.plugin(tauri_plugin_fs_watch::init())
-		.invoke_handler(generate_handler![udp_bind, udp_send, udp_kill])
-		.setup(|app_handle| {
-			app_handle.manage(ConnectionManager::default());
-			Ok(())
-		})
+		.plugin(tauri_plugin_websocket::init())
+		.invoke_handler(generate_handler![
+			convert_property_value_to_qn,
+			convert_property_value_to_rt
+		])
 		.run(tauri::generate_context!())
 		.expect("error while running tauri application");
+}
+
+#[tauri::command]
+fn convert_property_value_to_qn(
+	value: SEntityTemplatePropertyValue,
+) -> Result<serde_json::Value, String> {
+	convert_rt_property_value_to_qn(
+		&value,
+		&Default::default(),
+		&Default::default(),
+		&Default::default(),
+		false,
+	)
+	.map_err(|x| x.to_string())
+}
+
+#[tauri::command]
+fn convert_property_value_to_rt(value: Property) -> Result<serde_json::Value, String> {
+	convert_qn_property_value_to_rt(
+		&value,
+		&Default::default(),
+		&Default::default(),
+		&Default::default(),
+		&Default::default(),
+	)
+	.map_err(|x| x.to_string())
 }

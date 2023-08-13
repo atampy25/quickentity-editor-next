@@ -64,7 +64,11 @@
 			}
 		})
 
-		unlisten = await watch(directory, refreshTree)
+		unlisten = await watch(directory, (evt) => {
+			if (!evt.path.endsWith("project.json")) {
+				void refreshTree()
+			}
+		})
 	})
 
 	onDestroy(unlisten)
