@@ -418,26 +418,36 @@
 							type: "SMatrix43",
 							value: null
 						}
+						
+						const newTransform: any = evt.entity.transform!
 
-						$entity.entities[evt.entity.id].properties!.m_mTransform!.value = evt.entity.transform
+						newTransform.rotation.x = newTransform.yaw
+						newTransform.rotation.y = newTransform.pitch
+						newTransform.rotation.z = newTransform.roll
+
+						delete newTransform.yaw
+						delete newTransform.pitch
+						delete newTransform.roll
 
 						if (
-							+$entity.entities[evt.entity.id].properties!.m_mTransform!.value.scale.x ==
-							Math.round(+$entity.entities[evt.entity.id].properties!.m_mTransform!.value.scale.x * 100) / 100
+							+newTransform.scale.x ==
+							Math.round(+newTransform.scale.x * 100) / 100
 						) {
 							if (
-								+$entity.entities[evt.entity.id].properties!.m_mTransform!.value.scale.y ==
-								Math.round(+$entity.entities[evt.entity.id].properties!.m_mTransform!.value.scale.y * 100) / 100
+								+newTransform.scale.y ==
+								Math.round(+newTransform.scale.y * 100) / 100
 							) {
 								if (
-									+$entity.entities[evt.entity.id].properties!.m_mTransform!.value.scale.z ==
-									Math.round(+$entity.entities[evt.entity.id].properties!.m_mTransform!.value.scale.z * 100) / 100
+									+newTransform.scale.z ==
+									Math.round(+newTransform.scale.z * 100) / 100
 								) {
 									// this is marginally less ugly than a massive chain for x, y and z
-									delete $entity.entities[evt.entity.id].properties!.m_mTransform!.value.scale
+									delete newTransform.scale
 								}
 							}
 						}
+
+						$entity.entities[evt.entity.id].properties!.m_mTransform!.value = evt.entity.transform
 					}
 				}
 			}

@@ -31,7 +31,7 @@
 	export let inVivoExtensions: boolean
 
 	const safeToSync = new Set([
-		// "SMatrix43",
+		"SMatrix43",
 		"float32",
 		"bool",
 		"SColorRGB",
@@ -368,7 +368,9 @@
 
 		const syncToEditor = debounce(async () => {
 			for (const [property, value] of Object.entries((json.parse(editor.getValue()) as SubEntity).properties || {})) {
-				if (safeToSync.has(value.type)) {
+				if (property === "m_mTransform" && value.type === "SMatrix43") {
+					await gameServer.setTransform(subEntityID, entity.tbluHash, value.value, !!(json.parse(editor.getValue()) as SubEntity).properties?.m_eidParent)
+				} else if (safeToSync.has(value.type)) {
 					await gameServer.updateProperty(subEntityID, entity.tbluHash, property, value)
 				}
 			}

@@ -27,8 +27,7 @@
 <div class="p-2 px-3 h-full overflow-y-auto overflow-x-hidden">
 	<h1>Information</h1>
 	<p>QuickEntity Editor is licensed under the GNU General Public License version 3.0 (GPLv3).</p>
-	<p>The in-vivo extensions SDK mod is a result of work from primarly piepieonline, slightly modified and re-compiled for the newest SDK version.</p>
-	<p>The ZHMModSDK it uses was created by NoFaTe (OrfeasZ), to whom we owe, in part, the current state of Hitman modding to.</p>
+	<p>ZHMModSDK, which in-vivo extensions connects to, was created by NoFaTe (OrfeasZ), to whom we owe, in part, the current state of Hitman modding to.</p>
 	<p>QNE also includes RPKGv2, which is licensed under MIT and developed by a number of contributors, including primarily 2kpr.</p>
 	<br />
 	<h1 class="mb-2">Settings</h1>

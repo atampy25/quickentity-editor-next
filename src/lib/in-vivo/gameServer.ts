@@ -148,8 +148,34 @@ class GameServer {
 				id,
 				tblu: tblu as ResourceId
 			},
-			property,
+			// @ts-expect-error TS does not like type coercion
+			property: !isNaN(property) && !isNaN(parseFloat(property)) ? Number(property) : property,
 			value: convertedPropertyValue
+		})
+	}
+
+	async setTransform(
+		id: string,
+		tblu: string,
+		value: {
+			rotation: { x: number; y: number; z: number }
+			position: { x: number; y: number; z: number }
+			scale?: { x: number; y: number; z: number }
+		},
+		relative: boolean
+	) {
+		await this.sendRequest({
+			type: "setEntityTransform",
+			entity: {
+				id,
+				tblu: tblu as ResourceId
+			},
+			transform: {
+				position: value.position,
+				scale: value.scale || { x: 1, y: 1, z: 1 },
+				rotation: { yaw: value.rotation.x, pitch: value.rotation.y, roll: value.rotation.z }
+			},
+			relative
 		})
 	}
 }
