@@ -51,7 +51,7 @@ class GameServer {
 			this.socket.addListener((x) => {
 				if (x.type === "Text") {
 					const data = JSON.parse(x.data) as EditorEvent
-					
+
 					if (data.type === "entityPropertyChanged" && this.ignoreChangeEventsFor.some((a) => data.entity.id === a.id && data.entity.tblu === a.tblu)) {
 						console.log("Ignoring", data.entity.id, "change event due to recent property update")
 						this.ignoreChangeEventsFor = this.ignoreChangeEventsFor.filter((a) => !(data.entity.id === a.id && data.entity.tblu === a.tblu))

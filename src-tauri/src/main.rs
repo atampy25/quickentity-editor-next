@@ -3,9 +3,7 @@
 	windows_subsystem = "windows"
 )]
 
-use quickentity_rs::{
-	convert_qn_property_value_to_rt, convert_rt_property_value_to_qn
-};
+use quickentity_rs::{convert_qn_property_value_to_rt, convert_rt_property_value_to_qn};
 use tauri::generate_handler;
 
 fn main() {
