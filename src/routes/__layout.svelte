@@ -57,8 +57,7 @@
 	import { goto } from "$app/navigation"
 	import Decimal from "decimal.js"
 	import FileTree from "$lib/components/FileTree.svelte"
-	import propertyNames from "$lib/in-vivo/ZHMProperties.txt?raw"
-	import { str as crc32 } from "crc-32"
+	import debounce from "lodash/debounce"
 
 	let displayNotifications: { kind: "error" | "info" | "info-square" | "success" | "warning" | "warning-alt"; title: string; subtitle: string }[] = []
 
@@ -66,7 +65,10 @@
 		if (value) {
 			if (!displayNotifications.some((a) => a.title == value!.title)) {
 				displayNotifications = [...displayNotifications, value]
-				timeoutRemoveNotification(value.title)
+
+				setTimeout(() => {
+					displayNotifications = displayNotifications.filter((a) => a.title != value!.title)
+				}, 6000)
 			}
 
 			value = null
@@ -75,23 +77,8 @@
 
 	let isSideNavOpen = false
 
-	function timeoutRemoveNotification(title: string) {
-		setTimeout(() => {
-			displayNotifications = displayNotifications.filter((a) => a.title != title)
-		}, 6000)
-	}
-
 	let askGameFileModalOpen = false
 	let askGameFileModalResult: string
-
-	onMount(async () => {
-		await createDir("gltf", { dir: BaseDirectory.App, recursive: true })
-	})
-
-	let currentTime = 0
-	setInterval(() => {
-		currentTime = Date.now()
-	}, 100)
 
 	const exists = async (path: string) => {
 		try {
@@ -379,9 +366,9 @@
 
 	$: if ($entity.tempHash) appWindow.setTitle(`${$entity.entities[$entity.rootEntity].name} (${$entity.tempHash})`)
 
-	onMount(() => {
-		const propertyIDstoNames = Object.fromEntries(propertyNames.split("\n").map((a) => [crc32(a.trim()) >>> 0, a.trim()]))
+	const debouncedUpdateFunctions: Record<string, (newTransform: any) => void> = {}
 
+	onMount(() => {
 		gameServer.addListener("layoutEntityPropertyChanged", async (evt) => {
 			if (evt.type === "entityPropertyChanged") {
 				if ($entity.entities[evt.entity.id]) {
@@ -394,12 +381,12 @@
 
 					$entity.entities[evt.entity.id].properties ??= {}
 
-					$entity.entities[evt.entity.id].properties![propertyIDstoNames[String(evt.property).replace("~", "")] || String(evt.property)] ??= {
+					$entity.entities[evt.entity.id].properties![String(evt.property)] ??= {
 						type: evt.value.type,
 						value: null
 					}
 
-					$entity.entities[evt.entity.id].properties![propertyIDstoNames[String(evt.property).replace("~", "")] || String(evt.property)]!.value =
+					$entity.entities[evt.entity.id].properties![String(evt.property)]!.value =
 						// @ts-expect-error The type coercion is the point, TS
 						typeof convertedPropertyValue == "string" && !isNaN(convertedPropertyValue) && !isNaN(parseFloat(convertedPropertyValue))
 							? Number(convertedPropertyValue)
@@ -412,23 +399,16 @@
 					if ($entity.entities[evt.entity.id].properties?.m_eidParent?.value) {
 						// TODO: Relative transforms are not yet implemented by the SDK
 					} else {
-						$entity.entities[evt.entity.id].properties ??= {}
-
-						$entity.entities[evt.entity.id].properties!.m_mTransform ??= {
-							type: "SMatrix43",
-							value: null
+						const newTransform: any = {
+							rotation: {
+								x: evt.entity.transform!.rotation.roll,
+								y: evt.entity.transform!.rotation.pitch,
+								z: evt.entity.transform!.rotation.yaw
+							},
+							position: evt.entity.transform!.position,
+							scale: evt.entity.transform!.scale
 						}
-
-						const newTransform: any = evt.entity.transform!
-
-						newTransform.rotation.x = newTransform.yaw
-						newTransform.rotation.y = newTransform.pitch
-						newTransform.rotation.z = newTransform.roll
-
-						delete newTransform.yaw
-						delete newTransform.pitch
-						delete newTransform.roll
-
+						
 						if (+newTransform.scale.x == Math.round(+newTransform.scale.x * 100) / 100) {
 							if (+newTransform.scale.y == Math.round(+newTransform.scale.y * 100) / 100) {
 								if (+newTransform.scale.z == Math.round(+newTransform.scale.z * 100) / 100) {
@@ -438,7 +418,18 @@
 							}
 						}
 
-						$entity.entities[evt.entity.id].properties!.m_mTransform!.value = evt.entity.transform
+						debouncedUpdateFunctions[evt.entity.id] ??= debounce((x) => {
+							$entity.entities[evt.entity.id].properties ??= {}
+
+							$entity.entities[evt.entity.id].properties!.m_mTransform ??= {
+								type: "SMatrix43",
+								value: null
+							}
+
+							$entity.entities[evt.entity.id].properties!.m_mTransform!.value = x
+						}, 200)
+
+						debouncedUpdateFunctions[evt.entity.id](newTransform)
 					}
 				}
 			}

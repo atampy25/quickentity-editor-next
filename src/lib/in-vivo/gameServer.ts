@@ -15,6 +15,7 @@ class GameServer {
 	listeners: Record<string, (arg: Message) => unknown> = {}
 
 	ignoreChangeEventsFor: EntitySelector[] = []
+	ignoreTransformEventsFor: EntitySelector[] = []
 
 	constructor() {
 		this.socket = null
@@ -52,9 +53,15 @@ class GameServer {
 				if (x.type === "Text") {
 					const data = JSON.parse(x.data) as EditorEvent
 
-					if (data.type === "entityPropertyChanged" && this.ignoreChangeEventsFor.some((a) => data.entity.id === a.id && data.entity.tblu === a.tblu)) {
+					if (data.type === "entityPropertyChanged" && this.ignoreChangeEventsFor.some((a) => !data.byEditor && data.entity.id === a.id && data.entity.tblu === a.tblu)) {
 						console.log("Ignoring", data.entity.id, "change event due to recent property update")
-						this.ignoreChangeEventsFor = this.ignoreChangeEventsFor.filter((a) => !(data.entity.id === a.id && data.entity.tblu === a.tblu))
+						this.ignoreChangeEventsFor = this.ignoreChangeEventsFor.filter((a) => !(!data.byEditor && data.entity.id === a.id && data.entity.tblu === a.tblu))
+						return
+					}
+
+					if (data.type === "entityTransformUpdated" && this.ignoreTransformEventsFor.some((a) => !data.byEditor && data.entity.id === a.id && data.entity.tblu === a.tblu)) {
+						console.log("Ignoring", data.entity.id, "transform event due to recent transform update")
+						this.ignoreTransformEventsFor = this.ignoreTransformEventsFor.filter((a) => !(!data.byEditor && data.entity.id === a.id && data.entity.tblu === a.tblu))
 						return
 					}
 				}
@@ -164,19 +171,31 @@ class GameServer {
 		},
 		relative: boolean
 	) {
-		await this.sendRequest({
-			type: "setEntityTransform",
-			entity: {
+		// relative is not yet implemented by the SDK
+		if (!relative) {
+			this.ignoreTransformEventsFor.push({
 				id,
 				tblu: tblu as ResourceId
-			},
-			transform: {
-				position: value.position,
-				scale: value.scale || { x: 1, y: 1, z: 1 },
-				rotation: { yaw: value.rotation.x, pitch: value.rotation.y, roll: value.rotation.z }
-			},
-			relative
-		})
+			})
+
+			await this.sendRequest({
+				type: "setEntityTransform",
+				entity: {
+					id,
+					tblu: tblu as ResourceId
+				},
+				transform: {
+					position: value.position,
+					scale: value.scale || { x: 1, y: 1, z: 1 },
+					rotation: {
+						roll: value.rotation.x,
+						pitch: value.rotation.y,
+						yaw: value.rotation.z
+					}
+				},
+				relative
+			})
+		}
 	}
 }
 

@@ -269,8 +269,8 @@ declare namespace EditorEvents {
 		// The entity that was updated.
 		entity: EntityDetails
 
-		// The id of the property that was updated.
-		property: number
+		// The name or id of the property that was updated.
+		property: string | number
 
 		// The new value of the property.
 		value: PropertyValue

@@ -1512,15 +1512,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"crc-32@npm:^1.2.2":
-  version: 1.2.2
-  resolution: "crc-32@npm:1.2.2"
-  bin:
-    crc32: bin/crc32.njs
-  checksum: ad2d0ad0cbd465b75dcaeeff0600f8195b686816ab5f3ba4c6e052a07f728c3e70df2e3ca9fd3d4484dc4ba70586e161ca5a2334ec8bf5a41bf022a6103ff243
-  languageName: node
-  linkType: hard
-
 "cross-spawn@npm:^7.0.0, cross-spawn@npm:^7.0.2, cross-spawn@npm:^7.0.3":
   version: 7.0.3
   resolution: "cross-spawn@npm:7.0.3"
@@ -3905,7 +3896,6 @@ __metadata:
     carbon-components-svelte: ^0.67.1
     carbon-icons-svelte: ^11.2.0
     carbon-preprocess-svelte: ^0.9.1
-    crc-32: ^1.2.2
     decimal.js: ^10.4.1
     elkjs: ^0.8.2
     env-cmd: ^10.1.0
