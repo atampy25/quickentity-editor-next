@@ -31,7 +31,7 @@
 	export let inVivoExtensions: boolean
 
 	const safeToSync = new Set([
-		"SMatrix43",
+		// "SMatrix43",
 		"float32",
 		"bool",
 		"SColorRGB",
@@ -372,7 +372,7 @@
 					await gameServer.updateProperty(subEntityID, entity.tbluHash, property, value)
 				}
 			}
-		})
+		}, 800)
 
 		await refreshDecorations()
 

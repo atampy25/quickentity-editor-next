@@ -4,8 +4,7 @@
 )]
 
 use quickentity_rs::{
-	convert_qn_property_value_to_rt, convert_rt_property_value_to_qn, qn_structs::Property,
-	rt_structs::SEntityTemplatePropertyValue,
+	convert_qn_property_value_to_rt, convert_rt_property_value_to_qn
 };
 use tauri::generate_handler;
 
@@ -22,27 +21,25 @@ fn main() {
 }
 
 #[tauri::command]
-fn convert_property_value_to_qn(
-	value: SEntityTemplatePropertyValue,
-) -> Result<serde_json::Value, String> {
+fn convert_property_value_to_qn(value: String) -> Result<serde_json::Value, String> {
 	convert_rt_property_value_to_qn(
-		&value,
+		&serde_json::from_str(&value).map_err(|x| format!("{:?}", x))?,
 		&Default::default(),
 		&Default::default(),
 		&Default::default(),
 		false,
 	)
-	.map_err(|x| x.to_string())
+	.map_err(|x| format!("{:?}", x))
 }
 
 #[tauri::command]
-fn convert_property_value_to_rt(value: Property) -> Result<serde_json::Value, String> {
+fn convert_property_value_to_rt(value: String) -> Result<serde_json::Value, String> {
 	convert_qn_property_value_to_rt(
-		&value,
+		&serde_json::from_str(&value).map_err(|x| format!("{:?}", x))?,
 		&Default::default(),
 		&Default::default(),
 		&Default::default(),
 		&Default::default(),
 	)
-	.map_err(|x| x.to_string())
+	.map_err(|x| format!("{:?}", x))
 }

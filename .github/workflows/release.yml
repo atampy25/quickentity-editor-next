@@ -29,7 +29,7 @@ jobs:
                   toolchain: nightly
                   target: x86_64-pc-windows-msvc
                   default: true
-                  components: rustfmt
+                  components: clippy, rustfmt
 
             - name: Install dependencies
               run: |

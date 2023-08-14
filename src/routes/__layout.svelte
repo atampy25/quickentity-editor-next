@@ -386,10 +386,10 @@
 			if (evt.type === "entityPropertyChanged") {
 				if ($entity.entities[evt.entity.id]) {
 					const convertedPropertyValue = await invoke("convert_property_value_to_qn", {
-						value: {
+						value: json.stringify({
 							$type: evt.value.type,
 							$val: evt.value.data
-						}
+						})
 					})
 
 					$entity.entities[evt.entity.id].properties ??= {}

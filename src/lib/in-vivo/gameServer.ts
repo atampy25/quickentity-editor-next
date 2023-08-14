@@ -14,6 +14,8 @@ class GameServer {
 
 	listeners: Record<string, (arg: Message) => unknown> = {}
 
+	ignoreChangeEventsFor: EntitySelector[] = []
+
 	constructor() {
 		this.socket = null
 	}
@@ -46,7 +48,17 @@ class GameServer {
 				})()
 			})
 
-			this.socket.addListener(x=>{
+			this.socket.addListener((x) => {
+				if (x.type === "Text") {
+					const data = JSON.parse(x.data) as EditorEvent
+					
+					if (data.type === "entityPropertyChanged" && this.ignoreChangeEventsFor.some((a) => data.entity.id === a.id && data.entity.tblu === a.tblu)) {
+						console.log("Ignoring", data.entity.id, "change event due to recent property update")
+						this.ignoreChangeEventsFor = this.ignoreChangeEventsFor.filter((a) => !(data.entity.id === a.id && data.entity.tblu === a.tblu))
+						return
+					}
+				}
+
 				for (const listener of Object.values(this.listeners)) {
 					listener(x)
 				}
@@ -123,7 +135,12 @@ class GameServer {
 	}
 
 	async updateProperty(id: string, tblu: string, property: string, value: Property) {
-		const convertedPropertyValue = await invoke("convert_property_value_to_rt", { value })
+		const convertedPropertyValue = await invoke("convert_property_value_to_rt", { value: json.stringify(value) })
+
+		this.ignoreChangeEventsFor.push({
+			id,
+			tblu: tblu as ResourceId
+		})
 
 		await this.sendRequest({
 			type: "setEntityProperty",
