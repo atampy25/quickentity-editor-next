@@ -1,11 +1,11 @@
 {
-	"version": "1.43.3",
-	"notes": "Property syncing fixes",
+	"version": "1.43.4",
+	"notes": "Better transform handling, code cleanup",
 	"pub_date": "2023-02-18T08:42:26Z",
 	"platforms": {
 		"windows-x86_64": {
-			"signature": "dW50cnVzdGVkIGNvbW1lbnQ6IHNpZ25hdHVyZSBmcm9tIHRhdXJpIHNlY3JldCBrZXkKUlVScWpVZGd2b0lOTlN5bnBLMkFFK2F5cXBCZkRtdUNGVnA1UlJHRkk3alovN0I0YVBBc3Q3SWpNa25SQys1OTd5R3FHcmFwTmdGT0srM0czdGd2ZFUxTmlmdUxMS3RwSmdZPQp0cnVzdGVkIGNvbW1lbnQ6IHRpbWVzdGFtcDoxNjkyMDA4MTY5CWZpbGU6UXVpY2tFbnRpdHkgRWRpdG9yXzEuNDMuM194NjRfZW4tVVMubXNpLnppcApsY0dUcUNOYjZtWU5XZ05iaE9mNWlRQUd2RzZlYXRzV1ZqZjltWUlENVpmV0t6Ri85bUljcE5BakZoOUFwdkZjc3lNWnRldnBaTWNlQzVQNjNKRHlEQT09Cg==",
-			"url": "https://github.com/atampy25/quickentity-editor-next/releases/download/1.43.3/QuickEntity.Editor_1.43.3_x64_en-US.msi.zip"
+			"signature": "dW50cnVzdGVkIGNvbW1lbnQ6IHNpZ25hdHVyZSBmcm9tIHRhdXJpIHNlY3JldCBrZXkKUlVScWpVZGd2b0lOTmRMWGlRRkw1ZmFHZlpKUTlJbE44aVBwQURJcTlOZklDeEdGK3ZpS3hxMUdZUHhqbEwyekJGWFVpSE8yd0xseU9kRnhERDBTcUJvTWtPM1MzYjQvYWdFPQp0cnVzdGVkIGNvbW1lbnQ6IHRpbWVzdGFtcDoxNjkyMDExOTkzCWZpbGU6UXVpY2tFbnRpdHkgRWRpdG9yXzEuNDMuNF94NjRfZW4tVVMubXNpLnppcAp3VExtandWR0pqYTVydy9TdytIdlY5SlBXUFFjaW9ackxFRm1iUDRvL0NlL01DY0x2SUZLdkFxR29MVVBzckx6OE5HU1htM3pEenFsQndlbWk1ZCtBdz09Cg==",
+			"url": "https://github.com/atampy25/quickentity-editor-next/releases/download/1.43.4/QuickEntity.Editor_1.43.4_x64_en-US.msi.zip"
 		}
 	}
 }

@@ -408,7 +408,7 @@
 							position: evt.entity.transform!.position,
 							scale: evt.entity.transform!.scale
 						}
-						
+
 						if (+newTransform.scale.x == Math.round(+newTransform.scale.x * 100) / 100) {
 							if (+newTransform.scale.y == Math.round(+newTransform.scale.y * 100) / 100) {
 								if (+newTransform.scale.z == Math.round(+newTransform.scale.z * 100) / 100) {
