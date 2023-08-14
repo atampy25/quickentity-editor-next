@@ -167,6 +167,4 @@ appSettings.subscribe((value: { gameFileExtensions: boolean; gameFileExtensionsD
 	}
 })
 
-export const inProgressMeshLoads: Writable<Record<string, boolean>> = writable({})
-
 export const saveWorkAndCallback: Writable<null | (() => any)> = writable(null)
