@@ -1,11 +1,11 @@
 {
-	"version": "1.43.2",
-	"notes": "Fix auto-sync",
+	"version": "1.43.3",
+	"notes": "Property syncing fixes",
 	"pub_date": "2023-02-18T08:42:26Z",
 	"platforms": {
 		"windows-x86_64": {
-			"signature": "dW50cnVzdGVkIGNvbW1lbnQ6IHNpZ25hdHVyZSBmcm9tIHRhdXJpIHNlY3JldCBrZXkKUlVScWpVZGd2b0lOTlNnQmM5Q29WN2ZMaXZRcUgxWW5KSXlaNSttOHVRNDJtRWN0OE5nZE9xQ2pWbE5ZbTBoeGtqUnBSVkIzNlFyTTVpd0NXMTRod3lpRGtCMVVtZnk2eHdjPQp0cnVzdGVkIGNvbW1lbnQ6IHRpbWVzdGFtcDoxNjkyMDAwOTIxCWZpbGU6UXVpY2tFbnRpdHkgRWRpdG9yXzEuNDMuMl94NjRfZW4tVVMubXNpLnppcApxdnpKY2daT255TXRWOTFOSjJUYVUrMEo3cmJRZ3BpMUNQbndBMEU0WmlBWTM4Q2JNMVVnOFdFQkxQSXhnUGNJWXhYc0JKMjFRdUVVeEk0YnQrc3VEdz09Cg==",
-			"url": "https://github.com/atampy25/quickentity-editor-next/releases/download/1.43.2/QuickEntity.Editor_1.43.2_x64_en-US.msi.zip"
+			"signature": "dW50cnVzdGVkIGNvbW1lbnQ6IHNpZ25hdHVyZSBmcm9tIHRhdXJpIHNlY3JldCBrZXkKUlVScWpVZGd2b0lOTlN5bnBLMkFFK2F5cXBCZkRtdUNGVnA1UlJHRkk3alovN0I0YVBBc3Q3SWpNa25SQys1OTd5R3FHcmFwTmdGT0srM0czdGd2ZFUxTmlmdUxMS3RwSmdZPQp0cnVzdGVkIGNvbW1lbnQ6IHRpbWVzdGFtcDoxNjkyMDA4MTY5CWZpbGU6UXVpY2tFbnRpdHkgRWRpdG9yXzEuNDMuM194NjRfZW4tVVMubXNpLnppcApsY0dUcUNOYjZtWU5XZ05iaE9mNWlRQUd2RzZlYXRzV1ZqZjltWUlENVpmV0t6Ri85bUljcE5BakZoOUFwdkZjc3lNWnRldnBaTWNlQzVQNjNKRHlEQT09Cg==",
+			"url": "https://github.com/atampy25/quickentity-editor-next/releases/download/1.43.3/QuickEntity.Editor_1.43.3_x64_en-US.msi.zip"
 		}
 	}
 }
