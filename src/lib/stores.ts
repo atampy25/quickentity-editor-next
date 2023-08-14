@@ -21,7 +21,7 @@ interface AppSettings {
 	gameFileExtensionsDataPath: string
 
 	inVivoExtensions: boolean
-	preferredHighlightColour: string
+	autoSyncToEditor: boolean
 
 	enableLogRocket: boolean
 	logRocketID: string
@@ -46,11 +46,11 @@ await forage.setItem({
 				logRocketName: "",
 				technicalMode: false,
 				autoSaveOnSwitchFile: true,
-				preferredHighlightColour: "#0000ff",
 				extractModdedFiles: false,
 				h1: false,
 				compactMode: false,
-				h2: false
+				h2: false,
+				autoSyncToEditor: true
 			},
 			json.parse((await forage.getItem({ key: "appSettings" })()) || "{}")
 		)

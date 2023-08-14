@@ -392,16 +392,18 @@
 						}
 					})
 
-					console.log(propertyIDstoNames)
-
 					$entity.entities[evt.entity.id].properties ??= {}
 
-					$entity.entities[evt.entity.id].properties![propertyIDstoNames[evt.property] || evt.property] ??= {
+					$entity.entities[evt.entity.id].properties![propertyIDstoNames[String(evt.property).replace("~", "")] || String(evt.property)] ??= {
 						type: evt.value.type,
 						value: null
 					}
 
-					$entity.entities[evt.entity.id].properties![propertyIDstoNames[evt.property] || evt.property]!.value = convertedPropertyValue
+					$entity.entities[evt.entity.id].properties![propertyIDstoNames[String(evt.property).replace("~", "")] || String(evt.property)]!.value =
+						// @ts-expect-error The type coercion is the point, TS
+						typeof convertedPropertyValue == "string" && !isNaN(convertedPropertyValue) && !isNaN(parseFloat(convertedPropertyValue))
+							? Number(convertedPropertyValue)
+							: convertedPropertyValue
 				}
 			}
 

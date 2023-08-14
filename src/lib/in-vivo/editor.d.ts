@@ -165,7 +165,7 @@ declare namespace EditorRequests {
 		// The name or id of the property to set.
 		property: string | number
 
-		// The new value to give to the property.
+		// The new value to give to the property, as it would appear in RT JSON.
 		value: unknown
 	}
 

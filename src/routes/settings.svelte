@@ -92,6 +92,11 @@
 		</TooltipIcon>
 	</div>
 	<br />
+	{#if $appSettings.gameFileExtensions}
+		<Checkbox bind:checked={$appSettings.autoSyncToEditor} labelText="Automatically sync properties from QNE to Editor" />
+		<br />
+	{/if}
+	<br />
 	<div class="flex items-center gap-2">
 		<div class="flex-shrink">
 			<Checkbox bind:checked={$appSettings.enableLogRocket} labelText="Enable issue reporting (requires a restart to take effect)" />

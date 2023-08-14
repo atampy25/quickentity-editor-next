@@ -88,7 +88,7 @@
 	}
 
 	async function attemptToSelect(entityID: string) {
-		if (selectionType == "entity") {
+		if (selectionType == "entity" && editor) {
 			if (editorIsValid) {
 				$entity.entities[selectedEntityID] = json.parse(editor.getValue())
 			} else {

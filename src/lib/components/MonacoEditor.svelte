@@ -8,7 +8,7 @@
 	import cssWorker from "monaco-editor/esm/vs/language/css/css.worker?worker"
 	import htmlWorker from "monaco-editor/esm/vs/language/html/html.worker?worker"
 	import tsWorker from "monaco-editor/esm/vs/language/typescript/ts.worker?worker"
-	import type { Entity, FullRef, SubEntity } from "$lib/quickentity-types"
+	import type { Entity, FullRef, Property, SubEntity } from "$lib/quickentity-types"
 	import json from "$lib/json"
 	import { addNotification, appSettings, intellisense } from "$lib/stores"
 	import merge from "lodash/merge"
@@ -18,6 +18,7 @@
 	import { gameServer } from "$lib/in-vivo/gameServer"
 	import { Modal } from "carbon-components-svelte"
 	import GraphRenderer from "./GraphRenderer.svelte"
+	import debounce from "lodash/debounce"
 
 	let el: HTMLDivElement = null!
 	export let Monaco: typeof monaco
@@ -28,6 +29,51 @@
 	export let jsonToDisplay: SubEntity
 	export let subEntityID: string
 	export let inVivoExtensions: boolean
+
+	const safeToSync = new Set([
+		"SMatrix43",
+		"float32",
+		"bool",
+		"SColorRGB",
+		"ZString",
+		"SVector3",
+		"int32",
+		"uint8",
+		"SVector2",
+		"uint32",
+		"ZGuid",
+		"ZCurve",
+		"SColorRGBA",
+		"ZGameTime",
+		"TArray<ZGameTime>",
+		"TArray<bool>",
+		"TArray<SGaitTransitionEntry>",
+		"TArray<SMapMarkerData>",
+		"uint64",
+		"TArray<int32>",
+		"TArray<SConversationPart>",
+		"SBodyPartDamageMultipliers",
+		"TArray<SVector2>",
+		"TArray<ZSharedSensorDef.SVisibilitySetting>",
+		"TArray<ZString>",
+		"TArray<STargetableBoneConfiguration>",
+		"TArray<ZSecuritySystemCameraConfiguration.SHitmanVisibleEscalationRule>",
+		"TArray<ZSecuritySystemCameraConfiguration.SDeadBodyVisibleEscalationRule>",
+		"S25DProjectionSettings",
+		"SVector4",
+		"TArray<SClothVertex>",
+		"TArray<SFontLibraryDefinition>",
+		"TArray<SCamBone>",
+		"TArray<SVector3>",
+		"TArray<ZHUDOccluderTriggerEntity.SBoneTestSetup>",
+		"uint16",
+		"SWorldSpaceSettings",
+		"SCCEffectSet",
+		"TArray<AI.SFirePattern01>",
+		"TArray<AI.SFirePattern02>",
+		"SSCCuriousConfiguration",
+		"TArray<SColorRGB>"
+	])
 
 	const dispatch = createEventDispatcher()
 
@@ -320,6 +366,14 @@
 			decorations.set(decorationsArray)
 		}
 
+		const syncToEditor = debounce(async () => {
+			for (const [property, value] of Object.entries((json.parse(editor.getValue()) as SubEntity).properties || {})) {
+				if (safeToSync.has(value.type)) {
+					await gameServer.updateProperty(subEntityID, entity.tbluHash, property, value)
+				}
+			}
+		})
+
 		await refreshDecorations()
 
 		editor.onDidChangeModelContent(async (e) => {
@@ -332,6 +386,7 @@
 			}
 
 			await refreshDecorations()
+			await syncToEditor()
 		})
 
 		return () => {
