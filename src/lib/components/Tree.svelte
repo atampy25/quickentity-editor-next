@@ -215,122 +215,111 @@
 														subtitle: "Check your game; the entity should now be selected."
 													}
 												}
+											},
+											moveToPlayerPosition: {
+												separator_before: false,
+												separator_after: false,
+												label: "Move to Player Position",
+												icon: "fas fa-location-dot",
+												action: async (b: { reference: string | HTMLElement | JQuery<HTMLElement> }) => {
+													let d = tree.get_node(b.reference)
+
+													const player = await gameServer.getPlayerTransform()
+
+													entity.entities[d.id].properties ??= {}
+													entity.entities[d.id].properties!.m_mTransform ??= {
+														type: "SMatrix43",
+														value: {
+															rotation: {
+																x: 0,
+																y: 0,
+																z: 0
+															},
+															position: {
+																x: 0,
+																y: 0,
+																z: 0
+															}
+														}
+													}
+
+													if (entity.entities[d.id].properties!.m_eidParent) {
+														entity.entities[d.id].properties = Object.fromEntries(Object.entries(entity.entities[d.id].properties!).filter((a) => a[0] != "m_eidParent"))
+
+														// TODO: this isn't always going to work so it should probably be hooked up to intellisense in case of aliases or such
+														entity.entities[d.id].properties!.m_eRoomBehaviour = {
+															type: "ZSpatialEntity.ERoomBehaviour",
+															value: "ROOM_DYNAMIC"
+														}
+													}
+
+													entity.entities[d.id].properties!.m_mTransform.value.position.x = player.position.x
+													entity.entities[d.id].properties!.m_mTransform.value.position.y = player.position.y
+													entity.entities[d.id].properties!.m_mTransform.value.position.z = player.position.z
+
+													dispatch("entityUpdated", d.id)
+
+													await gameServer.setTransform(d.id, entity.tbluHash, entity.entities[d.id].properties!.m_mTransform.value, false)
+
+													$addNotification = {
+														kind: "success",
+														title: "Entity set to player position",
+														subtitle: "The m_mTransform property has been updated accordingly."
+													}
+												}
+											},
+											adjustRotationToPlayer: {
+												separator_before: false,
+												separator_after: false,
+												label: "Adjust Rotation to Player",
+												icon: "fas fa-compass",
+												action: async (b: { reference: string | HTMLElement | JQuery<HTMLElement> }) => {
+													let d = tree.get_node(b.reference)
+
+													const player = await gameServer.getPlayerTransform()
+
+													entity.entities[d.id].properties ??= {}
+													entity.entities[d.id].properties!.m_mTransform ??= {
+														type: "SMatrix43",
+														value: {
+															rotation: {
+																x: 0,
+																y: 0,
+																z: 0
+															},
+															position: {
+																x: 0,
+																y: 0,
+																z: 0
+															}
+														}
+													}
+
+													if (entity.entities[d.id].properties!.m_eidParent) {
+														entity.entities[d.id].properties = Object.fromEntries(Object.entries(entity.entities[d.id].properties!).filter((a) => a[0] != "m_eidParent"))
+
+														// TODO: this isn't always going to work so it should probably be hooked up to intellisense in case of aliases or such
+														entity.entities[d.id].properties!.m_eRoomBehaviour = {
+															type: "ZSpatialEntity.ERoomBehaviour",
+															value: "ROOM_DYNAMIC"
+														}
+													}
+
+													entity.entities[d.id].properties!.m_mTransform.value.rotation.x = player.rotation.x
+													entity.entities[d.id].properties!.m_mTransform.value.rotation.y = player.rotation.y
+													entity.entities[d.id].properties!.m_mTransform.value.rotation.z = player.rotation.z
+
+													dispatch("entityUpdated", d.id)
+
+													await gameServer.setTransform(d.id, entity.tbluHash, entity.entities[d.id].properties!.m_mTransform.value, false)
+
+													$addNotification = {
+														kind: "success",
+														title: "Entity set to player rotation",
+														subtitle: "The m_mTransform property has been updated accordingly."
+													}
+												}
 											}
-											// FIXME
-											// moveToPlayerPosition: {
-											// 	separator_before: false,
-											// 	separator_after: false,
-											// 	label: "Move to Player Position",
-											// 	icon: "fas fa-location-dot",
-											// 	action: async (b: { reference: string | HTMLElement | JQuery<HTMLElement> }) => {
-											// 		let d = tree.get_node(b.reference)
-
-											// 		let playerPos = await gameServer.getPlayerPosition()
-
-											// 		entity.entities[d.id].properties ??= {}
-											// 		entity.entities[d.id].properties!.m_mTransform ??= {
-											// 			type: "SMatrix43",
-											// 			value: {
-											// 				rotation: {
-											// 					x: 0,
-											// 					y: 0,
-											// 					z: 0
-											// 				},
-											// 				position: {
-											// 					x: 0,
-											// 					y: 0,
-											// 					z: 0
-											// 				}
-											// 			}
-											// 		}
-
-											// 		if (entity.entities[d.id].properties!.m_eidParent) {
-											// 			entity.entities[d.id].properties = Object.fromEntries(Object.entries(entity.entities[d.id].properties!).filter((a) => a[0] != "m_eidParent"))
-
-											// 			// TODO: this isn't always going to work so it should probably be hooked up to intellisense in case of aliases or such
-											// 			entity.entities[d.id].properties!.m_eRoomBehaviour = {
-											// 				type: "ZSpatialEntity.ERoomBehaviour",
-											// 				value: "ROOM_DYNAMIC"
-											// 			}
-											// 		}
-
-											// 		entity.entities[d.id].properties!.m_mTransform.value.position.x = playerPos.x
-											// 		entity.entities[d.id].properties!.m_mTransform.value.position.y = playerPos.y
-											// 		entity.entities[d.id].properties!.m_mTransform.value.position.z = playerPos.z
-
-											// 		dispatch("entityUpdated", d.id)
-
-											// 		await gameServer.updateProperty(d.id, entity.tbluHash, "m_mTransform", entity.entities[d.id].properties!.m_mTransform)
-
-											// 		$inVivoMetadata.entities[d.id] ??= {
-											// 			dirtyPins: false,
-											// 			dirtyUnchangeables: false,
-											// 			dirtyExtensions: false,
-											// 			dirtyProperties: [],
-											// 			hasSetProperties: false
-											// 		}
-
-											// 		$inVivoMetadata.entities[d.id].dirtyProperties = $inVivoMetadata.entities[d.id].dirtyProperties.filter((a) => a != "m_mTransform")
-
-											// 		$addNotification = {
-											// 			kind: "success",
-											// 			title: "Entity set to player position",
-											// 			subtitle: "The m_mTransform property has been updated accordingly."
-											// 		}
-											// 	}
-											// },
-											// adjustRotationToPlayer: {
-											// 	separator_before: false,
-											// 	separator_after: false,
-											// 	label: "Adjust Rotation to Player",
-											// 	icon: "fas fa-compass",
-											// 	action: async (b: { reference: string | HTMLElement | JQuery<HTMLElement> }) => {
-											// 		let d = tree.get_node(b.reference)
-
-											// 		let playerRot = await gameServer.getPlayerRotation()
-
-											// 		entity.entities[d.id].properties ??= {}
-											// 		entity.entities[d.id].properties!.m_mTransform ??= {
-											// 			type: "SMatrix43",
-											// 			value: {
-											// 				rotation: {
-											// 					x: 0,
-											// 					y: 0,
-											// 					z: 0
-											// 				},
-											// 				position: {
-											// 					x: 0,
-											// 					y: 0,
-											// 					z: 0
-											// 				}
-											// 			}
-											// 		}
-
-											// 		entity.entities[d.id].properties!.m_mTransform.value.rotation.x = playerRot.x
-											// 		entity.entities[d.id].properties!.m_mTransform.value.rotation.y = playerRot.y
-											// 		entity.entities[d.id].properties!.m_mTransform.value.rotation.z = playerRot.z
-
-											// 		dispatch("entityUpdated", d.id)
-
-											// 		await gameServer.updateProperty(d.id, entity.tbluHash, "m_mTransform", entity.entities[d.id].properties!.m_mTransform)
-
-											// 		$inVivoMetadata.entities[d.id] ??= {
-											// 			dirtyPins: false,
-											// 			dirtyUnchangeables: false,
-											// 			dirtyExtensions: false,
-											// 			dirtyProperties: [],
-											// 			hasSetProperties: false
-											// 		}
-
-											// 		$inVivoMetadata.entities[d.id].dirtyProperties = $inVivoMetadata.entities[d.id].dirtyProperties.filter((a) => a != "m_mTransform")
-
-											// 		$addNotification = {
-											// 			kind: "success",
-											// 			title: "Entity set to player rotation",
-											// 			subtitle: "The m_mTransform property has been updated accordingly."
-											// 		}
-											// 	}
-											// }
 										}
 									}
 							  }),

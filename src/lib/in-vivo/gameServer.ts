@@ -14,8 +14,7 @@ class GameServer {
 
 	listeners: Record<string, (arg: Message) => unknown> = {}
 
-	ignoreChangeEventsFor: EntitySelector[] = []
-	ignoreTransformEventsFor: EntitySelector[] = []
+	entityTreeLoaded = false
 
 	constructor() {
 		this.socket = null
@@ -35,7 +34,7 @@ class GameServer {
 						await this.socket?.disconnect()
 						this.socket = null
 					} else if (x.type === "Text") {
-						const data = JSON.parse(x.data)
+						const data = JSON.parse(x.data) as EditorEvent
 						console.log("Received message", data)
 
 						if (data.type === "error") {
@@ -44,28 +43,16 @@ class GameServer {
 								title: "Error in game connection",
 								subtitle: data.message
 							})
+						} else if (data.type === "entityTreeRebuilt") {
+							this.entityTreeLoaded = true
+						} else if (data.type === "sceneClearing" || data.type === "sceneLoading") {
+							this.entityTreeLoaded = false
 						}
 					}
 				})()
 			})
 
 			this.socket.addListener((x) => {
-				if (x.type === "Text") {
-					const data = JSON.parse(x.data) as EditorEvent
-
-					if (data.type === "entityPropertyChanged" && this.ignoreChangeEventsFor.some((a) => !data.byEditor && data.entity.id === a.id && data.entity.tblu === a.tblu)) {
-						console.log("Ignoring", data.entity.id, "change event due to recent property update")
-						this.ignoreChangeEventsFor = this.ignoreChangeEventsFor.filter((a) => !(!data.byEditor && data.entity.id === a.id && data.entity.tblu === a.tblu))
-						return
-					}
-
-					if (data.type === "entityTransformUpdated" && this.ignoreTransformEventsFor.some((a) => !data.byEditor && data.entity.id === a.id && data.entity.tblu === a.tblu)) {
-						console.log("Ignoring", data.entity.id, "transform event due to recent transform update")
-						this.ignoreTransformEventsFor = this.ignoreTransformEventsFor.filter((a) => !(!data.byEditor && data.entity.id === a.id && data.entity.tblu === a.tblu))
-						return
-					}
-				}
-
 				for (const listener of Object.values(this.listeners)) {
 					listener(x)
 				}
@@ -91,6 +78,13 @@ class GameServer {
 	}
 
 	async sendRequest(msg: EditorRequest) {
+		if (!this.entityTreeLoaded) {
+			console.log("Entity tree not yet built, sending request to editor")
+
+			await this.socket?.send(json.stringify({ type: "rebuildEntityTree" }))
+			await this.waitForEvent((evt) => evt.type === "entityTreeRebuilt")
+		}
+
 		console.log("Sending message to editor", msg)
 		await this.socket?.send(json.stringify(msg))
 	}
@@ -131,23 +125,41 @@ class GameServer {
 		})
 	}
 
-	async getPlayerPosition(): Promise<{
+	async getPlayerTransform(): Promise<{
 		rotation: { x: Decimal; y: Decimal; z: Decimal }
 		position: { x: Decimal; y: Decimal; z: Decimal }
-		scale: { x: Decimal; y: Decimal; z: Decimal }
+		scale?: { x: Decimal; y: Decimal; z: Decimal }
 	}> {
-		// TODO
+		await this.sendRequest({ type: "getHitmanEntity" })
+		const hitmanEntity = (await this.waitForEvent((evt) => evt.type === "hitmanEntity")) as EditorEvents.HitmanEntityResponse
+
+		if (hitmanEntity.entity.transform) {
+			const newTransform: any = {
+				rotation: {
+					x: hitmanEntity.entity.transform.rotation.roll,
+					y: hitmanEntity.entity.transform.rotation.pitch,
+					z: hitmanEntity.entity.transform.rotation.yaw
+				},
+				position: hitmanEntity.entity.transform.position,
+				scale: hitmanEntity.entity.transform.scale
+			}
+
+			if (+newTransform.scale.x == Math.round(+newTransform.scale.x * 100) / 100) {
+				if (+newTransform.scale.y == Math.round(+newTransform.scale.y * 100) / 100) {
+					if (+newTransform.scale.z == Math.round(+newTransform.scale.z * 100) / 100) {
+						delete newTransform.scale
+					}
+				}
+			}
+
+			return newTransform
+		}
 
 		return null!
 	}
 
 	async updateProperty(id: string, tblu: string, property: string, value: Property) {
 		const convertedPropertyValue = await invoke("convert_property_value_to_rt", { value: json.stringify(value) })
-
-		this.ignoreChangeEventsFor.push({
-			id,
-			tblu: tblu as ResourceId
-		})
 
 		await this.sendRequest({
 			type: "setEntityProperty",
@@ -171,31 +183,23 @@ class GameServer {
 		},
 		relative: boolean
 	) {
-		// relative is not yet implemented by the SDK
-		if (!relative) {
-			this.ignoreTransformEventsFor.push({
+		await this.sendRequest({
+			type: "setEntityTransform",
+			entity: {
 				id,
 				tblu: tblu as ResourceId
-			})
-
-			await this.sendRequest({
-				type: "setEntityTransform",
-				entity: {
-					id,
-					tblu: tblu as ResourceId
-				},
-				transform: {
-					position: value.position,
-					scale: value.scale || { x: 1, y: 1, z: 1 },
-					rotation: {
-						roll: value.rotation.x,
-						pitch: value.rotation.y,
-						yaw: value.rotation.z
-					}
-				},
-				relative
-			})
-		}
+			},
+			transform: {
+				position: value.position,
+				scale: value.scale || { x: 1, y: 1, z: 1 },
+				rotation: {
+					roll: value.rotation.x,
+					pitch: value.rotation.y,
+					yaw: value.rotation.z
+				}
+			},
+			relative
+		})
 	}
 }
 

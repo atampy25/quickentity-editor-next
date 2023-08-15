@@ -61,19 +61,23 @@
 
 	let displayNotifications: { kind: "error" | "info" | "info-square" | "success" | "warning" | "warning-alt"; title: string; subtitle: string }[] = []
 
-	addNotification.subscribe((value) => {
-		if (value) {
-			if (!displayNotifications.some((a) => a.title == value!.title)) {
-				displayNotifications = [...displayNotifications, value]
+	onDestroy(
+		addNotification.subscribe((value) => {
+			if (value) {
+				if (!displayNotifications.some((a) => a.title == value!.title)) {
+					displayNotifications = [...displayNotifications, value]
 
-				setTimeout(() => {
-					displayNotifications = displayNotifications.filter((a) => a.title != value!.title)
-				}, 6000)
+					const x = value!
+
+					setTimeout(() => {
+						displayNotifications = displayNotifications.filter((a) => a.title != x.title)
+					}, 6000)
+				}
+
+				value = null
 			}
-
-			value = null
-		}
-	})
+		})
+	)
 
 	let isSideNavOpen = false
 
@@ -392,45 +396,41 @@
 							? Number(convertedPropertyValue)
 							: convertedPropertyValue
 				}
-			}
-
-			if (evt.type === "entityTransformUpdated") {
+			} else if (evt.type === "entityTransformUpdated") {
 				if ($entity.entities[evt.entity.id]) {
-					if ($entity.entities[evt.entity.id].properties?.m_eidParent?.value) {
-						// TODO: Relative transforms are not yet implemented by the SDK
-					} else {
-						const newTransform: any = {
-							rotation: {
-								x: evt.entity.transform!.rotation.roll,
-								y: evt.entity.transform!.rotation.pitch,
-								z: evt.entity.transform!.rotation.yaw
-							},
-							position: evt.entity.transform!.position,
-							scale: evt.entity.transform!.scale
-						}
+					const relative = !!$entity.entities[evt.entity.id].properties?.m_eidParent?.value
 
-						if (+newTransform.scale.x == Math.round(+newTransform.scale.x * 100) / 100) {
-							if (+newTransform.scale.y == Math.round(+newTransform.scale.y * 100) / 100) {
-								if (+newTransform.scale.z == Math.round(+newTransform.scale.z * 100) / 100) {
-									// this is marginally less ugly than a massive chain for x, y and z
-									delete newTransform.scale
-								}
-							}
-						}
-
-						debouncedUpdateFunctions[evt.entity.id] ??= debounce((x) => {
-							$entity.entities[evt.entity.id].properties ??= {}
-
-							$entity.entities[evt.entity.id].properties!.m_mTransform ??= {
-								type: "SMatrix43",
-								value: null
-							}
-
-							$entity.entities[evt.entity.id].properties!.m_mTransform!.value = x
-						}, 200)
-
-						debouncedUpdateFunctions[evt.entity.id](newTransform)
+					const newTransform: any = {
+						rotation: {
+							x: evt.entity[relative ? "relativeTransform" : "transform"]!.rotation.roll,
+							y: evt.entity[relative ? "relativeTransform" : "transform"]!.rotation.pitch,
+							z: evt.entity[relative ? "relativeTransform" : "transform"]!.rotation.yaw
+						},
+						position: evt.entity[relative ? "relativeTransform" : "transform"]!.position,
+						scale: evt.entity[relative ? "relativeTransform" : "transform"]!.scale
 					}
+
+					if (+newTransform.scale.x == Math.round(+newTransform.scale.x * 100) / 100) {
+						if (+newTransform.scale.y == Math.round(+newTransform.scale.y * 100) / 100) {
+							if (+newTransform.scale.z == Math.round(+newTransform.scale.z * 100) / 100) {
+								// this is marginally less ugly than a massive chain for x, y and z
+								delete newTransform.scale
+							}
+						}
+					}
+
+					debouncedUpdateFunctions[evt.entity.id] ??= debounce((x) => {
+						$entity.entities[evt.entity.id].properties ??= {}
+
+						$entity.entities[evt.entity.id].properties!.m_mTransform ??= {
+							type: "SMatrix43",
+							value: null
+						}
+
+						$entity.entities[evt.entity.id].properties!.m_mTransform!.value = x
+					}, 200)
+
+					debouncedUpdateFunctions[evt.entity.id](newTransform)
 				}
 			}
 		})
