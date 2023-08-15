@@ -11,9 +11,13 @@ async function a() {
 	let n = 1
 
 	for (let file of allFiles) {
-		execSync('ResourceTool HM3 convert CPPT "' + file.path + '" "' + file.path + '.json" --simple')
+		try {
+			execSync('ResourceTool HM3 convert CPPT "' + file.path + '" "' + file.path + '.json" --simple')
+		} catch (e) {
+			console.log("Failed to convert " + file.path)
+		}
 
-		if (n % 1000 == 0) {
+		if (n % 100 == 0) {
 			console.log("Processed " + n + " of " + allFiles.length)
 		}
 		n++

@@ -58,7 +58,7 @@ class GameServer {
 				}
 			})
 
-			await this.sendRequest({ type: "hello", identifier: "QuickEntity Editor" })
+			await this.socket?.send(json.stringify({ type: "hello", identifier: "QuickEntity Editor" }))
 			await this.waitForEvent((evt) => evt.type === "welcome")
 
 			this.active = true
@@ -144,9 +144,9 @@ class GameServer {
 				scale: hitmanEntity.entity.transform.scale
 			}
 
-			if (+newTransform.scale.x == Math.round(+newTransform.scale.x * 100) / 100) {
-				if (+newTransform.scale.y == Math.round(+newTransform.scale.y * 100) / 100) {
-					if (+newTransform.scale.z == Math.round(+newTransform.scale.z * 100) / 100) {
+			if (Math.round(+newTransform.scale.x * 100) / 100 == 1) {
+				if (Math.round(+newTransform.scale.y * 100) / 100 == 1) {
+					if (Math.round(+newTransform.scale.z * 100) / 100 == 1) {
 						delete newTransform.scale
 					}
 				}
