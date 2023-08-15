@@ -1,11 +1,11 @@
 {
-	"version": "1.43.4",
-	"notes": "Better transform handling, code cleanup",
+	"version": "1.44.0",
+	"notes": "Add relative transforms, auto-build entity tree and player positioning",
 	"pub_date": "2023-02-18T08:42:26Z",
 	"platforms": {
 		"windows-x86_64": {
-			"signature": "dW50cnVzdGVkIGNvbW1lbnQ6IHNpZ25hdHVyZSBmcm9tIHRhdXJpIHNlY3JldCBrZXkKUlVScWpVZGd2b0lOTmRMWGlRRkw1ZmFHZlpKUTlJbE44aVBwQURJcTlOZklDeEdGK3ZpS3hxMUdZUHhqbEwyekJGWFVpSE8yd0xseU9kRnhERDBTcUJvTWtPM1MzYjQvYWdFPQp0cnVzdGVkIGNvbW1lbnQ6IHRpbWVzdGFtcDoxNjkyMDExOTkzCWZpbGU6UXVpY2tFbnRpdHkgRWRpdG9yXzEuNDMuNF94NjRfZW4tVVMubXNpLnppcAp3VExtandWR0pqYTVydy9TdytIdlY5SlBXUFFjaW9ackxFRm1iUDRvL0NlL01DY0x2SUZLdkFxR29MVVBzckx6OE5HU1htM3pEenFsQndlbWk1ZCtBdz09Cg==",
-			"url": "https://github.com/atampy25/quickentity-editor-next/releases/download/1.43.4/QuickEntity.Editor_1.43.4_x64_en-US.msi.zip"
+			"signature": "dW50cnVzdGVkIGNvbW1lbnQ6IHNpZ25hdHVyZSBmcm9tIHRhdXJpIHNlY3JldCBrZXkKUlVScWpVZGd2b0lOTlZaR3o5ZTVjeWQ2d3Q1UXc4aDlxbDRzVzdacW1vOVR3QWkxdHl3YzBMZEdOMC85YmhtSDlkK1hLQ2k3cHA0c3NEVVllUHM4RnFBVXNSQ2syTlhFbXdvPQp0cnVzdGVkIGNvbW1lbnQ6IHRpbWVzdGFtcDoxNjkyMDg0ODYyCWZpbGU6UXVpY2tFbnRpdHkgRWRpdG9yXzEuNDQuMF94NjRfZW4tVVMubXNpLnppcAo4SGViY0Z3MVp0MXIwMkVoYVVMWkxlWXZtWEVkVlIzZzVJSXVrTDZoMWQ4U2w3SVdDYzJ6aXZQaksxUHZqdlN5Sjc0ZWxmQ2xpNjFYcGZIaFEzcXJBdz09Cg==",
+			"url": "https://github.com/atampy25/quickentity-editor-next/releases/download/1.44.0/QuickEntity.Editor_1.44.0_x64_en-US.msi.zip"
 		}
 	}
 }
