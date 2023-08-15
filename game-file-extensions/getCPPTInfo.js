@@ -12,7 +12,12 @@ async function a() {
 
 	for (let file of allFiles) {
 		try {
-			props[path.basename(file, ".CPPT.json")] = Object.fromEntries(fs.readJSONSync(file).propertyValues.filter(a=>a.value).map((a) => [a.nPropertyID, [a.value.$type, a.value.$val]]))
+			props[path.basename(file, ".CPPT.json")] = Object.fromEntries(
+				fs
+					.readJSONSync(file)
+					.propertyValues.filter((a) => a.value)
+					.map((a) => [a.nPropertyID, [a.value.$type, a.value.$val]])
+			)
 		} catch {}
 	}
 
