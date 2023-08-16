@@ -18,12 +18,10 @@
 		SideNavDivider,
 		SkipToContent,
 		Content,
-		Grid,
 		ToastNotification,
 		Modal,
 		TextInput,
 		Select,
-		TreeView,
 		Button
 	} from "carbon-components-svelte"
 	import { addNotification, appSettings, entity, saveWorkAndCallback, intellisense, sessionMetadata, workspaceData } from "$lib/stores"
@@ -402,9 +400,9 @@
 
 					const newTransform: any = {
 						rotation: {
-							x: evt.entity[relative ? "relativeTransform" : "transform"]!.rotation.roll,
-							y: evt.entity[relative ? "relativeTransform" : "transform"]!.rotation.pitch,
-							z: evt.entity[relative ? "relativeTransform" : "transform"]!.rotation.yaw
+							x: evt.entity[relative ? "relativeTransform" : "transform"]!.rotation.yaw * 180 / Math.PI,
+							y: evt.entity[relative ? "relativeTransform" : "transform"]!.rotation.pitch * 180 / Math.PI,
+							z: evt.entity[relative ? "relativeTransform" : "transform"]!.rotation.roll * 180 / Math.PI
 						},
 						position: evt.entity[relative ? "relativeTransform" : "transform"]!.position,
 						scale: evt.entity[relative ? "relativeTransform" : "transform"]!.scale

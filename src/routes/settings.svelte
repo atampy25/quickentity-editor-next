@@ -1,18 +1,17 @@
 <script lang="ts">
-	import ColorPicker from "$lib/components/ColorPicker.svelte"
-	import { gameServer } from "$lib/in-vivo/gameServer"
 	import { appSettings, saveWorkAndCallback } from "$lib/stores"
-	import { BaseDirectory, copyFile, removeFile } from "@tauri-apps/api/fs"
-	import { documentDir, join } from "@tauri-apps/api/path"
-	import { Checkbox, TextInput, Tooltip, TooltipIcon } from "carbon-components-svelte"
+	import { getVersion } from "@tauri-apps/api/app"
+	import { documentDir } from "@tauri-apps/api/path"
+	import { Checkbox, TextInput, TooltipIcon } from "carbon-components-svelte"
 
 	import Information from "carbon-icons-svelte/lib/Information.svelte"
 	import { onDestroy } from "svelte"
-	import { slide } from "svelte/transition"
 
 	let documentsPath: string
+	let version: string
 	;(async () => {
 		documentsPath = await documentDir()
+		version = await getVersion()
 	})()
 
 	const unsubscribe = saveWorkAndCallback.subscribe(async (value) => {
@@ -26,9 +25,10 @@
 
 <div class="p-2 px-3 h-full overflow-y-auto overflow-x-hidden">
 	<h1>Information</h1>
-	<p>QuickEntity Editor is licensed under the GNU General Public License version 3.0 (GPLv3).</p>
-	<p>ZHMModSDK, which in-vivo extensions connects to, was created by NoFaTe (OrfeasZ), to whom we owe, in part, the current state of Hitman modding to.</p>
-	<p>QNE also includes RPKGv2, which is licensed under MIT and developed by a number of contributors, including primarily 2kpr.</p>
+	<p>QuickEntity Editor (version {version}) is licensed under the GNU General Public License version 3.0 (GPLv3).</p>
+	<p>ZHMModSDK, which in-vivo extensions connects to via WebSockets, was created by NoFaTe (OrfeasZ) and is also licensed GPLv3.</p>
+	<p>QNE includes in its distribution an unmodified copy of RPKGv2, which is developed by a number of contributors including primarily 2kpr and licensed under MIT.</p>
+	<p>QNE also includes an unmodified copy of ResourceTool, which is developed by NoFaTe (OrfeasZ) and licensed GPLv3.</p>
 	<br />
 	<h1 class="mb-2">Settings</h1>
 	<TextInput labelText="Retail path (required)" placeholder={documentsPath + "blabla"} bind:value={$appSettings.retailPath} />
