@@ -400,9 +400,9 @@
 
 					const newTransform: any = {
 						rotation: {
-							x: evt.entity[relative ? "relativeTransform" : "transform"]!.rotation.yaw * 180 / Math.PI,
-							y: evt.entity[relative ? "relativeTransform" : "transform"]!.rotation.pitch * 180 / Math.PI,
-							z: evt.entity[relative ? "relativeTransform" : "transform"]!.rotation.roll * 180 / Math.PI
+							x: (evt.entity[relative ? "relativeTransform" : "transform"]!.rotation.yaw * 180) / Math.PI,
+							y: (evt.entity[relative ? "relativeTransform" : "transform"]!.rotation.pitch * 180) / Math.PI,
+							z: (evt.entity[relative ? "relativeTransform" : "transform"]!.rotation.roll * 180) / Math.PI
 						},
 						position: evt.entity[relative ? "relativeTransform" : "transform"]!.position,
 						scale: evt.entity[relative ? "relativeTransform" : "transform"]!.scale

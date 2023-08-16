@@ -136,9 +136,9 @@ class GameServer {
 		if (hitmanEntity.entity.transform) {
 			const newTransform: any = {
 				rotation: {
-					x: hitmanEntity.entity.transform.rotation.yaw * 180 / Math.PI,
-					y: hitmanEntity.entity.transform.rotation.pitch * 180 / Math.PI,
-					z: hitmanEntity.entity.transform.rotation.roll * 180 / Math.PI
+					x: (hitmanEntity.entity.transform.rotation.yaw * 180) / Math.PI,
+					y: (hitmanEntity.entity.transform.rotation.pitch * 180) / Math.PI,
+					z: (hitmanEntity.entity.transform.rotation.roll * 180) / Math.PI
 				},
 				position: hitmanEntity.entity.transform.position,
 				scale: hitmanEntity.entity.transform.scale
@@ -193,9 +193,9 @@ class GameServer {
 				position: value.position,
 				scale: value.scale || { x: 1, y: 1, z: 1 },
 				rotation: {
-					yaw: value.rotation.x * Math.PI / 180,
-					pitch: value.rotation.y * Math.PI / 180,
-					roll: value.rotation.z * Math.PI / 180
+					yaw: (value.rotation.x * Math.PI) / 180,
+					pitch: (value.rotation.y * Math.PI) / 180,
+					roll: (value.rotation.z * Math.PI) / 180
 				}
 			},
 			relative
