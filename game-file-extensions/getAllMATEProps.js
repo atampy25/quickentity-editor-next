@@ -3,7 +3,9 @@ const Piscina = require("piscina")
 
 async function a() {
 	console.log("Crawling files...")
-	let allFiles = klaw("./MATE").map((a) => a.path).filter(a=>a.endsWith(".MATE"))
+	let allFiles = klaw("./MATE")
+		.map((a) => a.path)
+		.filter((a) => a.endsWith(".MATE"))
 	console.log("Crawled files!")
 
 	let workerPool = new Piscina({

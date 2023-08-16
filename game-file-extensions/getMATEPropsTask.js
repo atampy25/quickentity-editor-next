@@ -9,7 +9,20 @@ module.exports = async ({ file, n, allFilesLength }) => {
 			beginning--
 		}
 
-		fs.writeFileSync(file + ".json", JSON.stringify(Object.fromEntries(mate.subarray(beginning).subarray(mate.subarray(beginning).toString().indexOf("\x00")).toString().split("\x00").filter(a=>a).flatMap((_, i, a) => i % 2 ? [] : [a.slice(i, i + 2)]))))
+		fs.writeFileSync(
+			file + ".json",
+			JSON.stringify(
+				Object.fromEntries(
+					mate
+						.subarray(beginning)
+						.subarray(mate.subarray(beginning).toString().indexOf("\x00"))
+						.toString()
+						.split("\x00")
+						.filter((a) => a)
+						.flatMap((_, i, a) => (i % 2 ? [] : [a.slice(i, i + 2)]))
+				)
+			)
+		)
 	} catch {
 		console.log("Failed to convert " + file)
 		return
