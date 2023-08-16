@@ -627,67 +627,20 @@
 											helpMenuInputs = []
 											helpMenuOutputs = []
 
-											let allFoundProperties: string[] = []
-
-											for (let factory of (await exists(await join($appSettings.gameFileExtensionsDataPath, "ASET", normaliseToHash(entityData.factory) + ".ASET.meta.JSON")))
-												? json
-														.parse(await readTextFile(await join($appSettings.gameFileExtensionsDataPath, "ASET", normaliseToHash(entityData.factory) + ".ASET.meta.JSON")))
-														.hash_reference_data.slice(0, -1)
-														.map((a) => a.hash)
-												: [normaliseToHash(entityData.factory)]) {
-												if ($intellisense.knownCPPTProperties[factory]) {
-													allFoundProperties.push(...Object.keys($intellisense.knownCPPTProperties[factory]))
-												} else if ($intellisense.allUICTs.has(factory)) {
-													allFoundProperties.push(...Object.keys($intellisense.knownCPPTProperties["002C4526CC9753E6"])) // All UI controls have the properties of ZUIControlEntity
-													allFoundProperties.push(
-														...Object.keys(
-															json.parse(
-																await readTextFile(
-																	await join(
-																		"./intellisense-data/UICB",
-																		json
-																			.parse(await readTextFile(await join($appSettings.gameFileExtensionsDataPath, "UICT", factory + ".UICT.meta.JSON")))
-																			.hash_reference_data.filter((a) => a.hash != "002C4526CC9753E6")[0].hash + ".UICB.json"
-																	)
-																)
-															).properties
-														)
-													) // Get the specific properties from the UICB
-												} else {
-													const e = await $intellisense.getEntityByFactory(factory)
-
-													if (e) {
-														await $intellisense.findProperties(e, allFoundProperties)
-														entityData.propertyAliases && allFoundProperties.push(...Object.keys(entityData.propertyAliases))
-													}
-												}
-											}
-
-											allFoundProperties = [...new Set(allFoundProperties)]
-
 											helpMenuProps = {}
 
-											if ($intellisense.knownCPPTProperties[normaliseToHash(entityData.factory)]) {
-												for (let foundProp of allFoundProperties) {
-													helpMenuProps[foundProp] = {
-														type: $intellisense.knownCPPTProperties[normaliseToHash(entityData.factory)][foundProp][0],
-														value: $intellisense.knownCPPTProperties[normaliseToHash(entityData.factory)][foundProp][1]
-													}
-												}
-											} else {
-												for (let foundProp of allFoundProperties) {
-													let val = await $intellisense.findDefaultPropertyValue(entity, entityID, foundProp, entityID)
+											for (let foundProp of await $intellisense.findProperties(entity, entityID, true)) {
+												let val = await $intellisense.findDefaultPropertyValue(entity, entityID, foundProp, entityID)
 
-													if (val) {
-														helpMenuProps[foundProp] = val
-													}
+												if (val) {
+													helpMenuProps[foundProp] = val
 												}
 											}
 
-											let pins = { input: [], output: [] }
-											await $intellisense.getPins(entity, entityID, true, pins)
-											helpMenuInputs = [...new Set(pins.input)]
-											helpMenuOutputs = [...new Set(pins.output)]
+											const pins = await $intellisense.getPins(entity, entityID, true)
+
+											helpMenuInputs = pins.input
+											helpMenuOutputs = pins.output
 
 											helpMenuOpen = true
 										}

@@ -4,6 +4,7 @@ import { appDir, join } from "@tauri-apps/api/path"
 import { normaliseEntityIDs, normaliseToHash } from "$lib/utils"
 
 import { Command } from "@tauri-apps/api/shell"
+import Decimal from "decimal.js"
 import { Mutex } from "async-mutex"
 import cloneDeep from "lodash/cloneDeep"
 import json from "$lib/json"
@@ -28,6 +29,7 @@ export class Intellisense {
 	knownCPPTPins!: Record<string, { input: string[]; output: string[] }>
 	UICBPropTypes!: Record<number, string>
 	allUICTs!: Set<string>
+	allMATTs!: Set<string>
 
 	parsedFiles: Record<string, any> = {}
 	resolvedEntities: Record<string, Entity> = {}
@@ -187,19 +189,29 @@ export class Intellisense {
 				.filter((a) => a)
 				.map((a) => a!)
 		)
+		this.allMATTs = new Set(
+			(await readDir(await join(this.appSettings.gameFileExtensionsDataPath, "MATT")))
+				.map((a) => a.name?.split(".")[0])
+				.filter((a) => a)
+				.map((a) => a!)
+		)
 	}
 
-	async findProperties(entity: Entity, foundProperties: string[]) {
-		const targetedEntity = entity.entities[entity.rootEntity]
+	async findProperties(entity: Entity, targetedSubEntity?: string, ignoreOwnProperties?: boolean) {
+		const targetedEntity = entity.entities[targetedSubEntity || entity.rootEntity]
 
-		if (targetedEntity.propertyAliases) {
-			for (const alias of Object.keys(targetedEntity.propertyAliases)) {
-				foundProperties.push(alias)
+		const foundProperties: string[] = []
+
+		if (!ignoreOwnProperties) {
+			if (targetedEntity.propertyAliases) {
+				for (const alias of Object.keys(targetedEntity.propertyAliases)) {
+					foundProperties.push(alias)
+				}
 			}
-		}
 
-		if (targetedEntity.properties) {
-			foundProperties.push(...Object.keys(targetedEntity.properties))
+			if (targetedEntity.properties) {
+				foundProperties.push(...Object.keys(targetedEntity.properties))
+			}
 		}
 
 		for (const factory of (await exists(await join(this.appSettings.gameFileExtensionsDataPath, "ASET", normaliseToHash(targetedEntity.factory) + ".ASET.meta.JSON")))
@@ -226,14 +238,39 @@ export class Intellisense {
 						).properties
 					)
 				) // Get the specific properties from the UICB
+			} else if (this.allMATTs.has(factory)) {
+				foundProperties.push(...Object.keys(this.knownCPPTProperties["00B4B11DA327CAD0"])) // All materials have the properties of ZRenderMaterialEntity
+
+				const material = await this.readJSONFile(
+					await join(
+						this.appSettings.gameFileExtensionsDataPath,
+						"MATI",
+						(await this.readJSONFile(await join(this.appSettings.gameFileExtensionsDataPath, "MATT", `${factory}.MATT.meta.JSON`))).hash_reference_data[2].hash + ".material.json"
+					)
+				)
+
+				const props: string[] = []
+
+				props.push(
+					...Object.keys(material.Overrides)
+						.filter((a) => a !== "Texture" && a !== "Color")
+						.flatMap((a) => [a, `${a}_op`])
+				)
+
+				props.push(...Object.keys(material.Overrides.Texture || {}).flatMap((a) => [a, `${a}_enab`, `${a}_dest`]))
+				props.push(...Object.keys(material.Overrides.Color || {}).flatMap((a) => [a, `${a}_op`]))
+
+				foundProperties.push(...props)
 			} else {
 				const e = await this.getEntityByFactory(factory)
 
 				if (e) {
-					await this.findProperties(e, foundProperties)
+					foundProperties.push(...(await this.findProperties(e)))
 				}
 			}
 		}
+
+		return [...new Set(foundProperties)]
 	}
 
 	async findDefaultPropertyValue(entity: Entity, targetSubEntity: string | undefined, propertyToFind: string, excludeSubEntity?: string): Promise<any> {
@@ -310,19 +347,12 @@ export class Intellisense {
 					value: this.knownCPPTProperties[factory][propertyToFind][1]
 				}
 			} else if (this.allUICTs.has(factory)) {
-				if (
-					(
-						await this.readJSONFile(
-							await join(
-								this.appSettings.gameFileExtensionsDataPath,
-								"UICB",
-								(
-									await this.readJSONFile(await join(this.appSettings.gameFileExtensionsDataPath, "UICT", factory + ".UICT.meta.JSON"))
-								).hash_reference_data.find((a) => a.hash != "002C4526CC9753E6").hash + ".UICB.json"
-							)
-						)
-					).properties[propertyToFind]
-				) {
+				if (this.knownCPPTProperties["002C4526CC9753E6"][propertyToFind]) {
+					return {
+						type: this.knownCPPTProperties["002C4526CC9753E6"][propertyToFind][0],
+						value: this.knownCPPTProperties["002C4526CC9753E6"][propertyToFind][1]
+					} // All UI controls have the properties of ZUIControlEntity
+				} else {
 					return {
 						type: this.UICBPropTypes[
 							(
@@ -353,11 +383,71 @@ export class Intellisense {
 							]
 						]
 					} // Specific UI control properties can be found in the UICB; we can't parse the actual defaults (if there are any) right now so we use sensible ones
-				} else if (this.knownCPPTProperties["002C4526CC9753E6"][propertyToFind]) {
+				}
+			} else if (this.allMATTs.has(factory)) {
+				if (this.knownCPPTProperties["00B4B11DA327CAD0"][propertyToFind]) {
+					// All materials have the properties of ZRenderMaterialEntity
 					return {
-						type: this.knownCPPTProperties["002C4526CC9753E6"][propertyToFind][0],
-						value: this.knownCPPTProperties["002C4526CC9753E6"][propertyToFind][1]
-					} // All UI controls have the properties of ZUIControlEntity
+						type: this.knownCPPTProperties["00B4B11DA327CAD0"][propertyToFind][0],
+						value: this.knownCPPTProperties["00B4B11DA327CAD0"][propertyToFind][1]
+					}
+				} else {
+					if (propertyToFind.endsWith("_op")) {
+						return {
+							type: "IRenderMaterialEntity.EModifierOperation",
+							value: "eLeave"
+						}
+					} else if (propertyToFind.endsWith("_enab")) {
+						return {
+							type: "bool",
+							value: false
+						}
+					} else if (propertyToFind.endsWith("_dest")) {
+						return {
+							type: "SEntityTemplateReference",
+							value: null
+						}
+					}
+
+					const material = await this.readJSONFile(
+						await join(
+							this.appSettings.gameFileExtensionsDataPath,
+							"MATI",
+							(await this.readJSONFile(await join(this.appSettings.gameFileExtensionsDataPath, "MATT", `${factory}.MATT.meta.JSON`))).hash_reference_data[2].hash + ".material.json"
+						)
+					)
+
+					if ((material.Overrides.Texture || {})[propertyToFind]) {
+						return {
+							type: "ZRuntimeResourceID",
+							value: {
+								resource: material.Overrides.Texture[propertyToFind],
+								flag: "5F"
+							}
+						}
+					}
+
+					if ((material.Overrides.Color || {})[propertyToFind]) {
+						return {
+							type: material.Overrides.Color[propertyToFind].length === 3 ? "SColorRGB" : "SColorRGBA",
+							value: `#${material.Overrides.Color[propertyToFind]
+								.map((a) =>
+									Math.round(a * 255)
+										.toString(16)
+										.padStart(2, "0")
+								)
+								.join("")}`
+						}
+					}
+
+					if (material.Overrides[propertyToFind]) {
+						return {
+							type: Decimal.isDecimal(material.Overrides[propertyToFind]) ? "float32" : `SVector${material.Overrides[propertyToFind].length}`,
+							value: Decimal.isDecimal(material.Overrides[propertyToFind])
+								? material.Overrides[propertyToFind]
+								: Object.fromEntries(material.Overrides[propertyToFind].map((a, ind) => [["x", "y", "z", "w"][ind], a]))
+						}
+					}
 				}
 			} else {
 				const e = await this.getEntityByFactory(factory)
@@ -370,8 +460,10 @@ export class Intellisense {
 		}
 	}
 
-	async getPins(entity: Entity, subEntity: string, ignoreTargeted: boolean, soFar: { input: string[]; output: string[] }) {
+	async getPins(entity: Entity, subEntity: string, ignoreTargeted: boolean) {
 		const targetedEntity = entity.entities[subEntity]
+
+		const soFar: { input: string[]; output: string[] } = { input: [], output: [] }
 
 		if (!ignoreTargeted) {
 			if (targetedEntity.events) {
@@ -432,6 +524,10 @@ export class Intellisense {
 				soFar.input.push(...this.knownCPPTPins[factory].input)
 				soFar.output.push(...this.knownCPPTPins[factory].output)
 			} else if (this.allUICTs.has(factory)) {
+				// All UI controls have the pins of ZUIControlEntity
+				soFar.input.push(...this.knownCPPTPins["002C4526CC9753E6"].input)
+				soFar.output.push(...this.knownCPPTPins["002C4526CC9753E6"].output)
+
 				// Get the specific pins from the UICB (though we don't know if they're inputs or outputs)
 				soFar.input.push(
 					...Object.keys(
@@ -464,12 +560,32 @@ export class Intellisense {
 						).pins
 					)
 				)
+			} else if (this.allMATTs.has(factory)) {
+				// All materials have the pins of ZRenderMaterialEntity
+				soFar.input.push(...this.knownCPPTPins["00B4B11DA327CAD0"].input)
+				soFar.output.push(...this.knownCPPTPins["00B4B11DA327CAD0"].output)
+
+				const material = await this.readJSONFile(
+					await join(
+						this.appSettings.gameFileExtensionsDataPath,
+						"MATI",
+						(await this.readJSONFile(await join(this.appSettings.gameFileExtensionsDataPath, "MATT", `${factory}.MATT.meta.JSON`))).hash_reference_data[2].hash + ".material.json"
+					)
+				)
+
+				soFar.input.push(...Object.keys(material.Overrides).filter((a) => a !== "Texture" && a !== "Color"))
+
+				soFar.input.push(...Object.keys(material.Overrides.Color || {}))
 			} else {
 				const e = await this.getEntityByFactory(factory)
 				if (e) {
-					await this.getPins(e, e.rootEntity, false, soFar)
+					const x = await this.getPins(e, e.rootEntity, false)
+					soFar.input.push(...x.input)
+					soFar.output.push(...x.output)
 				}
 			}
 		}
+
+		return { input: [...new Set(soFar.input)], output: [...new Set(soFar.output)] }
 	}
 }

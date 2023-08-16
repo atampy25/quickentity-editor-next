@@ -6,7 +6,7 @@ const { execSync } = require("child_process")
 const RUNTIME_PATH = "<edit me, use double backslashes \\>"
 
 async function a() {
-	for (let filetype of ["TEMP", "TBLU", "ASET", "CPPT", "UICT", "UICB"]) {
+	for (let filetype of ["TEMP", "TBLU", "ASET", "CPPT", "UICT", "UICB", "MATT", "MATE"]) {
 		console.log(`Extracting ${filetype}...`)
 
 		for (let rpkg of klaw(RUNTIME_PATH)
@@ -61,6 +61,8 @@ async function a() {
 
 		fs.removeSync("./extraction")
 	}
+
+	execSync(`rpkg-cli -extract_all_materials_to_json "${RUNTIME_PATH}" -output_path MATI`)
 
 	console.log("Done!")
 }

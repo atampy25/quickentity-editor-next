@@ -9,7 +9,10 @@ echo Ensure you have edited extractAllOfFiletypes.js to use your Runtime path.
 pause
 
 call npm install
+ren hash_list2.txt hash_list.txt
 powershell "node extractAllOfFiletypes | tee log-extraction.txt"
+ren hash_list.txt hash_list2.txt
+powershell "node convertAllMATTMetas | tee log-matt-meta-conversion.txt"
 powershell "node convertAllASETMetas | tee log-aset-meta-conversion.txt"
 powershell "node convertAllCPPTs | tee log-cppt-conversion.txt"
 powershell "node convertAllCPPTMetas | tee log-cppt-meta-conversion.txt"
@@ -23,6 +26,7 @@ powershell "node convertAllQNs | tee log-qn-conversion.txt"
 powershell "node findUICBPropTypes | tee log-uicb-proptype-finding.txt"
 powershell "node getCPPTInfo | tee log-cppt-property-calculation.txt"
 powershell "node getCPPTPins | tee log-cppt-pin-crawling.txt"
+powershell "node getAllMATEProps | tee log-mate-prop-conversion.txt"
 
 echo Done! Enable game file extensions and input this folder's path in QuickEntity Editor to unlock the extra features.
 pause

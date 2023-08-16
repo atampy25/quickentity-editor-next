@@ -280,7 +280,7 @@
 	},
 	"SMatrix43": {
 		"type": "object",
-		"description": "A transform with position and rotation.",
+		"description": "A transform with position, rotation, and optionally, scale.",
 		"properties": {
 			"rotation": {
 				"type": "object",
@@ -321,6 +321,26 @@
 					"y": 0,
 					"z": 0
 				}
+			},
+			"scale": {
+				"type": "object",
+				"description": "The scale component of the transform. This is typically all set to 1, which is the default when omitted.",
+				"properties": {
+					"x": {
+						"type": "number"
+					},
+					"y": {
+						"type": "number"
+					},
+					"z": {
+						"type": "number"
+					}
+				},
+				"default": {
+					"x": 1,
+					"y": 1,
+					"z": 1
+				}
 			}
 		},
 		"default": {
@@ -334,7 +354,8 @@
 				"y": 0,
 				"z": 0
 			}
-		}
+		},
+		"required": ["position", "rotation"]
 	},
 	"SEntityTemplateReference": {
 		"$ref": "#/definitions/Ref",

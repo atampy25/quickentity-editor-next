@@ -164,11 +164,13 @@
 			let placeNode = false
 
 			if (!graphView.editor.nodeTypes.get(normaliseToHash(childEntity.factory))) {
-				let pins = { input: [], output: [] }
+				const pins = { input: [] as string[], output: [] as string[] }
 
 				for (const childEntityID of entitiesInFolder) {
 					if (normaliseToHash($entity.entities[childEntityID].factory) == normaliseToHash(childEntity.factory)) {
-						await $intellisense.getPins($entity, childEntityID, true, pins)
+						const x = await $intellisense.getPins($entity, childEntityID, true)
+						pins.input.push(...x.input)
+						pins.output.push(...x.output)
 					}
 				}
 

@@ -88,6 +88,9 @@
 	let showCurvePreview = false
 	let curveToPreview = null
 
+	let idsToRefsExternal: [string, FullRef][] = []
+	let idsToNamesInternal: [string, string][] = []
+
 	let destroyFunc = () => {}
 
 	onDestroy(destroyFunc)
@@ -238,13 +241,6 @@
 
 		let decorations: monaco.editor.IEditorDecorationsCollection = editor.createDecorationsCollection([])
 
-		const idsToRefsExternal = getReferencedExternalEntities(jsonToDisplay, entity.entities)
-			.filter((a) => a.entity && typeof a.entity !== "string")
-			.map((a) => a.entity as FullRef)
-			.map((a) => [a.ref, a]) as unknown as [string, FullRef][]
-
-		const idsToNamesInternal = Object.entries(entity.entities).map((a) => [a[0], a[1].name])
-
 		const repoIDstoNames = $appSettings.gameFileExtensions ? await $intellisense.getRepoIDsToNames() : []
 
 		destroyFunc = Monaco.languages.registerHoverProvider("json", {
@@ -328,6 +324,36 @@
 							}
 						}
 					}
+
+					if ($intellisense.allMATTs.has(normaliseToHash(jsonToDisplay.factory))) {
+						const matiJSON = await $intellisense.readJSONFile(
+							await join(
+								$appSettings.gameFileExtensionsDataPath,
+								"MATI",
+								(
+									await $intellisense.readJSONFile(await join($appSettings.gameFileExtensionsDataPath, "MATT", `${normaliseToHash(jsonToDisplay.factory)}.MATT.meta.JSON`))
+								).hash_reference_data[2].hash + ".material.json"
+							)
+						)
+
+						for (const [prop, friendly] of Object.entries(
+							await $intellisense.readJSONFile(await join($appSettings.gameFileExtensionsDataPath, "MATE", normaliseToHash(matiJSON.MATE) + ".MATE.json"))
+						)) {
+							if (line.includes(prop)) {
+								decorationsArray.push({
+									options: {
+										isWholeLine: true,
+										after: {
+											content: " " + friendly,
+											cursorStops: monaco.editor.InjectedTextCursorStops.Left,
+											inlineClassName: "monacoDecorationEntityRef"
+										}
+									},
+									range: new monaco.Range(no + 1, 0, no + 1, line.length + 1)
+								})
+							}
+						}
+					}
 				}
 
 				for (const [id, name] of idsToNamesInternal) {
@@ -398,110 +424,51 @@
 		}
 	})
 
+	const perfPropertySchemas = Object.fromEntries(getSchema().definitions.SubEntity.properties.properties.additionalProperties.anyOf.map((a) => [a?.properties?.type?.const, a?.properties?.value]))
+
 	$: {
 		if (editor && jsonToDisplay) {
 			editor.setValue(json.stringify(jsonToDisplay, "\t"))
 			editor.layout()
 			;(async () => {
+				idsToRefsExternal = getReferencedExternalEntities(jsonToDisplay, entity.entities)
+					.filter((a) => a.entity && typeof a.entity !== "string")
+					.map((a) => a.entity as FullRef)
+					.map((a) => [a.ref, a]) as unknown as [string, FullRef][]
+
+				idsToNamesInternal = Object.entries(entity.entities).map((a) => [a[0], a[1].name])
+
 				let props: Record<string, any> = {}
 				let inputs: Record<string, any> = {}
 				let outputs: Record<string, any> = {}
 
 				if ($appSettings.gameFileExtensions) {
-					let allFoundProperties: string[] = []
-
-					for (let factory of (await exists(await join($appSettings.gameFileExtensionsDataPath, "ASET", normaliseToHash(jsonToDisplay.factory) + ".ASET.meta.JSON")))
-						? json
-								.parse(await readTextFile(await join($appSettings.gameFileExtensionsDataPath, "ASET", normaliseToHash(jsonToDisplay.factory) + ".ASET.meta.JSON")))
-								.hash_reference_data.slice(0, -1)
-								.map((a) => a.hash)
-						: [normaliseToHash(jsonToDisplay.factory)]) {
-						if ($intellisense.knownCPPTProperties[factory]) {
-							allFoundProperties.push(...Object.keys($intellisense.knownCPPTProperties[factory]))
-						} else if ($intellisense.allUICTs.has(factory)) {
-							allFoundProperties.push(...Object.keys($intellisense.knownCPPTProperties["002C4526CC9753E6"])) // All UI controls have the properties of ZUIControlEntity
-							allFoundProperties.push(
-								...Object.keys(
-									json.parse(
-										await readTextFile(
-											await join(
-												"./intellisense-data/UICB",
-												json
-													.parse(await readTextFile(await join($appSettings.gameFileExtensionsDataPath, "UICT", factory + ".UICT.meta.JSON")))
-													.hash_reference_data.filter((a) => a.hash != "002C4526CC9753E6")[0].hash + ".UICB.json"
-											)
-										)
-									).properties
-								)
-							) // Get the specific properties from the UICB
-						} else {
-							const e = await $intellisense.getEntityByFactory(factory)
-
-							if (e) {
-								await $intellisense.findProperties(e, allFoundProperties)
-								jsonToDisplay.propertyAliases && allFoundProperties.push(...Object.keys(jsonToDisplay.propertyAliases))
-							}
-						}
-					}
-
-					allFoundProperties = [...new Set(allFoundProperties)]
-
 					props = {}
 
-					const perfPropertySchemas = Object.fromEntries(
-						getSchema().definitions.SubEntity.properties.properties.additionalProperties.anyOf.map((a) => [a?.properties?.type?.const, a?.properties?.value])
-					)
+					for (let foundProp of await $intellisense.findProperties(entity, subEntityID, true)) {
+						let val = await $intellisense.findDefaultPropertyValue(entity, subEntityID, foundProp, subEntityID)
 
-					if ($intellisense.knownCPPTProperties[normaliseToHash(jsonToDisplay.factory)]) {
-						for (let foundProp of allFoundProperties) {
+						if (val) {
 							props[foundProp] = {
 								type: "object",
 								properties: {
 									type: {
 										type: "string",
-										const: $intellisense.knownCPPTProperties[normaliseToHash(jsonToDisplay.factory)][foundProp][0]
+										const: val.type
 									},
-									value: merge(perfPropertySchemas[$intellisense.knownCPPTProperties[normaliseToHash(jsonToDisplay.factory)][foundProp][0]], {
-										default: $intellisense.knownCPPTProperties[normaliseToHash(jsonToDisplay.factory)][foundProp][1]
+									value: merge(perfPropertySchemas[val.type], {
+										default: val.value
 									}),
 									postInit: {
 										type: "boolean"
 									}
 								},
-								default: {
-									type: $intellisense.knownCPPTProperties[normaliseToHash(jsonToDisplay.factory)][foundProp][0],
-									value: $intellisense.knownCPPTProperties[normaliseToHash(jsonToDisplay.factory)][foundProp][1]
-								}
-							}
-						}
-					} else {
-						for (let foundProp of allFoundProperties) {
-							let val = await $intellisense.findDefaultPropertyValue(entity, subEntityID, foundProp, subEntityID)
-
-							if (val) {
-								props[foundProp] = {
-									type: "object",
-									properties: {
-										type: {
-											type: "string",
-											const: val.type
-										},
-										value: merge(perfPropertySchemas[val.type], {
-											default: val.value
-										}),
-										postInit: {
-											type: "boolean"
-										}
-									},
-									default: val
-								}
+								default: val
 							}
 						}
 					}
 
-					let pins = { input: [], output: [] }
-					await $intellisense.getPins(entity, subEntityID, true, pins)
-					pins = { input: [...new Set(pins.input)], output: [...new Set(pins.output)] }
+					const pins = await $intellisense.getPins(entity, subEntityID, true)
 
 					inputs = Object.fromEntries(
 						pins.input.map((a) => [

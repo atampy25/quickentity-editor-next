@@ -501,7 +501,7 @@
 					<h1>Visual editors</h1>
 					<div class="overflow-y-auto" style="max-height: 30rem">
 						<div class="flex flex-wrap gap-4 items-center">
-							{#each Object.entries(selectedEntity.properties).filter((a) => a[1].type == "SColorRGB" || a[1].type == "SColorRGBA") as [propertyName, property]}
+							{#each Object.entries(selectedEntity.properties).filter((a) => a[1].type == "SColorRGB" || a[1].type == "SColorRGBA") as [propertyName, property] (selectedEntityID + propertyName)}
 								<div class="flex flex-wrap gap-2 items-center">
 									{propertyName}
 									<ColorPicker type={property.type == "SColorRGB" ? "rgb" : "rgba"} bind:value={selectedEntity.properties[propertyName].value} />
@@ -510,7 +510,7 @@
 						</div>
 						<br />
 						<div class="flex flex-wrap gap-4 items-center">
-							{#each Object.entries(selectedEntity.properties).filter((a) => enums[a[1].type]) as [propertyName, property]}
+							{#each Object.entries(selectedEntity.properties).filter((a) => enums[a[1].type]) as [propertyName, property] (selectedEntityID + propertyName)}
 								<Select
 									labelText={propertyName}
 									on:change={({ detail }) => {
@@ -537,11 +537,13 @@
 	<div class="grid grid-cols-2 gap-4">
 		<div>
 			<h2>Default properties</h2>
-			{#if editorComponent && editorComponent.Monaco}
-				{#await editorComponent.coloriseJSON(helpMenuProps) then colorisedHTML}
-					<pre class="mt-1 rounded-sm bg-[#1e1e1e] p-2"><code>{@html colorisedHTML}</code></pre>
-				{/await}
-			{/if}
+			<div class="mt-1 w-full overflow-x-auto rounded-sm bg-[#1e1e1e] p-2">
+				{#if editorComponent && editorComponent.Monaco}
+					{#await editorComponent.coloriseJSON(helpMenuProps) then colorisedHTML}
+						<pre><code>{@html colorisedHTML}</code></pre>
+					{/await}
+				{/if}
+			</div>
 		</div>
 		<div>
 			<h2>Pins</h2>
@@ -568,4 +570,8 @@
 </Modal>
 
 <style global>
+	.vakata-context,
+	.vakata-context ul {
+		margin-top: -22px;
+	}
 </style>
