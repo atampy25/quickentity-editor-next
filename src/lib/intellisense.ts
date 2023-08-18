@@ -30,6 +30,7 @@ export class Intellisense {
 	UICBPropTypes!: Record<number, string>
 	allUICTs!: Set<string>
 	allMATTs!: Set<string>
+	classHelpText: Record<string, {properties:Record<string, string>,inputPins:Record<string, string>,outputPins:Record<string, string>}> = {}
 
 	parsedFiles: Record<string, any> = {}
 	resolvedEntities: Record<string, Entity> = {}
@@ -195,6 +196,11 @@ export class Intellisense {
 				.filter((a) => a)
 				.map((a) => a!)
 		)
+		if (await exists(await join(this.appSettings.gameFileExtensionsDataPath, "class-helptext.json"))) {
+			this.classHelpText = Object.fromEntries(
+				Object.entries(await this.readJSONFile(await join(this.appSettings.gameFileExtensionsDataPath, "class-helptext.json"))).map((a) => [normaliseToHash(a[0]), a[1] as any])
+			)
+		}
 	}
 
 	async findProperties(entity: Entity, targetedSubEntity?: string, ignoreOwnProperties?: boolean) {

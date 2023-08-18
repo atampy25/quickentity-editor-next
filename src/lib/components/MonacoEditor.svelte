@@ -258,6 +258,46 @@
 				}
 
 				if ($appSettings.gameFileExtensions) {
+					const helptext = $intellisense.classHelpText[normaliseToHash(jsonToDisplay.factory)]
+
+					if (helptext) {
+						for (const [property, help] of Object.entries(helptext.properties)) {
+							if (model.getWordAtPosition(position)?.word === property) {
+								return {
+									contents: [
+										{
+											value: help
+										}
+									]
+								}
+							}
+						}
+
+						for (const [pin, help] of Object.entries(helptext.inputPins)) {
+							if (model.getWordAtPosition(position)?.word === pin) {
+								return {
+									contents: [
+										{
+											value: help
+										}
+									]
+								}
+							}
+						}
+
+						for (const [pin, help] of Object.entries(helptext.outputPins)) {
+							if (model.getWordAtPosition(position)?.word === pin) {
+								return {
+									contents: [
+										{
+											value: help
+										}
+									]
+								}
+							}
+						}
+					}
+
 					for (const [id, name] of repoIDstoNames) {
 						if (model.getValue().split("\n")[position.lineNumber - 1].includes(id)) {
 							return {
