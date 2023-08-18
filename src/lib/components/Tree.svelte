@@ -259,7 +259,7 @@
 
 													dispatch("entityUpdated", d.id)
 
-													await gameServer.setTransform(d.id, entity.tbluHash, entity.entities[d.id].properties!.m_mTransform.value, false)
+													await gameServer.updateProperty(d.id, entity.tbluHash, "m_mTransform", entity.entities[d.id].properties!.m_mTransform)
 
 													$addNotification = {
 														kind: "success",
@@ -311,7 +311,7 @@
 
 													dispatch("entityUpdated", d.id)
 
-													await gameServer.setTransform(d.id, entity.tbluHash, entity.entities[d.id].properties!.m_mTransform.value, false)
+													await gameServer.updateProperty(d.id, entity.tbluHash, "m_mTransform", entity.entities[d.id].properties!.m_mTransform)
 
 													$addNotification = {
 														kind: "success",

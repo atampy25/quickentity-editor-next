@@ -368,7 +368,7 @@
 
 	$: if ($entity.tempHash) appWindow.setTitle(`${$entity.entities[$entity.rootEntity].name} (${$entity.tempHash})`)
 
-	const debouncedUpdateFunctions: Record<string, (newTransform: any) => void> = {}
+	const debouncedUpdateFunctions: Record<string, (newData: any) => void> = {}
 
 	onMount(() => {
 		gameServer.addListener("layoutEntityPropertyChanged", async (evt) => {
@@ -396,39 +396,21 @@
 				}
 			} else if (evt.type === "entityTransformUpdated") {
 				if ($entity.entities[evt.entity.id]) {
-					const relative = !!$entity.entities[evt.entity.id].properties?.m_eidParent?.value
-
-					const newTransform: any = {
-						rotation: {
-							x: (evt.entity[relative ? "relativeTransform" : "transform"]!.rotation.yaw * 180) / Math.PI,
-							y: (evt.entity[relative ? "relativeTransform" : "transform"]!.rotation.pitch * 180) / Math.PI,
-							z: (evt.entity[relative ? "relativeTransform" : "transform"]!.rotation.roll * 180) / Math.PI
-						},
-						position: evt.entity[relative ? "relativeTransform" : "transform"]!.position,
-						scale: evt.entity[relative ? "relativeTransform" : "transform"]!.scale
-					}
-
-					if (Math.round(+newTransform.scale.x * 100) / 100 == 1) {
-						if (Math.round(+newTransform.scale.y * 100) / 100 == 1) {
-							if (Math.round(+newTransform.scale.z * 100) / 100 == 1) {
-								// this is marginally less ugly than a massive chain for x, y and z
-								delete newTransform.scale
-							}
-						}
-					}
-
-					debouncedUpdateFunctions[evt.entity.id] ??= debounce((x) => {
+					debouncedUpdateFunctions[evt.entity.id] ??= debounce(async (newData) => {
 						$entity.entities[evt.entity.id].properties ??= {}
 
-						$entity.entities[evt.entity.id].properties!.m_mTransform ??= {
+						$entity.entities[evt.entity.id].properties!.m_mTransform = {
 							type: "SMatrix43",
-							value: null
+							value: await invoke("convert_property_value_to_qn", {
+								value: json.stringify({
+									$type: newData.type,
+									$val: newData.data
+								})
+							})
 						}
+					}, 500)
 
-						$entity.entities[evt.entity.id].properties!.m_mTransform!.value = x
-					}, 200)
-
-					debouncedUpdateFunctions[evt.entity.id](newTransform)
+					debouncedUpdateFunctions[evt.entity.id](evt.entity.properties.m_mTransform)
 				}
 			}
 		})

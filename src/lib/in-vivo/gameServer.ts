@@ -172,35 +172,6 @@ class GameServer {
 			value: convertedPropertyValue
 		})
 	}
-
-	async setTransform(
-		id: string,
-		tblu: string,
-		value: {
-			rotation: { x: number; y: number; z: number }
-			position: { x: number; y: number; z: number }
-			scale?: { x: number; y: number; z: number }
-		},
-		relative: boolean
-	) {
-		await this.sendRequest({
-			type: "setEntityTransform",
-			entity: {
-				id,
-				tblu: tblu as ResourceId
-			},
-			transform: {
-				position: value.position,
-				scale: value.scale || { x: 1, y: 1, z: 1 },
-				rotation: {
-					yaw: (value.rotation.x * Math.PI) / 180,
-					pitch: (value.rotation.y * Math.PI) / 180,
-					roll: (value.rotation.z * Math.PI) / 180
-				}
-			},
-			relative
-		})
-	}
 }
 
 export const gameServer = new GameServer()

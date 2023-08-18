@@ -435,9 +435,7 @@
 		const syncToEditor = debounce(async () => {
 			if (gameServer.active) {
 				for (const [property, value] of Object.entries((json.parse(editor.getValue()) as SubEntity).properties || {})) {
-					if (property === "m_mTransform" && value.type === "SMatrix43") {
-						await gameServer.setTransform(subEntityID, entity.tbluHash, value.value, !!(json.parse(editor.getValue()) as SubEntity).properties?.m_eidParent)
-					} else if (safeToSync.has(value.type)) {
+					if (safeToSync.has(value.type)) {
 						await gameServer.updateProperty(subEntityID, entity.tbluHash, property, value)
 					}
 				}
