@@ -1,11 +1,11 @@
 {
-	"version": "1.45.0",
-	"notes": "Material intellisense",
+	"version": "1.46.0",
+	"notes": "Property help text support",
 	"pub_date": "2023-02-18T08:42:26Z",
 	"platforms": {
 		"windows-x86_64": {
-			"signature": "dW50cnVzdGVkIGNvbW1lbnQ6IHNpZ25hdHVyZSBmcm9tIHRhdXJpIHNlY3JldCBrZXkKUlVScWpVZGd2b0lOTmFkM253QUs2Nmh0OTNSY0hDb2FwNVVRZ3ZhN1hHeEtWMGZkQkhSaW9NQ2lJOUdqK3lJWFdFQStmUno1RXhoM2J0NURBNUhFOG9EUVBGcnFNTmhCOHdjPQp0cnVzdGVkIGNvbW1lbnQ6IHRpbWVzdGFtcDoxNjkyMTY2ODY0CWZpbGU6UXVpY2tFbnRpdHkgRWRpdG9yXzEuNDUuMF94NjRfZW4tVVMubXNpLnppcApyYXhrRDlSOXgvMldaTTBIeFdib2V5V25Mb3dKRUhZRUZ3Q0oxMHowR05YeGY5eGplVFdwZmdtUC9VVWEydC8yWjNCdVlDUExFTUxMS1FGcGR6TUJBdz09Cg==",
-			"url": "https://github.com/atampy25/quickentity-editor-next/releases/download/1.45.0/QuickEntity.Editor_1.45.0_x64_en-US.msi.zip"
+			"signature": "dW50cnVzdGVkIGNvbW1lbnQ6IHNpZ25hdHVyZSBmcm9tIHRhdXJpIHNlY3JldCBrZXkKUlVScWpVZGd2b0lOTlNWUXRDcGZmR1FSTE1nNGV0aEtHMFYxakEvRnlmeXpuZC9Nc2ZQSFBJbjN6M0VjWmxZTkZjYnd0emJZcC8zWEVmODV2aFAvdkZnUGJ2aEhKYUNaY0FvPQp0cnVzdGVkIGNvbW1lbnQ6IHRpbWVzdGFtcDoxNjkyMzMwMjYyCWZpbGU6UXVpY2tFbnRpdHkgRWRpdG9yXzEuNDYuMF94NjRfZW4tVVMubXNpLnppcAo3NXUvdWJQQjgyQVBaM3RvOU1seWZYUGxvbnc1QUJzMm80a1lvV2pWY2xoSmFsSXZVd0dCN0ljLy9vV1ROWDJycDVhQURlM2V5ZDBzck1Dd2FWOE9Ddz09Cg==",
+			"url": "https://github.com/atampy25/quickentity-editor-next/releases/download/1.46.0/QuickEntity.Editor_1.46.0_x64_en-US.msi.zip"
 		}
 	}
 }

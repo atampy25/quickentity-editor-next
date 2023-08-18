@@ -30,7 +30,7 @@ export class Intellisense {
 	UICBPropTypes!: Record<number, string>
 	allUICTs!: Set<string>
 	allMATTs!: Set<string>
-	classHelpText: Record<string, {properties:Record<string, string>,inputPins:Record<string, string>,outputPins:Record<string, string>}> = {}
+	classHelpText: Record<string, { properties: Record<string, string>; inputPins: Record<string, string>; outputPins: Record<string, string> }> = {}
 
 	parsedFiles: Record<string, any> = {}
 	resolvedEntities: Record<string, Entity> = {}
