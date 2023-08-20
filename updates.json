@@ -1,11 +1,11 @@
 {
-	"version": "1.46.1",
-	"notes": "Working Editor transforms",
+	"version": "1.47.0",
+	"notes": "Camera position context menu action and pin signal Monaco action",
 	"pub_date": "2023-02-18T08:42:26Z",
 	"platforms": {
 		"windows-x86_64": {
-			"signature": "dW50cnVzdGVkIGNvbW1lbnQ6IHNpZ25hdHVyZSBmcm9tIHRhdXJpIHNlY3JldCBrZXkKUlVScWpVZGd2b0lOTlpsOGt4bE85NHVHcjV5TDNiU2o5ZUpUY0VtMnRzejNSSzU1VFlJYTkzS3VTSWFXNG9OMUluN0ltd3RQZE0rd1ozZnQyVXBRSmVLa2liOU42ejBoNkFFPQp0cnVzdGVkIGNvbW1lbnQ6IHRpbWVzdGFtcDoxNjkyMzQ3MTU5CWZpbGU6UXVpY2tFbnRpdHkgRWRpdG9yXzEuNDYuMV94NjRfZW4tVVMubXNpLnppcApKdElRc0EvZTZIVFMvenNFOVNSU2syUzZtOUFNSm9aTnUrcEVOdUJnL09vZ2V1RWpoMWJGNGd0QldPS0hrZ01KNWErcHA4dVRDQUZVRUlQbGZnQVZCZz09Cg==",
-			"url": "https://github.com/atampy25/quickentity-editor-next/releases/download/1.46.1/QuickEntity.Editor_1.46.1_x64_en-US.msi.zip"
+			"signature": "dW50cnVzdGVkIGNvbW1lbnQ6IHNpZ25hdHVyZSBmcm9tIHRhdXJpIHNlY3JldCBrZXkKUlVScWpVZGd2b0lOTlc4MWFPbDQzZ0dyM005Z1pHMmh5ek9Da3UyeDlDaXVlRHkrNzdWWFBPZ3p5a1dyWTdNdDFwaVpBMHVoY2tUYnJxRjJhU0tNZXI1dkk1YkdsMHpUZEFJPQp0cnVzdGVkIGNvbW1lbnQ6IHRpbWVzdGFtcDoxNjkyNTIwNjczCWZpbGU6UXVpY2tFbnRpdHkgRWRpdG9yXzEuNDcuMF94NjRfZW4tVVMubXNpLnppcApQQktnYjB1aVBJN2xIekxpb3M1UDVNYXIwampLYnF6d1ZGR3dUM3B6ZU1LUWU4WWxuUmJMQUtKeGZiU0xPUmpjdkZudEdEWTJBZE03NkpvRWZrcVBCdz09Cg==",
+			"url": "https://github.com/atampy25/quickentity-editor-next/releases/download/1.47.0/QuickEntity.Editor_1.47.0_x64_en-US.msi.zip"
 		}
 	}
 }
