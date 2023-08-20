@@ -246,7 +246,6 @@
 													if (entity.entities[d.id].properties!.m_eidParent) {
 														entity.entities[d.id].properties = Object.fromEntries(Object.entries(entity.entities[d.id].properties!).filter((a) => a[0] != "m_eidParent"))
 
-														// TODO: this isn't always going to work so it should probably be hooked up to intellisense in case of aliases or such
 														entity.entities[d.id].properties!.m_eRoomBehaviour = {
 															type: "ZSpatialEntity.ERoomBehaviour",
 															value: "ROOM_DYNAMIC"
@@ -298,7 +297,6 @@
 													if (entity.entities[d.id].properties!.m_eidParent) {
 														entity.entities[d.id].properties = Object.fromEntries(Object.entries(entity.entities[d.id].properties!).filter((a) => a[0] != "m_eidParent"))
 
-														// TODO: this isn't always going to work so it should probably be hooked up to intellisense in case of aliases or such
 														entity.entities[d.id].properties!.m_eRoomBehaviour = {
 															type: "ZSpatialEntity.ERoomBehaviour",
 															value: "ROOM_DYNAMIC"
@@ -316,6 +314,108 @@
 													$addNotification = {
 														kind: "success",
 														title: "Entity set to player rotation",
+														subtitle: "The m_mTransform property has been updated accordingly."
+													}
+												}
+											},
+											moveToCameraPosition: {
+												separator_before: false,
+												separator_after: false,
+												label: "Move to Camera Position",
+												icon: "fas fa-location-dot",
+												action: async (b: { reference: string | HTMLElement | JQuery<HTMLElement> }) => {
+													let d = tree.get_node(b.reference)
+
+													const camera = await gameServer.getCameraTransform()
+
+													entity.entities[d.id].properties ??= {}
+													entity.entities[d.id].properties!.m_mTransform ??= {
+														type: "SMatrix43",
+														value: {
+															rotation: {
+																x: 0,
+																y: 0,
+																z: 0
+															},
+															position: {
+																x: 0,
+																y: 0,
+																z: 0
+															}
+														}
+													}
+
+													if (entity.entities[d.id].properties!.m_eidParent) {
+														entity.entities[d.id].properties = Object.fromEntries(Object.entries(entity.entities[d.id].properties!).filter((a) => a[0] != "m_eidParent"))
+
+														entity.entities[d.id].properties!.m_eRoomBehaviour = {
+															type: "ZSpatialEntity.ERoomBehaviour",
+															value: "ROOM_DYNAMIC"
+														}
+													}
+
+													entity.entities[d.id].properties!.m_mTransform.value.position.x = camera.position.x
+													entity.entities[d.id].properties!.m_mTransform.value.position.y = camera.position.y
+													entity.entities[d.id].properties!.m_mTransform.value.position.z = camera.position.z
+
+													dispatch("entityUpdated", d.id)
+
+													await gameServer.updateProperty(d.id, entity.tbluHash, "m_mTransform", entity.entities[d.id].properties!.m_mTransform)
+
+													$addNotification = {
+														kind: "success",
+														title: "Entity set to camera position",
+														subtitle: "The m_mTransform property has been updated accordingly."
+													}
+												}
+											},
+											adjustRotationToCamera: {
+												separator_before: false,
+												separator_after: false,
+												label: "Adjust Rotation to Camera",
+												icon: "fas fa-compass",
+												action: async (b: { reference: string | HTMLElement | JQuery<HTMLElement> }) => {
+													let d = tree.get_node(b.reference)
+
+													const camera = await gameServer.getCameraTransform()
+
+													entity.entities[d.id].properties ??= {}
+													entity.entities[d.id].properties!.m_mTransform ??= {
+														type: "SMatrix43",
+														value: {
+															rotation: {
+																x: 0,
+																y: 0,
+																z: 0
+															},
+															position: {
+																x: 0,
+																y: 0,
+																z: 0
+															}
+														}
+													}
+
+													if (entity.entities[d.id].properties!.m_eidParent) {
+														entity.entities[d.id].properties = Object.fromEntries(Object.entries(entity.entities[d.id].properties!).filter((a) => a[0] != "m_eidParent"))
+
+														entity.entities[d.id].properties!.m_eRoomBehaviour = {
+															type: "ZSpatialEntity.ERoomBehaviour",
+															value: "ROOM_DYNAMIC"
+														}
+													}
+
+													entity.entities[d.id].properties!.m_mTransform.value.rotation.x = camera.rotation.x
+													entity.entities[d.id].properties!.m_mTransform.value.rotation.y = camera.rotation.y
+													entity.entities[d.id].properties!.m_mTransform.value.rotation.z = camera.rotation.z
+
+													dispatch("entityUpdated", d.id)
+
+													await gameServer.updateProperty(d.id, entity.tbluHash, "m_mTransform", entity.entities[d.id].properties!.m_mTransform)
+
+													$addNotification = {
+														kind: "success",
+														title: "Entity set to camera rotation",
 														subtitle: "The m_mTransform property has been updated accordingly."
 													}
 												}

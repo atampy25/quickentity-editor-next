@@ -158,6 +158,39 @@ class GameServer {
 		return null!
 	}
 
+	async getCameraTransform(): Promise<{
+		rotation: { x: Decimal; y: Decimal; z: Decimal }
+		position: { x: Decimal; y: Decimal; z: Decimal }
+		scale?: { x: Decimal; y: Decimal; z: Decimal }
+	}> {
+		await this.sendRequest({ type: "getCameraEntity" })
+		const cameraEntity = (await this.waitForEvent((evt) => evt.type === "cameraEntity")) as EditorEvents.CameraEntityResponse
+
+		if (cameraEntity.entity.transform) {
+			const newTransform: any = {
+				rotation: {
+					x: (cameraEntity.entity.transform.rotation.yaw * 180) / Math.PI,
+					y: (cameraEntity.entity.transform.rotation.pitch * 180) / Math.PI,
+					z: (cameraEntity.entity.transform.rotation.roll * 180) / Math.PI
+				},
+				position: cameraEntity.entity.transform.position,
+				scale: cameraEntity.entity.transform.scale
+			}
+
+			if (Math.round(+newTransform.scale.x * 100) / 100 == 1) {
+				if (Math.round(+newTransform.scale.y * 100) / 100 == 1) {
+					if (Math.round(+newTransform.scale.z * 100) / 100 == 1) {
+						delete newTransform.scale
+					}
+				}
+			}
+
+			return newTransform
+		}
+
+		return null!
+	}
+
 	async updateProperty(id: string, tblu: string, property: string, value: Property) {
 		const convertedPropertyValue = await invoke("convert_property_value_to_rt", { value: json.stringify(value) })
 
@@ -170,6 +203,18 @@ class GameServer {
 			// @ts-expect-error TS does not like type coercion
 			property: !isNaN(property) && !isNaN(parseFloat(property)) ? Number(property) : property,
 			value: convertedPropertyValue
+		})
+	}
+
+	async signalPin(id: string, tblu: string, pin: string, output: boolean) {
+		await this.sendRequest({
+			type: "signalEntityPin",
+			entity: {
+				id,
+				tblu: tblu as ResourceId
+			},
+			pin,
+			output
 		})
 	}
 }

@@ -155,10 +155,12 @@
 		const showUpdatePropertyCondition = customContextKey("showUpdatePropertyCondition", false)
 		const showPreviewCurveCondition = customContextKey("showPreviewCurveCondition", false)
 		const showFollowReferenceCondition = customContextKey("showFollowReferenceCondition", false)
+		const showSignalPinCondition = customContextKey("showSignalPinCondition", false)
 
 		editor.onDidChangeCursorPosition((e) => {
+			let x
 			try {
-				json.parse(editor.getValue())
+				x = json.parse(editor.getValue())
 			} catch {
 				return
 			}
@@ -173,21 +175,25 @@
 			if (!word || !inVivoExtensions || !gameServer.active) {
 				showUpdatePropertyCondition.set(false)
 			} else {
-				showUpdatePropertyCondition.set(!!(json.parse(editor.getValue()).properties && json.parse(editor.getValue()).properties[word]))
+				showUpdatePropertyCondition.set(!!(x.properties && x.properties[word]))
 			}
 
 			if (!word) {
 				showPreviewCurveCondition.set(false)
 			} else {
-				showPreviewCurveCondition.set(
-					json.parse(editor.getValue()).properties && json.parse(editor.getValue()).properties[word] && json.parse(editor.getValue()).properties[word].type === "ZCurve"
-				)
+				showPreviewCurveCondition.set(x.properties && x.properties[word] && x.properties[word].type === "ZCurve")
 			}
 
 			if (!word) {
 				showFollowReferenceCondition.set(false)
 			} else {
 				showFollowReferenceCondition.set(Object.keys(entity.entities).includes(word))
+			}
+
+			if (!word || !inVivoExtensions || !gameServer.active) {
+				showSignalPinCondition.set(false)
+			} else {
+				showSignalPinCondition.set([...Object.keys(x.inputCopying), ...Object.keys(x.outputCopying), ...Object.keys(x.events)].includes(word))
 			}
 		})
 
@@ -236,6 +242,27 @@
 			precondition: "showFollowReferenceCondition",
 			run: async (ed) => {
 				dispatch("followRef", editor.getModel()!.getWordAtPosition(ed.getPosition()!)!.word)
+			}
+		})
+
+		editor.addAction({
+			id: "signal-pin",
+			label: "Signal pin in-game",
+			contextMenuGroupId: "navigation",
+			contextMenuOrder: 0,
+			keybindings: [],
+			precondition: "showSignalPinCondition",
+			run: async (ed) => {
+				const pin = editor.getModel()!.getWordAtPosition(ed.getPosition()!)!.word
+				const output = !json.parse(editor.getValue()).inputCopying[pin]
+
+				await gameServer.signalPin(subEntityID, entity.tbluHash, pin, output)
+
+				$addNotification = {
+					kind: "success",
+					title: "Pin signalled",
+					subtitle: `The input/event has been sent in-game.`
+				}
 			}
 		})
 

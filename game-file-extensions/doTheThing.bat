@@ -28,5 +28,5 @@ powershell "node getCPPTInfo | tee log-cppt-property-calculation.txt"
 powershell "node getCPPTPins | tee log-cppt-pin-crawling.txt"
 powershell "node getAllMATEProps | tee log-mate-prop-conversion.txt"
 
-echo Done! Enable game file extensions and input this folder's path in QuickEntity Editor to unlock the extra features.
+echo Done! Enable game file extensions and input this folder's path in QuickEntity Editor to unlock the extra features. You can also run cleanupTemporaryFiles.bat in this folder to reclaim some disk space.
 pause

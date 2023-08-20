@@ -27,6 +27,7 @@ async function a() {
 					path: a
 				}
 			})
+			.filter((a) => !a.rpkg.includes("patch") || Number(/(?:chunk|dlc)[0-9]*patch([0-9]*)/g.exec(a.rpkg)[1]) < 10)
 			.sort((a, b) => {
 				const aChunk = /(chunk[0-9]*)(?:patch[0-9]*)?/gi.exec(a.rpkg)[1]
 				const bChunk = /(chunk[0-9]*)(?:patch[0-9]*)?/gi.exec(b.rpkg)[1]
