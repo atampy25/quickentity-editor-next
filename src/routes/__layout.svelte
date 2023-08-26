@@ -193,12 +193,22 @@
 							)
 					  ]
 							.filter((a) => !a[1].includes("patch") || Number(/(?:chunk|dlc)[0-9]*patch([0-9]*)\.rpkg/g.exec(a[1])![1]) < 10)
-							.sort((a, b) =>
-								b[1].localeCompare(a[1], undefined, {
-									numeric: true,
-									sensitivity: "base"
-								})
-							)[0][1]
+							.sort((a, b) => {
+								const aChunk = /(chunk[0-9]*)(?:patch[0-9]*)?/gi.exec(a[1])![1]
+								const bChunk = /(chunk[0-9]*)(?:patch[0-9]*)?/gi.exec(b[1])![1]
+
+								if (aChunk.localeCompare(bChunk) !== 0) {
+									return aChunk.localeCompare(bChunk, undefined, {
+										numeric: true,
+										sensitivity: "base"
+									})
+								} else {
+									return b[1].localeCompare(a[1], undefined, {
+										numeric: true,
+										sensitivity: "base"
+									})
+								}
+							})[0][1]
 
 				await Command.sidecar("sidecar/rpkg-cli", [
 					"-extract_from_rpkg",
@@ -231,12 +241,22 @@
 							)
 					  ]
 							.filter((a) => !a[1].includes("patch") || Number(/(?:chunk|dlc)[0-9]*patch([0-9]*)\.rpkg/g.exec(a[1])![1]) < 10)
-							.sort((a, b) =>
-								b[1].localeCompare(a[1], undefined, {
-									numeric: true,
-									sensitivity: "base"
-								})
-							)[0][1]
+							.sort((a, b) => {
+								const aChunk = /(chunk[0-9]*)(?:patch[0-9]*)?/gi.exec(a[1])![1]
+								const bChunk = /(chunk[0-9]*)(?:patch[0-9]*)?/gi.exec(b[1])![1]
+
+								if (aChunk.localeCompare(bChunk) !== 0) {
+									return aChunk.localeCompare(bChunk, undefined, {
+										numeric: true,
+										sensitivity: "base"
+									})
+								} else {
+									return b[1].localeCompare(a[1], undefined, {
+										numeric: true,
+										sensitivity: "base"
+									})
+								}
+							})[0][1]
 
 				await Command.sidecar("sidecar/rpkg-cli", [
 					"-extract_from_rpkg",
@@ -278,12 +298,22 @@
 							)
 					  ]
 							.filter((a) => !a[1].includes("patch") || Number(/(?:chunk|dlc)[0-9]*patch([0-9]*)\.rpkg/g.exec(a[1])![1]) < 10)
-							.sort((a, b) =>
-								b[1].localeCompare(a[1], undefined, {
-									numeric: true,
-									sensitivity: "base"
-								})
-							)[0][1]
+							.sort((a, b) => {
+								const aChunk = /(chunk[0-9]*)(?:patch[0-9]*)?/gi.exec(a[1])![1]
+								const bChunk = /(chunk[0-9]*)(?:patch[0-9]*)?/gi.exec(b[1])![1]
+
+								if (aChunk.localeCompare(bChunk) !== 0) {
+									return aChunk.localeCompare(bChunk, undefined, {
+										numeric: true,
+										sensitivity: "base"
+									})
+								} else {
+									return b[1].localeCompare(a[1], undefined, {
+										numeric: true,
+										sensitivity: "base"
+									})
+								}
+							})[0][1]
 
 				$addNotification = {
 					kind: "info",
