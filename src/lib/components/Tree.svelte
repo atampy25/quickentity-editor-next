@@ -137,6 +137,7 @@
 							action: function (b: { reference: string | HTMLElement | JQuery<HTMLElement> }) {
 								var c = jQuery.jstree!.reference(b.reference),
 									d = c.get_node(b.reference)
+								
 								c.create_node(d, {}, "last", function (a: any) {
 									try {
 										c.edit(a)
@@ -146,6 +147,21 @@
 										}, 0)
 									}
 								})
+							}
+						},
+						template: {
+							separator_before: false,
+							separator_after: true,
+							_disabled: false,
+							label: "Create from Template",
+							icon: "fas fa-plus",
+							action: function (b: { reference: string | HTMLElement | JQuery<HTMLElement> }) {
+								entity.entities["feed" + genRandHex(12)] = {
+									parent: jQuery.jstree!.reference(b.reference).get_node(b.reference).id,
+									name: "New Entity",
+									factory: "[modules:/zentity.class].pc_entitytype",
+									blueprint: "[modules:/zentity.class].pc_entityblueprint"
+								}
 							}
 						},
 						createComment: {

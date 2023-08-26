@@ -246,9 +246,7 @@
 								}
 							}}
 							on:nodeCreated={({ detail }) => {
-								let entityID = "feed" + genRandHex(12)
-
-								$entity.entities[entityID] = {
+								$entity.entities["feed" + genRandHex(12)] = {
 									parent: detail[1].parent,
 									name: "New Entity",
 									factory: "[modules:/zentity.class].pc_entitytype",

@@ -67,7 +67,7 @@
 				"providerShortName": null,
 				"signingIdentity": null
 			},
-			"resources": ["hash_list.txt", "ResourceLib_HM2016.dll", "ResourceLib_HM2.dll", "ResourceLib_HM3.dll", "ResourceLib_HMA.dll", "quickentity_rs.dll"],
+			"resources": ["hash_list.txt", "ResourceLib_HM2016.dll", "ResourceLib_HM2.dll", "ResourceLib_HM3.dll", "ResourceLib_HMA.dll", "quickentity_ffi.dll", "assimp.dll"],
 			"shortDescription": "",
 			"targets": "all",
 			"windows": {

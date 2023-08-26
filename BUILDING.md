@@ -8,7 +8,7 @@
 6. Download `ResourceTool-win-x64.zip` from `https://github.com/OrfeasZ/ZHMTools/releases` and extract into the `src-tauri` directory.
 7. Rename `ResourceTool.exe` to `ResourceTool-x86_64-pc-windows-msvc.exe` in the `src-tauri` directory.
 8. Download hash list from `https://hitmandb.glaciermodding.org/latest-hashes.7z` and extract into the `src-tauri` directory.
-9. Download RPKG from `https://glaciermodding.org/rpkg/` and extract `quickentity_rs.dll` into the `src-tauri` directory.
+9. Download RPKG from `https://glaciermodding.org/rpkg/` and extract `quickentity_ffi.dll` and `assimp.dll` into the `src-tauri` directory.
 
 ## Development
 
