@@ -13,8 +13,8 @@
 	import isEqual from "lodash/isEqual"
 	import { gameServer } from "$lib/in-vivo/gameServer"
 	import { addNotification, appSettings, intellisense } from "$lib/stores"
-	import { readTextFile } from "@tauri-apps/api/fs"
-	import { join } from "@tauri-apps/api/path"
+	import { Modal } from "carbon-components-svelte"
+	import premadeTemplates from "./premade-templates.json"
 
 	export let entity: Entity
 	export let reverseReferences: Record<
@@ -40,6 +40,9 @@
 	export let helpMenuProps: SubEntity["properties"] = {}
 	export let helpMenuInputs: string[] = []
 	export let helpMenuOutputs: string[] = []
+
+	let templateModalOpen = false
+	let templateInsertParent = ""
 
 	let onRefreshFunc: () => any
 
@@ -137,7 +140,7 @@
 							action: function (b: { reference: string | HTMLElement | JQuery<HTMLElement> }) {
 								var c = jQuery.jstree!.reference(b.reference),
 									d = c.get_node(b.reference)
-								
+
 								c.create_node(d, {}, "last", function (a: any) {
 									try {
 										c.edit(a)
@@ -147,21 +150,6 @@
 										}, 0)
 									}
 								})
-							}
-						},
-						template: {
-							separator_before: false,
-							separator_after: true,
-							_disabled: false,
-							label: "Create from Template",
-							icon: "fas fa-plus",
-							action: function (b: { reference: string | HTMLElement | JQuery<HTMLElement> }) {
-								entity.entities["feed" + genRandHex(12)] = {
-									parent: jQuery.jstree!.reference(b.reference).get_node(b.reference).id,
-									name: "New Entity",
-									factory: "[modules:/zentity.class].pc_entitytype",
-									blueprint: "[modules:/zentity.class].pc_entityblueprint"
-								}
 							}
 						},
 						createComment: {
@@ -479,234 +467,57 @@
 										let removeExternalRefs = pastedEntity.origin != entity.tempHash
 										delete pastedEntity.origin
 
-										let changedEntityIDs: Record<string, string> = {}
-										for (let ent of Object.entries(pastedEntity)) {
-											changedEntityIDs[ent[0]] = "feed" + genRandHex(12)
-
-											pastedEntity[changedEntityIDs[ent[0]]] = ent[1]
-											delete pastedEntity[ent[0]]
-										}
-
-										let paste: Record<string, SubEntity> = pastedEntity
-
-										for (let [entID, ent] of Object.entries(paste)) {
-											const localRef = getReferencedLocalEntity(ent.parent)
-											ent.parent = localRef && changedEntityIDs[localRef] ? changeReferenceToLocalEntity(ent.parent, changedEntityIDs[localRef]) : ent.parent
-
-											for (let ref of getReferencedEntities(ent)) {
-												if (changedEntityIDs[ref.entity]) {
-													switch (ref.type) {
-														case "property":
-															if (Array.isArray(ent.properties![ref.context![0]].value)) {
-																ent.properties![ref.context![0]].value.splice(
-																	ent.properties![ref.context![0]].value.findIndex((a: Ref) => getReferencedLocalEntity(a) == ref.entity),
-																	1,
-																	changeReferenceToLocalEntity(
-																		ent.properties![ref.context![0]].value.find((a: Ref) => getReferencedLocalEntity(a) == ref.entity),
-																		changedEntityIDs[ref.entity]
-																	)
-																)
-															} else {
-																ent.properties![ref.context![0]].value = changeReferenceToLocalEntity(
-																	ent.properties![ref.context![0]].value,
-																	changedEntityIDs[ref.entity]
-																)
-															}
-															break
-
-														case "platformSpecificProperty":
-															if (Array.isArray(ent.platformSpecificProperties![ref.context![0]][ref.context![1]].value)) {
-																ent.platformSpecificProperties![ref.context![0]][ref.context![1]].value.splice(
-																	ent.platformSpecificProperties![ref.context![0]][ref.context![1]].value.findIndex(
-																		(a: Ref) => getReferencedLocalEntity(a) == ref.entity
-																	),
-																	1,
-																	changeReferenceToLocalEntity(
-																		ent.platformSpecificProperties![ref.context![0]][ref.context![1]].value.find(
-																			(a: Ref) => getReferencedLocalEntity(a) == ref.entity
-																		),
-																		changedEntityIDs[ref.entity]
-																	)
-																)
-															} else {
-																ent.platformSpecificProperties![ref.context![0]][ref.context![1]].value = changeReferenceToLocalEntity(
-																	ent.platformSpecificProperties![ref.context![0]][ref.context![1]].value,
-																	changedEntityIDs[ref.entity]
-																)
-															}
-															break
-
-														case "event":
-															let evtIndex = ent.events![ref.context![0]][ref.context![1]].findIndex(
-																(a) =>
-																	getReferencedLocalEntity(a && typeof a != "string" && Object.prototype.hasOwnProperty.call(a, "value") ? a.ref : (a as FullRef)) ==
-																	ref.entity
-															)
-
-															let evt = ent.events![ref.context![0]][ref.context![1]][evtIndex]
-
-															ent.events![ref.context![0]][ref.context![1]].splice(
-																evtIndex,
-																1,
-																evt && typeof evt != "string" && Object.prototype.hasOwnProperty.call(evt, "value")
-																	? {
-																			ref: changeReferenceToLocalEntity(evt.ref, changedEntityIDs[ref.entity]),
-																			value: (evt as RefWithConstantValue).value
-																	  }
-																	: changeReferenceToLocalEntity(evt as FullRef, changedEntityIDs[ref.entity])
-															)
-															break
-
-														case "inputCopy":
-															let evt2Index = ent.inputCopying![ref.context![0]][ref.context![1]].findIndex(
-																(a) =>
-																	getReferencedLocalEntity(a && typeof a != "string" && Object.prototype.hasOwnProperty.call(a, "value") ? a.ref : (a as FullRef)) ==
-																	ref.entity
-															)
-
-															let evt2 = ent.inputCopying![ref.context![0]][ref.context![1]][evt2Index]
-
-															ent.inputCopying![ref.context![0]][ref.context![1]].splice(
-																evt2Index,
-																1,
-																evt2 && typeof evt2 != "string" && Object.prototype.hasOwnProperty.call(evt2, "value")
-																	? {
-																			ref: changeReferenceToLocalEntity(evt2.ref, changedEntityIDs[ref.entity]),
-																			value: (evt2 as RefWithConstantValue).value
-																	  }
-																	: changeReferenceToLocalEntity(evt2 as FullRef, changedEntityIDs[ref.entity])
-															)
-															break
-
-														case "outputCopy":
-															let evt3Index = ent.outputCopying![ref.context![0]][ref.context![1]].findIndex(
-																(a) =>
-																	getReferencedLocalEntity(a && typeof a != "string" && Object.prototype.hasOwnProperty.call(a, "value") ? a.ref : (a as FullRef)) ==
-																	ref.entity
-															)
-
-															let evt3 = ent.outputCopying![ref.context![0]][ref.context![1]][evt3Index]
-
-															ent.outputCopying![ref.context![0]][ref.context![1]].splice(
-																evt3Index,
-																1,
-																evt3 && typeof evt3 != "string" && Object.prototype.hasOwnProperty.call(evt3, "value")
-																	? {
-																			ref: changeReferenceToLocalEntity(evt3.ref, changedEntityIDs[ref.entity]),
-																			value: (evt3 as RefWithConstantValue).value
-																	  }
-																	: changeReferenceToLocalEntity(evt3 as FullRef, changedEntityIDs[ref.entity])
-															)
-															break
-
-														case "propertyAlias":
-															ent.propertyAliases![ref.context![0]].splice(
-																ent.propertyAliases![ref.context![0]].findIndex((a) => isEqual(a, { originalProperty: ref.context![1], originalEntity: ref.entity })),
-																1,
-																Object.assign(
-																	ent.propertyAliases![ref.context![0]].find((a) => isEqual(a, { originalProperty: ref.context![1], originalEntity: ref.entity }))!,
-																	{
-																		originalEntity: changedEntityIDs[ref.entity]
-																	}
-																)
-															)
-															break
-
-														case "exposedEntity":
-															ent.exposedEntities![ref.context![0]].refersTo.splice(
-																ent.exposedEntities![ref.context![0]].refersTo.findIndex((a) => getReferencedLocalEntity(a) == ref.entity),
-																1,
-																changeReferenceToLocalEntity(
-																	ent.exposedEntities![ref.context![0]].refersTo.find((a) => getReferencedLocalEntity(a) == ref.entity)!,
-																	changedEntityIDs[ref.entity]
-																)
-															)
-															break
-
-														case "exposedInterface":
-															ent.exposedInterfaces![ref.context![0]] = changedEntityIDs[ref.entity]
-															break
-
-														case "subset":
-															ent.subsets![ref.context![0]].splice(
-																ent.subsets![ref.context![0]].findIndex((a) => getReferencedLocalEntity(a) == ref.entity),
-																1,
-																changedEntityIDs[ref.entity]
-															)
-															break
-													}
-												}
-											}
-
-											if (removeExternalRefs) {
-												for (let ref of getReferencedExternalEntities(ent, paste)) {
-													let localRef = getReferencedLocalEntity(ref.entity)
-													if (!localRef || !entity.entities[localRef]) {
-														switch (ref.type) {
-															case "property":
-																if (Array.isArray(ent.properties![ref.context![0]].value)) {
-																	ent.properties![ref.context![0]].value = ent.properties![ref.context![0]].value.filter((a: Ref) => !isEqual(a, ref.entity))
-																} else {
-																	delete ent.properties![ref.context![0]]
-																}
-																break
-
-															case "platformSpecificProperty":
-																if (Array.isArray(ent.platformSpecificProperties![ref.context![0]][ref.context![1]].value)) {
-																	ent.platformSpecificProperties![ref.context![0]][ref.context![1]].value = ent.platformSpecificProperties![ref.context![0]][
-																		ref.context![1]
-																	].value.filter((a: Ref) => !isEqual(a, ref.entity))
-																} else {
-																	delete ent.platformSpecificProperties![ref.context![0]][ref.context![1]]
-																}
-																break
-
-															case "event":
-																ent.events![ref.context![0]][ref.context![1]] = ent.events![ref.context![0]][ref.context![1]].filter(
-																	(a) => !isEqual(a && typeof a != "string" && Object.prototype.hasOwnProperty.call(a, "value") ? a.ref : (a as FullRef), ref.entity)
-																)
-																break
-
-															case "inputCopy":
-																ent.inputCopying![ref.context![0]][ref.context![1]] = ent.inputCopying![ref.context![0]][ref.context![1]].filter(
-																	(a) => !isEqual(a && typeof a != "string" && Object.prototype.hasOwnProperty.call(a, "value") ? a.ref : (a as FullRef), ref.entity)
-																)
-																break
-
-															case "outputCopy":
-																ent.outputCopying![ref.context![0]][ref.context![1]] = ent.outputCopying![ref.context![0]][ref.context![1]].filter(
-																	(a) => !isEqual(a && typeof a != "string" && Object.prototype.hasOwnProperty.call(a, "value") ? a.ref : (a as FullRef), ref.entity)
-																)
-																break
-
-															case "propertyAlias":
-																ent.propertyAliases![ref.context![0]] = ent.propertyAliases![ref.context![0]].filter(
-																	(a) => !isEqual(a, { originalProperty: ref.context![1], originalEntity: ref.entity })
-																)
-																break
-
-															case "exposedEntity":
-																ent.exposedEntities![ref.context![0]].refersTo = ent.exposedEntities![ref.context![0]].refersTo.filter((a) => !isEqual(a, ref.entity))
-																break
-
-															case "exposedInterface":
-																delete ent.exposedInterfaces![ref.context![0]]
-																break
-
-															case "subset":
-																ent.subsets![ref.context![0]] = ent.subsets![ref.context![0]].filter((a) => a != ref.entity)
-																break
-														}
-													}
-												}
-											}
-										}
+										const paste = getPaste(pastedEntity, removeExternalRefs)
 
 										Object.assign(entity.entities, paste)
 
 										entity.entities[Object.keys(paste)[0]].parent = changeReferenceToLocalEntity(entity.entities[Object.keys(paste)[0]].parent, d.id)
 
 										dispatch("forceUpdateEntity")
+									}
+								}
+							}
+						},
+						templates: {
+							separator_before: true,
+							separator_after: false,
+							label: "Templates",
+							icon: "far fa-save",
+							action: false,
+							submenu: {
+								savetemplate: {
+									separator_before: false,
+									separator_after: false,
+									label: "Save as Template",
+									icon: "far fa-save",
+									action: async (b: { reference: string | HTMLElement | JQuery<HTMLElement> }) => {
+										let d = tree.get_node(b.reference)
+										let copiedEntity: Record<string, any> = {}
+
+										copiedEntity[d.id] = json.parse(json.stringify(entity.entities[d.id]))
+										Object.assign(
+											copiedEntity,
+											json.parse(json.stringify(Object.fromEntries([...new Set(traverseEntityTree(entity, d.id, reverseReferences))].map((a) => [a, entity.entities[a]]))))
+										)
+
+										$appSettings.templates = [...$appSettings.templates, copiedEntity]
+
+										$addNotification = {
+											kind: "success",
+											title: "Saved template",
+											subtitle: "The template has been saved."
+										}
+									}
+								},
+								inserttemplate: {
+									separator_before: false,
+									_disabled: false,
+									separator_after: false,
+									label: "Insert from Template",
+									icon: "far fa-plus",
+									action: async (b: { reference: string | HTMLElement | JQuery<HTMLElement> }) => {
+										templateModalOpen = true
+										templateInsertParent = tree.get_node(b.reference).id
 									}
 								}
 							}
@@ -805,6 +616,214 @@
 			)
 		)
 	})
+
+	function getPaste(pastedEntity: any, removeExternalRefs: boolean) {
+		let changedEntityIDs: Record<string, string> = {}
+		for (let ent of Object.entries(pastedEntity)) {
+			changedEntityIDs[ent[0]] = "feed" + genRandHex(12)
+
+			pastedEntity[changedEntityIDs[ent[0]]] = ent[1]
+			delete pastedEntity[ent[0]]
+		}
+
+		let paste: Record<string, SubEntity> = pastedEntity
+
+		for (let [entID, ent] of Object.entries(paste)) {
+			const localRef = getReferencedLocalEntity(ent.parent)
+			ent.parent = localRef && changedEntityIDs[localRef] ? changeReferenceToLocalEntity(ent.parent, changedEntityIDs[localRef]) : ent.parent
+
+			for (let ref of getReferencedEntities(ent)) {
+				if (changedEntityIDs[ref.entity]) {
+					switch (ref.type) {
+						case "property":
+							if (Array.isArray(ent.properties![ref.context![0]].value)) {
+								ent.properties![ref.context![0]].value.splice(
+									ent.properties![ref.context![0]].value.findIndex((a: Ref) => getReferencedLocalEntity(a) == ref.entity),
+									1,
+									changeReferenceToLocalEntity(
+										ent.properties![ref.context![0]].value.find((a: Ref) => getReferencedLocalEntity(a) == ref.entity),
+										changedEntityIDs[ref.entity]
+									)
+								)
+							} else {
+								ent.properties![ref.context![0]].value = changeReferenceToLocalEntity(ent.properties![ref.context![0]].value, changedEntityIDs[ref.entity])
+							}
+							break
+
+						case "platformSpecificProperty":
+							if (Array.isArray(ent.platformSpecificProperties![ref.context![0]][ref.context![1]].value)) {
+								ent.platformSpecificProperties![ref.context![0]][ref.context![1]].value.splice(
+									ent.platformSpecificProperties![ref.context![0]][ref.context![1]].value.findIndex((a: Ref) => getReferencedLocalEntity(a) == ref.entity),
+									1,
+									changeReferenceToLocalEntity(
+										ent.platformSpecificProperties![ref.context![0]][ref.context![1]].value.find((a: Ref) => getReferencedLocalEntity(a) == ref.entity),
+										changedEntityIDs[ref.entity]
+									)
+								)
+							} else {
+								ent.platformSpecificProperties![ref.context![0]][ref.context![1]].value = changeReferenceToLocalEntity(
+									ent.platformSpecificProperties![ref.context![0]][ref.context![1]].value,
+									changedEntityIDs[ref.entity]
+								)
+							}
+							break
+
+						case "event":
+							let evtIndex = ent.events![ref.context![0]][ref.context![1]].findIndex(
+								(a) => getReferencedLocalEntity(a && typeof a != "string" && Object.prototype.hasOwnProperty.call(a, "value") ? a.ref : (a as FullRef)) == ref.entity
+							)
+
+							let evt = ent.events![ref.context![0]][ref.context![1]][evtIndex]
+
+							ent.events![ref.context![0]][ref.context![1]].splice(
+								evtIndex,
+								1,
+								evt && typeof evt != "string" && Object.prototype.hasOwnProperty.call(evt, "value")
+									? {
+											ref: changeReferenceToLocalEntity(evt.ref, changedEntityIDs[ref.entity]),
+											value: (evt as RefWithConstantValue).value
+									  }
+									: changeReferenceToLocalEntity(evt as FullRef, changedEntityIDs[ref.entity])
+							)
+							break
+
+						case "inputCopy":
+							let evt2Index = ent.inputCopying![ref.context![0]][ref.context![1]].findIndex(
+								(a) => getReferencedLocalEntity(a && typeof a != "string" && Object.prototype.hasOwnProperty.call(a, "value") ? a.ref : (a as FullRef)) == ref.entity
+							)
+
+							let evt2 = ent.inputCopying![ref.context![0]][ref.context![1]][evt2Index]
+
+							ent.inputCopying![ref.context![0]][ref.context![1]].splice(
+								evt2Index,
+								1,
+								evt2 && typeof evt2 != "string" && Object.prototype.hasOwnProperty.call(evt2, "value")
+									? {
+											ref: changeReferenceToLocalEntity(evt2.ref, changedEntityIDs[ref.entity]),
+											value: (evt2 as RefWithConstantValue).value
+									  }
+									: changeReferenceToLocalEntity(evt2 as FullRef, changedEntityIDs[ref.entity])
+							)
+							break
+
+						case "outputCopy":
+							let evt3Index = ent.outputCopying![ref.context![0]][ref.context![1]].findIndex(
+								(a) => getReferencedLocalEntity(a && typeof a != "string" && Object.prototype.hasOwnProperty.call(a, "value") ? a.ref : (a as FullRef)) == ref.entity
+							)
+
+							let evt3 = ent.outputCopying![ref.context![0]][ref.context![1]][evt3Index]
+
+							ent.outputCopying![ref.context![0]][ref.context![1]].splice(
+								evt3Index,
+								1,
+								evt3 && typeof evt3 != "string" && Object.prototype.hasOwnProperty.call(evt3, "value")
+									? {
+											ref: changeReferenceToLocalEntity(evt3.ref, changedEntityIDs[ref.entity]),
+											value: (evt3 as RefWithConstantValue).value
+									  }
+									: changeReferenceToLocalEntity(evt3 as FullRef, changedEntityIDs[ref.entity])
+							)
+							break
+
+						case "propertyAlias":
+							ent.propertyAliases![ref.context![0]].splice(
+								ent.propertyAliases![ref.context![0]].findIndex((a) => isEqual(a, { originalProperty: ref.context![1], originalEntity: ref.entity })),
+								1,
+								Object.assign(ent.propertyAliases![ref.context![0]].find((a) => isEqual(a, { originalProperty: ref.context![1], originalEntity: ref.entity }))!, {
+									originalEntity: changedEntityIDs[ref.entity]
+								})
+							)
+							break
+
+						case "exposedEntity":
+							ent.exposedEntities![ref.context![0]].refersTo.splice(
+								ent.exposedEntities![ref.context![0]].refersTo.findIndex((a) => getReferencedLocalEntity(a) == ref.entity),
+								1,
+								changeReferenceToLocalEntity(ent.exposedEntities![ref.context![0]].refersTo.find((a) => getReferencedLocalEntity(a) == ref.entity)!, changedEntityIDs[ref.entity])
+							)
+							break
+
+						case "exposedInterface":
+							ent.exposedInterfaces![ref.context![0]] = changedEntityIDs[ref.entity]
+							break
+
+						case "subset":
+							ent.subsets![ref.context![0]].splice(
+								ent.subsets![ref.context![0]].findIndex((a) => getReferencedLocalEntity(a) == ref.entity),
+								1,
+								changedEntityIDs[ref.entity]
+							)
+							break
+					}
+				}
+			}
+
+			if (removeExternalRefs) {
+				for (let ref of getReferencedExternalEntities(ent, paste)) {
+					let localRef = getReferencedLocalEntity(ref.entity)
+					if (!localRef || !entity.entities[localRef]) {
+						switch (ref.type) {
+							case "property":
+								if (Array.isArray(ent.properties![ref.context![0]].value)) {
+									ent.properties![ref.context![0]].value = ent.properties![ref.context![0]].value.filter((a: Ref) => !isEqual(a, ref.entity))
+								} else {
+									delete ent.properties![ref.context![0]]
+								}
+								break
+
+							case "platformSpecificProperty":
+								if (Array.isArray(ent.platformSpecificProperties![ref.context![0]][ref.context![1]].value)) {
+									ent.platformSpecificProperties![ref.context![0]][ref.context![1]].value = ent.platformSpecificProperties![ref.context![0]][ref.context![1]].value.filter(
+										(a: Ref) => !isEqual(a, ref.entity)
+									)
+								} else {
+									delete ent.platformSpecificProperties![ref.context![0]][ref.context![1]]
+								}
+								break
+
+							case "event":
+								ent.events![ref.context![0]][ref.context![1]] = ent.events![ref.context![0]][ref.context![1]].filter(
+									(a) => !isEqual(a && typeof a != "string" && Object.prototype.hasOwnProperty.call(a, "value") ? a.ref : (a as FullRef), ref.entity)
+								)
+								break
+
+							case "inputCopy":
+								ent.inputCopying![ref.context![0]][ref.context![1]] = ent.inputCopying![ref.context![0]][ref.context![1]].filter(
+									(a) => !isEqual(a && typeof a != "string" && Object.prototype.hasOwnProperty.call(a, "value") ? a.ref : (a as FullRef), ref.entity)
+								)
+								break
+
+							case "outputCopy":
+								ent.outputCopying![ref.context![0]][ref.context![1]] = ent.outputCopying![ref.context![0]][ref.context![1]].filter(
+									(a) => !isEqual(a && typeof a != "string" && Object.prototype.hasOwnProperty.call(a, "value") ? a.ref : (a as FullRef), ref.entity)
+								)
+								break
+
+							case "propertyAlias":
+								ent.propertyAliases![ref.context![0]] = ent.propertyAliases![ref.context![0]].filter(
+									(a) => !isEqual(a, { originalProperty: ref.context![1], originalEntity: ref.entity })
+								)
+								break
+
+							case "exposedEntity":
+								ent.exposedEntities![ref.context![0]].refersTo = ent.exposedEntities![ref.context![0]].refersTo.filter((a) => !isEqual(a, ref.entity))
+								break
+
+							case "exposedInterface":
+								delete ent.exposedInterfaces![ref.context![0]]
+								break
+
+							case "subset":
+								ent.subsets![ref.context![0]] = ent.subsets![ref.context![0]].filter((a) => a != ref.entity)
+								break
+						}
+					}
+				}
+			}
+		}
+
+		return paste
+	}
 
 	export function refreshTree(
 		entity: Entity,
@@ -924,3 +943,70 @@
 </script>
 
 <div id={elemID} />
+
+<Modal bind:open={templateModalOpen} modalHeading="Select a template" passiveModal>
+	<div class="text-2xl">Custom</div>
+	<div class="grid grid-cols-4 gap-4">
+		{#each $appSettings.templates as template}
+			<div class="bg-neutral-800 rounded-sm w-full h-full p-4">
+				<div class="text-2xl">{Object.values(template)[0].name}</div>
+				{Object.keys(template).length} entit{Object.keys(template).length === 1 ? "y" : "ies"} |
+				<!-- svelte-ignore a11y-invalid-attribute -->
+				<a
+					href="#"
+					on:click={() => {
+						const paste = getPaste(template, true)
+
+						Object.assign(entity.entities, paste)
+
+						entity.entities[Object.keys(paste)[0]].parent = changeReferenceToLocalEntity(entity.entities[Object.keys(paste)[0]].parent, templateInsertParent)
+
+						dispatch("forceUpdateEntity")
+
+						templateModalOpen = false
+					}}
+				>
+					Insert
+				</a>
+				|
+				<!-- svelte-ignore a11y-invalid-attribute -->
+				<a
+					href="#"
+					on:click={() => {
+						$appSettings.templates = $appSettings.templates.filter((a) => a !== template)
+					}}
+				>
+					Delete
+				</a>
+			</div>
+		{/each}
+	</div>
+
+	<br />
+	<div class="text-2xl">Premade</div>
+	<div class="grid grid-cols-4 gap-4">
+		{#each premadeTemplates as template}
+			<div class="bg-neutral-800 rounded-sm w-full h-full p-4">
+				<div class="text-2xl">{Object.values(template)[0].name}</div>
+				{Object.keys(template).length} entit{Object.keys(template).length === 1 ? "y" : "ies"} |
+				<!-- svelte-ignore a11y-invalid-attribute -->
+				<a
+					href="#"
+					on:click={() => {
+						const paste = getPaste(template, true)
+
+						Object.assign(entity.entities, paste)
+
+						entity.entities[Object.keys(paste)[0]].parent = changeReferenceToLocalEntity(entity.entities[Object.keys(paste)[0]].parent, templateInsertParent)
+
+						dispatch("forceUpdateEntity")
+
+						templateModalOpen = false
+					}}
+				>
+					Insert
+				</a>
+			</div>
+		{/each}
+	</div>
+</Modal>

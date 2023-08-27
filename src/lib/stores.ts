@@ -29,6 +29,8 @@ interface AppSettings {
 
 	technicalMode: boolean
 	compactMode: boolean
+
+	templates: Entity["entities"][]
 }
 
 await forage.setItem({
@@ -50,7 +52,8 @@ await forage.setItem({
 				h1: false,
 				compactMode: false,
 				h2: false,
-				autoSyncToEditor: true
+				autoSyncToEditor: true,
+				templates: []
 			},
 			json.parse((await forage.getItem({ key: "appSettings" })()) || "{}")
 		)

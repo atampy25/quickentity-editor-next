@@ -1,0 +1,54 @@
+[
+	{
+		"feeda1aa966bef14": {
+			"parent": "fffffffffffffffe",
+			"name": "NPC",
+			"factory": "[assembly:/templates/gameplay/ai2/actors.template?/npcactor.entitytemplate].pc_entitytype",
+			"blueprint": "[assembly:/templates/gameplay/ai2/actors.template?/npcactor.entitytemplate].pc_entityblueprint",
+			"properties": {
+				"m_mTransform": { "type": "SMatrix43", "value": { "rotation": { "x": 0, "y": 0, "z": 0 }, "position": { "x": 0, "y": 0, "z": 0 } } },
+				"RepositoryId": { "type": "ZGuid", "value": "7af86858-df9d-478b-b5d8-803379cd165f" },
+				"m_OutfitRepositoryID": { "type": "ZGuid", "value": "44f30ddb-cad9-402b-a307-6076fae3aa74" },
+				"m_nOutfitVariation": { "type": "int32", "value": 0 },
+				"m_sActorName": { "type": "ZString", "value": "Richard Wilson" },
+				"m_nOutfitCharset": { "type": "int32", "value": 0 },
+				"m_eRequiredVoiceVariation": { "type": "EActorVoiceVariation", "value": "eAVV_CIVMALEES03" }
+			},
+			"subsets": { "AudioEmitters": ["fffffffffffffffe"], "Replicable": ["fffffffffffffffe"] }
+		},
+		"feed6c39e0d9b0cd": {
+			"parent": "feeda1aa966bef14",
+			"name": "ActorDeath",
+			"factory": "[modules:/zactordeathentity.class].pc_entitytype",
+			"blueprint": "[modules:/zactordeathentity.class].pc_entityblueprint",
+			"properties": { "m_rActor": { "type": "SEntityTemplateReference", "value": "feeda1aa966bef14" } },
+			"events": {
+				"OnDead": { "SetFalse": ["feedefd8ddf256b8", "feed6a7a996df025"] },
+				"OnPacified": { "SetFalse": ["feed6a7a996df025"] },
+				"OnAlive": { "SetTrue": ["feed6a7a996df025", "feedefd8ddf256b8"] }
+			}
+		},
+		"feed2ce2c8143f0b": { "parent": "feeda1aa966bef14", "name": "Values", "factory": "[modules:/zentity.class].pc_entitytype", "blueprint": "[modules:/zentity.class].pc_entityblueprint" },
+		"feedcfb1ce884dd3": {
+			"parent": "feeda1aa966bef14",
+			"name": "ActorProxy",
+			"factory": "[modules:/zactorproxyentity.class].pc_entitytype",
+			"blueprint": "[modules:/zactorproxyentity.class].pc_entityblueprint",
+			"properties": { "m_rActor": { "type": "SEntityTemplateReference", "value": "feeda1aa966bef14" } }
+		},
+		"feedefd8ddf256b8": {
+			"parent": "feed2ce2c8143f0b",
+			"name": "Alive",
+			"factory": "[assembly:/_pro/design/logic/valuebool.template?/valuebool_basic.entitytemplate].pc_entitytype",
+			"blueprint": "[assembly:/_pro/design/logic/valuebool.template?/valuebool_basic.entitytemplate].pc_entityblueprint",
+			"properties": { "m_bValue": { "type": "bool", "value": true } }
+		},
+		"feed6a7a996df025": {
+			"parent": "feed2ce2c8143f0b",
+			"name": "Conscious",
+			"factory": "[assembly:/_pro/design/logic/valuebool.template?/valuebool_basic.entitytemplate].pc_entitytype",
+			"blueprint": "[assembly:/_pro/design/logic/valuebool.template?/valuebool_basic.entitytemplate].pc_entityblueprint",
+			"properties": { "m_bValue": { "type": "bool", "value": true } }
+		}
+	}
+]

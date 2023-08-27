@@ -23,3 +23,5 @@ src-tauri/ResourceTool.pdb
 src-tauri/ResourceTool-x86_64-pc-windows-msvc.exe
 src-tauri/quickentity_rs.dll
 src/lib/rs-types.ts
+src-tauri/quickentity_ffi.dll
+src-tauri/assimp.dll
