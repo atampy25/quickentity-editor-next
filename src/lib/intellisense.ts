@@ -274,6 +274,8 @@ export class Intellisense {
 				props.push(...Object.keys(material.Overrides.Color || {}).flatMap((a) => [a, `${a}_op`]))
 
 				foundProperties.push(...props)
+			} else if (this.allWSWTs.has(factory)) {
+				foundProperties.push(...Object.keys(this.knownCPPTProperties["00797DC916520C4D"])) // All switch groups have the properties of ZAudioSwitchEntity
 			} else {
 				const e = await this.getEntityByFactory(factory)
 
@@ -462,6 +464,14 @@ export class Intellisense {
 						}
 					}
 				}
+			} else if (this.allWSWTs.has(factory)) {
+				if (this.knownCPPTProperties["00797DC916520C4D"][propertyToFind]) {
+					// All switch groups have the properties of ZAudioSwitchEntity
+					return {
+						type: this.knownCPPTProperties["00797DC916520C4D"][propertyToFind][0],
+						value: this.knownCPPTProperties["00797DC916520C4D"][propertyToFind][1]
+					}
+				}
 			} else {
 				const e = await this.getEntityByFactory(factory)
 
@@ -590,6 +600,10 @@ export class Intellisense {
 
 				soFar.input.push(...Object.keys(material.Overrides.Color || {}))
 			} else if (this.allWSWTs.has(factory)) {
+				// All switch groups have the pins of ZAudioSwitchEntity
+				soFar.input.push(...this.knownCPPTPins["00797DC916520C4D"].input)
+				soFar.output.push(...this.knownCPPTPins["00797DC916520C4D"].output)
+
 				const switchGroup = (await exists(
 					await join(
 						this.appSettings.gameFileExtensionsDataPath,
