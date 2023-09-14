@@ -30,6 +30,7 @@ export class Intellisense {
 	UICBPropTypes!: Record<number, string>
 	allUICTs!: Set<string>
 	allMATTs!: Set<string>
+	allWSWTs!: Set<string>
 	classHelpText: Record<string, { properties: Record<string, string>; inputPins: Record<string, string>; outputPins: Record<string, string> }> = {}
 
 	parsedFiles: Record<string, any> = {}
@@ -192,6 +193,12 @@ export class Intellisense {
 		)
 		this.allMATTs = new Set(
 			(await readDir(await join(this.appSettings.gameFileExtensionsDataPath, "MATT")))
+				.map((a) => a.name?.split(".")[0])
+				.filter((a) => a)
+				.map((a) => a!)
+		)
+		this.allWSWTs = new Set(
+			(await readDir(await join(this.appSettings.gameFileExtensionsDataPath, "WSWT")))
 				.map((a) => a.name?.split(".")[0])
 				.filter((a) => a)
 				.map((a) => a!)
@@ -582,6 +589,30 @@ export class Intellisense {
 				soFar.input.push(...Object.keys(material.Overrides).filter((a) => a !== "Texture" && a !== "Color"))
 
 				soFar.input.push(...Object.keys(material.Overrides.Color || {}))
+			} else if (this.allWSWTs.has(factory)) {
+				const switchGroup = (await exists(
+					await join(
+						this.appSettings.gameFileExtensionsDataPath,
+						"DSWB",
+						(await this.readJSONFile(await join(this.appSettings.gameFileExtensionsDataPath, "WSWT", `${factory}.WSWT.meta.JSON`))).hash_reference_data[1].hash + ".DSWB.json"
+					)
+				))
+					? await this.readJSONFile(
+							await join(
+								this.appSettings.gameFileExtensionsDataPath,
+								"DSWB",
+								(await this.readJSONFile(await join(this.appSettings.gameFileExtensionsDataPath, "WSWT", `${factory}.WSWT.meta.JSON`))).hash_reference_data[1].hash + ".DSWB.json"
+							)
+					  )
+					: await this.readJSONFile(
+							await join(
+								this.appSettings.gameFileExtensionsDataPath,
+								"WSWB",
+								(await this.readJSONFile(await join(this.appSettings.gameFileExtensionsDataPath, "WSWT", `${factory}.WSWT.meta.JSON`))).hash_reference_data[1].hash + ".WSWB.json"
+							)
+					  )
+
+				soFar.input.push(...switchGroup.m_aSwitches)
 			} else {
 				const e = await this.getEntityByFactory(factory)
 				if (e) {

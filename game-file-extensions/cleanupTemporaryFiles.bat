@@ -23,4 +23,12 @@ del *.meta
 cd ..\MATT
 del *.meta
 
+cd ..\WSWB
+del *.WSWB
+del *.WSWB.meta
+
+cd ..\DWSB
+del *.DSWB
+del *.DSWB.meta
+
 cd ..
