@@ -8,7 +8,7 @@
 	},
 	"package": {
 		"productName": "QuickEntity Editor",
-		"version": "1.48.0"
+		"version": "1.49.1"
 	},
 	"tauri": {
 		"allowlist": {

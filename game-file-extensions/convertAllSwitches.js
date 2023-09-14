@@ -16,7 +16,7 @@ async function a() {
 			console.log("Processed " + n + " of " + allFiles.length)
 		}
 	}
-	
+
 	allFiles = klaw("./WSWB", {
 		filter: (file) => file.path.endsWith(".WSWB") && !fs.existsSync(file.path + ".json")
 	})
@@ -30,7 +30,7 @@ async function a() {
 			console.log("Processed " + n + " of " + allFiles.length)
 		}
 	}
-	
+
 	allFiles = klaw("./DSWB", {
 		filter: (file) => file.path.endsWith(".DSWB") && !fs.existsSync(file.path + ".json")
 	})
@@ -44,7 +44,6 @@ async function a() {
 			console.log("Processed " + n + " of " + allFiles.length)
 		}
 	}
-
 
 	console.log("Done!")
 }
