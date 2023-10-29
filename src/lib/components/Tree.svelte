@@ -626,6 +626,8 @@
 			delete pastedEntity[ent[0]]
 		}
 
+		let addedExternalScenes = 0
+
 		let paste: Record<string, SubEntity> = pastedEntity
 
 		for (let [entID, ent] of Object.entries(paste)) {
@@ -761,7 +763,7 @@
 			if (removeExternalRefs) {
 				for (let ref of getReferencedExternalEntities(ent, paste)) {
 					let localRef = getReferencedLocalEntity(ref.entity)
-					if (!localRef || !entity.entities[localRef]) {
+					if (localRef && !entity.entities[localRef]) {
 						switch (ref.type) {
 							case "property":
 								if (Array.isArray(ent.properties![ref.context![0]].value)) {
@@ -818,7 +820,22 @@
 								break
 						}
 					}
+
+					if (!localRef && ref.entity !== null && typeof ref.entity !== "string" && ref.entity.externalScene) {
+						if (!entity.externalScenes.includes(ref.entity.externalScene)) {
+							entity.externalScenes = [...entity.externalScenes, ref.entity.externalScene]
+							addedExternalScenes += 1
+						}
+					}
 				}
+			}
+		}
+
+		if (addedExternalScenes) {
+			$addNotification = {
+				kind: "info",
+				title: "Added external scenes",
+				subtitle: `${addedExternalScenes} external scene${addedExternalScenes > 1 ? "s have" : " has"} been added to the entity to ensure that copied references work.`
 			}
 		}
 
