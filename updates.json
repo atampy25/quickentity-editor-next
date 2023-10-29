@@ -1,11 +1,11 @@
 {
-	"version": "1.49.1",
-	"notes": "Further improve switch group intellisense",
+	"version": "1.50.0",
+	"notes": "Automatically add external scenes for pasted refs",
 	"pub_date": "2023-02-18T08:42:26Z",
 	"platforms": {
 		"windows-x86_64": {
-			"signature": "dW50cnVzdGVkIGNvbW1lbnQ6IHNpZ25hdHVyZSBmcm9tIHRhdXJpIHNlY3JldCBrZXkKUlVScWpVZGd2b0lOTll5aE5QczNkaFZDN3ZKbnBjREZhdnJ5MXMrTmZEam9zWXF6VS9sUTdmNjRRbWdEVm9rMmZXVGxrM3prazBhTHhRM1d6VWZpNVlIVFM2NmlnNzhBeHdrPQp0cnVzdGVkIGNvbW1lbnQ6IHRpbWVzdGFtcDoxNjk0NjYwMDc5CWZpbGU6UXVpY2tFbnRpdHkgRWRpdG9yXzEuNDkuMV94NjRfZW4tVVMubXNpLnppcAp2ZWRabHZyMVBBNExFeGRHRFluenhkSFN3clRuM3R6eGtFbVIzQ09OVEt1MGMwSTJEdjdudEFRZVdmN08zK3owSVg1cjFUL2tmSEhwMU9ROXpQck9BUT09Cg==",
-			"url": "https://github.com/atampy25/quickentity-editor-next/releases/download/1.49.1/QuickEntity.Editor_1.49.1_x64_en-US.msi.zip"
+			"signature": "dW50cnVzdGVkIGNvbW1lbnQ6IHNpZ25hdHVyZSBmcm9tIHRhdXJpIHNlY3JldCBrZXkKUlVScWpVZGd2b0lOTlRYSURTa1lpZzZ3WDBXYXJaRkhaL1phNTFPd0Z5S1hnSkVFUDlnWlQ1dnNXRjBmWUtlOStkRmRSaVVvdmZxdnAxNjlja2RkaTZ3UG9DM3FFSzJlOHcwPQp0cnVzdGVkIGNvbW1lbnQ6IHRpbWVzdGFtcDoxNjk4NTQ0NDM3CWZpbGU6UXVpY2tFbnRpdHkgRWRpdG9yXzEuNTAuMF94NjRfZW4tVVMubXNpLnppcApadG9jV3lISXJhSkg5QjEwNU52eWFiZVd4OWY2d3RxdTgvTkNMWTBhR3NEM0lXR2IxYjZFR0UwTmJ4Y2V3N1JwbElKellKbm9Za2dCUmdpTTlyRU5EUT09Cg==",
+			"url": "https://github.com/atampy25/quickentity-editor-next/releases/download/1.50.0/QuickEntity.Editor_1.50.0_x64_en-US.msi.zip"
 		}
 	}
 }
