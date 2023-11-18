@@ -194,8 +194,8 @@
 					  ]
 							.filter((a) => !a[1].includes("patch") || Number(/(?:chunk|dlc)[0-9]*patch([0-9]*)\.rpkg/g.exec(a[1])![1]) < 10)
 							.sort((a, b) => {
-								const aChunk = /(chunk[0-9]*)(?:patch[0-9]*)?/gi.exec(a[1])![1]
-								const bChunk = /(chunk[0-9]*)(?:patch[0-9]*)?/gi.exec(b[1])![1]
+								const aChunk = /((?:chunk|dlc)[0-9]*)(?:patch[0-9]*)?/gi.exec(a[1])![1]
+								const bChunk = /((?:chunk|dlc)[0-9]*)(?:patch[0-9]*)?/gi.exec(b[1])![1]
 
 								if (aChunk.localeCompare(bChunk) !== 0) {
 									return aChunk.localeCompare(bChunk, undefined, {
@@ -242,8 +242,8 @@
 					  ]
 							.filter((a) => !a[1].includes("patch") || Number(/(?:chunk|dlc)[0-9]*patch([0-9]*)\.rpkg/g.exec(a[1])![1]) < 10)
 							.sort((a, b) => {
-								const aChunk = /(chunk[0-9]*)(?:patch[0-9]*)?/gi.exec(a[1])![1]
-								const bChunk = /(chunk[0-9]*)(?:patch[0-9]*)?/gi.exec(b[1])![1]
+								const aChunk = /((?:chunk|dlc)[0-9]*)(?:patch[0-9]*)?/gi.exec(a[1])![1]
+								const bChunk = /((?:chunk|dlc)[0-9]*)(?:patch[0-9]*)?/gi.exec(b[1])![1]
 
 								if (aChunk.localeCompare(bChunk) !== 0) {
 									return aChunk.localeCompare(bChunk, undefined, {
@@ -299,8 +299,8 @@
 					  ]
 							.filter((a) => !a[1].includes("patch") || Number(/(?:chunk|dlc)[0-9]*patch([0-9]*)\.rpkg/g.exec(a[1])![1]) < 10)
 							.sort((a, b) => {
-								const aChunk = /(chunk[0-9]*)(?:patch[0-9]*)?/gi.exec(a[1])![1]
-								const bChunk = /(chunk[0-9]*)(?:patch[0-9]*)?/gi.exec(b[1])![1]
+								const aChunk = /((?:chunk|dlc)[0-9]*)(?:patch[0-9]*)?/gi.exec(a[1])![1]
+								const bChunk = /((?:chunk|dlc)[0-9]*)(?:patch[0-9]*)?/gi.exec(b[1])![1]
 
 								if (aChunk.localeCompare(bChunk) !== 0) {
 									return aChunk.localeCompare(bChunk, undefined, {
@@ -385,7 +385,7 @@
 			$addNotification = {
 				kind: "error",
 				title: "Error while extracting",
-				subtitle: `QNE encountered a${["a", "e", "i", "o", "u"].some((a) => e.name.toLowerCase().startsWith(a)) ? "n" : ""} ${e.name} while extracting the given entity.`
+				subtitle: String(e)
 			}
 		}
 	}
