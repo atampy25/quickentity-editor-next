@@ -103,7 +103,8 @@
 			}
 		}
 
-		return json.stringify(ent)
+		const unformatted = json.stringify(ent)
+		return unformatted.length > 5000000 ? unformatted : json.stringify(ent, "\t")
 	}
 
 	async function getEntityFromText(x: string) {
