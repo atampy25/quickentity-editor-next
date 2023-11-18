@@ -35,9 +35,27 @@
 	<br />
 	<TextInput labelText="Runtime path (required)" placeholder={documentsPath + "blabla"} bind:value={$appSettings.runtimePath} />
 	<br />
-	<Checkbox bind:checked={$appSettings.h1} labelText="Above paths are from HITMAN™ (2016) install" />
+	<div class="flex items-center gap-2">
+		<div class="flex-shrink">
+			<Checkbox bind:checked={$appSettings.h1} labelText="Above paths are from HITMAN™ (2016) install" />
+		</div>
+		<TooltipIcon icon={Information}>
+			<span slot="tooltipText" style="font-size: 0.875rem; margin-top: 0.5rem; margin-bottom: 0.5rem">
+				You will need to clear the cache files in %appdata%\app.quickentity.editor if you want to load a different version of a file you've already loaded before.
+			</span>
+		</TooltipIcon>
+	</div>
 	<br />
-	<Checkbox bind:checked={$appSettings.h2} labelText="Above paths are from HITMAN™ 2 install" />
+	<div class="flex items-center gap-2">
+		<div class="flex-shrink">
+			<Checkbox bind:checked={$appSettings.h2} labelText="Above paths are from HITMAN™ 2 install" />
+		</div>
+		<TooltipIcon icon={Information}>
+			<span slot="tooltipText" style="font-size: 0.875rem; margin-top: 0.5rem; margin-bottom: 0.5rem">
+				You will need to clear the cache files in %appdata%\app.quickentity.editor if you want to load a different version of a file you've already loaded before.
+			</span>
+		</TooltipIcon>
+	</div>
 	<br />
 	<div class="flex items-center gap-2">
 		<div class="flex-shrink">
