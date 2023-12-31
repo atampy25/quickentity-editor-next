@@ -1,11 +1,11 @@
 {
-	"version": "1.51.0",
-	"notes": "Format saved entities",
+	"version": "1.51.1",
+	"notes": "Set nonexistent refs to empty array/string when pasting",
 	"pub_date": "2023-02-18T08:42:26Z",
 	"platforms": {
 		"windows-x86_64": {
-			"signature": "dW50cnVzdGVkIGNvbW1lbnQ6IHNpZ25hdHVyZSBmcm9tIHRhdXJpIHNlY3JldCBrZXkKUlVScWpVZGd2b0lOTlRpanZSNlQ5Z3FxUWpPckFkbWhxemNFbHFLbHNKbHFxckk5N01POVNVZFpmTWFQVXJmMnNOU2N0STJ3dElwbWh6dzQyT3BCWExVZ281b0RDNVd1ZlFrPQp0cnVzdGVkIGNvbW1lbnQ6IHRpbWVzdGFtcDoxNzAwMjgxNDk2CWZpbGU6UXVpY2tFbnRpdHkgRWRpdG9yXzEuNTEuMF94NjRfZW4tVVMubXNpLnppcApnYmIzQlZQZGtEVmdtRFNtcmE4NlQ4R3pxeCs3akVKMWNTRUdsbkxITmRiUGhvY0ZGNFh1d05oM0RHc2Zob014S09Qa2JLdGtWU3NJSnFiNVpEVWxDdz09Cg==",
-			"url": "https://github.com/atampy25/quickentity-editor-next/releases/download/1.51.0/QuickEntity.Editor_1.51.0_x64_en-US.msi.zip"
+			"signature": "dW50cnVzdGVkIGNvbW1lbnQ6IHNpZ25hdHVyZSBmcm9tIHRhdXJpIHNlY3JldCBrZXkKUlVScWpVZGd2b0lOTmVCamFSUXUwZ0UrOEpETS9HV05CejI4UVd6b3hQamp6SW1iWTJld3RZcU1Ud0lXaW5RZktlVW1WWW01Y055VzhnMmJTL2k3b1I3WG8xOTVlTitpN1FFPQp0cnVzdGVkIGNvbW1lbnQ6IHRpbWVzdGFtcDoxNzAzOTg1MTY3CWZpbGU6UXVpY2tFbnRpdHkgRWRpdG9yXzEuNTEuMV94NjRfZW4tVVMubXNpLnppcApybHdXMktNSVN5amRLMm0zNlI0a2dLVHA5L3B6ZTZNdVphZGthTzhNeEVFRzMvL2tNNkhYWGlUbXBlOVpDVVpIdHNLcUF0eUE5Snd4bTJVdU9PL1BCUT09Cg==",
+			"url": "https://github.com/atampy25/quickentity-editor-next/releases/download/1.51.1/QuickEntity.Editor_1.51.1_x64_en-US.msi.zip"
 		}
 	}
 }
