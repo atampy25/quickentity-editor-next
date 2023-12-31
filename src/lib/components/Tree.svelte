@@ -769,7 +769,7 @@
 								if (Array.isArray(ent.properties![ref.context![0]].value)) {
 									ent.properties![ref.context![0]].value = ent.properties![ref.context![0]].value.filter((a: Ref) => !isEqual(a, ref.entity))
 								} else {
-									delete ent.properties![ref.context![0]]
+									ent.properties![ref.context![0]].value = []
 								}
 								break
 
@@ -779,7 +779,7 @@
 										(a: Ref) => !isEqual(a, ref.entity)
 									)
 								} else {
-									delete ent.platformSpecificProperties![ref.context![0]][ref.context![1]]
+									ent.platformSpecificProperties![ref.context![0]][ref.context![1]].value = []
 								}
 								break
 
@@ -812,7 +812,7 @@
 								break
 
 							case "exposedInterface":
-								delete ent.exposedInterfaces![ref.context![0]]
+								ent.exposedInterfaces![ref.context![0]] = ""
 								break
 
 							case "subset":
