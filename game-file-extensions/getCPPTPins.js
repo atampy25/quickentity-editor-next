@@ -146,11 +146,21 @@ for (let filePath of allFiles) {
 	}
 }
 
-for (const c of fs.readJSONSync("./classes").classes) {
+function getClassPins(c, classInfo) {
+	const data = classInfo.find((a) => a.name == c)
+	if (data) {
+		return [...data.inputPins.map((a) => a.name), ...data.baseClasses.filter((a) => a != c).flatMap((a) => getClassPins(a, classInfo)), ...data.interfaces.filter((a) => a != c).flatMap((a) => getClassPins(a, classInfo))]
+	} else {
+		return []
+	}
+}
+
+const classInfo = fs.readJSONSync("./classes").classes
+for (const c of classInfo) {
 	let bla = hashes["[modules:/" + c.name.toLowerCase() + ".class].pc_entitytype"]
 	if (bla) {
 		data[bla] ??= { input: new Set(), output: new Set() }
-		data[bla].input = new Set(c.inputPins.map((a) => a.name))
+		data[bla].input = new Set(getClassPins(c.name, classInfo))
 	}
 }
 
