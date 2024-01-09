@@ -149,7 +149,11 @@ for (let filePath of allFiles) {
 function getClassPins(c, classInfo) {
 	const data = classInfo.find((a) => a.name == c)
 	if (data) {
-		return [...data.inputPins.map((a) => a.name), ...data.baseClasses.filter((a) => a != c).flatMap((a) => getClassPins(a, classInfo)), ...data.interfaces.filter((a) => a != c).flatMap((a) => getClassPins(a, classInfo))]
+		return [
+			...data.inputPins.map((a) => a.name),
+			...data.baseClasses.filter((a) => a != c).flatMap((a) => getClassPins(a, classInfo)),
+			...data.interfaces.filter((a) => a != c).flatMap((a) => getClassPins(a, classInfo))
+		]
 	} else {
 		return []
 	}
